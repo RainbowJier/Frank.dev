@@ -1,0 +1,56 @@
+server:
+  port: 9040
+  servlet:
+    context-path: /frank-dev
+
+spring:
+  application:
+    name: Frank-Dev
+  profiles:
+    # 这里的 @profile.active@ 会在 maven 打包时被替换为 'dev' 或 'prod'
+    active: @profile.active@
+
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    default-property-inclusion: NON_NULL
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: org.frank.domain.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
+      logic-delete-field: 'del_flag'
+      logic-not-delete-value: 1
+      logic-delete-value: 0
+
+token:
+  header: Authorization
+  secret: "frank-web-jwt-secret-key-must-be-at-least-32-bytes-long"
+  expireTime: 30
+
+# user login
+user:
+  password:
+    maxRetryCount: 10
+    lockTime: 10
+
+interceptor:
+  exclude:
+    - /frank-dev/sys-login/login
+    - /frank-dev/sys-login/logout
+
+# 跨域配置
+cors:
+  allowed-origins: "*"
+  allowed-methods: "GET,POST,PUT,DELETE,OPTIONS,PATCH"
+  allowed-headers: "*"
+  exposed-headers: "*"
+  allow-credentials: false
+  max-age: 3600

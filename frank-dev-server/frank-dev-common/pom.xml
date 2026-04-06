@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.frank-dev</groupId>
+        <artifactId>frank-dev-end</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>frank-dev-common</artifactId>
+    <packaging>pom</packaging>
+    <name>Frank-Dev Common</name>
+    <description>FRANK-DEV项目通用工具模块 - 提供通用工具类和基础依赖</description>
+
+    <modules>
+        <module>frank-dev-common-core</module>
+        <module>frank-dev-redis</module>
+        <module>frank-dev-token</module>
+        <module>frank-dev-mybatis-plus</module>
+        <module>frank-dev-schedule</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.frank-dev</groupId>
+                <artifactId>frank-dev-common-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.frank-dev</groupId>
+                <artifactId>frank-dev-redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.frank-dev</groupId>
+                <artifactId>frank-dev-token</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.frank-dev</groupId>
+                <artifactId>frank-dev-mybatis-plus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.frank-dev</groupId>
+                <artifactId>frank-dev-schedule</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.frank-dev</groupId>
+        <artifactId>frank-dev-end</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>frank-dev-infrastructure</artifactId>
+    <packaging>jar</packaging>
+    <name>Frank-Dev Infrastructure</name>
+    <description>FRANK-DEV项目基础设施层 - 实现数据访问和外部系统集成</description>
+
+    <dependencies>
+        <!-- 引入 domain 模块 -->
+        <dependency>
+            <groupId>com.frank-dev</groupId>
+            <artifactId>frank-dev-domain</artifactId>
+        </dependency>
+
+        <!-- 引入 common 模块 -->
+        <dependency>
+            <groupId>com.frank-dev</groupId>
+            <artifactId>frank-dev-common-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 引入 mybatis 模块 -->
+        <dependency>
+            <groupId>com.frank-dev</groupId>
+            <artifactId>frank-dev-mybatis-plus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Database drivers -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <!-- Oracle JDBC Driver -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+        </dependency>
+
+        <!-- Oracle i18n - 支持额外的字符集（如ZHS16GBK） -->
+        <dependency>
+            <groupId>com.oracle.database.nls</groupId>
+            <artifactId>orai18n</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
