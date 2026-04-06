@@ -4,11 +4,7 @@
  */
 
 import userAuth from './auth/userAuth';
-import articleApi from './article/articleApi';
-import categoryApi from './article/categoryApi';
 
 export default{
   userAuth,
-  articleApi,
-  categoryApi,
 };
