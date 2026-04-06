@@ -25,6 +25,51 @@ export const constantRoutes = [
     },
   },
   {
+    path: '/article/list',
+    name: 'ArticleList',
+    component: () => import('@/views/article/ArticleList.vue'),
+    meta: {
+      title: '文章管理',
+      icon: 'document',
+    },
+  },
+  {
+    path: '/article/create',
+    name: 'ArticleCreate',
+    component: () => import('@/views/article/ArticleForm.vue'),
+    meta: {
+      title: '新建文章',
+      hidden: true,
+    },
+  },
+  {
+    path: '/article/edit/:id',
+    name: 'ArticleEdit',
+    component: () => import('@/views/article/ArticleForm.vue'),
+    meta: {
+      title: '编辑文章',
+      hidden: true,
+    },
+  },
+  {
+    path: '/article/detail/:id',
+    name: 'ArticleDetail',
+    component: () => import('@/views/article/ArticleDetail.vue'),
+    meta: {
+      title: '文章详情',
+      hidden: true,
+    },
+  },
+  {
+    path: '/article/category',
+    name: 'CategoryList',
+    component: () => import('@/views/article/CategoryList.vue'),
+    meta: {
+      title: '分类管理',
+      icon: 'menu',
+    },
+  },
+  {
     path: '/404',
     name: 'NotFound',
     component: () => import('@/views/error/404NotFound.vue'),

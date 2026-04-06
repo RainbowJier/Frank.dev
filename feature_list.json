@@ -1,0 +1,187 @@
+{
+  "project": "Frank.dev Article Module",
+  "created": "2026-04-06",
+  "features": [
+    {
+      "id": "F001",
+      "category": "backend-database",
+      "description": "Article and ArticleCategory database tables created in PostgreSQL",
+      "steps": [
+        "Create article table with fields: id, title, content, summary, cover_image, category_id, author_id, status, is_top, view_count, like_count, and BaseEntity fields",
+        "Create article_category table with fields: id, category_name, sort_order, status, and BaseEntity fields",
+        "Verify SQL runs without errors against PostgreSQL"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F002",
+      "category": "backend-domain",
+      "description": "Article entity and ArticleCategory entity in domain layer",
+      "steps": [
+        "Create Article entity extending BaseEntity with all article fields",
+        "Create ArticleCategory entity extending BaseEntity with all category fields",
+        "Entities follow existing naming conventions (MyBatis-Plus annotations)"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F003",
+      "category": "backend-domain",
+      "description": "Article gateway interfaces in domain layer",
+      "steps": [
+        "Create IArticleGateway extending IService<Article>",
+        "Create IArticleCategoryGateway extending IService<ArticleCategory>",
+        "Define custom query methods: selectArticlePage, countByCategoryId, etc."
+      ],
+      "passes": true
+    },
+    {
+      "id": "F004",
+      "category": "backend-infrastructure",
+      "description": "Article mapper and gateway implementations in infrastructure layer",
+      "steps": [
+        "Create ArticleMapper extending BaseMapper<Article>",
+        "Create ArticleCategoryMapper extending BaseMapper<ArticleCategory>",
+        "Create ArticleGatewayImpl implementing IArticleGateway",
+        "Create ArticleCategoryGatewayImpl implementing IArticleCategoryGateway",
+        "Implement pagination query with title/categoryId/status filters"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F005",
+      "category": "backend-shared",
+      "description": "Article DTOs (request/response) in shared layer",
+      "steps": [
+        "Create ArticlePageReq for pagination with filters",
+        "Create ArticleReq for create/update operations",
+        "Create ArticleResp for article response data",
+        "Create ArticleCategoryReq and ArticleCategoryResp"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F006",
+      "category": "backend-application",
+      "description": "Article service with business logic in application layer",
+      "steps": [
+        "Create ArticleService interface with CRUD + pagination methods",
+        "Create ArticleServiceImpl with full business logic",
+        "Create ArticleCategoryService interface and implementation",
+        "Implement: create, update, delete (logical), getById, page, publish, top"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F007",
+      "category": "backend-adapter",
+      "description": "Article REST controller in adapter layer",
+      "steps": [
+        "Create ArticleController with endpoints: POST /article, PUT /article, DELETE /article/{id}, GET /article/{id}, GET /article/page",
+        "Create ArticleCategoryController with CRUD endpoints",
+        "All endpoints return AjaxResult<T> with proper auth",
+        "Follow existing controller patterns"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F008",
+      "category": "frontend-api",
+      "description": "Article API module in frontend",
+      "steps": [
+        "Create src/api/article/articleApi.js with all article CRUD methods",
+        "Create src/api/article/categoryApi.js with category CRUD methods",
+        "Update src/api/index.js to export new modules"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F009",
+      "category": "frontend-store",
+      "description": "Article Pinia store in frontend",
+      "steps": [
+        "Create src/store/article/article.js with Pinia store",
+        "State: articleList, currentArticle, pagination, categories",
+        "Actions: fetchArticles, createArticle, updateArticle, deleteArticle",
+        "Actions: fetchCategories, createCategory, updateCategory, deleteCategory"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F010",
+      "category": "frontend-views",
+      "description": "Article list page with pagination and filters",
+      "steps": [
+        "Create src/views/article/ArticleList.vue",
+        "Element Plus table with columns: title, category, status, isTop, viewCount, createTime",
+        "Pagination component",
+        "Search filters: title, category, status",
+        "Action buttons: create, edit, delete, publish, top"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F011",
+      "category": "frontend-views",
+      "description": "Article create/edit form page",
+      "steps": [
+        "Create src/views/article/ArticleForm.vue",
+        "Form fields: title, category, summary, content (textarea), cover image, status",
+        "Support both create and edit modes",
+        "Form validation"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F012",
+      "category": "frontend-views",
+      "description": "Article detail page for viewing a single article",
+      "steps": [
+        "Create src/views/article/ArticleDetail.vue",
+        "Display full article content with metadata",
+        "Show category, status, isTop, viewCount, createTime",
+        "Edit and back buttons"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F013",
+      "category": "frontend-views",
+      "description": "Article category management page",
+      "steps": [
+        "Create src/views/article/CategoryList.vue",
+        "Table with category name, sort order, status, article count",
+        "Add/edit/delete category dialog",
+        "Form validation"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F014",
+      "category": "frontend-router",
+      "description": "Article route configuration in Vue Router",
+      "steps": [
+        "Add article routes to router/routes/index.js",
+        "Routes: /article/list, /article/create, /article/edit/:id, /article/detail/:id",
+        "Routes: /article/category",
+        "All routes require authentication"
+      ],
+      "passes": true
+    },
+    {
+      "id": "F015",
+      "category": "integration",
+      "description": "Full end-to-end article workflow verification",
+      "steps": [
+        "Backend compiles and starts successfully",
+        "Frontend dev server starts without errors",
+        "Create an article via API and verify in database",
+        "List articles via API with pagination",
+        "Update and delete articles",
+        "Category CRUD works end-to-end",
+        "Frontend pages render correctly with Element Plus"
+      ],
+      "passes": false
+    }
+  ]
+}

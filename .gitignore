@@ -38,3 +38,10 @@ logs/
 # Claude Code
 # ========================
 .claude/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
