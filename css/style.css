@@ -282,7 +282,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .sidebar-overlay.show { display: block; }
 
 /* ---------- 区块标题（纯英文大写） ---------- */
-.section { padding: clamp(1.8rem, 4vw, 3rem) 0; }
+.section { padding: clamp(1.8rem, 4vw, 3rem) 0; scroll-margin-top: 0.5rem; }
 .section + .section { padding-top: 0; }
 
 .section-title {
