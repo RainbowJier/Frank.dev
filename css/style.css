@@ -38,7 +38,17 @@
 /* ---------- 基础 ---------- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
+/* 细滚动条（更精致、减少视觉噪音） */
+html { scrollbar-width: thin; scrollbar-color: var(--border-dark) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar-track { background: transparent; }
 
 body {
   font-family: var(--font);
@@ -47,6 +57,7 @@ body {
   font-size: 16px;
   line-height: 1.7;
   padding-left: var(--sidebar-w);
+  -webkit-overflow-scrolling: touch; /* iOS 惯性滚动 */
 }
 
 img { max-width: 100%; display: block; }
@@ -535,13 +546,18 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .js .reveal {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
-              transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
   will-change: opacity, transform;
 }
 .js .reveal.in {
   opacity: 1;
   transform: none;
+}
+/* 动画结束后释放合成层（will-change/transition 移除，滚动更顺） */
+.js .reveal-done {
+  will-change: auto;
+  transition: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .js .reveal { opacity: 1; transform: none; transition: none; }
@@ -608,9 +624,9 @@ button:active,
 }
 
 .post-item {
-  transition: padding-left 0.2s ease;
+  transition: transform 0.2s ease; /* transform 不触发重排，滚动不卡 */
 }
-.post-item:hover { padding-left: 0.4rem; }
+.post-item:hover { transform: translateX(4px); }
 .post-item h3 a { transition: color 0.18s ease; }
 .post-item:hover h3 a { color: var(--accent); }
 

@@ -36,7 +36,7 @@
   });
 })();
 
-// 返回顶部按钮
+// 返回顶部按钮（rAF 缓动动画，比浏览器自带 smooth 更丝滑）
 (function () {
   var btn = document.querySelector(".back-top");
   if (!btn) return;
@@ -46,7 +46,22 @@
   }, { passive: true });
 
   btn.addEventListener("click", function () {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    var start = window.scrollY;
+    var dur = 480;
+    var t0 = null;
+
+    function easeInOutCubic(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1);
+      window.scrollTo(0, Math.round(start * (1 - easeInOutCubic(p))));
+      if (p < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
   });
 })();
 
@@ -63,20 +78,25 @@
     return;
   }
 
-  // 同父级下的 .reveal 按索引错峰 70ms
+  // 同父级下的 .reveal 按索引错峰 45ms
   items.forEach(function (el) {
     var siblings = Array.prototype.filter.call(el.parentNode.children, function (c) {
       return c.classList.contains("reveal");
     });
     var idx = siblings.indexOf(el);
-    if (idx > 0) el.style.transitionDelay = idx * 70 + "ms";
+    if (idx > 0) el.style.transitionDelay = idx * 45 + "ms";
   });
 
+  // 动画结束后释放合成层（移除 will-change/transition，滚动不卡）
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
       if (en.isIntersecting) {
         en.target.classList.add("in");
         io.unobserve(en.target);
+        var delay = parseFloat(en.target.style.transitionDelay) || 0;
+        setTimeout(function () {
+          en.target.classList.add("reveal-done");
+        }, 520 + delay);
       }
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
