@@ -83,3 +83,24 @@
 
   items.forEach(function (el) { io.observe(el); });
 })();
+
+// 文章分类筛选（blog 页筛选标签）
+(function () {
+  var bar = document.querySelector(".filter-bar");
+  if (!bar) return;
+
+  bar.addEventListener("click", function (e) {
+    var btn = e.target.closest(".filter-btn");
+    if (!btn) return;
+    var f = btn.getAttribute("data-filter");
+
+    bar.querySelectorAll(".filter-btn").forEach(function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+
+    document.querySelectorAll(".post-item").forEach(function (item) {
+      var show = f === "all" || item.getAttribute("data-cat") === f;
+      item.style.display = show ? "" : "none";
+    });
+  });
+})();

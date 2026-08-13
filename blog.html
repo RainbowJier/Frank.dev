@@ -53,18 +53,26 @@
 
     <!-- ====== 文章列表 ====== -->
     <section class="section">
+
+      <!-- 分类筛选标签：新分类时复制一个按钮，改 data-filter 和 data-i18n 的 cat.xxx -->
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all" data-i18n="cat.all">全部</button>
+        <button class="filter-btn" data-filter="essay" data-i18n="cat.essay">随笔</button>
+        <button class="filter-btn" data-filter="tech" data-i18n="cat.tech">技术</button>
+      </div>
+
       <ul class="post-list">
 
-        <!-- 文章条目：复制一段，改日期/分类/标题/链接，并在 js/i18n.js 补对应 key -->
-        <li class="post-item reveal">
+        <!-- 文章条目：复制一段，改日期/data-cat 分类/标题/链接，并在 js/i18n.js 补对应 key -->
+        <li class="post-item reveal" data-cat="essay">
           <span class="date">2026-08-01</span>
-          <span class="cat" data-i18n="post1.cat">随笔</span>
+          <span class="cat" data-i18n="cat.essay">随笔</span>
           <h3><a href="posts/hello-world.html" data-i18n="post1.title">你好，世界 —— 我的个人网站上线了</a></h3>
         </li>
 
-        <li class="post-item reveal">
+        <li class="post-item reveal" data-cat="tech">
           <span class="date">2026-07-20</span>
-          <span class="cat" data-i18n="post2.cat">技术</span>
+          <span class="cat" data-i18n="cat.tech">技术</span>
           <h3><a href="posts/deploy-static-site.html" data-i18n="post2.title">零服务器部署静态网站：从本地到上线</a></h3>
         </li>
 

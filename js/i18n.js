@@ -50,10 +50,13 @@ window.I18N = {
     "blog.subtitle": "一些关于代码、学习与生活的记录。",
     "post1.title": "你好，世界 —— 我的个人网站上线了",
     "post1.excerpt": "为什么在社交媒体之外，还需要一个属于自己的小角落。",
-    "post1.cat": "随笔",
     "post2.title": "零服务器部署静态网站：从本地到上线",
     "post2.excerpt": "用一个纯静态网站走完「本地开发 → 自动部署 → 获得网址」的全过程。",
-    "post2.cat": "技术",
+
+    /* 文章分类（筛选标签） */
+    "cat.all": "全部",
+    "cat.essay": "随笔",
+    "cat.tech": "技术",
 
     /* 文章页通用 */
     "post.reading": "预计阅读 {n} 分钟",
@@ -145,7 +148,21 @@ window.I18N = {
     "about.fact4.value": "键盘与好奇心",
     "about.h2_3": "怎么找到我",
     "about.p5": "想聊聊技术、合作，或者只是想说声你好，欢迎通过下面任意一种方式找我。",
-    "about.motto": "「先上线，再迭代。」—— 与所有迟迟不敢开始的人共勉。"
+    "about.motto": "「先上线，再迭代。」—— 与所有迟迟不敢开始的人共勉。",
+
+    /* ========== ★ 新文章字典从这里添加 ==========
+       步骤：复制 posts/TEMPLATE.html → posts/xxx.html，
+       把 key 前缀换成文章英文标识（如 my-post），
+       在此加一篇 zh（必写）+ en（可选，缺省自动回退中文）。
+       例：
+       "my-post.eyebrow": "随笔 · No. 03",
+       "my-post.title": "文章标题",
+       "my-post.date": "2026 年 8 月 20 日",
+       "my-post.p1": "正文第一段…",
+       "my-post.h2_1": "小标题",
+       "my-post.li1": "列表项",
+       "my-post.quote": "引用",
+    */
   },
 
   en: {
@@ -192,10 +209,13 @@ window.I18N = {
     "blog.subtitle": "Notes about code, learning and life.",
     "post1.title": "Hello, World — My Personal Site Is Live",
     "post1.excerpt": "Why we still need a corner of our own beyond social media.",
-    "post1.cat": "Essay",
     "post2.title": "Deploy a Static Site with Zero Servers",
     "post2.excerpt": "From local development to auto-deployment and a public URL — the whole journey.",
-    "post2.cat": "Tech",
+
+    /* 文章分类（筛选标签） */
+    "cat.all": "All",
+    "cat.essay": "Essay",
+    "cat.tech": "Tech",
 
     /* 文章页通用 */
     "post.reading": "{n} min read",
@@ -288,7 +308,12 @@ window.I18N = {
     "about.fact4.value": "Keyboard & curiosity",
     "about.h2_3": "Find me",
     "about.p5": "To talk tech, collaborate, or just say hi — reach out through any channel below.",
-    "about.motto": "\"Ship first, iterate later.\" — for everyone hesitating to start."
+    "about.motto": "\"Ship first, iterate later.\" — for everyone hesitating to start.",
+
+    /* ========== ★ 新文章英文翻译从这里添加 ==========
+       en 可选：某篇文章没写英文时，自动显示中文。
+       写完后把上面 zh 示例对应的 en 文案放这里。
+    */
   }
 };
 
@@ -301,11 +326,18 @@ window.I18N = {
     current = lang;
     var dict = window.I18N[lang] || window.I18N.zh;
 
+    // 英文缺 key 时自动回退中文 —— 新文章只需写中文，英文可后补
+    function getText(key) {
+      if (dict[key] !== undefined) return dict[key];
+      if (lang !== "zh" && window.I18N.zh[key] !== undefined) return window.I18N.zh[key];
+      return undefined;
+    }
+
     // 文本节点
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       var key = el.getAttribute("data-i18n");
-      if (dict[key] !== undefined) {
-        var text = dict[key];
+      var text = getText(key);
+      if (text !== undefined) {
         // 支持 {n} 占位符（如阅读时长），值来自 data-i18n-placeholder
         var ph = el.getAttribute("data-i18n-placeholder");
         if (ph !== null) text = text.replace("{n}", ph);
@@ -316,26 +348,29 @@ window.I18N = {
     // 含行内标签的节点（innerHTML）
     document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-html");
-      if (dict[key] !== undefined) el.innerHTML = dict[key];
+      var html = getText(key);
+      if (html !== undefined) el.innerHTML = html;
     });
 
     // 带 {year} 占位符的文本
     document.querySelectorAll("[data-i18n-year]").forEach(function (el) {
       var key = el.getAttribute("data-i18n-year");
-      if (dict[key] !== undefined) {
-        el.textContent = dict[key].replace("{year}", String(new Date().getFullYear()));
+      var text = getText(key);
+      if (text !== undefined) {
+        el.textContent = text.replace("{year}", String(new Date().getFullYear()));
       }
     });
 
     // 语言切换按钮文案
     var toggle = document.querySelector("[data-lang-toggle]");
-    if (toggle) toggle.textContent = dict["lang.switch"];
+    if (toggle) toggle.textContent = getText("lang.switch");
 
     // 文档标题（可选：页面标题的 key）
     var titleEl = document.querySelector("[data-i18n-title]");
     if (titleEl) {
       var tKey = titleEl.getAttribute("data-i18n-title");
-      if (dict[tKey]) document.title = dict[tKey];
+      var tText = getText(tKey);
+      if (tText) document.title = tText;
     }
 
     try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
