@@ -4,3 +4,6 @@
 # 系统 / 编辑器杂项
 Thumbs.db
 .DS_Store
+
+# JetBrains IDE
+.idea/
