@@ -3,105 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="你的名字的个人主页：介绍、技能与经历">
-  <title>你的名字 · 个人主页</title>
+  <meta name="description" content="Frank's Notes —— 一个前端开发者的个人博客，记录关于构建、学习与思考的文字。">
+  <title>Frank's Notes · 个人博客</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- 顶部导航 -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a class="nav-brand" href="index.html">你的名字</a>
+  <!-- ====== 刊头导航 ====== -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="masthead-brand" href="index.html">Frank<span class="amp">’</span>s Notes</a>
       <button class="nav-toggle" aria-label="打开菜单">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="masthead-links">
         <li><a href="index.html" class="active">首页</a></li>
-        <li><a href="blog.html">博客</a></li>
-        <li><a href="projects.html">作品集</a></li>
+        <li><a href="blog.html">文章</a></li>
+        <li><a href="projects.html">作品</a></li>
+        <li><a href="about.html">关于</a></li>
       </ul>
-    </div>
-  </nav>
-
-  <!-- Hero 区：把下面 3 处占位文字换成你自己的 -->
-  <header class="hero">
-    <div class="container">
-      <div class="avatar">你</div>
-      <h1>你好，我是「你的名字」</h1>
-      <p class="subtitle">前端开发者 / 兴趣广泛的学习者</p>
-      <p class="intro">
-        一句话介绍自己：我热爱把想法变成可用的产品，专注于 Web 开发与用户体验。
-        这里是我的个人主页，你可以通过博客了解我的思考，通过作品集了解我做过的事。
-      </p>
-      <div class="actions">
-        <a class="btn btn-primary" href="projects.html">查看作品</a>
-        <a class="btn btn-outline" href="mailto:you@example.com">联系我</a>
-      </div>
     </div>
   </header>
 
-  <main class="container">
+  <main>
 
-    <!-- 关于我 -->
-    <section class="section" id="about">
-      <h2 class="section-title">关于我</h2>
-      <p class="section-sub">一段详细介绍，可以写你的背景、兴趣和正在做的事。</p>
-      <div class="card">
-        <p>这里写你的完整自我介绍。例如：我是谁、来自哪里、学了什么专业、目前在做什么工作或项目、有什么长期目标。</p>
-        <p style="margin-top:12px;">再补充一些个人细节：喜欢的工具、业余爱好、最近在学的东西，让读者对你有一个立体的印象。</p>
+    <!-- ====== 刊头 Hero ====== -->
+    <section class="container">
+      <div class="hero">
+        <p class="mast-sub">A Personal Journal · Est. 2026</p>
+        <h1 class="mast-title">Frank<span class="amp">’</span>s Notes</h1>
+        <p class="mast-tagline">把每一个想法，认真写下来。<br>关于代码、学习，与那些值得停留的瞬间。</p>
       </div>
     </section>
 
-    <!-- 技能 -->
-    <section class="section" id="skills">
-      <h2 class="section-title">技能</h2>
-      <p class="section-sub">把下面的标签换成你真正掌握的技能。</p>
-      <div class="skills">
-        <span class="skill-tag">HTML / CSS</span>
-        <span class="skill-tag">JavaScript</span>
-        <span class="skill-tag">Vue</span>
-        <span class="skill-tag">React</span>
-        <span class="skill-tag">Node.js</span>
-        <span class="skill-tag">Git</span>
-        <span class="skill-tag">UI 设计</span>
+    <!-- ====== 精选头条 ====== -->
+    <section class="section container">
+      <div class="feature">
+        <div class="feature-text">
+          <p class="eyebrow">头条 · Featured</p>
+          <h2><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h2>
+          <p class="lead">这是第一篇。关于为什么在 2026 年还要拥有一个属于自己的角落，它由什么构成，以及我打算在这里写下些什么。</p>
+          <p style="margin-top:1.5rem;"><a class="btn btn-primary" href="posts/hello-world.html">继续阅读 <span class="arrow">→</span></a></p>
+        </div>
+        <a class="feature-art" href="posts/hello-world.html" aria-label="阅读：你好，世界">No.&nbsp;01</a>
       </div>
     </section>
 
-    <!-- 经历时间线 -->
-    <section class="section" id="experience">
-      <h2 class="section-title">经历</h2>
-      <p class="section-sub">工作、学习或项目经历，按时间倒序排列。</p>
-      <div class="timeline">
-        <div class="timeline-item">
-          <h3>公司名 / 学校名</h3>
-          <div class="date">2024.07 — 至今</div>
-          <p>这里写你在这段经历中做了什么：职责、成果、学到的技能。</p>
+    <!-- ====== 最新文章 ====== -->
+    <section class="section container">
+      <div class="kicker"><span class="eyebrow" style="margin:0;">最新文章 · Latest</span></div>
+      <ul class="post-list">
+
+        <!-- 文章卡片：复制这一段添加新文章，并改 data-href / 日期 / 分类 / 标题 / 摘要 -->
+        <li class="post-card" data-href="posts/hello-world.html">
+          <div class="date-col">
+            08·01·2026
+            <span class="cat">随笔</span>
+          </div>
+          <div>
+            <h3><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h3>
+            <p class="excerpt">为什么在社交媒体之外，还需要一个属于自己的小角落。这里会写什么，又会怎样生长。</p>
+          </div>
+        </li>
+
+        <li class="post-card" data-href="posts/deploy-static-site.html">
+          <div class="date-col">
+            07·20·2026
+            <span class="cat">技术</span>
+          </div>
+          <div>
+            <h3><a href="posts/deploy-static-site.html">零服务器部署静态网站：从本地到上线</a></h3>
+            <p class="excerpt">用一个纯静态网站走完「本地开发 → 推送代码 → 自动部署 → 获得网址」的全过程，附完整步骤。</p>
+          </div>
+        </li>
+
+      </ul>
+      <p style="margin-top:2.5rem; text-align:center;">
+        <a class="btn" href="blog.html">查看全部文章 <span class="arrow">→</span></a>
+      </p>
+    </section>
+
+    <!-- ====== 双栏：作者简介 + 作品入口 ====== -->
+    <section class="section container">
+      <div class="split">
+
+        <div>
+          <p class="eyebrow">关于作者</p>
+          <div class="author-card">
+            <div class="author-avatar">F</div>
+            <div class="who">
+              <h3>Frank</h3>
+              <p>前端开发者 · 终身学习者<br>热衷把想法变成可用的产品。</p>
+            </div>
+          </div>
+          <p class="lead" style="margin-top:1.5rem; font-size:1.05rem;">
+            我在这里记录学习路径上的笔记、踩过的坑，以及偶尔一些值得留下的随想。
+          </p>
+          <p style="margin-top:1.5rem;"><a class="btn" href="about.html">了解更多 <span class="arrow">→</span></a></p>
         </div>
-        <div class="timeline-item">
-          <h3>公司名 / 学校名</h3>
-          <div class="date">2022.09 — 2024.06</div>
-          <p>同样，用一两句话概括这段经历的重点和收获。</p>
+
+        <div>
+          <p class="eyebrow">精选作品</p>
+          <h3 style="margin-bottom:1rem;">一些我做过的东西</h3>
+          <p class="lead" style="font-size:1.05rem;">
+            从 Spring 全家桶到多智能体交易框架，我喜欢在实践里把概念吃透。下面是其中一部分。
+          </p>
+          <p style="margin-top:1.5rem;"><a class="btn" href="projects.html">浏览作品集 <span class="arrow">→</span></a></p>
         </div>
-        <div class="timeline-item">
-          <h3>公司名 / 学校名</h3>
-          <div class="date">2020.09 — 2022.06</div>
-          <p>时间线条目可以继续往下加，复制上面整块即可。</p>
-        </div>
+
       </div>
     </section>
 
   </main>
 
-  <!-- 页脚 -->
+  <!-- ====== 页脚 ====== -->
   <footer class="footer">
-    <div class="container">
-      <div class="social">
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
-        <a href="mailto:you@example.com">邮箱</a>
-      </div>
-      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    <div class="footer-inner">
+      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
+      <ul class="footer-social">
+        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
+        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
+        <li><a href="about.html">关于</a></li>
+      </ul>
+      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
     </div>
   </footer>
 

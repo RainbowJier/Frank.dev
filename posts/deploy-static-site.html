@@ -3,83 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="零服务器部署静态网站：从本地到上线">
-  <title>零服务器部署静态网站：从本地到上线 · 你的名字</title>
+  <meta name="description" content="零服务器部署静态网站：从本地开发到自动上线的全过程。">
+  <title>零服务器部署静态网站 —— Frank's Notes</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-  <!-- 顶部导航 -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a class="nav-brand" href="../index.html">你的名字</a>
+  <!-- ====== 刊头导航 ====== -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="masthead-brand" href="../index.html">Frank<span class="amp">’</span>s Notes</a>
       <button class="nav-toggle" aria-label="打开菜单">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="masthead-links">
         <li><a href="../index.html">首页</a></li>
-        <li><a href="../blog.html" class="active">博客</a></li>
-        <li><a href="../projects.html">作品集</a></li>
+        <li><a href="../blog.html" class="active">文章</a></li>
+        <li><a href="../projects.html">作品</a></li>
+        <li><a href="../about.html">关于</a></li>
       </ul>
     </div>
-  </nav>
+  </header>
 
-  <!-- 文章正文：替换 <article> 中的内容即可 -->
-  <article class="article container">
-    <header>
-      <h1>零服务器部署静态网站：从本地到上线</h1>
-      <div class="meta">
-        <span>2026-07-20</span>
-        <span class="tag">前端</span>
-        <span>预计阅读 5 分钟</span>
+  <main class="container">
+
+    <article class="article">
+
+      <header class="article-header">
+        <p class="eyebrow">技术 · No. 02</p>
+        <h1>零服务器部署静态网站<br>从本地到上线</h1>
+        <p class="article-meta">
+          <span class="cat">技术</span>
+          <span class="sep">·</span> 2026 年 7 月 20 日
+          <span class="sep">·</span> 预计阅读 6 分钟
+        </p>
+      </header>
+
+      <div class="article-body">
+
+        <p>很多人以为「把网站做出来」很难，「让它能被全世界访问」更难。其实对一个纯静态网站来说，后者反而简单得令人意外——你不需要买服务器、不需要配环境，甚至不需要花钱。这篇文章，我们走完整条路。</p>
+
+        <h2>先理清一个概念：什么是「静态网站」</h2>
+        <p>静态网站，指的是网站由一堆固定的文件组成——<code>.html</code>、<code>.css</code>、<code>.js</code>、图片。浏览器请求某个地址，服务器就把对应文件原样发回来，没有数据库查询，没有动态渲染。</p>
+        <p>它的好处很直接：</p>
+        <ul>
+          <li><strong>快</strong>：文件直接发，没有计算；</li>
+          <li><strong>稳</strong>：没有运行中的程序，几乎不会崩；</li>
+          <li><strong>便宜</strong>：很多平台免费就能托管。</li>
+        </ul>
+
+        <h2>三种常见的部署方式</h2>
+        <h3>方式一：拖拽上传</h3>
+        <p>最简单。把整个文件夹拖到托管平台（如 EdgeOne Pages、Vercel）的上传区，等几秒，它给你一个网址。适合第一次发布，缺点是每次更新都要手动重传。</p>
+
+        <h3>方式二：Git 仓库 + 自动部署（推荐）</h3>
+        <p>把代码推到一个 Git 仓库（GitHub / Gitee），托管平台绑定仓库后，每次 <code>git push</code> 都会自动重新部署。一劳永逸。</p>
+        <pre><code>git add .
+git commit -m "更新内容"
+git push</code></pre>
+        <p>三行命令，网站就更新了。</p>
+
+        <h3>方式三：自建服务器</h3>
+        <p>买一台云服务器，用 Nginx 之类的软件托管文件。灵活、可控，但要自己维护、备案、续费。对个人小站来说，通常没必要。</p>
+
+        <h2>一条最省心的路径</h2>
+        <p>如果你只是想快速拥有一个能访问的个人网站，我会这样建议：</p>
+        <ol>
+          <li>用 HTML/CSS 把网站写出来（或者用一个模板）；</li>
+          <li>把代码推到 GitHub；</li>
+          <li>在 EdgeOne Pages 这类平台绑定仓库，开启自动部署；</li>
+          <li>拿到平台给的免费域名，网站就上线了。</li>
+        </ol>
+        <blockquote>整个过程不花一分钱，也不需要懂服务器。你唯一要学的，是基础的 Git 命令。</blockquote>
+
+        <h2>最后</h2>
+        <p>「上线」这件事，门槛其实低到很多人想象不到。真正的难点从来不是技术，而是——你愿不愿意，把第一个版本先发出去。先上线，再迭代。共勉。</p>
+
       </div>
-    </header>
 
-    <div class="article-body">
+      <footer class="article-footer">
+        <p class="author-line">—— Frank</p>
 
-      <p>很多人以为"上线一个网站"需要买服务器、配环境、装 Nginx……其实对于静态网站，完全有更简单的方式：写好 HTML 文件，上传到托管平台，几分钟就能获得一个公网可访问的网址，全程零服务器。</p>
+        <nav class="post-nav">
+          <a class="prev" href="hello-world.html">
+            <span class="nav-label">← 上一篇</span>
+            你好，世界
+          </a>
+          <a class="next" href="../blog.html">
+            <span class="nav-label">返回列表 →</span>
+            所有文章
+          </a>
+        </nav>
+      </footer>
 
-      <h2>静态网站是什么</h2>
-      <p>静态网站就是由固定文件组成的网站——服务器收到请求后原样返回文件，不做任何计算。适合个人主页、博客、作品集、文档站等场景。</p>
+    </article>
 
-      <p>它的优点非常明显：</p>
-      <ul>
-        <li><strong>部署简单</strong>：上传文件夹即完成部署；</li>
-        <li><strong>成本为零</strong>：主流的托管平台都有免费额度；</li>
-        <li><strong>稳定安全</strong>：没有数据库和后端代码，攻击面小；</li>
-        <li><strong>访问快</strong>：内容天然适合 CDN 缓存，全球加速。</li>
-      </ul>
+  </main>
 
-      <h2>托管平台怎么选</h2>
-      <p>常见的免费静态托管平台有 GitHub Pages、Vercel、Netlify、Cloudflare Pages 等。如果面向国内访客，可以关注腾讯云 EdgeOne Pages 这类国内平台，访问速度更好，免费域名也不需要备案。</p>
-
-      <blockquote>小提示：如果你平时用 Gitee 存代码，注意 Gitee 官方的 Pages 托管服务目前处于暂停状态，需要搭配其他平台托管。</blockquote>
-
-      <h2>部署流程（以 EdgeOne Pages 为例）</h2>
-      <ol>
-        <li>打开 EdgeOne Pages 控制台，用常用账号登录；</li>
-        <li>新建一个项目，上传你的网站文件夹（包含 <code>index.html</code>）；</li>
-        <li>等待几秒钟，即可获得一个 <code>https://xxx.edgeone.app</code> 的免费域名；</li>
-        <li>访问网址，确认页面正常显示，部署完成。</li>
-      </ol>
-
-      <p>以后每次更新内容，重新上传覆盖即可；也可以把网站源码放进 Git 仓库，绑定仓库后每次 <code>git push</code> 自动重新部署。</p>
-
-      <h2>结语</h2>
-      <p>静态网站是「一个人低成本拥有互联网资产」的最佳起点。它也许不是最复杂的技术方案，但它足够简单、可靠，让你把注意力放在内容本身。</p>
-
-    </div>
-  </article>
-
-  <!-- 页脚 -->
+  <!-- ====== 页脚 ====== -->
   <footer class="footer">
-    <div class="container">
-      <div class="social">
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
-        <a href="mailto:you@example.com">邮箱</a>
-      </div>
-      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    <div class="footer-inner">
+      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
+      <ul class="footer-social">
+        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
+        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
+        <li><a href="../about.html">关于</a></li>
+      </ul>
+      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
     </div>
   </footer>
 

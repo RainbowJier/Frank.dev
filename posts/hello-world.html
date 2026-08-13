@@ -3,84 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="你好，世界 —— 我的个人网站上线了">
-  <title>你好，世界 —— 我的个人网站上线了 · 你的名字</title>
+  <meta name="description" content="你好，世界 —— 我的个人网站上线了。关于为什么要有个人网站。">
+  <title>你好，世界 —— Frank's Notes</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-  <!-- 顶部导航 -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a class="nav-brand" href="../index.html">你的名字</a>
+  <!-- ====== 刊头导航 ====== -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="masthead-brand" href="../index.html">Frank<span class="amp">’</span>s Notes</a>
       <button class="nav-toggle" aria-label="打开菜单">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="masthead-links">
         <li><a href="../index.html">首页</a></li>
-        <li><a href="../blog.html" class="active">博客</a></li>
-        <li><a href="../projects.html">作品集</a></li>
+        <li><a href="../blog.html" class="active">文章</a></li>
+        <li><a href="../projects.html">作品</a></li>
+        <li><a href="../about.html">关于</a></li>
       </ul>
     </div>
-  </nav>
+  </header>
 
-  <!-- 文章正文：替换 <article> 中的内容即可 -->
-  <article class="article container">
-    <header>
-      <h1>你好，世界 —— 我的个人网站上线了</h1>
-      <div class="meta">
-        <span>2026-08-01</span>
-        <span class="tag">学习笔记</span>
-        <span>预计阅读 3 分钟</span>
-      </div>
-    </header>
+  <main class="container">
 
-    <div class="article-body">
+    <article class="article">
 
-      <p>这是我的第一篇博客。花了一点时间，我终于有了一个属于自己的、完全由我控制的小角落。这篇文章介绍一下这个网站是什么、怎么构成的，以及我打算用它来做什么。</p>
+      <header class="article-header">
+        <p class="eyebrow">随笔 · No. 01</p>
+        <h1>你好，世界 ——<br>我的个人网站上线了</h1>
+        <p class="article-meta">
+          <span class="cat">随笔</span>
+          <span class="sep">·</span> 2026 年 8 月 1 日
+          <span class="sep">·</span> 预计阅读 3 分钟
+        </p>
+      </header>
 
-      <h2>为什么要有个人网站</h2>
-      <p>社交媒体上的内容会随着平台变化而消失，而自己的网站不会。它像是互联网上的一个家：</p>
-      <ul>
-        <li>可以完整地表达自己，不受字数限制；</li>
-        <li>学习过程中的笔记和思考有了一个沉淀的地方；</li>
-        <li>以后找工作或合作时，这就是最好的名片。</li>
-      </ul>
+      <div class="article-body">
 
-      <h2>这个网站是怎么构成的</h2>
-      <p>整个网站是纯静态的：HTML + CSS + JavaScript，没有服务器、没有数据库、没有构建工具。这也是我刻意为之的选择——</p>
-      <blockquote>
-        静态网站是最简单、最可靠的形态：任何托管平台都能跑，几乎不会出故障，修改即发布。
-      </blockquote>
-      <p>如果你想快速搭一个类似的网站，核心只需要三个文件：</p>
-      <pre><code>my-site/
+        <p>这是我的第一篇博客。花了一点时间，我终于在互联网上有了一个属于自己的、完全由我控制的小角落。这篇文章，想聊聊这个网站是什么、为什么要有它，以及我打算用它来做什么。</p>
+
+        <h2>为什么要有个人网站</h2>
+        <p>社交媒体上的内容会随着平台的变化而消失——链接会失效，账号会被封，算法会决定谁看到你的文字。而自己的网站不会。它像是互联网上的一个家：</p>
+        <ul>
+          <li>可以完整地表达自己，不受字数与格式的限制；</li>
+          <li>学习过程中的笔记与思考，有了一个能沉淀下来的地方；</li>
+          <li>将来找工作或合作时，它就是最好的一张名片。</li>
+        </ul>
+
+        <h2>这个网站是怎么构成的</h2>
+        <p>整个网站是纯静态的：HTML、CSS 和一点点 JavaScript，没有服务器、没有数据库、没有构建工具。这是刻意为之的选择——</p>
+        <blockquote>静态网站是最简单、最可靠的形态：任何托管平台都能跑，几乎不会出故障，修改即发布。</blockquote>
+        <p>如果你想搭一个类似的网站，核心其实只需要三个文件：</p>
+        <pre><code>Frank.dev/
 ├── index.html    # 首页
 ├── css/style.css # 样式
 └── js/main.js    # 少量交互</code></pre>
 
-      <h2>接下来打算写什么</h2>
-      <p>计划中的话题包括：</p>
-      <ol>
-        <li>学习过程中踩过的坑和总结；</li>
-        <li>有趣的小工具和小项目复盘；</li>
-        <li>偶尔一些随想。</li>
-      </ol>
+        <h2>接下来打算写什么</h2>
+        <p>计划中的话题大致有这么几类：</p>
+        <ol>
+          <li>学习过程中踩过的坑，以及事后总结出来的方法；</li>
+          <li>一些有趣的小工具、小项目，以及复盘；</li>
+          <li>偶尔，一些与代码无关的随想。</li>
+        </ol>
 
-      <h2>结语</h2>
-      <p>网站会持续更新。如果你看到这里，欢迎通过首页的联系方式和我交流。祝大家都能拥有自己的小角落。</p>
+        <h2>写在最后</h2>
+        <p>网站会持续更新。如果你看到这里，欢迎通过页脚的联系方式和我聊聊。祝我们都能拥有自己的小角落，并把想说的，认真写下来。</p>
 
-    </div>
-  </article>
-
-  <!-- 页脚 -->
-  <footer class="footer">
-    <div class="container">
-      <div class="social">
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
-        <a href="mailto:you@example.com">邮箱</a>
       </div>
-      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+
+      <footer class="article-footer">
+        <p class="author-line">—— Frank，写于 2026 年盛夏</p>
+
+        <!-- 上一篇 / 下一篇：改 href 与标题即可 -->
+        <nav class="post-nav">
+          <a class="prev" href="../blog.html">
+            <span class="nav-label">← 返回列表</span>
+            所有文章
+          </a>
+          <a class="next" href="deploy-static-site.html">
+            <span class="nav-label">下一篇 →</span>
+            零服务器部署静态网站
+          </a>
+        </nav>
+      </footer>
+
+    </article>
+
+  </main>
+
+  <!-- ====== 页脚 ====== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
+      <ul class="footer-social">
+        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
+        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
+        <li><a href="../about.html">关于</a></li>
+      </ul>
+      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
     </div>
   </footer>
 

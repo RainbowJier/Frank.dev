@@ -3,68 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="博客文章列表">
-  <title>博客 · 你的名字</title>
+  <meta name="description" content="Frank's Notes 博客文章列表 —— 记录学习笔记与生活思考。">
+  <title>文章 · Frank's Notes</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- 顶部导航 -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <a class="nav-brand" href="index.html">你的名字</a>
+  <!-- ====== 刊头导航 ====== -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="masthead-brand" href="index.html">Frank<span class="amp">’</span>s Notes</a>
       <button class="nav-toggle" aria-label="打开菜单">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="masthead-links">
         <li><a href="index.html">首页</a></li>
-        <li><a href="blog.html" class="active">博客</a></li>
-        <li><a href="projects.html">作品集</a></li>
+        <li><a href="blog.html" class="active">文章</a></li>
+        <li><a href="projects.html">作品</a></li>
+        <li><a href="about.html">关于</a></li>
       </ul>
     </div>
-  </nav>
+  </header>
 
-  <main class="container">
+  <main>
 
-    <section class="section">
-      <h2 class="section-title">博客</h2>
-      <p class="section-sub">记录学习笔记与生活思考。新增文章：复制 <code>posts/</code> 里的一篇模板，改内容后在下方列表加一条卡片即可。</p>
+    <!-- ====== 列表刊头 ====== -->
+    <section class="container" style="padding-top: clamp(2.5rem,7vw,4.5rem); text-align:center;">
+      <p class="eyebrow">The Archive</p>
+      <h1 style="font-size:clamp(2.4rem,7vw,4rem); margin-bottom:0.6rem;">所有文章</h1>
+      <p class="lead" style="margin:0 auto; max-width:34rem;">一些关于代码、学习与生活的记录。慢慢写，慢慢读。</p>
+    </section>
 
-      <div class="grid">
+    <!-- ====== 文章列表 ====== -->
+    <section class="section container">
+      <ul class="post-list">
 
-        <!-- 文章卡片：复制这一段可以添加新文章 -->
-        <article class="card blog-card">
-          <div class="meta">
-            <span>2026-08-01</span>
-            <span class="tag">学习笔记</span>
+        <!-- 文章卡片：复制这一段添加新文章，改 data-href / 日期 / 分类 / 标题 / 摘要 -->
+        <li class="post-card" data-href="posts/hello-world.html">
+          <div class="date-col">
+            08·01·2026
+            <span class="cat">随笔</span>
           </div>
-          <h3><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h3>
-          <p>第一篇博客：为什么要建这个网站、它由什么构成、以及我接下来打算写点什么。</p>
-        </article>
-
-        <article class="card blog-card">
-          <div class="meta">
-            <span>2026-07-20</span>
-            <span class="tag">前端</span>
+          <div>
+            <h3><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h3>
+            <p class="excerpt">为什么在社交媒体之外，还需要一个属于自己的小角落。这里会写什么，又会怎样生长。</p>
           </div>
-          <h3><a href="posts/deploy-static-site.html">零服务器部署静态网站：从本地到上线</a></h3>
-          <p>用一个纯静态网站走完「本地开发 → 上传托管 → 获得网址」的全过程，附完整步骤。</p>
-        </article>
+        </li>
 
-      </div>
+        <li class="post-card" data-href="posts/deploy-static-site.html">
+          <div class="date-col">
+            07·20·2026
+            <span class="cat">技术</span>
+          </div>
+          <div>
+            <h3><a href="posts/deploy-static-site.html">零服务器部署静态网站：从本地到上线</a></h3>
+            <p class="excerpt">用一个纯静态网站走完「本地开发 → 推送代码 → 自动部署 → 获得网址」的全过程，附完整步骤。</p>
+          </div>
+        </li>
+
+      </ul>
     </section>
 
   </main>
 
-  <!-- 页脚 -->
+  <!-- ====== 页脚 ====== -->
   <footer class="footer">
-    <div class="container">
-      <div class="social">
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
-        <a href="mailto:you@example.com">邮箱</a>
-      </div>
-      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    <div class="footer-inner">
+      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
+      <ul class="footer-social">
+        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
+        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
+        <li><a href="about.html">关于</a></li>
+      </ul>
+      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
     </div>
   </footer>
 
