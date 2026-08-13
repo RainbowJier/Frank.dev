@@ -1,24 +1,38 @@
 /* ============================================================
    Frank's Notes · 交互脚本
-   移动端导航 / 返回顶部 / 页脚年份
+   侧边栏汉堡菜单 / 返回顶部
    ============================================================ */
 
-// 移动端导航菜单开关
+// 侧边栏移动端开关
 (function () {
-  var toggle = document.querySelector(".nav-toggle");
-  var links = document.querySelector(".nav-links");
-  if (!toggle || !links) return;
+  var toggle  = document.querySelector(".sidebar-toggle");
+  var sidebar = document.querySelector(".sidebar");
+  var overlay = document.querySelector(".sidebar-overlay");
+  if (!toggle || !sidebar) return;
+
+  function openSidebar() {
+    toggle.classList.add("open");
+    sidebar.classList.add("open");
+    if (overlay) overlay.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSidebar() {
+    toggle.classList.remove("open");
+    sidebar.classList.remove("open");
+    if (overlay) overlay.classList.remove("show");
+    document.body.style.overflow = "";
+  }
 
   toggle.addEventListener("click", function () {
-    toggle.classList.toggle("open");
-    links.classList.toggle("open");
+    sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
   });
 
-  links.addEventListener("click", function (e) {
-    if (e.target.tagName === "A") {
-      toggle.classList.remove("open");
-      links.classList.remove("open");
-    }
+  if (overlay) overlay.addEventListener("click", closeSidebar);
+
+  // 点击侧边栏内链接后关闭
+  sidebar.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") closeSidebar();
   });
 })();
 
@@ -28,19 +42,10 @@
   if (!btn) return;
 
   window.addEventListener("scroll", function () {
-    if (window.scrollY > 480) btn.classList.add("show");
-    else btn.classList.remove("show");
+    btn.classList.toggle("show", window.scrollY > 480);
   }, { passive: true });
 
   btn.addEventListener("click", function () {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-})();
-
-// 页脚年份（data-i18n-year 由 i18n.js 处理，这里兜底）
-(function () {
-  var el = document.querySelector(".footer-year");
-  if (el && !el.getAttribute("data-i18n-year")) {
-    el.textContent = new Date().getFullYear();
-  }
 })();
