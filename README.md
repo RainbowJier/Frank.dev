@@ -9,7 +9,7 @@
 ## 目录结构
 
 ```
-my-site/
+Frank.dev/             # 项目根目录
 ├── index.html          # 个人主页/简历：关于我、技能、经历
 ├── blog.html           # 博客文章列表
 ├── posts/              # 博客文章（hello-world、deploy-static-site）

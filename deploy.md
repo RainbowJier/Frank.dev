@@ -18,7 +18,7 @@
 1. 打开 **EdgeOne Pages 控制台**（腾讯云官网 → 搜索「EdgeOne」→ 进入「Pages」，或用账号直接登录控制台）。首次使用可用微信 / Gitee 等账号登录，按提示完成。
 2. 点击 **创建项目 / 新建 Pages 项目**。
 3. 选择 **上传文件** 方式（或拖拽上传）。
-4. 上传本目录 `my-site/` 下的**所有文件**（`index.html`、`css/`、`js/`、`posts/`、`assets/`，注意要把文件夹里的文件传进去，而不是传一个文件夹压缩包）。
+4. 上传项目根目录（`Frank.dev/`）下的**所有文件**（`index.html`、`css/`、`js/`、`posts/`、`assets/`，注意要把文件夹里的文件传进去，而不是传一个文件夹压缩包）。
 5. 等待几秒构建完成，控制台会给你一个免费域名，例如：`https://yourname.edgeone.app`。
 6. 浏览器打开该网址验证，部署完成 ✅
 
@@ -30,25 +30,21 @@
 
 ### 第 1 步：把网站推送到 Gitee
 
-1. 在 [gitee.com](https://gitee.com) 登录，新建一个仓库（例如 `my-site`，选「公开」）。
+1. 在 [gitee.com](https://gitee.com) 登录，新建一个仓库（例如 `frank-dev`，选「公开」）。
 2. 在项目根目录执行（替换 `你的用户名`）：
 
 ```bash
-git init
-git add .
-git commit -m "init: 个人网站首版"
-git branch -M main
-git remote add origin https://gitee.com/你的用户名/my-site.git
+git remote add origin https://gitee.com/你的用户名/frank-dev.git
 git push -u origin main
 ```
 
-（仓库建立后 Gitee 页面会显示具体地址，以它为准。）
+（仓库建立后 Gitee 页面会显示具体地址，以它为准。仓库已在本机初始化并完成首次提交，无需重复 `git init`。）
 
 ### 第 2 步：在 EdgeOne Pages 绑定仓库
 
 1. 打开 EdgeOne Pages 控制台 → 创建项目。
 2. 选择 **从代码仓库导入 / Git 仓库** 方式。
-3. 按提示授权绑定 Gitee 账号，选择仓库 `my-site`。
+3. 按提示授权绑定 Gitee 账号，选择仓库 `frank-dev`。
 4. 构建配置保持默认即可（本网站无需构建步骤，直接发布）。
 5. 点击 **部署**，获得免费域名，上线 ✅
 
