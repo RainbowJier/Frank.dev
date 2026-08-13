@@ -19,7 +19,9 @@
   --accent-hover:#9e4c2e;
   --accent-soft: #f9ede8;
 
-  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+  --font-head: "Saira Extra Condensed", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", -apple-system, sans-serif;
+  --font: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
           "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   --font-mono: "SFMono-Regular", Consolas, "Courier New", monospace;
 
@@ -68,7 +70,8 @@ a { color: var(--accent); text-decoration: none; }
 a:hover { color: var(--accent-hover); text-decoration: underline; }
 
 h1, h2, h3, h4 {
-  font-weight: 600;
+  font-family: var(--font-head);
+  font-weight: 700;
   line-height: 1.3;
   color: var(--text);
 }
@@ -170,8 +173,10 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 }
 
 .sidebar-name {
-  font-size: 1.15rem;
+  font-family: var(--font-head);
+  font-size: 1.5rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--text);
   margin-bottom: 0.25rem;
 }
@@ -286,28 +291,26 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .section + .section { padding-top: 0; }
 
 .section-title {
-  display: flex;
-  align-items: baseline;
-  gap: 0.9rem;
   margin-bottom: 1.6rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--border-dark);
+  border-bottom: 2px solid var(--accent);
 }
 .section-title .en {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  display: block;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--text);
 }
-.section-title .zh { font-size: 1.25rem; font-weight: 600; }
+.section-title .zh { display: none; }
 
 /* ---------- 首页头部 ---------- */
 .hero {
   padding: clamp(2.2rem, 6vw, 4rem) 0 1rem;
   margin-bottom: 0.8rem;
 }
-.hero h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 0.4rem; }
+.hero h1 { font-size: clamp(2.4rem, 5vw, 3.2rem); margin-bottom: 0.4rem; }
 .hero .subtitle { color: var(--text-soft); font-size: 1.05rem; margin-bottom: 0.7rem; }
 .hero .contact-line { font-size: 0.9rem; color: var(--text-faint); }
 .hero .contact-line a { margin-right: 1rem; }
@@ -325,27 +328,38 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 }
 .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ---------- 经历时间线 ---------- */
+/* ---------- 经历（三栏 CV 式：职位 / 描述 / 时间） ---------- */
 .timeline { list-style: none; padding: 0; }
 .timeline-item {
-  position: relative;
-  padding: 0 0 1.4rem 1.8rem;
-  border-left: 2px solid var(--border);
-  margin-left: 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
 }
-.timeline-item::before {
-  content: "";
-  position: absolute;
-  left: -7px; top: 6px;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
+.timeline-item:last-child { border-bottom: none; }
+.timeline-item h3 {
+  order: 1;
+  flex: 0 0 11rem;
+  font-size: 1.05rem;
+  margin: 0;
 }
-.timeline-item:last-child { padding-bottom: 0; }
-.timeline-item h3 { font-size: 1.05rem; }
-.timeline-item .date { font-size: 0.85rem; color: var(--accent); margin-bottom: 0.3rem; }
-.timeline-item p { color: var(--text-soft); font-size: 0.95rem; }
+.timeline-item p {
+  order: 2;
+  flex: 1 1 18rem;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.timeline-item .date {
+  order: 3;
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
 
 /* ---------- 文章列表 ---------- */
 .post-list { list-style: none; padding: 0; }
@@ -486,6 +500,14 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   .post-item .date { width: auto; }
   .post-nav { flex-direction: column; }
   .post-nav .next { margin-left: 0; text-align: left; }
+
+  /* 经历在移动端竖向堆叠 */
+  .timeline-item h3,
+  .timeline-item p,
+  .timeline-item .date { flex-basis: 100%; margin-left: 0; }
+  .timeline-item h3 { order: 1; }
+  .timeline-item .date { order: 2; }
+  .timeline-item p { order: 3; }
 }
 
 @media (prefers-reduced-motion: reduce) {
