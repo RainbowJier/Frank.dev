@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="零服务器部署静态网站：从本地到上线">
+  <title>零服务器部署静态网站：从本地到上线 · 你的名字</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="../index.html">你的名字</a>
+      <button class="nav-toggle" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="../index.html">首页</a></li>
+        <li><a href="../blog.html" class="active">博客</a></li>
+        <li><a href="../projects.html">作品集</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 文章正文：替换 <article> 中的内容即可 -->
+  <article class="article container">
+    <header>
+      <h1>零服务器部署静态网站：从本地到上线</h1>
+      <div class="meta">
+        <span>2026-07-20</span>
+        <span class="tag">前端</span>
+        <span>预计阅读 5 分钟</span>
+      </div>
+    </header>
+
+    <div class="article-body">
+
+      <p>很多人以为"上线一个网站"需要买服务器、配环境、装 Nginx……其实对于静态网站，完全有更简单的方式：写好 HTML 文件，上传到托管平台，几分钟就能获得一个公网可访问的网址，全程零服务器。</p>
+
+      <h2>静态网站是什么</h2>
+      <p>静态网站就是由固定文件组成的网站——服务器收到请求后原样返回文件，不做任何计算。适合个人主页、博客、作品集、文档站等场景。</p>
+
+      <p>它的优点非常明显：</p>
+      <ul>
+        <li><strong>部署简单</strong>：上传文件夹即完成部署；</li>
+        <li><strong>成本为零</strong>：主流的托管平台都有免费额度；</li>
+        <li><strong>稳定安全</strong>：没有数据库和后端代码，攻击面小；</li>
+        <li><strong>访问快</strong>：内容天然适合 CDN 缓存，全球加速。</li>
+      </ul>
+
+      <h2>托管平台怎么选</h2>
+      <p>常见的免费静态托管平台有 GitHub Pages、Vercel、Netlify、Cloudflare Pages 等。如果面向国内访客，可以关注腾讯云 EdgeOne Pages 这类国内平台，访问速度更好，免费域名也不需要备案。</p>
+
+      <blockquote>小提示：如果你平时用 Gitee 存代码，注意 Gitee 官方的 Pages 托管服务目前处于暂停状态，需要搭配其他平台托管。</blockquote>
+
+      <h2>部署流程（以 EdgeOne Pages 为例）</h2>
+      <ol>
+        <li>打开 EdgeOne Pages 控制台，用常用账号登录；</li>
+        <li>新建一个项目，上传你的网站文件夹（包含 <code>index.html</code>）；</li>
+        <li>等待几秒钟，即可获得一个 <code>https://xxx.edgeone.app</code> 的免费域名；</li>
+        <li>访问网址，确认页面正常显示，部署完成。</li>
+      </ol>
+
+      <p>以后每次更新内容，重新上传覆盖即可；也可以把网站源码放进 Git 仓库，绑定仓库后每次 <code>git push</code> 自动重新部署。</p>
+
+      <h2>结语</h2>
+      <p>静态网站是「一个人低成本拥有互联网资产」的最佳起点。它也许不是最复杂的技术方案，但它足够简单、可靠，让你把注意力放在内容本身。</p>
+
+    </div>
+  </article>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="social">
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
+        <a href="mailto:you@example.com">邮箱</a>
+      </div>
+      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    </div>
+  </footer>
+
+  <button class="back-top" aria-label="返回顶部">↑</button>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

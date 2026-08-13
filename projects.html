@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="我的作品集与项目展示">
+  <title>作品集 · 你的名字</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">你的名字</a>
+      <button class="nav-toggle" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">首页</a></li>
+        <li><a href="blog.html">博客</a></li>
+        <li><a href="projects.html" class="active">作品集</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <section class="section">
+      <h2 class="section-title">作品集</h2>
+      <p class="section-sub">我做过的一些项目。复制下方卡片可添加新项目，替换标题、说明、标签和链接即可。</p>
+
+      <div class="grid">
+
+        <!-- 项目卡片模板：复制这一段添加新项目 -->
+        <article class="card project-card">
+          <div class="project-meta">
+            <span class="tag">Web</span>
+            <span class="tag">Vue</span>
+          </div>
+          <h3 style="margin-top:10px;">项目名称一</h3>
+          <p>用一两句话介绍这个项目：它解决什么问题、用了什么技术、你负责的部分。简洁但要有信息量。</p>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">在线 Demo →</a>
+            <a href="#" target="_blank" rel="noopener">源码</a>
+          </div>
+        </article>
+
+        <article class="card project-card">
+          <div class="project-meta">
+            <span class="tag">工具</span>
+            <span class="tag">Python</span>
+          </div>
+          <h3 style="margin-top:10px;">项目名称二</h3>
+          <p>介绍你的第二个项目。可以写写最有意思的实现细节或踩过的坑，这比罗列技术栈更能打动人。</p>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">在线 Demo →</a>
+            <a href="#" target="_blank" rel="noopener">源码</a>
+          </div>
+        </article>
+
+        <article class="card project-card">
+          <div class="project-meta">
+            <span class="tag">开源</span>
+            <span class="tag">Node.js</span>
+          </div>
+          <h3 style="margin-top:10px;">项目名称三</h3>
+          <p>第三个项目：可以是开源贡献、学习作品或课程作业。每多一个项目，作品集的说服力就多一分。</p>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noopener">在线 Demo →</a>
+            <a href="#" target="_blank" rel="noopener">源码</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="social">
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
+        <a href="mailto:you@example.com">邮箱</a>
+      </div>
+      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    </div>
+  </footer>
+
+  <button class="back-top" aria-label="返回顶部">↑</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

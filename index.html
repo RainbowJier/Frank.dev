@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="你的名字的个人主页：介绍、技能与经历">
+  <title>你的名字 · 个人主页</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">你的名字</a>
+      <button class="nav-toggle" aria-label="打开菜单">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">首页</a></li>
+        <li><a href="blog.html">博客</a></li>
+        <li><a href="projects.html">作品集</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero 区：把下面 3 处占位文字换成你自己的 -->
+  <header class="hero">
+    <div class="container">
+      <div class="avatar">你</div>
+      <h1>你好，我是「你的名字」</h1>
+      <p class="subtitle">前端开发者 / 兴趣广泛的学习者</p>
+      <p class="intro">
+        一句话介绍自己：我热爱把想法变成可用的产品，专注于 Web 开发与用户体验。
+        这里是我的个人主页，你可以通过博客了解我的思考，通过作品集了解我做过的事。
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="projects.html">查看作品</a>
+        <a class="btn btn-outline" href="mailto:you@example.com">联系我</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 关于我 -->
+    <section class="section" id="about">
+      <h2 class="section-title">关于我</h2>
+      <p class="section-sub">一段详细介绍，可以写你的背景、兴趣和正在做的事。</p>
+      <div class="card">
+        <p>这里写你的完整自我介绍。例如：我是谁、来自哪里、学了什么专业、目前在做什么工作或项目、有什么长期目标。</p>
+        <p style="margin-top:12px;">再补充一些个人细节：喜欢的工具、业余爱好、最近在学的东西，让读者对你有一个立体的印象。</p>
+      </div>
+    </section>
+
+    <!-- 技能 -->
+    <section class="section" id="skills">
+      <h2 class="section-title">技能</h2>
+      <p class="section-sub">把下面的标签换成你真正掌握的技能。</p>
+      <div class="skills">
+        <span class="skill-tag">HTML / CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Vue</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">UI 设计</span>
+      </div>
+    </section>
+
+    <!-- 经历时间线 -->
+    <section class="section" id="experience">
+      <h2 class="section-title">经历</h2>
+      <p class="section-sub">工作、学习或项目经历，按时间倒序排列。</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <h3>公司名 / 学校名</h3>
+          <div class="date">2024.07 — 至今</div>
+          <p>这里写你在这段经历中做了什么：职责、成果、学到的技能。</p>
+        </div>
+        <div class="timeline-item">
+          <h3>公司名 / 学校名</h3>
+          <div class="date">2022.09 — 2024.06</div>
+          <p>同样，用一两句话概括这段经历的重点和收获。</p>
+        </div>
+        <div class="timeline-item">
+          <h3>公司名 / 学校名</h3>
+          <div class="date">2020.09 — 2022.06</div>
+          <p>时间线条目可以继续往下加，复制上面整块即可。</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="social">
+        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a>
+        <a href="mailto:you@example.com">邮箱</a>
+      </div>
+      <p>© <span class="footer-year"></span> 你的名字 · 用 ❤️ 与纯 HTML 构建</p>
+    </div>
+  </footer>
+
+  <button class="back-top" aria-label="返回顶部">↑</button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
