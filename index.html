@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Saira+Extra+Condensed:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -45,7 +46,7 @@
   <main class="container">
 
     <!-- ====== 头部 ====== -->
-    <header class="hero">
+    <header class="hero reveal">
       <h1 data-i18n="home.name">Frank</h1>
       <p class="subtitle" data-i18n="home.subtitle">前端开发者 · 终身学习者</p>
       <p style="color:var(--text-soft); margin-bottom:0.8rem;" data-i18n="home.tagline">把想法变成可用的产品，把学到的记录下来。</p>
@@ -57,7 +58,7 @@
 
     <!-- ====== 关于我 ====== -->
     <section class="section">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span class="en" data-i18n="home.about.en">About</span>
         <span class="zh" data-i18n="home.about.zh">关于我</span>
       </div>
@@ -68,36 +69,36 @@
 
     <!-- ====== 技能 ====== -->
     <section class="section">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span class="en" data-i18n="home.skills.en">Skills</span>
         <span class="zh" data-i18n="home.skills.zh">技能</span>
       </div>
       <div class="skills">
-        <span class="skill-tag">HTML / CSS</span>
-        <span class="skill-tag">JavaScript</span>
-        <span class="skill-tag">Vue</span>
-        <span class="skill-tag">React</span>
-        <span class="skill-tag">Node.js</span>
-        <span class="skill-tag">Java / Spring</span>
-        <span class="skill-tag">Git</span>
-        <span class="skill-tag">Python</span>
-        <span class="skill-tag">UI 设计</span>
+        <span class="skill-tag reveal">HTML / CSS</span>
+        <span class="skill-tag reveal">JavaScript</span>
+        <span class="skill-tag reveal">Vue</span>
+        <span class="skill-tag reveal">React</span>
+        <span class="skill-tag reveal">Node.js</span>
+        <span class="skill-tag reveal">Java / Spring</span>
+        <span class="skill-tag reveal">Git</span>
+        <span class="skill-tag reveal">Python</span>
+        <span class="skill-tag reveal">UI 设计</span>
       </div>
     </section>
 
     <!-- ====== 经历 ====== -->
     <section class="section">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span class="en" data-i18n="home.exp.en">Experience</span>
         <span class="zh" data-i18n="home.exp.zh">经历</span>
       </div>
       <ul class="timeline">
-        <li class="timeline-item">
+        <li class="timeline-item reveal">
           <h3 data-i18n="home.exp1.title">前端开发者</h3>
           <div class="date" data-i18n="home.exp1.date">2024.07 — 至今</div>
           <p data-i18n="home.exp1.desc">负责 Web 应用的前端开发与用户体验优化。</p>
         </li>
-        <li class="timeline-item">
+        <li class="timeline-item reveal">
           <h3 data-i18n="home.exp2.title">计算机专业 · 本科</h3>
           <div class="date" data-i18n="home.exp2.date">2020.09 — 2024.06</div>
           <p data-i18n="home.exp2.desc">系统学习计算机基础与软件开发，积累了丰富的实践项目经验。</p>
@@ -107,33 +108,33 @@
 
     <!-- ====== 最新文章 ====== -->
     <section class="section">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span class="en" data-i18n="home.posts.en">Latest Posts</span>
         <span class="zh" data-i18n="home.posts.zh">最新文章</span>
       </div>
       <ul class="post-list">
-        <li class="post-item">
+        <li class="post-item reveal">
           <span class="date">2026-08-01</span>
           <span class="cat" data-i18n="post1.cat">随笔</span>
           <h3><a href="posts/hello-world.html" data-i18n="post1.title">你好，世界 —— 我的个人网站上线了</a></h3>
         </li>
-        <li class="post-item">
+        <li class="post-item reveal">
           <span class="date">2026-07-20</span>
           <span class="cat" data-i18n="post2.cat">技术</span>
           <h3><a href="posts/deploy-static-site.html" data-i18n="post2.title">零服务器部署静态网站：从本地到上线</a></h3>
         </li>
       </ul>
-      <p style="margin-top:1.2rem;"><a href="blog.html" data-i18n="home.posts.more">查看全部文章 →</a></p>
+      <p style="margin-top:1.2rem;"><a class="link-more" href="blog.html" data-i18n="home.posts.more">查看全部文章 →</a></p>
     </section>
 
     <!-- ====== 精选作品 ====== -->
     <section class="section">
-      <div class="section-title">
+      <div class="section-title reveal">
         <span class="en" data-i18n="home.projects.en">Projects</span>
         <span class="zh" data-i18n="home.projects.zh">精选作品</span>
       </div>
       <p data-i18n="home.projects.desc" style="max-width:60rem;">一些我做过的东西，从 Spring 全家桶到多智能体交易框架。</p>
-      <p style="margin-top:1.2rem;"><a href="projects.html" data-i18n="home.projects.more">浏览作品集 →</a></p>
+      <p style="margin-top:1.2rem;"><a class="link-more" href="projects.html" data-i18n="home.projects.more">浏览作品集 →</a></p>
     </section>
 
   </main>

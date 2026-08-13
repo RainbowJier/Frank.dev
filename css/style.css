@@ -499,3 +499,101 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   .sidebar, .sidebar-toggle, .back-top { display: none !important; }
   body { padding-left: 0; }
 }
+
+/* ============================================================
+   交互增强：滚动入场动画 / 按钮反馈 / 链接动画
+   ============================================================ */
+
+/* ---------- 滚动入场动画（仅 JS 启用时隐藏，关 JS 即正常显示） ---------- */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+.js .reveal.in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- 全局点击 / 焦点反馈 ---------- */
+a, button, .skill-tag, .project-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 键盘焦点轮廓（无障碍） */
+a:focus-visible,
+button:focus-visible,
+.skill-tag:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* 按下按压感 */
+button:active,
+.skill-tag:active,
+.lang-toggle:active,
+.back-top:active { transform: scale(0.96); }
+.sidebar-links a:active { transform: scale(0.98); }
+
+/* ---------- 带箭头的文字链接 ---------- */
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.link-more::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.link-more:hover {
+  transform: translateX(5px);
+  text-decoration: none;
+}
+.link-more:hover::after { transform: scaleX(1); }
+
+/* ---------- hover 增强 ---------- */
+.skill-tag {
+  transition: border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+.skill-tag:hover { transform: translateY(-2px); }
+
+.project-card {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1), 0 2px 6px rgba(0,0,0,0.06);
+  border-color: var(--accent);
+}
+
+.post-item {
+  transition: padding-left 0.2s ease;
+}
+.post-item:hover { padding-left: 0.4rem; }
+.post-item h3 a { transition: color 0.18s ease; }
+.post-item:hover h3 a { color: var(--accent); }
+
+.back-top { transition: opacity 0.3s ease, transform 0.25s ease, border-color 0.2s ease, color 0.2s ease; }
+.back-top:hover { transform: translateY(-2px); }
+
+/* 侧边栏导航：hover 时左侧指示条滑入 */
+.sidebar-links a {
+  border-left: 3px solid transparent;
+}
+.sidebar-links a:not(.active):hover {
+  border-left-color: rgba(255,255,255,0.5);
+}

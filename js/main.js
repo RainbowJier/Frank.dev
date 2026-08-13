@@ -49,3 +49,37 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 })();
+
+// 滚动入场动画（IntersectionObserver + 同组错峰 + 降级）
+(function () {
+  var items = document.querySelectorAll(".reveal");
+  if (!items.length) return;
+
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // 无障碍偏好或浏览器不支持：全部立即显示
+  if (reduce || !("IntersectionObserver" in window)) {
+    items.forEach(function (el) { el.classList.add("in"); });
+    return;
+  }
+
+  // 同父级下的 .reveal 按索引错峰 70ms
+  items.forEach(function (el) {
+    var siblings = Array.prototype.filter.call(el.parentNode.children, function (c) {
+      return c.classList.contains("reveal");
+    });
+    var idx = siblings.indexOf(el);
+    if (idx > 0) el.style.transitionDelay = idx * 70 + "ms";
+  });
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        en.target.classList.add("in");
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+  items.forEach(function (el) { io.observe(el); });
+})();

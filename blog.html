@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Saira+Extra+Condensed:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 
@@ -45,7 +46,7 @@
     <main class="container">
 
     <!-- ====== 页头 ====== -->
-    <header class="hero">
+    <header class="hero reveal">
       <h1 data-i18n="blog.title">文章</h1>
       <p class="subtitle" data-i18n="blog.subtitle">一些关于代码、学习与生活的记录。</p>
     </header>
@@ -55,13 +56,13 @@
       <ul class="post-list">
 
         <!-- 文章条目：复制一段，改日期/分类/标题/链接，并在 js/i18n.js 补对应 key -->
-        <li class="post-item">
+        <li class="post-item reveal">
           <span class="date">2026-08-01</span>
           <span class="cat" data-i18n="post1.cat">随笔</span>
           <h3><a href="posts/hello-world.html" data-i18n="post1.title">你好，世界 —— 我的个人网站上线了</a></h3>
         </li>
 
-        <li class="post-item">
+        <li class="post-item reveal">
           <span class="date">2026-07-20</span>
           <span class="cat" data-i18n="post2.cat">技术</span>
           <h3><a href="posts/deploy-static-site.html" data-i18n="post2.title">零服务器部署静态网站：从本地到上线</a></h3>
