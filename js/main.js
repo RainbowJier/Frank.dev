@@ -91,11 +91,11 @@ function smoothScrollTo(targetY, dur) {
   // 2) scrollspy：滚动时高亮当前区块对应的导航项
   //    技能/经历区归「关于」，文章区→文章，作品区→作品
   var spySections = [
-    { id: "about",      link: '#sidebar a[href="#about"]' },
-    { id: "skills",     link: '#sidebar a[href="#about"]' },
-    { id: "experience", link: '#sidebar a[href="#about"]' },
-    { id: "posts",      link: '#sidebar a[href="#posts"]' },
-    { id: "projects",   link: '#sidebar a[href="#projects"]' },
+    { id: "about",      link: '.sidebar a[href="#about"]' },
+    { id: "skills",     link: '.sidebar a[href="#about"]' },
+    { id: "experience", link: '.sidebar a[href="#about"]' },
+    { id: "posts",      link: '.sidebar a[href="#posts"]' },
+    { id: "projects",   link: '.sidebar a[href="#projects"]' },
   ].filter(function (s) { return document.getElementById(s.id); });
 
   if (!spySections.length) return;
