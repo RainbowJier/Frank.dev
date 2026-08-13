@@ -3,62 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Frank's Notes 博客文章列表 —— 记录学习笔记与生活思考。">
+  <meta name="description" content="Frank's Notes 文章列表。">
   <title>文章 · Frank's Notes</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ====== 刊头导航 ====== -->
-  <header class="masthead">
-    <div class="masthead-inner">
-      <a class="masthead-brand" href="index.html">Frank<span class="amp">’</span>s Notes</a>
-      <button class="nav-toggle" aria-label="打开菜单">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="masthead-links">
-        <li><a href="index.html">首页</a></li>
-        <li><a href="blog.html" class="active">文章</a></li>
-        <li><a href="projects.html">作品</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
+  <!-- ====== 顶部导航 ====== -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">Frank<span class="dot">.</span>dev</a>
+      <div class="nav-right">
+        <button class="nav-toggle" aria-label="打开菜单">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+          <li><a href="blog.html" class="active" data-i18n="nav.blog">文章</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">作品</a></li>
+          <li><a href="about.html" data-i18n="nav.about">关于</a></li>
+        </ul>
+        <button class="lang-toggle" data-lang-toggle>English</button>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main class="container">
 
-    <!-- ====== 列表刊头 ====== -->
-    <section class="container" style="padding-top: clamp(2.5rem,7vw,4.5rem); text-align:center;">
-      <p class="eyebrow">The Archive</p>
-      <h1 style="font-size:clamp(2.4rem,7vw,4rem); margin-bottom:0.6rem;">所有文章</h1>
-      <p class="lead" style="margin:0 auto; max-width:34rem;">一些关于代码、学习与生活的记录。慢慢写，慢慢读。</p>
-    </section>
+    <!-- ====== 页头 ====== -->
+    <header class="hero">
+      <h1 data-i18n="blog.title">文章</h1>
+      <p class="subtitle" data-i18n="blog.subtitle">一些关于代码、学习与生活的记录。</p>
+    </header>
 
     <!-- ====== 文章列表 ====== -->
-    <section class="section container">
+    <section class="section">
       <ul class="post-list">
 
-        <!-- 文章卡片：复制这一段添加新文章，改 data-href / 日期 / 分类 / 标题 / 摘要 -->
-        <li class="post-card" data-href="posts/hello-world.html">
-          <div class="date-col">
-            08·01·2026
-            <span class="cat">随笔</span>
-          </div>
-          <div>
-            <h3><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h3>
-            <p class="excerpt">为什么在社交媒体之外，还需要一个属于自己的小角落。这里会写什么，又会怎样生长。</p>
-          </div>
+        <!-- 文章条目：复制一段，改日期/分类/标题/链接，并在 js/i18n.js 补对应 key -->
+        <li class="post-item">
+          <span class="date">2026-08-01</span>
+          <span class="cat" data-i18n="post1.cat">随笔</span>
+          <h3><a href="posts/hello-world.html" data-i18n="post1.title">你好，世界 —— 我的个人网站上线了</a></h3>
         </li>
 
-        <li class="post-card" data-href="posts/deploy-static-site.html">
-          <div class="date-col">
-            07·20·2026
-            <span class="cat">技术</span>
-          </div>
-          <div>
-            <h3><a href="posts/deploy-static-site.html">零服务器部署静态网站：从本地到上线</a></h3>
-            <p class="excerpt">用一个纯静态网站走完「本地开发 → 推送代码 → 自动部署 → 获得网址」的全过程，附完整步骤。</p>
-          </div>
+        <li class="post-item">
+          <span class="date">2026-07-20</span>
+          <span class="cat" data-i18n="post2.cat">技术</span>
+          <h3><a href="posts/deploy-static-site.html" data-i18n="post2.title">零服务器部署静态网站：从本地到上线</a></h3>
         </li>
 
       </ul>
@@ -69,19 +61,18 @@
   <!-- ====== 页脚 ====== -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
-      <ul class="footer-social">
-        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
-        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
-      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
+      <span data-i18n="footer.tagline">个人主页 · 记录学习与思考</span>
+      <div class="footer-links">
+        <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:3021809270@qq.com" data-i18n="home.contact">邮箱</a>
+      </div>
+      <p class="footer-copy" data-i18n-year="footer.copyright">© <span class="footer-year"></span> Frank's Notes · 用 HTML 与 CSS 构建</p>
     </div>
   </footer>
 
   <button class="back-top" aria-label="返回顶部">↑</button>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

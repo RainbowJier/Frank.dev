@@ -1,12 +1,12 @@
 /* ============================================================
    Frank's Notes · 交互脚本
-   移动端导航 / 返回顶部 / 页脚年份 / 列表卡片整块可点
+   移动端导航 / 返回顶部 / 页脚年份
    ============================================================ */
 
 // 移动端导航菜单开关
 (function () {
   var toggle = document.querySelector(".nav-toggle");
-  var links = document.querySelector(".masthead-links");
+  var links = document.querySelector(".nav-links");
   if (!toggle || !links) return;
 
   toggle.addEventListener("click", function () {
@@ -14,7 +14,6 @@
     links.classList.toggle("open");
   });
 
-  // 点击菜单项后自动收起
   links.addEventListener("click", function (e) {
     if (e.target.tagName === "A") {
       toggle.classList.remove("open");
@@ -38,22 +37,10 @@
   });
 })();
 
-// 页脚自动年份
+// 页脚年份（data-i18n-year 由 i18n.js 处理，这里兜底）
 (function () {
   var el = document.querySelector(".footer-year");
-  if (el) el.textContent = new Date().getFullYear();
-})();
-
-// 让整张文章卡片可点击（点击卡片任意位置跳到链接）
-// 给 .post-card 加 data-href 即可启用
-(function () {
-  var cards = document.querySelectorAll(".post-card[data-href]");
-  cards.forEach(function (card) {
-    card.style.cursor = "pointer";
-    card.addEventListener("click", function (e) {
-      // 点到卡片内的真实链接时，交给它自己处理
-      if (e.target.closest("a")) return;
-      window.location.href = card.getAttribute("data-href");
-    });
-  });
+  if (el && !el.getAttribute("data-i18n-year")) {
+    el.textContent = new Date().getFullYear();
+  }
 })();

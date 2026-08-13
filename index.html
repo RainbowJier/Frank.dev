@@ -3,115 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Frank's Notes —— 一个前端开发者的个人博客，记录关于构建、学习与思考的文字。">
-  <title>Frank's Notes · 个人博客</title>
+  <meta name="description" content="Frank's Notes —— 前端开发者的个人主页与博客。">
+  <title>Frank's Notes · 个人主页</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ====== 刊头导航 ====== -->
-  <header class="masthead">
-    <div class="masthead-inner">
-      <a class="masthead-brand" href="index.html">Frank<span class="amp">’</span>s Notes</a>
-      <button class="nav-toggle" aria-label="打开菜单">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="masthead-links">
-        <li><a href="index.html" class="active">首页</a></li>
-        <li><a href="blog.html">文章</a></li>
-        <li><a href="projects.html">作品</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
+  <!-- ====== 顶部导航 ====== -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">Frank<span class="dot">.</span>dev</a>
+      <div class="nav-right">
+        <button class="nav-toggle" aria-label="打开菜单">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active" data-i18n="nav.home">首页</a></li>
+          <li><a href="blog.html" data-i18n="nav.blog">文章</a></li>
+          <li><a href="projects.html" data-i18n="nav.projects">作品</a></li>
+          <li><a href="about.html" data-i18n="nav.about">关于</a></li>
+        </ul>
+        <button class="lang-toggle" data-lang-toggle>English</button>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main class="container">
 
-    <!-- ====== 刊头 Hero ====== -->
-    <section class="container">
-      <div class="hero">
-        <p class="mast-sub">A Personal Journal · Est. 2026</p>
-        <h1 class="mast-title">Frank<span class="amp">’</span>s Notes</h1>
-        <p class="mast-tagline">把每一个想法，认真写下来。<br>关于代码、学习，与那些值得停留的瞬间。</p>
+    <!-- ====== 头部 ====== -->
+    <header class="hero">
+      <h1 data-i18n="home.name">Frank</h1>
+      <p class="subtitle" data-i18n="home.subtitle">前端开发者 · 终身学习者</p>
+      <p style="color:var(--text-soft); margin-bottom:0.8rem;" data-i18n="home.tagline">把想法变成可用的产品，把学到的记录下来。</p>
+      <p class="contact-line">
+        <a href="mailto:3021809270@qq.com" data-i18n="home.contact">邮箱</a>
+        <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+      </p>
+    </header>
+
+    <!-- ====== 关于我 ====== -->
+    <section class="section">
+      <div class="section-title">
+        <span class="en" data-i18n="home.about.en">About</span>
+        <span class="zh" data-i18n="home.about.zh">关于我</span>
       </div>
-    </section>
-
-    <!-- ====== 精选头条 ====== -->
-    <section class="section container">
-      <div class="feature">
-        <div class="feature-text">
-          <p class="eyebrow">头条 · Featured</p>
-          <h2><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h2>
-          <p class="lead">这是第一篇。关于为什么在 2026 年还要拥有一个属于自己的角落，它由什么构成，以及我打算在这里写下些什么。</p>
-          <p style="margin-top:1.5rem;"><a class="btn btn-primary" href="posts/hello-world.html">继续阅读 <span class="arrow">→</span></a></p>
-        </div>
-        <a class="feature-art" href="posts/hello-world.html" aria-label="阅读：你好，世界">No.&nbsp;01</a>
-      </div>
-    </section>
-
-    <!-- ====== 最新文章 ====== -->
-    <section class="section container">
-      <div class="kicker"><span class="eyebrow" style="margin:0;">最新文章 · Latest</span></div>
-      <ul class="post-list">
-
-        <!-- 文章卡片：复制这一段添加新文章，并改 data-href / 日期 / 分类 / 标题 / 摘要 -->
-        <li class="post-card" data-href="posts/hello-world.html">
-          <div class="date-col">
-            08·01·2026
-            <span class="cat">随笔</span>
-          </div>
-          <div>
-            <h3><a href="posts/hello-world.html">你好，世界 —— 我的个人网站上线了</a></h3>
-            <p class="excerpt">为什么在社交媒体之外，还需要一个属于自己的小角落。这里会写什么，又会怎样生长。</p>
-          </div>
-        </li>
-
-        <li class="post-card" data-href="posts/deploy-static-site.html">
-          <div class="date-col">
-            07·20·2026
-            <span class="cat">技术</span>
-          </div>
-          <div>
-            <h3><a href="posts/deploy-static-site.html">零服务器部署静态网站：从本地到上线</a></h3>
-            <p class="excerpt">用一个纯静态网站走完「本地开发 → 推送代码 → 自动部署 → 获得网址」的全过程，附完整步骤。</p>
-          </div>
-        </li>
-
-      </ul>
-      <p style="margin-top:2.5rem; text-align:center;">
-        <a class="btn" href="blog.html">查看全部文章 <span class="arrow">→</span></a>
+      <p data-i18n="home.about.text" style="max-width:60rem;">
+        你好，我是 Frank，一名前端开发者。我热爱把想法变成可用的产品，也喜欢在更广的技术栈里折腾——从 Spring 到多智能体框架，从计算机视觉到手写框架。这里记录我的学习路径、踩过的坑，以及偶尔的随想。
       </p>
     </section>
 
-    <!-- ====== 双栏：作者简介 + 作品入口 ====== -->
-    <section class="section container">
-      <div class="split">
-
-        <div>
-          <p class="eyebrow">关于作者</p>
-          <div class="author-card">
-            <div class="author-avatar">F</div>
-            <div class="who">
-              <h3>Frank</h3>
-              <p>前端开发者 · 终身学习者<br>热衷把想法变成可用的产品。</p>
-            </div>
-          </div>
-          <p class="lead" style="margin-top:1.5rem; font-size:1.05rem;">
-            我在这里记录学习路径上的笔记、踩过的坑，以及偶尔一些值得留下的随想。
-          </p>
-          <p style="margin-top:1.5rem;"><a class="btn" href="about.html">了解更多 <span class="arrow">→</span></a></p>
-        </div>
-
-        <div>
-          <p class="eyebrow">精选作品</p>
-          <h3 style="margin-bottom:1rem;">一些我做过的东西</h3>
-          <p class="lead" style="font-size:1.05rem;">
-            从 Spring 全家桶到多智能体交易框架，我喜欢在实践里把概念吃透。下面是其中一部分。
-          </p>
-          <p style="margin-top:1.5rem;"><a class="btn" href="projects.html">浏览作品集 <span class="arrow">→</span></a></p>
-        </div>
-
+    <!-- ====== 技能 ====== -->
+    <section class="section">
+      <div class="section-title">
+        <span class="en" data-i18n="home.skills.en">Skills</span>
+        <span class="zh" data-i18n="home.skills.zh">技能</span>
       </div>
+      <div class="skills">
+        <span class="skill-tag">HTML / CSS</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Vue</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">Java / Spring</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">UI 设计</span>
+      </div>
+    </section>
+
+    <!-- ====== 经历 ====== -->
+    <section class="section">
+      <div class="section-title">
+        <span class="en" data-i18n="home.exp.en">Experience</span>
+        <span class="zh" data-i18n="home.exp.zh">经历</span>
+      </div>
+      <ul class="timeline">
+        <li class="timeline-item">
+          <h3 data-i18n="home.exp1.title">前端开发者</h3>
+          <div class="date" data-i18n="home.exp1.date">2024.07 — 至今</div>
+          <p data-i18n="home.exp1.desc">负责 Web 应用的前端开发与用户体验优化。</p>
+        </li>
+        <li class="timeline-item">
+          <h3 data-i18n="home.exp2.title">计算机专业 · 本科</h3>
+          <div class="date" data-i18n="home.exp2.date">2020.09 — 2024.06</div>
+          <p data-i18n="home.exp2.desc">系统学习计算机基础与软件开发，积累了丰富的实践项目经验。</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ====== 最新文章 ====== -->
+    <section class="section">
+      <div class="section-title">
+        <span class="en" data-i18n="home.posts.en">Latest Posts</span>
+        <span class="zh" data-i18n="home.posts.zh">最新文章</span>
+      </div>
+      <ul class="post-list">
+        <li class="post-item">
+          <span class="date">2026-08-01</span>
+          <span class="cat" data-i18n="post1.cat">随笔</span>
+          <h3><a href="posts/hello-world.html" data-i18n="post1.title">你好，世界 —— 我的个人网站上线了</a></h3>
+        </li>
+        <li class="post-item">
+          <span class="date">2026-07-20</span>
+          <span class="cat" data-i18n="post2.cat">技术</span>
+          <h3><a href="posts/deploy-static-site.html" data-i18n="post2.title">零服务器部署静态网站：从本地到上线</a></h3>
+        </li>
+      </ul>
+      <p style="margin-top:1.2rem;"><a href="blog.html" data-i18n="home.posts.more">查看全部文章 →</a></p>
+    </section>
+
+    <!-- ====== 精选作品 ====== -->
+    <section class="section">
+      <div class="section-title">
+        <span class="en" data-i18n="home.projects.en">Projects</span>
+        <span class="zh" data-i18n="home.projects.zh">精选作品</span>
+      </div>
+      <p data-i18n="home.projects.desc" style="max-width:60rem;">一些我做过的东西，从 Spring 全家桶到多智能体交易框架。</p>
+      <p style="margin-top:1.2rem;"><a href="projects.html" data-i18n="home.projects.more">浏览作品集 →</a></p>
     </section>
 
   </main>
@@ -119,19 +127,18 @@
   <!-- ====== 页脚 ====== -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
-      <ul class="footer-social">
-        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
-        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
-      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
+      <span data-i18n="footer.tagline">个人主页 · 记录学习与思考</span>
+      <div class="footer-links">
+        <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:3021809270@qq.com" data-i18n="home.contact">邮箱</a>
+      </div>
+      <p class="footer-copy" data-i18n-year="footer.copyright">© <span class="footer-year"></span> Frank's Notes · 用 HTML 与 CSS 构建</p>
     </div>
   </footer>
 
   <button class="back-top" aria-label="返回顶部">↑</button>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

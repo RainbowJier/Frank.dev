@@ -3,121 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Frank 的作品集 —— 一些我做过的项目与实践。">
+  <meta name="description" content="Frank 的作品集 —— 一些我做过的项目。">
   <title>作品 · Frank's Notes</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- ====== 刊头导航 ====== -->
-  <header class="masthead">
-    <div class="masthead-inner">
-      <a class="masthead-brand" href="index.html">Frank<span class="amp">’</span>s Notes</a>
-      <button class="nav-toggle" aria-label="打开菜单">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="masthead-links">
-        <li><a href="index.html">首页</a></li>
-        <li><a href="blog.html">文章</a></li>
-        <li><a href="projects.html" class="active">作品</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
+  <!-- ====== 顶部导航 ====== -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html">Frank<span class="dot">.</span>dev</a>
+      <div class="nav-right">
+        <button class="nav-toggle" aria-label="打开菜单">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+          <li><a href="index.html" data-i18n="nav.home">首页</a></li>
+          <li><a href="blog.html" data-i18n="nav.blog">文章</a></li>
+          <li><a href="projects.html" class="active" data-i18n="nav.projects">作品</a></li>
+          <li><a href="about.html" data-i18n="nav.about">关于</a></li>
+        </ul>
+        <button class="lang-toggle" data-lang-toggle>English</button>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main class="container">
 
-    <!-- ====== 刊头 ====== -->
-    <section class="container" style="padding-top: clamp(2.5rem,7vw,4.5rem); text-align:center;">
-      <p class="eyebrow">Selected Works</p>
-      <h1 style="font-size:clamp(2.4rem,7vw,4rem); margin-bottom:0.6rem;">作品集</h1>
-      <p class="lead" style="margin:0 auto; max-width:34rem;">比起罗列技术栈，我更愿意讲清楚每个项目解决过什么问题。下面是我做过的一些东西。</p>
-    </section>
+    <!-- ====== 页头 ====== -->
+    <header class="hero">
+      <h1 data-i18n="projects.title">作品集</h1>
+      <p class="subtitle" data-i18n="projects.subtitle">比起罗列技术栈，我更愿意讲清楚每个项目解决过什么问题。</p>
+    </header>
 
     <!-- ====== 项目卡片 ====== -->
-    <section class="section container">
+    <section class="section">
       <div class="project-grid">
 
-        <!-- 项目卡片模板：复制这一段，改 标签 / 标题 / 描述 / 链接即可 -->
+        <!-- 项目卡片：复制一段，改标签/标题/描述/链接，并在 js/i18n.js 补 key -->
         <article class="project-card">
           <div class="tags">
-            <span class="tag">AI</span>
-            <span class="tag ghost">Python</span>
-            <span class="tag ghost">Multi-Agent</span>
+            <span>AI</span><span>Python</span><span>Multi-Agent</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/TradingAgents" target="_blank" rel="noopener">TradingAgents</a></h3>
-          <p class="desc">基于多智能体 LLM 的金融交易框架。多个分工协作的 Agent 分析市场、辩论、给出交易决策——研究「让 LLM 像团队一样工作」。</p>
+          <p class="desc" data-i18n="proj1.desc">基于多智能体 LLM 的金融交易框架。多个分工协作的 Agent 分析市场、辩论、给出交易决策——研究「让 LLM 像团队一样工作」。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/TradingAgents" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/TradingAgents" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
         <article class="project-card">
           <div class="tags">
-            <span class="tag">Java</span>
-            <span class="tag ghost">Spring Cloud</span>
-            <span class="tag ghost">Gateway</span>
+            <span>Java</span><span>Spring Cloud</span><span>Gateway</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/spring-cloud-gateway" target="_blank" rel="noopener">spring-cloud-gateway</a></h3>
-          <p class="desc">基于 Spring Framework 与 Spring Boot 的 API 网关，提供路由转发与更多能力。动手实现网关核心机制的过程，也是吃透微服务治理的过程。</p>
+          <p class="desc" data-i18n="proj2.desc">基于 Spring Framework 与 Spring Boot 的 API 网关，提供路由转发与更多能力。动手实现网关核心机制的过程，也是吃透微服务治理的过程。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/spring-cloud-gateway" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/spring-cloud-gateway" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
         <article class="project-card">
           <div class="tags">
-            <span class="tag">Java</span>
-            <span class="tag ghost">Web</span>
-            <span class="tag ghost">框架</span>
+            <span>Java</span><span>Web</span><span>框架</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/Basic_Framework" target="_blank" rel="noopener">Basic_Framework</a></h3>
-          <p class="desc">一套用于快速搭建 Web 系统的基础框架。把常用的认证、权限、分层等模块沉淀下来，新项目能更快起跑。</p>
+          <p class="desc" data-i18n="proj3.desc">一套用于快速搭建 Web 系统的基础框架。把常用的认证、权限、分层等模块沉淀下来，新项目能更快起跑。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/Basic_Framework" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/Basic_Framework" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
         <article class="project-card">
           <div class="tags">
-            <span class="tag">Java</span>
-            <span class="tag ghost">MyBatis-Plus</span>
+            <span>Java</span><span>MyBatis-Plus</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/MybatisPlus" target="_blank" rel="noopener">MybatisPlus</a></h3>
-          <p class="desc">MyBatis-Plus 的学习与实践仓库。从条件构造器到自动填充、分页插件，把常用特性都跑通并记录下来。</p>
+          <p class="desc" data-i18n="proj4.desc">MyBatis-Plus 的学习与实践仓库。从条件构造器到自动填充、分页插件，把常用特性都跑通并记录下来。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/MybatisPlus" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/MybatisPlus" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
         <article class="project-card">
           <div class="tags">
-            <span class="tag">CV</span>
-            <span class="tag ghost">YOLOv5</span>
+            <span>CV</span><span>YOLOv5</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/AI-AIMBOT-YOLOV5" target="_blank" rel="noopener">AI-AIMBOT-YOLOV5</a></h3>
-          <p class="desc">基于 YOLOv5 的目标检测实践。从模型训练到推理部署，完整走一遍计算机视觉工程化的流程。</p>
+          <p class="desc" data-i18n="proj5.desc">基于 YOLOv5 的目标检测实践。从模型训练到推理部署，完整走一遍计算机视觉工程化的流程。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/AI-AIMBOT-YOLOV5" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/AI-AIMBOT-YOLOV5" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
         <article class="project-card">
           <div class="tags">
-            <span class="tag">Java</span>
-            <span class="tag ghost">Spring 手写</span>
+            <span>Java</span><span>手写框架</span>
           </div>
           <h3><a href="https://github.com/RainbowJier/HandWrittenSpring" target="_blank" rel="noopener">HandWrittenSpring</a></h3>
-          <p class="desc">手写一个迷你版 Spring。IoC、AOP 这些听起来抽象的概念，自己实现一遍之后，就再也不会觉得玄学了。</p>
+          <p class="desc" data-i18n="proj6.desc">手写一个迷你版 Spring。IoC、AOP 这些听起来抽象的概念，自己实现一遍之后，就再也不会觉得玄学了。</p>
           <div class="links">
-            <a href="https://github.com/RainbowJier/HandWrittenSpring" target="_blank" rel="noopener">源码 →</a>
+            <a href="https://github.com/RainbowJier/HandWrittenSpring" target="_blank" rel="noopener" data-i18n="proj.view">源码 →</a>
           </div>
         </article>
 
       </div>
 
-      <p style="margin-top:3rem; text-align:center;">
-        <a class="btn" href="https://github.com/RainbowJier?tab=repositories" target="_blank" rel="noopener">在 GitHub 查看全部 <span class="arrow">→</span></a>
+      <p style="margin-top:2rem;">
+        <a href="https://github.com/RainbowJier?tab=repositories" target="_blank" rel="noopener" data-i18n="proj.more">在 GitHub 查看全部 →</a>
       </p>
     </section>
 
@@ -126,19 +119,18 @@
   <!-- ====== 页脚 ====== -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-brand">Frank<span class="amp">’</span>s Notes</div>
-      <ul class="footer-social">
-        <li><a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a></li>
-        <li><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a></li>
-        <li><a href="mailto:3021809270@qq.com">邮箱</a></li>
-        <li><a href="about.html">关于</a></li>
-      </ul>
-      <p class="footer-copy">© <span class="footer-year"></span> Frank's Notes · 用纸与墨（和一点 HTML）写成</p>
+      <span data-i18n="footer.tagline">个人主页 · 记录学习与思考</span>
+      <div class="footer-links">
+        <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+        <a href="mailto:3021809270@qq.com" data-i18n="home.contact">邮箱</a>
+      </div>
+      <p class="footer-copy" data-i18n-year="footer.copyright">© <span class="footer-year"></span> Frank's Notes · 用 HTML 与 CSS 构建</p>
     </div>
   </footer>
 
   <button class="back-top" aria-label="返回顶部">↑</button>
 
+  <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
