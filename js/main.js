@@ -88,19 +88,23 @@
 (function () {
   var bar = document.querySelector(".filter-bar");
   if (!bar) return;
+  var btns = bar.querySelectorAll(".filter-btn");
+  if (!btns.length) return;
 
-  bar.addEventListener("click", function (e) {
-    var btn = e.target.closest(".filter-btn");
-    if (!btn) return;
-    var f = btn.getAttribute("data-filter");
-
-    bar.querySelectorAll(".filter-btn").forEach(function (b) {
-      b.classList.toggle("active", b === btn);
+  function applyFilter(f) {
+    btns.forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-filter") === f);
     });
-
     document.querySelectorAll(".post-item").forEach(function (item) {
       var show = f === "all" || item.getAttribute("data-cat") === f;
       item.style.display = show ? "" : "none";
+    });
+  }
+
+  // 每个按钮直接绑定，不依赖事件委托
+  btns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyFilter(btn.getAttribute("data-filter"));
     });
   });
 })();
