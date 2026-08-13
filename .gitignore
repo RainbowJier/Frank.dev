@@ -1,0 +1,6 @@
+# ZCode 客户端本地配置（不发布到公开仓库）
+.zcode/
+
+# 系统 / 编辑器杂项
+Thumbs.db
+.DS_Store
