@@ -1,6 +1,6 @@
 /* ============================================================
    Frank's Notes · 侧边栏布局 · 砖橙主题
-   参考 zhangbingxue.com 学术 CV 风格
+   参考 zhangbingxue.com 学术 CV 风格（亮色，无深色模式）
    改主题色请改 :root 中的 --accent 变量
    ============================================================ */
 
@@ -15,7 +15,7 @@
   --border:      #e5e7eb;
   --border-dark: #d1d5db;
 
-  --accent:      #bd5d38;   /* 砖橙 */
+  --accent:      #bd5d38;   /* 砖橙（侧边栏底色 + 强调色） */
   --accent-hover:#9e4c2e;
   --accent-soft: #f9ede8;
 
@@ -33,21 +33,7 @@
   --measure-wide: 72rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:          #1a1d21;
-    --bg-soft:     #23272d;
-    --card:        #1e2227;
-    --text:        #e5e7eb;
-    --text-soft:   #a8b0ba;
-    --text-faint:  #7a828c;
-    --border:      #33383f;
-    --border-dark: #454b54;
-    --accent:      #d4785a;
-    --accent-hover:#e0896e;
-    --accent-soft: #3a2318;
-  }
-}
+/* 不使用深色模式 —— 始终亮色白底，与参考站一致 */
 
 /* ---------- 基础 ---------- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -61,7 +47,6 @@ body {
   font-size: 16px;
   line-height: 1.7;
   padding-left: var(--sidebar-w);
-  transition: background 0.3s ease, color 0.3s ease;
 }
 
 img { max-width: 100%; display: block; }
@@ -124,14 +109,13 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 }
 .measure { max-width: var(--measure); margin: 0 auto; }
 
-/* ---------- 侧边栏 ---------- */
+/* ---------- 侧边栏（砖橙底 + 白字） ---------- */
 .sidebar {
   position: fixed;
   top: 0; left: 0;
   width: var(--sidebar-w);
   height: 100vh;
-  background: var(--bg-soft);
-  border-right: 1px solid var(--border);
+  background: var(--accent);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -139,11 +123,10 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   transition: transform 0.3s ease;
 }
 
-/* 头像区 */
 .sidebar-top {
   padding: 2rem 1.2rem 1.4rem;
   text-align: center;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
 }
 
 .avatar-wrap {
@@ -151,7 +134,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   height: 84px;
   margin: 0 auto 0.9rem;
   border-radius: 50%;
-  border: 3px solid var(--accent);
+  border: 3px solid #fff;
   overflow: hidden;
   background: var(--accent);
   display: flex;
@@ -164,7 +147,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   object-fit: cover;
   border-radius: 50%;
 }
-/* 图片不存在时显示首字母 */
 .avatar-wrap .avatar-placeholder {
   font-size: 2rem;
   font-weight: 700;
@@ -177,16 +159,15 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--text);
+  color: #fff;
   margin-bottom: 0.25rem;
 }
 .sidebar-sub {
   font-size: 0.78rem;
-  color: var(--text-soft);
+  color: rgba(255,255,255,0.85);
   line-height: 1.4;
 }
 
-/* 导航区 */
 .sidebar-nav {
   flex: 1;
   padding: 1rem 0;
@@ -202,25 +183,24 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
   padding: 0.62rem 1.4rem;
   font-size: 0.92rem;
   font-weight: 500;
-  color: var(--text-soft);
+  color: rgba(255,255,255,0.82);
   border-left: 3px solid transparent;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
 }
 .sidebar-links a:hover {
-  color: var(--text);
-  background: var(--bg);
+  color: #fff;
+  background: rgba(255,255,255,0.15);
   text-decoration: none;
 }
 .sidebar-links a.active {
-  color: var(--accent);
-  border-left-color: var(--accent);
-  background: var(--accent-soft);
+  color: #fff;
+  border-left-color: #fff;
+  background: rgba(255,255,255,0.2);
 }
 
-/* 底部区（语言切换 + 版权） */
 .sidebar-bottom {
   padding: 1rem 1.2rem 1.4rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(255,255,255,0.2);
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
@@ -229,25 +209,29 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 
 .lang-toggle {
   font-size: 0.8rem;
-  color: var(--text-soft);
-  background: none;
-  border: 1px solid var(--border-dark);
+  color: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.4);
   border-radius: 4px;
   padding: 0.22rem 0.6rem;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
 }
-.lang-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.lang-toggle:hover {
+  color: #fff;
+  border-color: #fff;
+  background: rgba(255,255,255,0.22);
+}
 
 .sidebar-copy {
   font-size: 0.72rem;
-  color: var(--text-faint);
+  color: rgba(255,255,255,0.6);
   line-height: 1.5;
   margin: 0;
 }
 
-/* 汉堡按钮（移动端） */
+/* 汉堡按钮（移动端，白底内容区上） */
 .sidebar-toggle {
   display: none;
   position: fixed;
@@ -276,7 +260,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 .sidebar-toggle.open span:nth-child(2) { opacity: 0; }
 .sidebar-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* 遮罩层 */
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -286,7 +269,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 }
 .sidebar-overlay.show { display: block; }
 
-/* ---------- 区块标题（学术风） ---------- */
+/* ---------- 区块标题（纯英文大写） ---------- */
 .section { padding: clamp(1.8rem, 4vw, 3rem) 0; }
 .section + .section { padding-top: 0; }
 
@@ -458,7 +441,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 }
 .about-facts .fact .value { font-size: 1rem; font-weight: 500; }
 
-/* ---------- 页脚（隐藏，版权移至侧边栏） ---------- */
+/* ---------- 页脚（隐藏，版权在侧边栏） ---------- */
 .footer { display: none; }
 
 /* ---------- 返回顶部 ---------- */
@@ -486,9 +469,7 @@ hr { border: none; border-top: 1px solid var(--border); margin: 2.5em 0; }
 @media (max-width: 768px) {
   body { padding-left: 0; }
 
-  .sidebar {
-    transform: translateX(-100%);
-  }
+  .sidebar { transform: translateX(-100%); }
   .sidebar.open {
     transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0,0,0,0.15);
