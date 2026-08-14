@@ -1,0 +1,152 @@
+# ============================================================
+# Pure 主题中文文案（zh-cn）—— UI chrome + 首页 CV 内容
+# ============================================================
+
+# 导航菜单（key 对应 _config.pure.yml 的 menu ID）
+menu:
+  home: 首页
+  archives: 归档
+  categories: 分类
+  tags: 标签
+  projects: 作品
+  about: 关于
+
+# 顶部按钮 / 无障碍标签
+header:
+  nav_aria: 主导航
+  search_aria: 搜索
+  theme_aria: 切换主题
+  menu_aria: 菜单
+  lang_switch: English        # 语言切换按钮显示的是「另一种语言」的名字
+
+# 返回顶部
+top:
+  back_to_top: 回到顶部
+
+# 搜索弹窗
+search:
+  placeholder: 搜索文章…
+  close_aria: 关闭搜索
+  hint: 输入关键词开始搜索
+
+# 文章目录
+toc:
+  title: 目录
+  collapse_aria: 折叠目录
+  nav_aria: 文章目录
+
+# 评论
+comments:
+  title: 评论
+
+# 分享
+share:
+  label: "分享："
+  copy_link: 复制链接
+  copied: 已复制！
+  twitter: 分享到 Twitter
+  weibo: 分享到微博
+
+# 时效提醒
+outdated:
+  title: 内容时效提醒
+  text: "本文{basis}于 {date}，距今已约 {days} 天。"
+  basis_updated: 最后更新
+  basis_date: 发布
+  message: 技术细节可能随版本变化，请结合当前环境验证。
+
+# 文章页
+post:
+  updated_prefix: 更新于
+  reading: "{n} 分钟阅读"
+  copyright_title: "本文标题："
+  copyright_url: "本文链接："
+  copyright_notice_label: "版权声明："
+  copyright_notice: 本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。
+  prev: "← 上一篇"
+  next: "下一篇 →"
+
+# 代码块按钮（JS）
+code:
+  copy: 复制
+  copied: 已复制
+  failed: 失败
+  wrap: 换行
+  unwrap: 不换行
+
+# 分页
+pagination:
+  aria: 分页
+  prev: 上一页
+  next: 下一页
+
+# 系列文章
+series:
+  kicker: 系列文章
+  count: "第 {i} 篇 / 共 {n} 篇"
+  prev: 上一篇
+  next: 下一篇
+
+# 404
+404:
+  title: 页面不见了
+  desc: 您访问的页面可能已被删除、移动或从未存在过。
+  home: 返回首页
+
+# 归档页
+archive:
+  title: 归档
+  count_unit: 篇
+  month_suffix: 月
+
+# 标签 / 分类页
+tags:
+  title: 标签
+  count_unit: 个
+categories:
+  title: 分类
+  count_unit: 个
+
+# 页脚
+footer:
+  last_updated_prefix: 最后更新于
+
+# 关于页（about.ejs）的「网站」链接
+about:
+  website: 网站
+
+# 作品集页（projects.ejs）
+projects:
+  view_source: 源码 →
+  view_all: 在 GitHub 查看全部 →
+
+# ============================================================
+# 首页 CV 内容（index.ejs 使用）
+# ============================================================
+home:
+  name: Frank
+  subtitle: 前端开发者 · 终身学习者
+  tagline: 把想法变成可用的产品，把学到的记录下来。
+  contact_label: 邮箱
+  about_en: About
+  about_zh: 关于我
+  about_text: "你好，我是 Frank，一名前端开发者。我热爱把想法变成可用的产品，也喜欢在更广的技术栈里折腾——从 Spring 到多智能体框架，从计算机视觉到手写框架。这里记录我的学习路径、踩过的坑，以及偶尔的随想。"
+  skills_en: Skills
+  skills_zh: 技能
+  experience_en: Experience
+  experience_zh: 经历
+  posts_en: Latest Posts
+  posts_zh: 最新文章
+  posts_more: 查看全部文章 →
+  projects_en: Projects
+  projects_zh: 精选作品
+  projects_desc: 一些我做过的东西，从 Spring 全家桶到多智能体交易框架。
+  projects_more: 浏览作品集 →
+  exp1:
+    title: 前端开发者
+    date: 2024.07 — 至今
+    desc: 负责 Web 应用的前端开发与用户体验优化。
+  exp2:
+    title: 计算机专业 · 本科
+    date: 2020.09 — 2024.06
+    desc: 系统学习计算机基础与软件开发，积累了丰富的实践项目经验。

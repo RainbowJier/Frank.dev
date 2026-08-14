@@ -1,0 +1,136 @@
+# ============================================================
+# Pure 主题配置覆盖（_config.pure.yml）
+# 本文件覆盖 themes/pure/_config.yml，是主题配置的唯一真源。
+# 菜单 key 用「语言中立 ID」，显示文案由 languages/*.yml 的 menu.* 提供。
+# ============================================================
+
+favicon: /images/avatar.jpg
+
+logo: ""
+
+# 导航菜单（ID: 路径）。ID → 文案见 languages/*.yml 的 menu.<id>
+menu:
+  home: /
+  archives: /archives
+  categories: /categories
+  tags: /tags
+  projects: /projects
+  about: /about
+
+# 页脚社交链接
+social:
+  github: https://github.com/RainbowJier
+  twitter: ""
+  email: 3021809270@qq.com
+  rss: /atom.xml
+
+# 文章设置
+post:
+  excerpt_length: 200
+  show_updated: true
+  copyright: true
+  copyright_text: ""          # 实际文案走 languages（post.copyright_notice）
+  series:
+    enable: true
+  outdated:
+    enable: true
+    days: 365
+    basis: updated
+    message: ""               # 走 languages（post.outdated_message）
+
+# 文章目录
+toc:
+  enable: true
+  max_depth: 3
+  number: false
+
+# 代码高亮
+highlight:
+  enable: true
+  theme: atom-one-dark
+  copy_button: true
+
+# 数学公式
+math:
+  enable: false
+  engine: katex
+
+# 图片灯箱
+lightbox:
+  enable: true
+
+# 本地搜索
+search:
+  enable: true
+  path: search.xml
+  field: post
+  content: true
+
+# 评论（暂未接入，置 false；接入 Giscus 等时再打开并填参数）
+comments:
+  enable: false
+  provider: giscus
+  giscus:
+    repo: ""
+    repo_id: ""
+    category: ""
+    category_id: ""
+    mapping: pathname
+    reactions_enabled: 1
+    emit_metadata: 0
+    theme: preferred_color_scheme
+    lang: zh-CN
+  waline:
+    server_url: ""
+    lang: zh-CN
+    comment_count: true
+    page_view: false
+  disqus:
+    shortname: ""
+  valine:
+    app_id: ""
+    app_key: ""
+    placeholder: ""
+    avatar: mm
+    lang: zh-CN
+
+# 站点统计
+analytics:
+  google:
+    enable: false
+    id: ""
+  baidu:
+    enable: false
+    id: ""
+  umami:
+    enable: false
+    src: ""
+    website_id: ""
+
+# 深色模式
+dark_mode:
+  enable: true
+  default: auto
+
+# 页脚
+footer:
+  since: 2026
+  last_updated: true
+  custom_text: ""
+  icp: ""
+
+# 关于页（头像 / 名称 / 社交；正文内容写在 about 页 Markdown 里，天然双语）
+about:
+  avatar: /images/avatar.jpg
+  name: Frank
+  bio: ""
+  links:
+    github: https://github.com/RainbowJier
+    email: 3021809270@qq.com
+    twitter: ""
+    website: https://frank-dev.site
+
+cdn:
+  highlight_css: ""
+  katex_css: ""
+  katex_js: ""

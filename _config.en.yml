@@ -1,0 +1,7 @@
+# 英文构建覆盖 —— 从 source_en/ 读取，输出到 public/en/，根路径 /en/
+# 构建：hexo generate --config _config.yml,_config.en.yml  →  public/en/
+language: en
+source_dir: source_en
+public_dir: public/en
+root: /en/
+url: https://frank-dev.site/en/

@@ -7,3 +7,15 @@ Thumbs.db
 
 # JetBrains IDE
 .idea/
+
+# ---------- Hexo 构建产物 ----------
+public/
+db.json
+db.json.bak
+_multiconfig.yml
+.deploy_git/
+.deploy_*/
+node_modules/
+npm-debug.log*
+yarn-error.log*
+*.log

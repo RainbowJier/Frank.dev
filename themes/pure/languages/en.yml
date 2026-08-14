@@ -1,0 +1,134 @@
+# ============================================================
+# Pure theme English strings (en) — UI chrome + homepage CV
+# ============================================================
+
+menu:
+  home: Home
+  archives: Archives
+  categories: Categories
+  tags: Tags
+  projects: Projects
+  about: About
+
+header:
+  nav_aria: Main navigation
+  search_aria: Search
+  theme_aria: Toggle theme
+  menu_aria: Menu
+  lang_switch: 中文
+
+top:
+  back_to_top: Back to top
+
+search:
+  placeholder: Search posts…
+  close_aria: Close search
+  hint: Type to search
+
+toc:
+  title: Contents
+  collapse_aria: Collapse
+  nav_aria: Table of contents
+
+comments:
+  title: Comments
+
+share:
+  label: "Share:"
+  copy_link: Copy link
+  copied: Copied!
+  twitter: Share on Twitter
+  weibo: Share on Weibo
+
+outdated:
+  title: Content age notice
+  text: "This post was {basis} on {date}, about {days} days ago."
+  basis_updated: last updated
+  basis_date: published
+  message: Technical details may change with versions — please verify against your current environment.
+
+post:
+  updated_prefix: Updated
+  reading: "{n} min read"
+  copyright_title: "Title: "
+  copyright_url: "Link: "
+  copyright_notice_label: "License: "
+  copyright_notice: Licensed under CC BY-NC-SA 4.0. Please cite the source when reposting.
+  prev: "← Previous"
+  next: "Next →"
+
+code:
+  copy: Copy
+  copied: Copied
+  failed: Failed
+  wrap: Wrap
+  unwrap: No wrap
+
+pagination:
+  aria: Pagination
+  prev: Previous
+  next: Next
+
+series:
+  kicker: Series
+  count: "Part {i} of {n}"
+  prev: Previous
+  next: Next
+
+404:
+  title: Page Not Found
+  desc: The page you're looking for may have been deleted, moved, or never existed.
+  home: Back to home
+
+archive:
+  title: Archives
+  count_unit: posts
+  month_suffix: ""
+
+tags:
+  title: Tags
+  count_unit: ""
+categories:
+  title: Categories
+  count_unit: ""
+
+footer:
+  last_updated_prefix: Last updated
+
+about:
+  website: Website
+
+projects:
+  view_source: Source →
+  view_all: View all on GitHub →
+
+# ============================================================
+# Homepage CV content
+# ============================================================
+home:
+  name: Frank
+  subtitle: Frontend Developer · Lifelong Learner
+  tagline: Turning ideas into products, and documenting what I learn.
+  contact_label: Email
+  about_en: About
+  about_zh: About Me
+  about_text: "Hi, I'm Frank, a frontend developer. I love turning ideas into usable products and exploring beyond the frontend — from Spring to multi-agent frameworks, from computer vision to hand-writing frameworks. This site records my learning path, the pitfalls I stepped into, and occasional thoughts."
+  skills_en: Skills
+  skills_zh: Skills
+  experience_en: Experience
+  experience_zh: Experience
+  posts_en: Latest Posts
+  posts_zh: Latest Posts
+  posts_more: View all posts →
+  projects_en: Projects
+  projects_zh: Selected Projects
+  projects_desc: Some things I've built — from the Spring ecosystem to a multi-agent trading framework.
+  projects_more: Browse projects →
+  exp1:
+    title: Frontend Developer
+    date: Jul 2024 — Present
+    desc: Building frontend for web applications and polishing user experience.
+  exp2:
+    title: B.S. in Computer Science
+    date: Sep 2020 — Jun 2024
+    desc: Studied computer science fundamentals and software development with rich hands-on project experience.

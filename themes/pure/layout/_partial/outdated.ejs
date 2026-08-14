@@ -1,0 +1,19 @@
+<%
+  var outdated = pure_outdated(page);
+%>
+<% if (outdated) { %>
+  <div class="post-outdated" role="note">
+    <strong><%= __('outdated.title') %></strong>
+    <p>
+      <%
+        var basisLabel = outdated.basis === 'updated' ? __('outdated.basis_updated') : __('outdated.basis_date');
+        var msg = __('outdated.message');
+      %>
+      <%= __('outdated.text')
+            .replace('{basis}', basisLabel)
+            .replace('{date}', outdated.date.format('YYYY-MM-DD'))
+            .replace('{days}', outdated.days) %>
+      <%= msg %>
+    </p>
+  </div>
+<% } %>

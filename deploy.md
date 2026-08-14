@@ -1,73 +1,63 @@
-# 部署指南：发布到 EdgeOne Pages
+# 部署指南
 
-本网站是纯静态站点（无服务器、无数据库），EdgeOne Pages 是腾讯云提供的免费静态托管服务：
-- ✅ 免费额度，足够个人网站使用
-- ✅ 国内访问快（腾讯云 CDN 节点）
-- ✅ 免费域名 `https://xxx.edgeone.app`，无需备案
-- ✅ 支持从 Gitee / GitHub 仓库拉取自动部署
-
-> ⚠️ 说明：Gitee 官方的 Pages 托管服务目前暂停，所以「代码放 Gitee，托管用 EdgeOne Pages」是最适合国内用户的组合。
-> 控制台界面可能随版本更新而变化，下面的步骤看思路，具体按钮以实际页面为准。
+Frank's Notes 基于 Hexo，构建出纯静态站点后发布。
 
 ---
 
-## 方式 A：直接上传文件夹（最快，5 分钟上线）
+## ✅ 主渠道：GitHub Actions（自动，推荐）
 
-适合第一次发布，不用碰 Git。
+push 到 `main` 分支后，`.github/workflows/deploy.yml` 会自动：
 
-1. 打开 **EdgeOne Pages 控制台**（腾讯云官网 → 搜索「EdgeOne」→ 进入「Pages」，或用账号直接登录控制台）。首次使用可用微信 / Gitee 等账号登录，按提示完成。
-2. 点击 **创建项目 / 新建 Pages 项目**。
-3. 选择 **上传文件** 方式（或拖拽上传）。
-4. 上传项目根目录（`Frank.dev/`）下的**所有文件**（`index.html`、`css/`、`js/`、`posts/`、`assets/`，注意要把文件夹里的文件传进去，而不是传一个文件夹压缩包）。
-5. 等待几秒构建完成，控制台会给你一个免费域名，例如：`https://yourname.edgeone.app`。
-6. 浏览器打开该网址验证，部署完成 ✅
+1. `npm ci` 装依赖
+2. 双构建：中文 → `public/`，英文 → `public/en/`（中途清 `db.json` 防串资产）
+3. 把 `public/` 发布到 GitHub Pages
+4. 自定义域名 **https://frank-dev.site** 生效（`source/CNAME` 自动复制到 `public/` 根）
 
-**以后更新内容**：改完文件后，重新上传整个文件夹覆盖即可（也可以用方式 B 免去手动上传）。
+### 一次性前提（务必做）
+仓库 **Settings → Pages → Build and deployment → Source** 必须选 **「GitHub Actions」**（而不是「Deploy from a branch」）。否则 Pages 还在按旧的「main 根目录」发布，会和 Hexo 产物冲突。
 
----
-
-## 方式 B：Gitee 仓库 + 自动部署（推荐长期使用）
-
-### 第 1 步：把网站推送到 Gitee
-
-1. 在 [gitee.com](https://gitee.com) 登录，新建一个仓库（例如 `frank-dev`，选「公开」）。
-2. 在项目根目录执行（替换 `你的用户名`）：
-
+### 日常发布
 ```bash
-git remote add origin https://gitee.com/你的用户名/frank-dev.git
-git push -u origin main
+git add -A && git commit -m "..." && git push   # 推 main，约 1 分钟上线
 ```
+功能开发请在 `feat/*` 分支进行，合并到 `main` 才触发部署。
 
-（仓库建立后 Gitee 页面会显示具体地址，以它为准。仓库已在本机初始化并完成首次提交，无需重复 `git init`。）
+### 验证
+- Actions 页面看构建是否绿。
+- 线上 URL 加 `?b=时间戳` 穿透 CDN 缓存，浏览器强刷。
+- 中：https://frank-dev.site ｜ 英：https://frank-dev.site/en/
 
-### 第 2 步：在 EdgeOne Pages 绑定仓库
+---
 
-1. 打开 EdgeOne Pages 控制台 → 创建项目。
-2. 选择 **从代码仓库导入 / Git 仓库** 方式。
-3. 按提示授权绑定 Gitee 账号，选择仓库 `frank-dev`。
-4. 构建配置保持默认即可（本网站无需构建步骤，直接发布）。
-5. 点击 **部署**，获得免费域名，上线 ✅
+## 本地预览 / 手动构建
+```bash
+npm install
+npm run server     # 本地预览中文 http://localhost:4000
+npm run build      # 构建中英两套到 public/
+```
+手动检查 `public/`（中）与 `public/en/`（英）输出齐全即可。
 
-**以后更新内容**：本地改完执行 `git add . && git commit -m "更新说明" && git push`，EdgeOne 会自动重新部署，无需任何手动操作。
+---
+
+## 备用渠道：EdgeOne Pages（手动上传）
+
+需要先本地 `npm run build` 产出 `public/`，再把 `public/` 文件夹（注意是 `public/` 里的内容，不是整个项目）上传到 EdgeOne Pages。
+- 国内访问快、免费额度、免备案子域名。
+- 绑定自定义域名时，到 DNS 服务商加 CNAME 指向 EdgeOne 提供的地址。
+- ⚠️ 旧版「直接上传项目根目录 / 推 Gitee 自动部署」**已不适用**——现在必须先构建。
 
 ---
 
 ## 常见问题
 
-**Q：需要备案吗？**
-A：使用 EdgeOne Pages 提供的免费子域名（`*.edgeone.app`）不需要备案。以后绑定自己的顶级域名时，域名在国内服务器托管才需要备案。
+**Q：GitHub Pages 显示 404 或还是旧站？**
+A：99% 是 Settings → Pages 的 Source 没改成「GitHub Actions」。改完重跑一次 workflow。
 
-**Q：如何绑定自己的域名？**
-A：在控制台项目设置 → 自定义域中绑定，然后到域名服务商处添加 CNAME 解析记录指向 EdgeOne 提供的地址，等待生效即可。
+**Q：`/en/` 页面 404？**
+A：确认 workflow 里英文构建步骤跑过；本地 `npm run build` 后检查 `public/en/index.html` 是否存在。
 
-**Q：怎么修改网站内容？**
-A：所有页面都是普通 HTML 文件，用编辑器打开直接改文字。改完按方式 A 重新上传，或按方式 B 执行 `git push` 即可。
+**Q：自定义域名失效？**
+A：`source/CNAME` 内容是 `frank-dev.site`，构建会复制到 `public/CNAME`；DNS 的 CNAME/A 记录指向 `<user>.github.io` 即可。
 
-**Q：如何新增博客文章？**
-A：复制 `posts/hello-world.html`，改文件名和内容；然后在 `blog.html` 列表里复制一张文章卡片，改标题、日期、链接即可。
-
-**Q：如何新增项目卡片？**
-A：打开 `projects.html`，复制一张 `.project-card` 卡片，改标题、说明、标签和链接即可。
-
-**Q：想让网站同时支持中文和英文？**
-A：这是纯静态 HTML，最简单的方式是复制一套英文页面，再在导航加一个语言切换链接。
+**Q：怎么新增文章 / 项目？**
+A：见 [`docs/写文章指南.md`](docs/写文章指南.md)。项目改 `source/_data/projects.yml` 与 `source_en/_data/projects.yml`（两份保持一致）。

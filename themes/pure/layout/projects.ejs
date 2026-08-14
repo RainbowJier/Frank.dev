@@ -1,0 +1,42 @@
+<%
+  /* 作品集：读取 source/_data/projects.yml，按当前语言渲染。 */
+  var lang = config.language === 'en' ? 'en' : 'zh';
+  var pdata = (site.data && site.data.projects) || {};
+  var items = pdata.items || [];
+  var allLink = pdata.all_link || '';
+%>
+
+<div class="projects-page">
+  <% if (page.title) { %>
+    <header class="page-header">
+      <h1 class="page-title"><%= page.title %></h1>
+      <% if (page.description) { %><p class="page-subtitle"><%= page.description %></p><% } %>
+    </header>
+  <% } %>
+
+  <div class="project-grid">
+    <% items.forEach(function (p) {
+      var tags = (p.tags && p.tags[lang]) || [];
+      var desc = (p.desc && p.desc[lang]) || '';
+    %>
+      <article class="project-card">
+        <% if (tags.length) { %>
+          <div class="project-tags">
+            <% tags.forEach(function (t) { %>
+              <span class="project-tag"><%= t %></span>
+            <% }); %>
+          </div>
+        <% } %>
+        <h3 class="project-name"><a href="<%= p.repo %>" target="_blank" rel="noopener"><%= p.name %></a></h3>
+        <p class="project-desc"><%= desc %></p>
+        <div class="project-links">
+          <a class="link-more" href="<%= p.repo %>" target="_blank" rel="noopener"><%= __('projects.view_source') %></a>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+
+  <% if (allLink) { %>
+    <p class="projects-all"><a class="link-more" href="<%= allLink %>" target="_blank" rel="noopener"><%= __('projects.view_all') %></a></p>
+  <% } %>
+</div>
