@@ -1,38 +1,36 @@
 ---
-title: Hello World
+title: 你好，世界
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+欢迎来到 **Frank's Notes**！这是我的第一篇博客文章。
 
-## Quick Start
+站点基于 [Hexo](https://hexo.io/) 构建，主题为 [Oranges](https://github.com/zchengsite/hexo-theme-oranges)。之后会在这里记录前端开发、生活与学习的点滴。
 
-### Create a new post
+## 常用命令
+
+创建新文章：
 
 ``` bash
-$ hexo new "My New Post"
+$ hexo new "我的新文章"
 ```
 
-More info: [Writing](https://hexo.io/docs/writing.html)
-
-### Run server
+本地预览：
 
 ``` bash
 $ hexo server
 ```
 
-More info: [Server](https://hexo.io/docs/server.html)
-
-### Generate static files
+生成静态文件：
 
 ``` bash
 $ hexo generate
 ```
 
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
+部署到远端：
 
 ``` bash
 $ hexo deploy
 ```
 
-More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
+遇到问题可以参考 [Hexo 文档](https://hexo.io/docs/) 或 [故障排查](https://hexo.io/docs/troubleshooting.html)，也可以在 [GitHub Issues](https://github.com/hexojs/hexo/issues) 里提问。
+
+慢慢写，慢慢积累。

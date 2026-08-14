@@ -80,32 +80,32 @@ comments:
 # 主题页面导航栏
 navbar:
   -
-    name: Home
+    name: 首页
     enable: true
     path: /
     key: home
   -
-    name: Archives
+    name: 归档
     enable: true
     path: /archives/
     key: archives
   -
-    name: Categories
+    name: 分类
     enable: false
     path: /categories/
     key: categories
   -
-    name: Tags
+    name: 标签
     enable: true
     path: /tags/
     key: tags
   -
-    name: Friends
+    name: 友链
     enable: true
     path: /friends/
     key: friends
   -
-    name: About
+    name: 关于
     enable: true
     path: /about/
     key: about
@@ -181,7 +181,7 @@ footer:
       name: Copyright © {thisYear} Frank
       path: https://github.com/zchengsite/hexo-theme-oranges
     -
-      name: Theme by Oranges | Powered by Hexo
+      name: 主题 Oranges | 由 Hexo 驱动
       path: https://github.com/zchengsite/hexo-theme-oranges
 
   # 浏览量统计
