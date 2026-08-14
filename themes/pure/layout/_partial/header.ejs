@@ -1,9 +1,3 @@
-<%
-  /* 语言切换：当前构建的「另一种语言」根路径。
-     href 先指向另一种语言的首页，main.js 会在加载时改写为同路径的对应页（无 JS 也能跳首页）。*/
-  var isEn = config.language === 'en';
-  var otherRoot = isEn ? '/' : '/en/';
-%>
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
 
@@ -15,13 +9,13 @@
       <% } %>
     </a>
 
-    <nav class="site-nav" id="siteNav" aria-label="<%= __('header.nav_aria') %>">
+    <nav class="site-nav" id="siteNav" aria-label="主导航">
       <ul class="nav-list">
         <% for (var name in theme.menu) { %>
           <% var href = url_for(theme.menu[name]); %>
           <li class="nav-item">
             <a href="<%= href %>" class="nav-link<%= page.path && ('/' + page.path).startsWith(theme.menu[name]) && theme.menu[name] !== '/' ? ' active' : (theme.menu[name] === '/' && (page.path === '' || page.path === 'index.html') ? ' active' : '') %>">
-              <%= __('menu.' + name) %>
+              <%= name %>
             </a>
           </li>
         <% } %>
@@ -30,19 +24,15 @@
 
     <div class="header-actions">
       <% if (theme.search && theme.search.enable) { %>
-        <button class="icon-btn" id="searchBtn" aria-label="<%= __('header.search_aria') %>" title="<%= __('header.search_aria') %>">
+        <button class="icon-btn" id="searchBtn" aria-label="搜索" title="搜索">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
         </button>
       <% } %>
 
-      <a class="icon-btn lang-toggle" id="langToggle" href="<%= otherRoot %>" aria-label="<%= __('header.lang_switch') %>" title="<%= __('header.lang_switch') %>">
-        <span class="lang-toggle-text"><%= __('header.lang_switch') %></span>
-      </a>
-
       <% if (theme.dark_mode && theme.dark_mode.enable) { %>
-        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="<%= __('header.theme_aria') %>" title="<%= __('header.theme_aria') %>">
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="切换主题" title="切换主题">
           <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"/>
             <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -56,7 +46,7 @@
         </button>
       <% } %>
 
-      <button class="icon-btn hamburger" id="menuToggle" aria-label="<%= __('header.menu_aria') %>" aria-expanded="false" aria-controls="siteNav">
+      <button class="icon-btn hamburger" id="menuToggle" aria-label="菜单" aria-expanded="false" aria-controls="siteNav">
         <span></span><span></span><span></span>
       </button>
     </div>

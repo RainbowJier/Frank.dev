@@ -1,8 +1,8 @@
 <% if (page.type === 'tags') { %>
 
 <div class="tags-page">
-  <h1 class="page-heading"><%= __('tags.title') %>
-    <span class="page-heading-count"><%= site.tags.length %> <%= __('tags.count_unit') %></span>
+  <h1 class="page-heading">标签
+    <span class="page-heading-count"><%= site.tags.length %> 个</span>
   </h1>
   <div class="tags-cloud">
     <% site.tags.sort('name').each(function(tag) { %>
@@ -17,8 +17,8 @@
 <% } else if (page.type === 'categories') { %>
 
 <div class="categories-page">
-  <h1 class="page-heading"><%= __('categories.title') %>
-    <span class="page-heading-count"><%= site.categories.length %> <%= __('categories.count_unit') %></span>
+  <h1 class="page-heading">分类
+    <span class="page-heading-count"><%= site.categories.length %> 个</span>
   </h1>
   <ul class="categories-list">
     <% site.categories.sort('name').each(function(cat) { %>

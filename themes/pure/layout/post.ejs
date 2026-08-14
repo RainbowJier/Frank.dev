@@ -12,7 +12,7 @@
         </time>
         <% if (theme.post && theme.post.show_updated && page.updated && page.updated.valueOf() !== page.date.valueOf()) { %>
           <span class="meta-sep">·</span>
-          <span><%= __('post.updated_prefix') %> <%= page.updated.format('YYYY-MM-DD') %></span>
+          <span>更新于 <%= page.updated.format('YYYY-MM-DD') %></span>
         <% } %>
         <% if (page.categories && page.categories.length) { %>
           <span class="meta-sep">·</span>
@@ -22,7 +22,7 @@
         <% } %>
         <% if (page.reading_time) { %>
           <span class="meta-sep">·</span>
-          <span><%= __('post.reading').replace('{n}', page.reading_time) %></span>
+          <span><%= page.reading_time %> 分钟阅读</span>
         <% } %>
       </div>
       <% if (page.cover) { %>
@@ -53,9 +53,9 @@
 
       <% if (theme.post && theme.post.copyright) { %>
         <div class="post-copyright">
-          <p><strong><%= __('post.copyright_title') %></strong><%= page.title %></p>
-          <p><strong><%= __('post.copyright_url') %></strong><a href="<%= page.permalink %>"><%= page.permalink %></a></p>
-          <p><strong><%= __('post.copyright_notice_label') %></strong><%= __('post.copyright_notice') %></p>
+          <p><strong>本文标题：</strong><%= page.title %></p>
+          <p><strong>本文链接：</strong><a href="<%= page.permalink %>"><%= page.permalink %></a></p>
+          <p><strong>版权声明：</strong><%= (theme.post && theme.post.copyright_text) || '本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。' %></p>
         </div>
       <% } %>
     </footer>
@@ -64,13 +64,13 @@
     <nav class="post-nav">
       <% if (page.prev) { %>
         <a href="<%- url_for(page.prev.path) %>" class="post-nav-item post-nav-prev">
-          <span class="post-nav-label"><%= __('post.prev') %></span>
+          <span class="post-nav-label">← 上一篇</span>
           <span class="post-nav-title"><%= page.prev.title %></span>
         </a>
       <% } %>
       <% if (page.next) { %>
         <a href="<%- url_for(page.next.path) %>" class="post-nav-item post-nav-next">
-          <span class="post-nav-label"><%= __('post.next') %></span>
+          <span class="post-nav-label">下一篇 →</span>
           <span class="post-nav-title"><%= page.next.title %></span>
         </a>
       <% } %>

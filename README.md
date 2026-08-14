@@ -1,9 +1,9 @@
 # Frank's Notes · 个人网站
 
-个人主页 + 博客 + 作品集三合一，基于 **Hexo** + **hexo-theme-pure**，中英双语。
+个人主页 + 博客 + 作品集三合一，基于 **Hexo** + **hexo-theme-pure**（官方原版）。
 
-- **技术**：Hexo 7 + hexo-theme-pure（极简、亮/暗模式）
-- **双语**：双构建——中文 `/`、英文 `/en/`，头部一键切换
+- **技术**：Hexo 7 + hexo-theme-pure（极简、亮/暗模式，官方原版照搬）
+- **双语**：双构建——中文 `/`、英文 `/en/`（内容双语；UI 为中文，无切换按钮，英文站直接访问 `/en/`）
 - **部署**：GitHub Actions 自动构建发布 → **https://frank-dev.site**（见 [deploy.md](deploy.md)）
 
 ## 目录结构
@@ -12,11 +12,9 @@
 Frank.dev/
 ├── _config.yml / _config.pure.yml   # 站点配置 / 主题配置
 ├── _config.zh.yml / _config.en.yml  # 中英双构建覆盖
-├── source/          # 中文内容（文章 / 页面 / 作品数据 / CNAME）
+├── source/          # 中文内容（文章 / 页面 / 头像 / CNAME）
 ├── source_en/       # 英文镜像
-├── themes/pure/     # 主题（已 i18n + CV 首页定制）
-│   ├── languages/   # 中英文案（UI + 首页 CV）
-│   └── layout/      # index.ejs(CV首页) projects.ejs 等
+├── themes/pure/     # hexo-theme-pure 官方原版（照搬，无定制）
 ├── scripts/         # 阅读时长等站点脚本
 └── .github/workflows/deploy.yml  # GitHub Actions 部署
 ```
@@ -35,10 +33,9 @@ npm run build      # 构建中英两套到 public/
 
 ## 部署
 
-push 到 `main` → GitHub Actions 自动双构建并发布。前提：仓库 Settings → Pages → Source 选「GitHub Actions」。详见 [deploy.md](deploy.md)。
+push 到 `main` → GitHub Actions 自动双构建并发布（Pages Source 已设为 GitHub Actions）。详见 [deploy.md](deploy.md)。
 
 ## 自定义
 
-- 主题配色走 `themes/pure/source/css/main.css` 的 `:root` 变量（亮/暗两套 token）。
-- CV 首页 / 作品集额外样式在 `themes/pure/source/css/custom.css`。
-- UI 文案与首页 CV 文本在 `themes/pure/languages/zh-cn.yml` 与 `en.yml`（两个都要改）。
+- 主题为官方原版：站点级调整全部走 `_config.pure.yml`（菜单/关于/社交/页脚/功能开关），**不要改 `themes/pure/` 里的文件**。
+- 亮/暗配色走主题 `themes/pure/source/css/main.css` 的 `:root` 变量（如需要）。

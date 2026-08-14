@@ -1,6 +1,6 @@
 <div class="archive-page">
-  <h1 class="page-heading"><%= __('archive.title') %>
-    <span class="page-heading-count"><%= site.posts.length %> <%= __('archive.count_unit') %></span>
+  <h1 class="page-heading">归档
+    <span class="page-heading-count"><%= site.posts.length %> 篇</span>
   </h1>
 
   <%
@@ -24,7 +24,7 @@
         var months = Object.keys(archive[y]).sort(function(a, b) { return b - a; });
       %>
       <% months.forEach(function(m) { %>
-        <h3 class="archive-month-title"><%= parseInt(m, 10) %><%= __('archive.month_suffix') %></h3>
+        <h3 class="archive-month-title"><%= parseInt(m, 10) %>月</h3>
         <ul class="archive-list">
           <% archive[y][m].forEach(function(post) { %>
             <li class="archive-item">

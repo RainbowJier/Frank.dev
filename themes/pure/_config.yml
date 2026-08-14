@@ -9,17 +9,14 @@ favicon: /favicon.ico
 logo: ""                     # 如 /img/logo.png，留空则显示站点标题文字
 
 # ----------------------------------------------------------------
-# 导航菜单（ID: 路径）。ID → 文案见 languages/*.yml 的 menu.<id>
-# 注意：本主题配置会与站点根目录的 _config.pure.yml 深合并，
-#       故此处 key 必须与 _config.pure.yml 的 menu 一致（语言中立 ID）。
+# 导航菜单（名称: 路径）
 # ----------------------------------------------------------------
 menu:
-  home: /
-  archives: /archives
-  categories: /categories
-  tags: /tags
-  projects: /projects
-  about: /about
+  首页: /
+  归档: /archives
+  标签: /tags
+  分类: /categories
+  关于: /about
 
 # ----------------------------------------------------------------
 # 社交链接（显示在页脚；留空则隐藏）

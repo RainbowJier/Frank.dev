@@ -2,25 +2,6 @@
 (function () {
   'use strict';
 
-  /* ── 前端文案双语（按 <html lang> 切换）────────────────────── */
-  var LANG_EN = (document.documentElement.lang || '').indexOf('en') === 0;
-  var T = LANG_EN
-    ? { wrap: 'Wrap', unwrap: 'No wrap', copy: 'Copy', copied: 'Copied', failed: 'Failed', copiedLink: 'Copied!', copyLink: 'Copy link' }
-    : { wrap: '换行', unwrap: '不换行', copy: '复制', copied: '已复制', failed: '失败', copiedLink: '已复制！', copyLink: '复制链接' };
-
-  /* ── 语言切换（/ ↔ /en/，映射到同路径的对应页）────────────── */
-  (function () {
-    var toggle = document.getElementById('langToggle');
-    if (!toggle) return;
-    var p = location.pathname;
-    var isEn = p === '/en' || p === '/en/' || p.indexOf('/en/') === 0;
-    var target = isEn
-      ? p.replace(/^\/en(\/|$)/, '/')        // /en/... → /...
-      : '/en' + (p === '/' ? '/' : p);       // /...   → /en/...
-    if (target === '') target = '/';
-    toggle.href = target;
-  })();
-
   /* ── Dark mode ─────────────────────────────────────────────── */
   var themeToggle = document.getElementById('themeToggle');
   if (themeToggle) {
@@ -81,13 +62,13 @@
     var wrapBtn = document.createElement('button');
     wrapBtn.className = 'code-wrap-btn';
     wrapBtn.type = 'button';
-    wrapBtn.textContent = T.wrap;
+    wrapBtn.textContent = '换行';
     wrapBtn.setAttribute('aria-label', '切换代码自动换行');
 
     var btn = document.createElement('button');
     btn.className = 'code-copy-btn';
     btn.type = 'button';
-    btn.textContent = T.copy;
+    btn.textContent = '复制';
     btn.setAttribute('aria-label', '复制代码');
     fig.style.position = 'relative';
 
@@ -97,7 +78,7 @@
 
     wrapBtn.addEventListener('click', function () {
       var wrapped = fig.classList.toggle('code-wrap');
-      wrapBtn.textContent = wrapped ? T.unwrap : T.wrap;
+      wrapBtn.textContent = wrapped ? '不换行' : '换行';
     });
 
     btn.addEventListener('click', function () {
@@ -110,11 +91,11 @@
         text = pre ? pre.innerText : '';
       }
       navigator.clipboard.writeText(text).then(function () {
-        btn.textContent = T.copied;
-        setTimeout(function () { btn.textContent = T.copy; }, 2000);
+        btn.textContent = '已复制';
+        setTimeout(function () { btn.textContent = '复制'; }, 2000);
       }).catch(function () {
-        btn.textContent = T.failed;
-        setTimeout(function () { btn.textContent = T.copy; }, 2000);
+        btn.textContent = '失败';
+        setTimeout(function () { btn.textContent = '复制'; }, 2000);
       });
     });
   });
@@ -338,8 +319,8 @@
       navigator.clipboard.writeText(window.location.href).then(function () {
         var label = copyLinkBtn.querySelector('.share-btn-text');
         if (label) {
-          label.textContent = T.copiedLink;
-          setTimeout(function () { label.textContent = T.copyLink; }, 2000);
+          label.textContent = '已复制！';
+          setTimeout(function () { label.textContent = '复制链接'; }, 2000);
         }
       });
     });

@@ -1,42 +1,52 @@
 # ============================================================
 # Pure 主题配置覆盖（_config.pure.yml）
+# 主题为 Zcxx0322/hexo-theme-pure 官方原版（照搬，无定制）。
 # 本文件覆盖 themes/pure/_config.yml，是主题配置的唯一真源。
-# 菜单 key 用「语言中立 ID」，显示文案由 languages/*.yml 的 menu.* 提供。
+# 注意：原版主题为单语言中文 UI（菜单/搜索/页脚等硬编码中文）；
+#       中英双构建下英文站（/en/）的 UI 同样为中文，仅内容双语。
 # ============================================================
 
+# 网站图标（用头像兼作 favicon）
 favicon: /images/avatar.jpg
 
+# Logo；留空显示站点标题文字
 logo: ""
 
-# 导航菜单（ID: 路径）。ID → 文案见 languages/*.yml 的 menu.<id>
+# ----------------------------------------------------------------
+# 导航菜单（名称: 路径）—— 原版中文菜单 + 作品集入口
+# ----------------------------------------------------------------
 menu:
-  home: /
-  archives: /archives
-  categories: /categories
-  tags: /tags
-  projects: /projects
-  about: /about
+  首页: /
+  归档: /archives
+  标签: /tags
+  分类: /categories
+  作品: /projects
+  关于: /about
 
-# 页脚社交链接
+# ----------------------------------------------------------------
+# 社交链接（显示在页脚）
+# ----------------------------------------------------------------
 social:
   github: https://github.com/RainbowJier
   twitter: ""
   email: 3021809270@qq.com
   rss: /atom.xml
 
+# ----------------------------------------------------------------
 # 文章设置
+# ----------------------------------------------------------------
 post:
   excerpt_length: 200
   show_updated: true
   copyright: true
-  copyright_text: ""          # 实际文案走 languages（post.copyright_notice）
+  copyright_text: "本文采用 CC BY-NC-SA 4.0 许可协议，转载请注明出处。"
   series:
     enable: true
   outdated:
     enable: true
     days: 365
     basis: updated
-    message: ""               # 走 languages（post.outdated_message）
+    message: "技术细节可能随版本变化，请结合当前环境验证。"
 
 # 文章目录
 toc:
@@ -66,7 +76,7 @@ search:
   field: post
   content: true
 
-# 评论（暂未接入，置 false；接入 Giscus 等时再打开并填参数）
+# 评论（未接入评论服务，置 false 不显示空评论块）
 comments:
   enable: false
   provider: giscus
@@ -90,7 +100,7 @@ comments:
   valine:
     app_id: ""
     app_key: ""
-    placeholder: ""
+    placeholder: "说点什么吧…"
     avatar: mm
     lang: zh-CN
 
@@ -119,11 +129,11 @@ footer:
   custom_text: ""
   icp: ""
 
-# 关于页（头像 / 名称 / 社交；正文内容写在 about 页 Markdown 里，天然双语）
+# 关于页（头像 / 名称 / 社交；正文写在 about 页 Markdown 里，中英各一份）
 about:
   avatar: /images/avatar.jpg
   name: Frank
-  bio: ""
+  bio: "前端开发者 · 终身学习者"
   links:
     github: https://github.com/RainbowJier
     email: 3021809270@qq.com

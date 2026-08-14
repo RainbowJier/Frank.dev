@@ -13,8 +13,8 @@ push 到 `main` 分支后，`.github/workflows/deploy.yml` 会自动：
 3. 把 `public/` 发布到 GitHub Pages
 4. 自定义域名 **https://frank-dev.site** 生效（`source/CNAME` 自动复制到 `public/` 根）
 
-### 一次性前提（务必做）
-仓库 **Settings → Pages → Build and deployment → Source** 必须选 **「GitHub Actions」**（而不是「Deploy from a branch」）。否则 Pages 还在按旧的「main 根目录」发布，会和 Hexo 产物冲突。
+### 一次性前提（已设置完成 ✅）
+仓库 **Settings → Pages → Build and deployment → Source** 已选 **「GitHub Actions」**（2026-08-14 设置）。如误改回「Deploy from a branch」，需改回来，否则会和 Hexo 产物冲突。
 
 ### 日常发布
 ```bash
