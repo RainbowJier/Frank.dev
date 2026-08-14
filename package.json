@@ -2,20 +2,14 @@
   "name": "frank-notes",
   "version": "2.0.0",
   "private": true,
-  "description": "Frank's Notes —— 个人主页 + 博客 + 作品集（Hexo + hexo-theme-pure）",
+  "scripts": {
+    "build": "hexo generate",
+    "clean": "hexo clean",
+    "deploy": "hexo deploy",
+    "server": "hexo server"
+  },
   "hexo": {
     "version": "7.3.0"
-  },
-  "scripts": {
-    "build": "hexo generate --config _config.yml,_config.zh.yml && hexo generate --config _config.yml,_config.en.yml",
-    "build:zh": "hexo generate --config _config.yml,_config.zh.yml",
-    "build:en": "hexo generate --config _config.yml,_config.en.yml",
-    "clean": "hexo clean",
-    "server": "hexo server --config _config.yml,_config.zh.yml",
-    "deploy": "hexo deploy"
-  },
-  "engines": {
-    "node": ">=18"
   },
   "dependencies": {
     "hexo": "^7.3.0",
@@ -26,10 +20,8 @@
     "hexo-generator-search": "^2.4.3",
     "hexo-generator-tag": "^2.0.0",
     "hexo-renderer-ejs": "^2.0.0",
-    "hexo-renderer-marked": "^6.3.0"
-  },
-  "devDependencies": {
-    "hexo-cli": "^4.3.1",
+    "hexo-renderer-marked": "^6.3.0",
+    "hexo-renderer-stylus": "^3.0.0",
     "hexo-server": "^3.0.0"
   }
 }

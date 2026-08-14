@@ -1,13 +1,3 @@
-# ZCode 客户端本地配置（不发布到公开仓库）
-.zcode/
-
-# 系统 / 编辑器杂项
-Thumbs.db
-.DS_Store
-
-# JetBrains IDE
-.idea/
-
 # ---------- Hexo 构建产物 ----------
 public/
 db.json
@@ -19,3 +9,9 @@ node_modules/
 npm-debug.log*
 yarn-error.log*
 *.log
+
+# 系统 / 编辑器杂项
+Thumbs.db
+.DS_Store
+.idea/
+.zcode/

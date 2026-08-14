@@ -1,7 +1,0 @@
-# 中文构建覆盖（base _config.yml 已是中文默认，本文件仅作占位 / 显式标注）
-# 构建：hexo generate --config _config.yml,_config.zh.yml  →  public/
-language: zh-cn
-source_dir: source
-public_dir: public
-root: /
-url: https://frank-dev.site

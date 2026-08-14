@@ -5,13 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# 允许 GitHub Pages 部署
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 同一时间只跑一条部署，避免互相覆盖
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -32,18 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site (Chinese + English, dual build)
-        run: |
-          # 清理旧产物与缓存
-          npx hexo clean
-          # 中文：source/ → public/
-          npx hexo generate --config _config.yml,_config.zh.yml
-          # 清掉共享缓存 db.json，避免英文构建串入中文资产
-          rm -f db.json
-          # 英文：source_en/ → public/en/
-          npx hexo generate --config _config.yml,_config.en.yml
-          # 保险：移除可能误入 /en/ 的 CNAME（自定义域名只在根目录生效）
-          rm -f public/en/CNAME
+      - name: Build site
+        run: npx hexo generate
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

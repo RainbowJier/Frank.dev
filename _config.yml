@@ -1,31 +1,26 @@
-# ============================================================
-# Hexo 站点配置（Frank's Notes）
-# ------------------------------------------------------------
-# 双语双构建：
-#   中文： hexo generate --config _config.yml,_config.zh.yml  → public/
-#   英文： hexo generate --config _config.yml,_config.en.yml  → public/en/
-# 本文件为「共享 + 中文默认」配置；英文覆盖见 _config.en.yml。
-# ============================================================
+# Hexo Configuration
+## Docs: https://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
 
-# ---------- 站点 ----------
+# Site
 title: Frank's Notes
 subtitle: 前端开发者 · 终身学习者
 description: Frank 的个人主页与博客 —— 记录学习、思考与作品。
 keywords: Frank,前端开发,博客,作品集,个人网站
 author: Frank
-language: zh-cn
+language: zh-CN
 timezone: Asia/Shanghai
 
-# ---------- URL ----------
+# URL
 url: https://frank-dev.site
 root: /
 permalink: posts/:title/
 permalink_defaults:
 pretty_urls:
-  trailing_index: true
-  trailing_html: true
+  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
+  trailing_html: true # Set to false to remove trailing '.html' from permalinks
 
-# ---------- 目录（默认；英文构建由 _config.en.yml 覆盖）----------
+# Directory
 source_dir: source
 public_dir: public
 tag_dir: tags
@@ -35,13 +30,13 @@ code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
 
-# ---------- 文章 ----------
-new_post_name: :title.md
+# Writing
+new_post_name: :title.md # File name of new posts
 default_layout: post
-titlecase: false
+titlecase: false # Transform title into titlecase
 external_link:
-  enable: true
-  field: site
+  enable: true # Open external links in new tab
+  field: site # Apply to the whole site
   exclude: ''
 filename_case: 0
 render_drafts: false
@@ -49,25 +44,6 @@ post_asset_folder: false
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
-
-# ---------- 首页 / 分类 / 归档生成器 ----------
-index_generator:
-  path: ''
-  per_page: 10
-  order_by: -date
-archive_generator:
-  enabled: true
-  per_page: 0
-  yearly: true
-  monthly: true
-category_generator:
-  enable: true
-  per_page: 0
-tag_generator:
-  enable: true
-  per_page: 0
-
-# ---------- 代码高亮（主题内置 highlight.js 主题）----------
 highlight:
   enable: true
   line_number: false
@@ -77,36 +53,56 @@ highlight:
   hljs: true
 prismjs:
   enable: false
+  preprocess: true
+  line_number: true
+  tab_replace: ''
 
-# ---------- 分类与标签 ----------
+# Home page setting
+index_generator:
+  path: ''
+  per_page: 10
+  order_by: -date
+
+# Category & Tag
 default_category: uncategorized
 category_map:
 tag_map:
 
-# ---------- 日期 / 元信息 ----------
+# Metadata elements
 meta_generator: true
 
-# ---------- 主题 ----------
+# Date / Time format
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: 'mtime'
+
+# Pagination
+per_page: 10
+pagination_dir: page
+
+# Include / Exclude file(s)
+include:
+exclude:
+ignore:
+
+# Extensions
 theme: pure
 
-# ---------- 本地搜索（需 hexo-generator-search）----------
+# 本地搜索（hexo-generator-search）
 search:
   path: search.xml
   field: post
   content: true
-  format: html
 
-# ---------- RSS（需 hexo-generator-feed）----------
+# RSS（hexo-generator-feed）
 feed:
   enable: true
   type: atom
   path: atom.xml
   limit: 20
   content: true
-  content_limit:
-  content_limit_delim: ' '
   order_by: -date
 
-# ---------- 部署（实际由 GitHub Actions 构建发布，此处仅占位）----------
+# Deployment
 deploy:
   type: ''
