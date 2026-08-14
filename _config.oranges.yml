@@ -100,11 +100,6 @@ navbar:
     path: /tags/
     key: tags
   -
-    name: 友链
-    enable: true
-    path: /friends/
-    key: friends
-  -
     name: 关于
     enable: true
     path: /about/
@@ -117,20 +112,6 @@ catalog:
 # 文章末尾的上一页与下一页
 prevnext:
   enable: true
-
-# 友链详细信息：支持多个友链
-friends:
-  # nickname: 昵称
-  # site: 地址
-  # meta: 描述
-  -
-    nickname: Zcheng
-    site: https://zcheng.site/
-    meta:
-  -
-    nickname: Hexo
-    site: https://hexo.io/
-    meta:
 
 # 页脚信息
 footer:
