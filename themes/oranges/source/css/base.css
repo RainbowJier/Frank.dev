@@ -35,6 +35,10 @@ body.hidden {
 
 #app {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
   margin: 0 auto;
 }
 
@@ -69,12 +73,9 @@ a:hover {
 }
 
 .flex-container {
-  min-height: calc(100vh - 290px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-left: calc(100vw - 100%);
-  /*transition: all 0.3s ease;*/
 }
 
 .header {
@@ -87,11 +88,49 @@ a:hover {
 }
 
 .index .post-list,
-.friend-index .friend-list,
 .archives .post-list,
 .tag-index .tag-list,
 .about-index .markdown-body {
   padding: 0 40px;
+}
+
+.home-intro {
+  padding: 0 40px 28px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--color-divider-md-border);
+}
+
+.home-intro-name {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--color-text-a);
+  margin-bottom: 8px;
+}
+
+.home-intro-role {
+  font-size: 1.5rem;
+  color: var(--color-text-a);
+  margin-bottom: 10px;
+}
+
+.home-intro-desc {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: var(--color-text-a);
+}
+
+.home-intro-links {
+  margin-top: 14px;
+}
+
+.home-intro-links a {
+  font-size: 1.3rem;
+  margin-right: 20px;
+  color: var(--color-text-a);
+}
+
+.home-intro-links a:hover {
+  color: var(--color-text-a-hover);
 }
 
 .category-index .category-list {
@@ -106,8 +145,10 @@ a:hover {
   .container {
     width: 90%;
   }
+  .home-intro {
+    padding: 0 0 28px;
+  }
   .index .post-list,
-  .friend-index .friend-list,
   .archives .post-list,
   .tag-index .tag-list,
   .about-index .markdown-body {
@@ -156,7 +197,8 @@ a:hover {
     display: none;
   }
   .post-catalog .catalog-content {
-    height: unset!important;
+    height: auto!important;
+    max-height: none!important;
   }
   .back-to-top {
     opacity: 0;
@@ -166,7 +208,6 @@ a:hover {
 
 @media (max-width: 1200px) and (min-width: 887px) {
   .index .post-list,
-  .friend-index .friend-list,
   .archives .post-list,
   .tag-index .tag-list,
   .about-index .markdown-body {
@@ -258,33 +299,32 @@ a:hover {
 }
 
 .navbar ul li a {
-  padding-bottom: 2px;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 5px;
 }
 
-.navbar ul li a:hover::after {
+.navbar ul li a::after {
   content: "";
   position: absolute;
-  bottom: 3px;
-  left: 5px;
-  height: 6px;
-  opacity: 0.45;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
   background-color: gray;
-  width: 89%;
+  opacity: 0.55;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 320ms ease;
+}
+
+.navbar ul li a:hover::after,
+.navbar ul li.active a::after {
+  transform: scaleX(1);
 }
 
 .navbar ul li.active a {
   color: var(--color-text-a-active);
-}
-
-.navbar ul li.active a::after {
-  content: "";
-  position: absolute;
-  bottom: 3px;
-  left: 5px;
-  height: 6px;
-  opacity: 0.55;
-  background-color: gray;
-  width: 89%;
 }
 
 @media (max-width: 888px) {
@@ -384,16 +424,6 @@ a:hover {
   padding-left: 30px;
 }
 
-.friend-list-item {
-  font-size: 1.6rem;
-  padding: 10px;
-}
-
-.friend-list-item .nickname {
-  padding-right: 10px;
-  color: var(--color-text-a)
-}
-
 .post-details .post-title {
   text-align: center;
   font-size: 2.2rem;
@@ -472,7 +502,7 @@ a:hover {
 }
 
 .catalog-content {
-  overflow: auto;
+  overflow: visible;
 }
 
 .post-catalog .toc-child {
@@ -589,8 +619,6 @@ a:hover {
 }
 
 .search-result {
-  max-height: 350px;
-  overflow: auto;
   background-color: var(--bg-content-search);
   border-radius: 10px;
   margin-top: 8px;
@@ -696,4 +724,151 @@ a:hover {
   font-size: 1rem;
   line-height: 1rem;
   white-space: nowrap;
+}
+
+@media (min-width: 889px) {
+  #app {
+    --sidebar-width: clamp(208px, 18vw, 280px);
+  }
+
+  .site-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100dvh;
+    z-index: 10;
+  }
+
+  .site-sidebar .header {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .site-sidebar .avatar {
+    margin-left: 0;
+    padding-bottom: 36px;
+    text-align: center;
+  }
+
+  .site-sidebar .avatar img {
+    height: 96px;
+    width: 96px;
+  }
+
+  .site-sidebar .avatar--text .nickname {
+    padding-top: 0;
+  }
+
+  .site-sidebar .navbar {
+    margin-left: 0;
+    display: block;
+    width: 100%;
+  }
+
+  .site-sidebar .navbar ul {
+    list-style: none;
+  }
+
+  .site-sidebar .navbar ul li {
+    display: block;
+    margin: 0;
+    text-align: center;
+  }
+
+  .site-sidebar .navbar ul li a {
+    display: inline-block;
+    padding: 10px 12px;
+  }
+
+  .site-main {
+    flex: 1 0 auto;
+    min-width: 0;
+    margin-left: var(--sidebar-width);
+  }
+
+  .site-footer {
+    flex: 0 0 auto;
+    box-sizing: border-box;
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+    padding: 0 48px;
+  }
+
+  .site-footer .footer {
+    width: min(100%, 820px);
+    margin-inline: auto;
+  }
+
+  .site-main .flex-container {
+    box-sizing: border-box;
+    min-height: 0;
+    margin-left: 0;
+    padding: 32px 0 40px;
+  }
+
+  .site-main .container {
+    box-sizing: border-box;
+    margin-inline: auto;
+    width: min(100% - 96px, 820px);
+  }
+
+  .site-main .post-details {
+    width: min(100% - 96px, 980px);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .site-main .post-details > .post-content {
+    min-width: 0;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .site-main .post-details > .post-catalog {
+    position: sticky;
+    top: 32px;
+    right: auto;
+    width: auto;
+    box-sizing: border-box;
+    padding-left: 0;
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .site-main .post-catalog.hidden {
+    opacity: 1;
+    visibility: visible;
+  }
+
+}
+
+@media (max-width: 888px) {
+  .site-sidebar {
+    display: block;
+  }
+
+  .site-main {
+    min-width: 0;
+  }
+
+  .site-main .flex-container {
+    margin-left: 0;
+  }
+
+  .site-main .post-details {
+    width: 90%;
+  }
+
+  .avatar--text .nickname {
+    padding-top: 0;
+  }
 }

@@ -1,4 +1,13 @@
 <div class="container index">
+  <div class="home-intro">
+    <h2 class="home-intro-name">刘起杰</h2>
+    <p class="home-intro-role">Java 开发工程师 · 全栈 · 3 年经验</p>
+    <p class="home-intro-desc">热爱技术与持续学习，关注后端架构、微服务与 AI 工程化方向。工作之余通过博客分享技术经验。</p>
+    <div class="home-intro-links">
+      <a href="/about/">关于我</a>
+      <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
   <div class="post-list">
     <!-- 遍历渲染文章 -->
     <% page.posts.forEach(function(item) { %>
@@ -20,6 +29,7 @@
       </div>
     <% }) %>
   </div>
+  <% if (page.total > 1) { %>
   <nav class="post-navigation">
     <% if(page.prev !== 0){ %>
       <a href="<%- url_for(page.prev_link)%>"><i class="iconfont icon-angleleft"></i></a>
@@ -29,4 +39,5 @@
       <a href="<%- url_for(page.next_link)%>"><i class="iconfont icon-angleright"></i></a>
     <% } %>
   </nav>
+  <% } %>
 </div>

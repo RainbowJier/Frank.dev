@@ -5,12 +5,19 @@
 
   <body>
     <div id="app">
-      <%- partial('_partial/navigation') %>
+      <aside class="site-sidebar" aria-label="站点导航">
+        <%- partial('_partial/navigation') %>
+      </aside>
 
-      <div class="flex-container">
-        <%- body %>
+      <main class="site-main">
+        <div class="flex-container">
+          <%- body %>
+        </div>
+      </main>
+
+      <footer class="site-footer">
         <%- partial('_partial/footer') %>
-      </div>
+      </footer>
 
       <div class="tools-bar">
         <%- partial('_partial/backtotop') %>

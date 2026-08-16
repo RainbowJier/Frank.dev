@@ -1,9 +1,5 @@
 <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
-
-<% if (theme.mathjax && theme.mathjax.enable){ %>
-  <%- partial('_partial/mathjax') %>
-<% } %>
+<!-- 同时承载标签、分类和关于页面，具体展示取决于 page.type -->
 
 <% if (theme.codeBlock && theme.codeBlock.copy && theme.codeBlock.copy.enable){ %>
   <%- partial('_partial/clipboard') %>
@@ -23,28 +19,6 @@
   <div class="container category-index">
     <div>
       <%- list_categories({orderby: "length", order: -1}) %>
-    </div>
-  </div>
-  <% } %>
-
-  <% if (page.type === "friends") { %>
-  <!-- 朋友页 url形式：https://yoursite/friends/ -->
-  <div class="container friend-index">
-    <div class="friend-list">
-      <% for(let friend of theme.friends) { %>
-        <div class="friend-list-item">
-          <span class="nickname">@ <%- friend.nickname %></span>
-          <a href="<%- friend.site %>" target="_blank">
-            <span class="site-path"><%- friend.site %></span>
-          </a>
-          <p class="card-meta">
-            <%- friend.meta %>
-          </p>
-        </div>
-      <% } %>
-    </div>
-    <div class="markdown-body">
-      <%- page.content %>
     </div>
   </div>
   <% } %>
@@ -84,7 +58,7 @@
           <% }
           }
           if (item.key === 'categories' && item.enable) {
-            if(page.tags && page.categories.length > 0) { %>
+            if(page.categories && page.categories.length > 0) { %>
               <span class="post-categories">
                 <i class="iconfont icon-bookmark" title="<%= __('categories') %>"></i>
                 <% for(let item of page.categories.data){ %>
@@ -133,7 +107,7 @@
               <% }
               }
               if (item.key === 'categories' && item.enable) {
-                if(page.tags && page.categories.length > 0) { %>
+                if(page.categories && page.categories.length > 0) { %>
                   <span class="post-categories">
                     <i class="iconfont icon-bookmark" title="<%= __('categories') %>"></i>
                     <% for(let item of page.categories.data){ %>
@@ -160,10 +134,5 @@
       <% } %>
     </div>
     <%- partial("_partial/catalog") %>
-    <% if(theme.comments.enable) { %>
-      <div class="comments-container">
-        <%- partial("_partial/comments") %>
-      </div>
-    <% } %>
   </div>
 <% } %>

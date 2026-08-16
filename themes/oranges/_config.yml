@@ -2,14 +2,9 @@
   # favicon: 网站图标
   # avatar: 主题用户头像与昵称
   # rss: rss订阅
-  # gtag: Google 分析
-  # comments: 文章评论系统
-    # gitalk
-    # disqus
   # navbar: 主题页面导航栏
   # catalog: 文章目录
   # prevnext: 文章末尾的上一页与下一页
-  # friends: 友链
   # footer: 页脚信息
   # search: 文章搜索
   # colorSwitch: 深/浅配色切换
@@ -26,56 +21,9 @@ favicon:
 
 # 用户头像与昵称
 avatar:
-  author_photo: /images/avatar.png
+  author_photo: ""
   author_nickname: Oranges
   path: /
-
-# Google 分析
-# https://analytics.google.com
-# 注册Google分析账号，在管理/创建媒体资源/选择网站/填写相关信息后得到跟踪Id，一般格式为UA-xxxxxxx-x
-# 如之前已有注册账号，在管理/跟踪信息/跟踪代码/找到跟踪ID，一般格式为UA-xxxxxxx-x
-gtag:
-  enable: false
-  gtagkey: UA-xxxxxxx-x
-
-# 文章评论系统
-comments:
-  enable: true
-  # 目前仅支持gitalk, valine, disqus评论，选择喜欢的一种开启即可
-
-  gitalk:
-    # https://github.com/gitalk/gitalk#usage查看官方教程
-    enable: false
-    clientID:
-    clientSecret:
-    repo:
-    owner:
-    admin:
-    id: location.pathname
-    distractionFreeMode: false
-
-  valine:
-    # https://valine.js.org/quickstart.html#%E8%8E%B7%E5%8F%96APP-ID-%E5%92%8C-APP-Key
-    # 进入以上网址查看官方教程
-    enable: false
-    appId:
-    appKey:
-    placeholder: Welcome!
-    avatar: retro
-    vempty_display: false
-
-  # disqus 需科学上网方可使用
-  disqus:
-    # https://disqus.com/
-    # 注册账号，获取shortname.disqus.com，shortname为你定义的唯一name
-    # 例：我注册配置完毕后的网址为zxcxxxx.disqus.com，https-zxcxxxx-github-io即为shortname
-    enable: false
-    shortname: https-zxcxxxx-github-io
-  
-  # waline https://waline.js.org
-  waline:
-    enable: false
-    serverURL:
 
 # 主题页面导航栏
 navbar:
@@ -100,11 +48,6 @@ navbar:
     path: /tags/
     key: tags
   -
-    name: Friends
-    enable: true
-    path: /friends/
-    key: friends
-  -
     name: About
     enable: true
     path: /about/
@@ -117,20 +60,6 @@ catalog:
 # 文章末尾的上一页与下一页
 prevnext:
   enable: true
-
-# 友链详细信息：支持多个友链
-friends:
-  # nickname: 昵称
-  # site: 地址
-  # meta: 描述
-  -
-    nickname: Zcheng
-    site: https://zcheng.site/
-    meta:
-  -
-    nickname: Hexo
-    site: https://hexo.io/
-    meta:
 
 # 页脚信息
 footer:
@@ -184,28 +113,6 @@ footer:
       name: Theme by Oranges | Powered by Hexo
       path: https://github.com/zchengsite/hexo-theme-oranges
 
-  # 浏览量统计
-  # http://busuanzi.ibruce.info/
-  views:
-    enable: false
-    provider: '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js'
-    item:
-      -
-        enable: true
-        id: busuanzi_value_site_pv
-        name: 本站总访问量
-        unit: 次
-      -
-        enable: true
-        id: busuanzi_value_page_pv
-        name: 本文总阅读量
-        unit: 次
-      -
-        enable: true
-        id: busuanzi_value_site_uv
-        name: 本站访客数
-        unit: 人
-
 # 文章搜索
 search:
   enable: true
@@ -233,51 +140,6 @@ codeBlock:
   # 代码复制
   copy:
     enable: true
-
-# MathJax Support
-# 数学公式支持
-mathjax:
-  enable: true
-
-# cdn配置，默认关闭，如需启动，先确保对应插件版本cdn资源可用后再开启
-# 如资源加载失败，可替换cdn提供商或设置enable:false默认走本地资源
-# 也可使用自己的cdn服务，资源在/theme/oranges/source/plugins下
-cdns:
-  jquery:
-    enable: false
-    url: https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js
-
-  fancybox:
-    enable: false
-    url:
-      css: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css
-      js: https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js
-
-  # LaTeX 公式
-  mathjax:
-    enable: false
-    url: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js
-
-  # 代码块复制
-  clipboard:
-    enable: false
-    url: https://cdn.jsdelivr.net/npm/clipboard@2.0.10/dist/clipboard.min.js
-
-  # 评论系统
-  comments:
-    gitalk:
-      enable: false
-      url:
-        css: https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css
-        js: https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js
-
-    valine:
-      enable: false
-      url: https://cdn.jsdelivr.net/npm/valine@1.4.18/dist/Valine.min.js
-
-    waline:
-      enable: false
-      url: https://cdn.jsdelivr.net/npm/@waline/client@2.5.1/dist/legacy.min.js
 
 # 主题色
 themeColor: '#808080'
