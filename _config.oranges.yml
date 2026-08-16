@@ -10,6 +10,74 @@ avatar:
   author_nickname: Frank
   path: /
 
+# 首页总体介绍区块（index.ejs 渲染）
+intro:
+  name: 刘起杰
+  role: Java 开发工程师 · 全栈 · 3 年经验
+  bio: 安徽工程大学计算机系毕业，三年全栈开发经历，专注后端架构、微服务与 AI 工程化方向。现居福州，热爱技术、持续学习，也乐于把踩过的坑写成文章，与更多人分享。
+  # 数据概览：value 大数字 + label 小标签，文章数由模板自动追加
+  stats:
+    -
+      value: 180+
+      label: CSDN 粉丝
+    -
+      value: 8w+
+      label: CSDN 访问量
+  # 博客态度，引用样式展示
+  motto: 这里是我记录思想、学习和生活的地方，希望我的分享能带给你一丝启发。
+  skills:
+    - Java
+    - Spring Boot
+    - PostgreSQL
+    - Redis
+    - RabbitMQ
+    - Vue 3
+    - AI 工程化
+  # 工作经历（按时间自动排序）：logo 留空时显示简称占位；传入 logo 后填 /images/xxx.png 即可
+  work:
+    -
+      name: 福州智城空间信息科技有限公司
+      short: 智城
+      logo:
+      period: 2025.04 - 至今
+      role: Java 开发工程师
+      location: 福州
+    -
+      name: 安徽兆尹安联科技有限责任公司
+      short: 兆尹
+      logo: /images/zhaoyin.png
+      period: 2024.06 - 2025.02
+      role: 全栈开发工程师
+      location: 合肥
+    -
+      name: 浙江浙大网新软件产业集团有限公司
+      short: 网新
+      logo: /images/insigma.ico
+      period: 2023.05 - 2024.03
+      role: 全栈开发工程师
+      location: 杭州
+  # 教育经历
+  education:
+    -
+      name: 安徽工程大学
+      short: 安工程
+      logo: /images/ahpu.png
+      period: 2020.09 - 2024.06
+      role: 数据科学与大数据技术 · 本科
+  links:
+    -
+      name: 关于我
+      path: /about/
+    -
+      name: GitHub
+      path: https://github.com/RainbowJier
+    -
+      name: CSDN
+      path: https://blog.csdn.net/weixin_51329147
+    -
+      name: 邮箱
+      path: mailto:3021809270@qq.com
+
 navbar:
   -
     name: 首页
@@ -17,10 +85,15 @@ navbar:
     path: /
     key: home
   -
-    name: 归档
+    name: 文章
     enable: true
     path: /archives/
     key: archives
+  -
+    name: 项目
+    enable: true
+    path: /projects/
+    key: projects
   -
     name: 分类
     enable: false
@@ -64,7 +137,7 @@ colorSwitch:
   enable: true
 
 postShare:
-  enable: true
+  enable: false
   twitter:
     enable: true
   facebook:

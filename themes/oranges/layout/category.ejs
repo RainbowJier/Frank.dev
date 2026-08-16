@@ -1,4 +1,4 @@
-<!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
+<!-- 分类详情页，展示某个分类下的文章列表，url形式：https://yoursite/categories/某个分类/ -->
 
 <div class="container category-details">
   <div class="content-title">
@@ -6,16 +6,19 @@
       <span><%- page.category %></span>
     </h2>
   </div>
-  <% page.posts.sort('date', -1).each(function(item) { %>
-    <div class="post-list">
+  <div class="post-list">
+    <% page.posts.sort('date', -1).each(function(item) { %>
       <div class="post-item" title="<%- item.title %>">
-        <span class="time-m-d"><%- item.date.format("YYYY-MM-DD") %></span>
-        <a href="<%- url_for(item.path) %>">
-          <span><%- item.title %></span>
-        </a>
+        <div class="time-m-d"><%- item.date.format("YYYY-MM-DD") %></div>
+        <div class="title">
+          <a href="<%- url_for(item.path) %>">
+            <span><%- item.title %></span>
+          </a>
+        </div>
       </div>
-    </div>
-  <% }) %>
+    <% }) %>
+  </div>
+  <% if (page.total > 1) { %>
   <nav class="post-navigation">
     <% if(page.prev !== 0){ %>
       <a href="<%- url_for(page.prev_link)%>"><i class="iconfont icon-angleleft"></i></a>
@@ -25,4 +28,5 @@
       <a href="<%- url_for(page.next_link)%>"><i class="iconfont icon-angleright"></i></a>
     <% } %>
   </nav>
+  <% } %>
 </div>

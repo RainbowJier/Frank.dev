@@ -5,7 +5,7 @@
 # Site
 title: Frank's Notes
 subtitle: ''
-description: ''
+description: 刘起杰（Frank）的个人博客，分享 Java 后端、全栈开发与 AI 工程化的技术笔记。
 keywords:
 author: Frank
 language: zh-CN
@@ -50,10 +50,6 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
-prismjs:
-  preprocess: true
-  line_number: true
-  tab_replace: ''
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -111,8 +107,3 @@ feed:
   icon: /images/favicon.png
   autodiscovery: true
   template:
-
-# Deployment
-## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: ''

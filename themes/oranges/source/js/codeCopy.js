@@ -35,14 +35,12 @@ function copyContentAction() {
     clipboard = new ClipboardJS('#copy-target')
   }
   const copyBtnDom = document.querySelector('.pin-copy')
-  clipboard.on('success', function(e) {
-    console.warn('clipboard success', e)
+  clipboard.on('success', function() {
     clipboard.destroy()
     clipboard = null
     copyBtnDom && copyBtnDom.setAttribute('data-text', 'copied')
   })
-  clipboard.on('error', function(e) {
-    console.warn('clipboard error', e)
+  clipboard.on('error', function() {
     clipboard.destroy()
     clipboard = null
     copyBtnDom && copyBtnDom.setAttribute('data-text', 'fail to copy')

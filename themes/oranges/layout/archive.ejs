@@ -1,4 +1,4 @@
-<!-- 归档页，展示本站所有文章，按照年份降序归类，url形式：https://yoursite/archives/ -->
+<!-- 文章页（原归档页），按年份降序归类展示博客文章，url形式：https://yoursite/archives/ -->
 
 <!-- last: 按年份把文章分组，当前遍历到的年份 -->
 <!-- now: 当前遍历到的文章的发布年份 -->
@@ -9,7 +9,10 @@
       var prev = -10086;// prev year
       var curr;// curr year, ever step be updated
 
-      site.posts.sort('date', -1).each(function(item, index) {
+      // 只列博客文章；项目经历有独立的 /projects/ 页面
+      site.posts.filter(function(item) {
+        return !(item.categories.data || []).some(function(c) { return c.name === '项目经历'; });
+      }).sort('date', -1).each(function(item, index) {
         curr = item.date.year()
         if (curr !== prev) {
           prev = curr;

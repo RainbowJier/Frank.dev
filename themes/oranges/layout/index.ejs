@@ -1,13 +1,116 @@
 <div class="container index">
+  <% if (theme.intro) { %>
   <div class="home-intro">
-    <h2 class="home-intro-name">刘起杰</h2>
-    <p class="home-intro-role">Java 开发工程师 · 全栈 · 3 年经验</p>
-    <p class="home-intro-desc">热爱技术与持续学习，关注后端架构、微服务与 AI 工程化方向。工作之余通过博客分享技术经验。</p>
-    <div class="home-intro-links">
-      <a href="/about/">关于我</a>
-      <a href="https://github.com/RainbowJier" target="_blank" rel="noopener">GitHub</a>
+    <div class="home-intro-head">
+      <h2 class="home-intro-name"><%- theme.intro.name %></h2>
+      <p class="home-intro-role"><%- theme.intro.role %></p>
     </div>
+    <% if (theme.intro.bio) { %>
+    <p class="home-intro-desc"><%- theme.intro.bio %></p>
+    <% } %>
+    <% if (theme.intro.skills && theme.intro.skills.length) { %>
+    <div class="home-intro-skills">
+      <% theme.intro.skills.forEach(function(skill) { %>
+        <span class="skill-chip"><%- skill %></span>
+      <% }) %>
+    </div>
+    <% } %>
+    <% var statList = (theme.intro.stats || []).slice(); %>
+    <% if (site.posts.length) { statList.push({ value: String(site.posts.length), label: __('posts_count') }); } %>
+    <% if (statList.length) { %>
+    <div class="home-intro-stats">
+      <% statList.forEach(function(stat) { %>
+        <div class="stat-item">
+          <span class="stat-value"><%- stat.value %></span>
+          <span class="stat-label"><%- stat.label %></span>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+    <% if (theme.intro.motto) { %>
+    <p class="home-intro-motto"><%- theme.intro.motto %></p>
+    <% } %>
+    <%
+      // 按时间段起始年月升序（最早在前），与配置书写顺序无关
+      var byPeriodAsc = function(a, b) {
+        var parse = function(p) {
+          var m = /(\d{4})\.(\d{1,2})/.exec(p || '');
+          return m ? parseInt(m[1], 10) * 100 + parseInt(m[2], 10) : 0;
+        };
+        return parse(a.period) - parse(b.period);
+      };
+      var workList = (theme.intro.work || []).slice().sort(byPeriodAsc);
+      var eduList = (theme.intro.education || []).slice().sort(byPeriodAsc);
+      // 项目经历：自动取分类「项目经历」下的文章，按时间倒序（最新在前）
+      var projCat = site.categories.findOne({ name: '项目经历' });
+      var projList = projCat ? projCat.posts.sort('date', -1).data : [];
+    %>
+    <% if (workList.length) { %>
+    <div class="home-exp">
+      <div class="home-exp-title"><%= __('work') %></div>
+      <% workList.forEach(function(item) { %>
+        <div class="home-exp-item">
+          <span class="home-exp-logo">
+            <span class="home-exp-monogram<%- item.logo ? ' hidden' : '' %>"><%- item.short || item.name %></span>
+            <% if (item.logo) { %>
+              <img src="<%- url_for(item.logo) %>" alt="<%- item.short || item.name %>" loading="lazy" onerror="this.classList.add('hidden');this.previousElementSibling.classList.remove('hidden')">
+            <% } %>
+          </span>
+          <div class="home-exp-info">
+            <div class="home-exp-name"><%- item.name %></div>
+            <div class="home-exp-role"><%- item.role %><% if (item.location) { %> · <%- item.location %><% } %></div>
+          </div>
+          <div class="home-exp-period"><%- item.period %></div>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+    <% if (eduList.length) { %>
+    <div class="home-exp">
+      <div class="home-exp-title"><%= __('education') %></div>
+      <% eduList.forEach(function(item) { %>
+        <div class="home-exp-item">
+          <span class="home-exp-logo">
+            <span class="home-exp-monogram<%- item.logo ? ' hidden' : '' %>"><%- item.short || item.name %></span>
+            <% if (item.logo) { %>
+              <img src="<%- url_for(item.logo) %>" alt="<%- item.short || item.name %>" loading="lazy" onerror="this.classList.add('hidden');this.previousElementSibling.classList.remove('hidden')">
+            <% } %>
+          </span>
+          <div class="home-exp-info">
+            <div class="home-exp-name"><%- item.name %></div>
+            <div class="home-exp-role"><%- item.role %><% if (item.location) { %> · <%- item.location %><% } %></div>
+          </div>
+          <div class="home-exp-period"><%- item.period %></div>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+    <% if (projList.length) { %>
+    <div class="home-exp">
+      <div class="home-exp-title"><%= __('projects') %></div>
+      <% projList.forEach(function(item) { %>
+        <a class="home-exp-item" href="<%- url_for(item.path) %>" title="<%- item.title %>">
+          <span class="home-exp-logo">
+            <span class="home-exp-monogram"><%- item.title.slice(0, 1) %></span>
+          </span>
+          <div class="home-exp-info">
+            <div class="home-exp-name"><%- item.title %></div>
+            <div class="home-exp-role"><%- item.role || item.description || '' %></div>
+          </div>
+          <div class="home-exp-period"><%- item.period || item.date.format('YYYY.MM') %></div>
+        </a>
+      <% }) %>
+    </div>
+    <% } %>
+    <% if (theme.intro.links && theme.intro.links.length) { %>
+    <div class="home-intro-links">
+      <% theme.intro.links.forEach(function(link) { %>
+        <a href="<%- url_for(link.path) %>" <%- /^https?:/.test(link.path) ? 'target="_blank" rel="noopener"' : '' %>><%- link.name %></a>
+      <% }) %>
+    </div>
+    <% } %>
   </div>
+  <% } %>
   <div class="post-list">
     <!-- 遍历渲染文章 -->
     <% page.posts.forEach(function(item) { %>

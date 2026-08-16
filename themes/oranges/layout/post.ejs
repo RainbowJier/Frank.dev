@@ -32,6 +32,46 @@
     </div>
   <% } %>
 
+  <% if(page.type === "projects") { %>
+  <!-- 项目经历页 url形式：https://yoursite/projects/，列表数据来自分类「项目经历」下的文章 -->
+    <%
+      var projCat = site.categories.findOne({ name: '项目经历' });
+      var projList = projCat ? projCat.posts.sort('date', -1).data : [];
+    %>
+    <div class="container project-index">
+      <% if (page.content && page.content.trim()) { %>
+      <div class="markdown-body project-intro">
+        <%- page.content %>
+      </div>
+      <% } %>
+      <% if (projList.length) { %>
+      <div class="project-list">
+        <% projList.forEach(function(item) { %>
+          <a class="project-item" href="<%- url_for(item.path) %>" title="<%- item.title %>">
+            <div class="project-item-head">
+              <span class="project-item-name"><%- item.title %></span>
+              <span class="project-item-period"><%- item.period || item.date.format('YYYY.MM') %></span>
+            </div>
+            <% if (item.role) { %>
+            <div class="project-item-role"><%- item.role %></div>
+            <% } %>
+            <% if (item.description) { %>
+            <div class="project-item-desc"><%- item.description %></div>
+            <% } %>
+            <% if (item.stack && item.stack.length) { %>
+            <div class="project-item-stack">
+              <% item.stack.forEach(function(s) { %>
+                <span class="skill-chip"><%- s %></span>
+              <% }) %>
+            </div>
+            <% } %>
+          </a>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+  <% } %>
+
   <% if (!page.type) { %>
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">

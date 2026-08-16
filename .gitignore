@@ -1,11 +1,19 @@
-.DS_Store
-Thumbs.db
-db.json
-*.log
-node_modules/
+# 构建产物与缓存
 public/
+db.json
 .deploy*/
-_multiconfig.yml
+
+# 依赖
+node_modules/
+
+# IDE / 系统
 .idea/
 .DS_Store
+Thumbs.db
+
+# 日志与杂项
+*.log
+_multiconfig.yml
+
+# 隐私：简历含手机号等个人信息，不入公开仓库
 Java开发工程师.pdf

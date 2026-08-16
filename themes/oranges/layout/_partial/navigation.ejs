@@ -2,7 +2,7 @@
   <% if (theme.avatar.author_photo) { %>
     <div class="avatar">
       <a href="<%- theme.avatar.path %>">
-        <img src="<%- theme.avatar.author_photo %>" alt="">
+        <img src="<%- theme.avatar.author_photo %>" alt="<%- theme.avatar.author_nickname %> 的头像">
       </a>
       <div class="nickname"><a href="<%- theme.avatar.path %>"><%- theme.avatar.author_nickname %></a></div>
     </div>
@@ -28,4 +28,4 @@
   </nav>
 </div>
 
-<%- js(['/js/activeNav.js']) %>
+<%- js(['/js/activeNav.js', '/js/avatarViewer.js']) %>
