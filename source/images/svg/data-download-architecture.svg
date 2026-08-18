@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" width="820" height="450"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="450" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="449" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 四个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="40"  width="740" height="76" rx="10"/>
+    <rect x="40" y="130" width="740" height="76" rx="10"/>
+    <rect x="40" y="220" width="740" height="76" rx="10"/>
+    <rect x="40" y="310" width="740" height="76" rx="10"/>
+  </g>
+
+  <!-- 层名：小方块 + 深蓝粗体 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="73" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="83">运营管理端 Vue3</text>
+    <rect x="64" y="163" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="173">resources 服务</text>
+    <rect x="64" y="253" width="10" height="10" fill="#F39B7F"/>
+    <text x="82" y="263">异步处理链路</text>
+    <rect x="64" y="343" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="353">存储与登记</text>
+  </g>
+
+  <!-- 层内元件：白底 + 彩描边 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#4DBBD5">
+      <rect x="190" y="54"  width="182" height="48" rx="6"/>
+      <rect x="386" y="54"  width="182" height="48" rx="6"/>
+      <rect x="582" y="54"  width="182" height="48" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="190" y="144" width="182" height="48" rx="6"/>
+      <rect x="386" y="144" width="182" height="48" rx="6"/>
+      <rect x="582" y="144" width="182" height="48" rx="6"/>
+    </g>
+    <g stroke="#F39B7F">
+      <rect x="190" y="234" width="182" height="48" rx="6"/>
+      <rect x="386" y="234" width="182" height="48" rx="6"/>
+      <rect x="582" y="234" width="182" height="48" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="190" y="324" width="182" height="48" rx="6"/>
+      <rect x="386" y="324" width="182" height="48" rx="6"/>
+      <rect x="582" y="324" width="182" height="48" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 元件主标签 + 子标注 -->
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="281" y="76">数据下载配置</text>
+    <text x="477" y="76">下载记录</text>
+    <text x="673" y="76">文件下载</text>
+    <text x="281" y="166">RecordController</text>
+    <text x="477" y="166">RecordServiceImpl</text>
+    <text x="673" y="166">RecordGateway</text>
+    <text x="281" y="256">RabbitMQ 队列</text>
+    <text x="477" y="256">MQ Listener</text>
+    <text x="673" y="256">GDAL 服务</text>
+    <text x="281" y="346">MinIO</text>
+    <text x="477" y="346">OPS file_info</text>
+    <text x="673" y="346">PostgreSQL</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="281" y="92">子类别 · 下载方式</text>
+    <text x="477" y="92">状态查询 · 详情</text>
+    <text x="673" y="92">流式 · 断点续传</text>
+    <text x="281" y="182">幂等 · 权限 · 审计</text>
+    <text x="477" y="182">记录 · 区划中转</text>
+    <text x="673" y="182">MyBatis-Plus</text>
+    <text x="281" y="272">basic · core · core-old</text>
+    <text x="477" y="272">CAS 抢占 EXPORTING</text>
+    <text x="673" y="272">Feign · GDB 裁剪加密</text>
+    <text x="281" y="362">加密 ZIP 对象</text>
+    <text x="477" y="362">文件元数据登记</text>
+    <text x="673" y="362">data_download_record</text>
+  </g>
+
+  <text x="410" y="424" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜数据下载功能端到端分层架构</text>
+</svg>

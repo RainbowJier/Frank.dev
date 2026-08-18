@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" width="820" height="450"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="450" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="449" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4DBBD5"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+
+  <!-- Broker 边界 -->
+  <rect x="210" y="60" width="430" height="310" rx="12" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+  <text x="232" y="88" font-size="13" font-weight="600" fill="#3C5488">RabbitMQ Broker</text>
+  <text x="620" y="88" text-anchor="end" font-size="11" fill="#6B7280">虚拟主机 vhost /</text>
+
+  <!-- 生产者 -->
+  <rect x="40" y="190" width="128" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="104" y="214" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">生产者</text>
+  <text x="104" y="232" text-anchor="middle" font-size="11" fill="#6B7280">Publisher</text>
+
+  <!-- 交换机 -->
+  <rect x="240" y="192" width="140" height="64" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="310" y="218" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">交换机</text>
+  <text x="310" y="238" text-anchor="middle" font-size="11" fill="#6B7280">Exchange</text>
+
+  <!-- 队列 A / B -->
+  <rect x="450" y="120" width="150" height="52" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="525" y="142" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">队列 order.queue</text>
+  <text x="525" y="160" text-anchor="middle" font-size="11" fill="#6B7280">先入先出缓冲区</text>
+
+  <rect x="450" y="256" width="150" height="52" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="525" y="278" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">队列 log.queue</text>
+  <text x="525" y="296" text-anchor="middle" font-size="11" fill="#6B7280">先入先出缓冲区</text>
+
+  <!-- 消费者 -->
+  <rect x="664" y="124" width="116" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="722" y="151" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 C1</text>
+  <rect x="664" y="262" width="116" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="722" y="289" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 C2</text>
+
+  <!-- 发布：生产者 → 交换机 -->
+  <line x1="168" y1="218" x2="234" y2="218" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="201" y="206" text-anchor="middle" font-size="11" fill="#6B7280">routing key</text>
+  <text x="201" y="240" text-anchor="middle" font-size="11" fill="#6B7280">order.paid</text>
+
+  <!-- 绑定：交换机 → 队列（虚线 = 间接路由） -->
+  <path d="M384 210 L418 210 L418 146 L444 146" fill="none" stroke="#4DBBD5" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowTeal)"/>
+  <text x="401" y="112" text-anchor="middle" font-size="11" fill="#6B7280">binding: order.*</text>
+
+  <path d="M384 238 L418 238 L418 282 L444 282" fill="none" stroke="#4DBBD5" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowTeal)"/>
+  <text x="418" y="330" text-anchor="middle" font-size="11" fill="#6B7280">binding: #</text>
+
+  <!-- 投递：队列 → 消费者 -->
+  <line x1="600" y1="146" x2="658" y2="146" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="629" y="134" text-anchor="middle" font-size="11" fill="#6B7280">推送</text>
+  <line x1="600" y1="282" x2="658" y2="282" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="629" y="270" text-anchor="middle" font-size="11" fill="#6B7280">推送</text>
+
+  <!-- 红色警示：路由失败默认丢弃 -->
+  <line x1="310" y1="256" x2="310" y2="298" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowRed)"/>
+  <text x="310" y="318" text-anchor="middle" font-size="11" fill="#E64B35">无匹配绑定 → 默认丢弃</text>
+
+  <!-- 底部要点 -->
+  <circle cx="46" cy="396" r="2.5" fill="#4DBBD5"/>
+  <text x="58" y="400" font-size="12" fill="#6B7280">生产者永远只发消息给交换机；交换机只路由不存消息，队列才是消息的缓存区</text>
+  <circle cx="46" cy="418" r="2.5" fill="#4DBBD5"/>
+  <text x="58" y="422" font-size="12" fill="#6B7280">binding key 是交换机与队列之间的绑定规则，一条消息可同时路由到多个队列</text>
+
+  <text x="410" y="442" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜AMQP 消息路由模型：生产者 → 交换机 → 绑定 → 队列 → 消费者</text>
+</svg>

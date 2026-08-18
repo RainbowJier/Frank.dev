@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 触发条件（箭头上方） -->
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="214" y="54">第 1 次加锁</text>
+    <text x="399" y="54">第 2 个线程出现</text>
+    <text x="584" y="54">自旋超限 / 竞争加剧</text>
+  </g>
+
+  <!-- 四级锁节点 -->
+  <g stroke-width="2">
+    <rect x="40"  y="64" width="165" height="60" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+    <rect x="225" y="64" width="165" height="60" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="410" y="64" width="165" height="60" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="595" y="64" width="165" height="60" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="122" y="90" font-size="15" font-weight="600" fill="#252A33">无锁</text>
+    <text x="307" y="90" font-size="15" font-weight="600" fill="#252A33">偏向锁</text>
+    <text x="492" y="90" font-size="15" font-weight="600" fill="#252A33">轻量级锁</text>
+    <text x="677" y="90" font-size="15" font-weight="600" fill="#252A33">重量级锁</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="122" y="110">未被同步块使用</text>
+    <text x="307" y="110">单线程反复获取</text>
+    <text x="492" y="110">第二个线程来竞争</text>
+    <text x="677" y="110">自旋失败 / 竞争激烈</text>
+  </g>
+
+  <!-- 升级箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="207" y1="94" x2="221" y2="94" marker-end="url(#arrow)"/>
+    <line x1="392" y1="94" x2="406" y2="94" marker-end="url(#arrow)"/>
+    <line x1="577" y1="94" x2="591" y2="94" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 各级说明 -->
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="122" y="150">Mark Word 标志位 01</text>
+    <text x="122" y="168">对象刚创建，无人加锁</text>
+    <text x="307" y="150">Mark Word 记录线程 ID</text>
+    <text x="307" y="168">同一线程再进入近乎零成本</text>
+    <text x="492" y="150">栈中 Lock Record + CAS 自旋</text>
+    <text x="492" y="168">不挂起线程，失败重试</text>
+    <text x="677" y="150">膨胀为 ObjectMonitor</text>
+    <text x="677" y="168">未抢到者内核态挂起</text>
+  </g>
+
+  <!-- JEP 374 说明（虚线框） -->
+  <rect x="250" y="200" width="320" height="46" rx="10" fill="none" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="410" y="219">JDK 15 起偏向锁默认关闭并废弃（JEP 374）</text>
+    <text x="410" y="238">今天的路径更多是：无锁 → 轻量级 → 重量级</text>
+  </g>
+
+  <text x="410" y="278" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜synchronized 锁升级：竞争加剧时逐级膨胀，只升不降</text>
+</svg>

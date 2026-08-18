@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 令牌生成器 -->
+  <rect x="50" y="70" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="135" y="95" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">令牌生成器</text>
+  <text x="135" y="114" text-anchor="middle" font-size="11" fill="#6B7280">固定速率 r</text>
+
+  <line x1="220" y1="98" x2="310" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="265" y="86" text-anchor="middle" font-size="11" fill="#6B7280">匀速投放令牌</text>
+  <text x="265" y="118" text-anchor="middle" font-size="11" fill="#6B7280">速率 r 个/秒</text>
+
+  <!-- 令牌桶 -->
+  <path d="M330 60 L510 60 L488 200 L352 200 Z" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="420" y="90" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">令牌桶</text>
+  <g fill="#4DBBD5">
+    <circle cx="395" cy="172" r="6"/><circle cx="420" cy="172" r="6"/><circle cx="445" cy="172" r="6"/>
+    <circle cx="407" cy="148" r="6"/><circle cx="432" cy="148" r="6"/><circle cx="420" cy="124" r="6"/>
+  </g>
+
+  <line x1="492" y1="150" x2="540" y2="144" stroke="#9AA4B2" stroke-width="1"/>
+  <circle cx="492" cy="150" r="2.5" fill="#9AA4B2"/>
+  <text x="546" y="148" font-size="11" fill="#6B7280">桶满后新令牌被丢弃</text>
+
+  <text x="420" y="224" text-anchor="middle" font-size="11" fill="#6B7280">容量 b · 当前令牌数 n</text>
+
+  <!-- 请求到达 -->
+  <rect x="50" y="300" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="135" y="322" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">请求到达</text>
+  <text x="135" y="342" text-anchor="middle" font-size="11" fill="#6B7280">每个请求需 1 个令牌</text>
+
+  <line x1="220" y1="328" x2="312" y2="328" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 判断菱形 -->
+  <polygon points="322,328 392,294 462,328 392,362" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="392" y="333" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">还有令牌吗</text>
+
+  <!-- 通过路径 -->
+  <line x1="462" y1="328" x2="534" y2="328" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="498" y="318" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <rect x="540" y="300" width="210" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="645" y="322" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">取走令牌 · 放行</text>
+  <text x="645" y="342" text-anchor="middle" font-size="11" fill="#6B7280">请求进入业务逻辑</text>
+
+  <!-- 反馈：令牌数减一 -->
+  <path d="M600 294 C570 255 520 228 478 206" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="585" y="244" font-size="11" fill="#6B7280">令牌数 -1</text>
+
+  <!-- 拒绝路径 -->
+  <line x1="392" y1="362" x2="392" y2="388" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="404" y="380" font-size="11" fill="#6B7280">否</text>
+  <rect x="272" y="392" width="240" height="50" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="392" y="421" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">拒绝：返回 429 或排队等待</text>
+
+  <text x="410" y="466" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜令牌桶工作流程：匀速投放令牌，请求先取令牌再放行</text>
+</svg>

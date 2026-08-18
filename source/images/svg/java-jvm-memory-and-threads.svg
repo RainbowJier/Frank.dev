@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 左侧：三个线程 -->
+  <g stroke="#4DBBD5" stroke-width="1.5" fill="#4DBBD5" fill-opacity="0.12">
+    <rect x="40" y="84"  width="140" height="48" rx="6"/>
+    <rect x="40" y="180" width="140" height="48" rx="6"/>
+    <rect x="40" y="276" width="140" height="48" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="110" y="113">主线程 main</text>
+    <text x="110" y="209">工作线程 A</text>
+    <text x="110" y="305">工作线程 B</text>
+  </g>
+
+  <!-- 线程进入 JVM 的箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="180" y1="108" x2="224" y2="108" marker-end="url(#arrow)"/>
+    <line x1="180" y1="204" x2="224" y2="204" marker-end="url(#arrow)"/>
+    <line x1="180" y1="300" x2="224" y2="300" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- JVM 外框 -->
+  <rect x="230" y="40" width="560" height="350" rx="12" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+  <text x="510" y="68" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">JVM 运行时数据区（一个 Java 进程）</text>
+
+  <!-- 共享带 -->
+  <text x="260" y="84" font-size="11" fill="#6B7280">线程共享 · 并发问题的战场</text>
+  <g stroke-width="1.5">
+    <rect x="260" y="94"  width="250" height="66" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+    <rect x="530" y="94"  width="230" height="66" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="385" y="118" font-size="14" font-weight="500" fill="#252A33">堆 Heap</text>
+    <text x="385" y="140" font-size="11" fill="#6B7280">对象实例 · 数组 · GC 主战场</text>
+    <text x="645" y="118" font-size="14" font-weight="500" fill="#252A33">方法区 / 元空间</text>
+    <text x="645" y="140" font-size="11" fill="#6B7280">类元信息 · 运行时常量池</text>
+  </g>
+
+  <!-- 私有带 -->
+  <text x="260" y="184" font-size="11" fill="#6B7280">线程私有 · 天然隔离</text>
+  <g stroke="#3C5488" stroke-width="1.5" fill="#3C5488" fill-opacity="0.10">
+    <rect x="260" y="192" width="150" height="128" rx="6"/>
+    <rect x="435" y="192" width="150" height="128" rx="6"/>
+    <rect x="610" y="192" width="150" height="128" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="335" y="230" font-size="13" font-weight="500" fill="#252A33">虚拟机栈</text>
+    <text x="510" y="230" font-size="13" font-weight="500" fill="#252A33">程序计数器</text>
+    <text x="685" y="230" font-size="13" font-weight="500" fill="#252A33">本地方法栈</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="335" y="252">栈帧 · 局部变量表</text>
+    <text x="335" y="270">方法调用与返回</text>
+    <text x="335" y="288">-Xss 默认约 1MB</text>
+    <text x="510" y="252">记录字节码位置</text>
+    <text x="510" y="270">线程切换后恢复</text>
+    <text x="510" y="288">唯一不 OOM 的区域</text>
+    <text x="685" y="252">服务 native 方法</text>
+    <text x="685" y="270">与虚拟机栈同构</text>
+    <text x="685" y="288">StackOverflowError</text>
+  </g>
+
+  <!-- 私有 → 共享：读写共享变量（虚线反馈） -->
+  <line x1="380" y1="192" x2="380" y2="164" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="390" y="180" font-size="11" fill="#6B7280">读写共享变量</text>
+
+  <!-- 底部注 -->
+  <text x="510" y="368" text-anchor="middle" font-size="12" fill="#6B7280">一条线程 = 私有栈与计数器 × 1 + 可访问全部共享区</text>
+
+  <text x="410" y="408" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜JVM 内存布局：线程私有区与共享区</text>
+</svg>

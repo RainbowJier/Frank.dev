@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="blueArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3C5488"/>
+    </marker>
+  </defs>
+  <text x="40" y="40" font-size="17" font-weight="600" fill="#252A33">WebSocket 握手与全双工通信</text>
+  <text x="40" y="63" font-size="11" fill="#6B7280">先协商升级，再使用 WebSocket 帧双向传输</text>
+  <line x1="270" y1="92" x2="270" y2="310" stroke="#D9DFE8" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="550" y1="92" x2="550" y2="310" stroke="#D9DFE8" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <g font-size="14" font-weight="600" fill="#3C5488" text-anchor="middle">
+    <text x="140" y="94">A 浏览器</text>
+    <text x="410" y="94">B HTTP 协商</text>
+    <text x="685" y="94">C WebSocket 服务端</text>
+  </g>
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="48" y="118" width="184" height="74" rx="8" stroke="#3C5488"/>
+    <rect x="318" y="118" width="184" height="74" rx="8" stroke="#4DBBD5"/>
+    <rect x="588" y="118" width="184" height="74" rx="8" stroke="#00A087"/>
+    <rect x="48" y="239" width="184" height="58" rx="8" stroke="#3C5488"/>
+    <rect x="588" y="239" width="184" height="58" rx="8" stroke="#00A087"/>
+  </g>
+  <g fill="#252A33" text-anchor="middle" font-size="13">
+    <text x="140" y="146">GET /chat</text>
+    <text x="140" y="169" font-size="11" fill="#6B7280">Upgrade: websocket</text>
+    <text x="410" y="146">校验 Key</text>
+    <text x="410" y="169" font-size="11" fill="#6B7280">确认支持版本 13</text>
+    <text x="680" y="146">HTTP/1.1 101</text>
+    <text x="680" y="169" font-size="11" fill="#6B7280">Switching Protocols</text>
+    <text x="140" y="273">发送文本 / 二进制</text>
+    <text x="680" y="273">发送文本 / 二进制</text>
+  </g>
+  <line x1="238" y1="155" x2="310" y2="155" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="508" y1="155" x2="580" y2="155" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M232 268 C350 215 470 215 588 268" fill="none" stroke="#3C5488" stroke-width="1.5" marker-end="url(#blueArrow)"/>
+  <path d="M588 285 C470 335 350 335 232 285" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="225" text-anchor="middle" font-size="11" fill="#6B7280">升级完成：WebSocket 帧</text>
+  <text x="410" y="370" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜HTTP Upgrade 握手成功后进入全双工消息通道</text>
+</svg>

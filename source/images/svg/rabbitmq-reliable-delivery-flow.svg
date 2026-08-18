@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 顶部：主链路 ===== -->
+  <rect x="120" y="40" width="140" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="190" y="69" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">生产者</text>
+
+  <rect x="346" y="40" width="140" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="416" y="69" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">RabbitMQ Broker</text>
+
+  <rect x="572" y="40" width="140" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="642" y="69" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">消费者</text>
+
+  <line x1="262" y1="64" x2="340" y2="64" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <circle cx="301" cy="46" r="9" fill="#3C5488"/>
+  <text x="301" y="50" text-anchor="middle" font-size="11" font-weight="600" fill="#FFFFFF">1</text>
+  <text x="301" y="104" text-anchor="middle" font-size="11" fill="#6B7280">网络失败 / 路由失败</text>
+
+  <line x1="488" y1="64" x2="566" y2="64" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <circle cx="527" cy="46" r="9" fill="#3C5488"/>
+  <text x="527" y="50" text-anchor="middle" font-size="11" font-weight="600" fill="#FFFFFF">2</text>
+  <text x="527" y="104" text-anchor="middle" font-size="11" fill="#6B7280">重启丢内存消息</text>
+
+  <text x="642" y="104" text-anchor="middle" font-size="11" fill="#6B7280">消费失败即丢</text>
+
+  <!-- ===== 面板一：生产端 ===== -->
+  <rect x="40" y="122" width="240" height="212" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="60" y="150" font-size="13" font-weight="600" fill="#3C5488">① 生产端防丢</text>
+
+  <circle cx="66" cy="174" r="3" fill="#3C5488"/>
+  <text x="78" y="178" font-size="12" font-weight="500" fill="#252A33">生产者确认 confirm</text>
+  <text x="78" y="194" font-size="11" fill="#6B7280">Broker 收到消息后异步回执</text>
+
+  <circle cx="66" cy="218" r="3" fill="#3C5488"/>
+  <text x="78" y="222" font-size="12" font-weight="500" fill="#252A33">不可路由退回 return</text>
+  <text x="78" y="238" font-size="11" fill="#6B7280">mandatory=true，路由失败回退</text>
+
+  <circle cx="66" cy="262" r="3" fill="#3C5488"/>
+  <text x="78" y="266" font-size="12" font-weight="500" fill="#252A33">失败落补偿表</text>
+  <text x="78" y="282" font-size="11" fill="#6B7280">超时未确认的消息重发或告警</text>
+
+  <text x="60" y="314" font-size="11" fill="#6B7280">解决：发送不出去、发丢在半路</text>
+
+  <!-- ===== 面板二：存储端 ===== -->
+  <rect x="290" y="122" width="240" height="212" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="310" y="150" font-size="13" font-weight="600" fill="#3C5488">② Broker 端持久化</text>
+
+  <circle cx="316" cy="174" r="3" fill="#3C5488"/>
+  <text x="328" y="178" font-size="12" font-weight="500" fill="#252A33">交换机持久化</text>
+  <text x="328" y="194" font-size="11" fill="#6B7280">durable=true，重启后定义还在</text>
+
+  <circle cx="316" cy="218" r="3" fill="#3C5488"/>
+  <text x="328" y="222" font-size="12" font-weight="500" fill="#252A33">队列持久化</text>
+  <text x="328" y="238" font-size="11" fill="#6B7280">durable=true，重启后队列还在</text>
+
+  <circle cx="316" cy="262" r="3" fill="#3C5488"/>
+  <text x="328" y="266" font-size="12" font-weight="500" fill="#252A33">消息持久化</text>
+  <text x="328" y="282" font-size="11" fill="#6B7280">deliveryMode=2，消息落盘</text>
+
+  <circle cx="316" cy="306" r="3" fill="#E64B35"/>
+  <text x="328" y="310" font-size="11" font-weight="600" fill="#252A33">三层是与的关系，缺一不可</text>
+
+  <!-- ===== 面板三：消费端 ===== -->
+  <rect x="540" y="122" width="240" height="212" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="560" y="150" font-size="13" font-weight="600" fill="#3C5488">③ 消费端防丢 + 防重</text>
+
+  <circle cx="566" cy="174" r="3" fill="#3C5488"/>
+  <text x="578" y="178" font-size="12" font-weight="500" fill="#252A33">手动 ack</text>
+  <text x="578" y="194" font-size="11" fill="#6B7280">业务处理成功后才确认删除</text>
+
+  <circle cx="566" cy="218" r="3" fill="#3C5488"/>
+  <text x="578" y="222" font-size="12" font-weight="500" fill="#252A33">失败 nack 进死信</text>
+  <text x="578" y="238" font-size="11" fill="#6B7280">requeue=false，转入死信队列</text>
+
+  <circle cx="566" cy="262" r="3" fill="#3C5488"/>
+  <text x="578" y="266" font-size="12" font-weight="500" fill="#252A33">消费幂等</text>
+  <text x="578" y="282" font-size="11" fill="#6B7280">唯一键 / Redis setnx / 状态机</text>
+
+  <text x="560" y="314" font-size="11" fill="#6B7280">重试必然带来重复，幂等兜底</text>
+
+  <text x="410" y="360" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜消息可靠性投递全链路：三个丢失环节与对应机制</text>
+</svg>

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+
+  <!-- ============ 面板 A：Hashtable 全表锁 ============ -->
+  <rect x="40" y="40" width="236" height="316" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="71" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="70" font-size="13.5" font-weight="600" fill="#252A33">Hashtable · 全表锁</text>
+
+  <!-- 全局锁虚线框（红色：唯一警示点） -->
+  <rect x="53" y="104" width="210" height="62" rx="8" fill="none" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <g transform="translate(158,96)" stroke="#E64B35" fill="none" stroke-width="1.5">
+    <rect x="-6" y="-2" width="12" height="10" rx="2"/>
+    <path d="M-3.5 -2 v-2.5 a3.5 3.5 0 0 1 7 0 v2.5"/>
+  </g>
+  <!-- 6 个桶 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1">
+    <rect x="61"  y="118" width="28" height="34" rx="4"/>
+    <rect x="94"  y="118" width="28" height="34" rx="4"/>
+    <rect x="127" y="118" width="28" height="34" rx="4"/>
+    <rect x="160" y="118" width="28" height="34" rx="4"/>
+    <rect x="193" y="118" width="28" height="34" rx="4"/>
+    <rect x="226" y="118" width="28" height="34" rx="4"/>
+  </g>
+  <text x="158" y="190" text-anchor="middle" font-size="11" fill="#6B7280">一把锁锁住整张表（读写都互斥）</text>
+
+  <circle cx="58" cy="228" r="3" fill="#8491B4"/>
+  <text x="70" y="232" font-size="12.5" fill="#252A33">并发度 = 1，读写全部排队</text>
+  <circle cx="58" cy="260" r="3" fill="#8491B4"/>
+  <text x="70" y="264" font-size="12.5" fill="#252A33">简单粗暴，性能最差</text>
+
+  <!-- ============ 面板 B：JDK 7 分段锁 ============ -->
+  <rect x="292" y="40" width="236" height="316" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="312" y="71" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="334" y="70" font-size="13.5" font-weight="600" fill="#252A33">JDK 7 · 分段锁 Segment</text>
+
+  <!-- 三个 Segment，各带一把锁 -->
+  <rect x="306" y="112" width="55" height="46" rx="6" fill="#3C5488" fill-opacity="0.06" stroke="#3C5488" stroke-width="1.5"/>
+  <g transform="translate(333.5,106)" stroke="#3C5488" fill="none" stroke-width="1.5">
+    <rect x="-6" y="-2" width="12" height="10" rx="2"/>
+    <path d="M-3.5 -2 v-2.5 a3.5 3.5 0 0 1 7 0 v2.5"/>
+  </g>
+  <rect x="373" y="112" width="55" height="46" rx="6" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <g transform="translate(400.5,106)" stroke="#4DBBD5" fill="none" stroke-width="1.5">
+    <rect x="-6" y="-2" width="12" height="10" rx="2"/>
+    <path d="M-3.5 -2 v-2.5 a3.5 3.5 0 0 1 7 0 v2.5"/>
+  </g>
+  <rect x="440" y="112" width="55" height="46" rx="6" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1.5"/>
+  <g transform="translate(467.5,106)" stroke="#8491B4" fill="none" stroke-width="1.5">
+    <rect x="-6" y="-2" width="12" height="10" rx="2"/>
+    <path d="M-3.5 -2 v-2.5 a3.5 3.5 0 0 1 7 0 v2.5"/>
+  </g>
+  <!-- 每个 Segment 里 2 个桶 -->
+  <g fill="#FFFFFF" stroke="#E3E8EF" stroke-width="1">
+    <rect x="309" y="120" width="22" height="30" rx="3"/>
+    <rect x="336" y="120" width="22" height="30" rx="3"/>
+    <rect x="376" y="120" width="22" height="30" rx="3"/>
+    <rect x="403" y="120" width="22" height="30" rx="3"/>
+    <rect x="443" y="120" width="22" height="30" rx="3"/>
+    <rect x="470" y="120" width="22" height="30" rx="3"/>
+  </g>
+  <text x="410" y="190" text-anchor="middle" font-size="11" fill="#6B7280">每段一把独立锁（默认 16 段）</text>
+
+  <circle cx="310" cy="228" r="3" fill="#8491B4"/>
+  <text x="322" y="232" font-size="12.5" fill="#252A33">并发度 = 段数，默认 16</text>
+  <circle cx="310" cy="260" r="3" fill="#8491B4"/>
+  <text x="322" y="264" font-size="12.5" fill="#252A33">段内所有桶共用同一把锁</text>
+  <circle cx="310" cy="292" r="3" fill="#8491B4"/>
+  <text x="322" y="296" font-size="12.5" fill="#252A33">两次 hash 定位：先段后桶</text>
+
+  <!-- ============ 面板 C：JDK 8 桶级锁 ============ -->
+  <rect x="544" y="40" width="236" height="316" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="564" y="71" font-size="17" font-weight="700" fill="#3C5488">C</text>
+  <text x="586" y="70" font-size="13.5" font-weight="600" fill="#252A33">JDK 8 · CAS + 桶级锁</text>
+
+  <!-- 6 个桶：1 个空桶走 CAS（无锁），1 个非空桶走 synchronized -->
+  <g fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1">
+    <rect x="565"  y="118" width="28" height="34" rx="4"/>
+    <rect x="631"  y="118" width="28" height="34" rx="4"/>
+    <rect x="664"  y="118" width="28" height="34" rx="4"/>
+    <rect x="697"  y="118" width="28" height="34" rx="4"/>
+    <rect x="730"  y="118" width="28" height="34" rx="4"/>
+  </g>
+  <rect x="598" y="118" width="28" height="34" rx="4" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.8"/>
+  <text x="612" y="112" text-anchor="middle" font-size="11" fill="#6B7280">无锁</text>
+  <rect x="727" y="118" width="28" height="34" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.8"/>
+  <g transform="translate(741,102)" stroke="#3C5488" fill="none" stroke-width="1.5">
+    <rect x="-6" y="-2" width="12" height="10" rx="2"/>
+    <path d="M-3.5 -2 v-2.5 a3.5 3.5 0 0 1 7 0 v2.5"/>
+  </g>
+  <text x="661" y="190" text-anchor="middle" font-size="11" fill="#6B7280">锁只挂在正在写的那个桶上</text>
+
+  <circle cx="562" cy="228" r="3" fill="#8491B4"/>
+  <text x="574" y="232" font-size="12.5" fill="#252A33">并发度 ≈ 桶的数量</text>
+  <circle cx="562" cy="260" r="3" fill="#8491B4"/>
+  <text x="574" y="264" font-size="12.5" fill="#252A33">空桶用 CAS，无锁插入</text>
+  <circle cx="562" cy="292" r="3" fill="#8491B4"/>
+  <text x="574" y="296" font-size="12.5" fill="#252A33">get 全程不加锁（volatile 读）</text>
+
+  <text x="410" y="396" text-anchor="middle" font-size="12" fill="#6B7280">图 9｜从全表锁到桶级锁：线程安全 Map 的锁粒度演进</text>
+</svg>

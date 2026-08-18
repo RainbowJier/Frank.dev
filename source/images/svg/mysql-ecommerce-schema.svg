@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+<rect width="820" height="390" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+<g fill="#3C5488" fill-opacity=".12" stroke="#3C5488" stroke-width="1.5"><rect x="48" y="70" width="160" height="70" rx="8"/><rect x="330" y="70" width="160" height="70" rx="8"/></g>
+<g fill="#4DBBD5" fill-opacity=".12" stroke="#4DBBD5" stroke-width="1.5"><rect x="610" y="70" width="160" height="70" rx="8"/><rect x="330" y="235" width="160" height="70" rx="8"/></g>
+<rect x="48" y="235" width="160" height="70" rx="8" fill="#00A087" fill-opacity=".12" stroke="#00A087" stroke-width="1.5"/>
+<g stroke="#5A6472" stroke-width="1.5"><line x1="208" y1="105" x2="330" y2="105"/><line x1="490" y1="105" x2="610" y2="105"/><line x1="410" y1="140" x2="410" y2="235"/><line x1="208" y1="270" x2="330" y2="270"/></g>
+<g fill="#252A33" font-size="14" text-anchor="middle"><text x="128" y="100">users</text><text x="128" y="123" fill="#6B7280" font-size="11">用户与身份</text><text x="410" y="100">orders</text><text x="410" y="123" fill="#6B7280" font-size="11">订单主表</text><text x="690" y="100">payments</text><text x="690" y="123" fill="#6B7280" font-size="11">幂等支付记录</text><text x="410" y="265">order_items</text><text x="410" y="288" fill="#6B7280" font-size="11">订单明细</text><text x="128" y="265">inventory</text><text x="128" y="288" fill="#6B7280" font-size="11">条件扣库存</text></g>
+<text x="410" y="345" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜电商订单核心实体、外键关系与事务访问路径</text>
+</svg>

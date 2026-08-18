@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" width="820" height="370"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="370" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="369" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="mBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3C5488"/>
+    </marker>
+    <marker id="mRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+
+  <!-- 线程 -->
+  <g stroke="#4DBBD5" stroke-width="1.5" fill="#4DBBD5" fill-opacity="0.12">
+    <rect x="300" y="48"  width="180" height="52" rx="8"/>
+    <rect x="340" y="240" width="180" height="52" rx="8"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="390" y="79">线程 T1：A 转给 B</text>
+    <text x="430" y="271">线程 T2：B 转给 A</text>
+  </g>
+
+  <!-- 锁资源 -->
+  <g stroke="#3C5488" stroke-width="1.5" fill="#3C5488" fill-opacity="0.12">
+    <rect x="90"  y="120" width="150" height="52" rx="8"/>
+    <rect x="580" y="120" width="150" height="52" rx="8"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="165" y="144" font-size="14" font-weight="500" fill="#252A33">账户 A 的锁</text>
+    <text x="165" y="163" font-size="11" fill="#6B7280">monitor A</text>
+    <text x="655" y="144" font-size="14" font-weight="500" fill="#252A33">账户 B 的锁</text>
+    <text x="655" y="163" font-size="11" fill="#6B7280">monitor B</text>
+  </g>
+
+  <!-- 持有：实线蓝 -->
+  <line x1="300" y1="74" x2="200" y2="118" stroke="#3C5488" stroke-width="1.5" marker-end="url(#mBlue)"/>
+  <text x="238" y="90" text-anchor="middle" font-size="11" fill="#6B7280">持有</text>
+  <line x1="520" y1="266" x2="620" y2="176" stroke="#3C5488" stroke-width="1.5" marker-end="url(#mBlue)"/>
+  <text x="588" y="222" font-size="11" fill="#6B7280">持有</text>
+
+  <!-- 等待：虚线红（唯一的红色警示） -->
+  <line x1="480" y1="74" x2="610" y2="118" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#mRed)"/>
+  <text x="545" y="86" text-anchor="middle" font-size="11" fill="#6B7280">等待获取</text>
+  <line x1="340" y1="266" x2="210" y2="176" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#mRed)"/>
+  <text x="262" y="230" text-anchor="middle" font-size="11" fill="#6B7280">等待获取</text>
+
+  <!-- 中心结论 -->
+  <text x="410" y="190" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">循环等待：互相等对方放手</text>
+
+  <!-- 四条件 -->
+  <text x="410" y="326" text-anchor="middle" font-size="12" fill="#6B7280">死锁四条件：互斥 · 请求与保持 · 不可抢占 · 循环等待（破坏任意一个即可预防）</text>
+
+  <text x="410" y="352" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜转账死锁：两个线程互相持有对方需要的锁</text>
+</svg>

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 530" width="820" height="530"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="530" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="529" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- transferIndex 分配方向 -->
+  <text x="405" y="72" text-anchor="middle" font-size="11.5" fill="#6B7280">transferIndex：迁移区间从右往左认领（每段 ≥ 16 个桶）</text>
+  <line x1="610" y1="84" x2="204" y2="84" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 旧表左侧标签 -->
+  <text x="160" y="130" text-anchor="end" font-size="12.5" font-weight="600" fill="#252A33">旧 table</text>
+  <text x="160" y="146" text-anchor="end" font-size="11.5" fill="#6B7280">容量 n</text>
+
+  <!-- 待迁移：线程2 已认领 -->
+  <rect x="166" y="106" width="174" height="56" rx="8" fill="none" stroke="#3C5488" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <circle cx="180" cy="94" r="3" fill="#3C5488"/>
+  <text x="188" y="98" font-size="11.5" fill="#6B7280">线程2 已认领（待迁移）</text>
+
+  <!-- 正在迁移：线程1 -->
+  <rect x="342" y="106" width="118" height="56" rx="8" fill="none" stroke="#3C5488" stroke-width="2"/>
+  <circle cx="348" cy="94" r="3" fill="#3C5488"/>
+  <text x="356" y="98" font-size="11.5" fill="#6B7280">线程1 正在迁移</text>
+
+  <!-- 旧表 8 个桶 -->
+  <g fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1">
+    <rect x="170" y="112" width="52" height="44" rx="4"/>
+    <rect x="228" y="112" width="52" height="44" rx="4"/>
+    <rect x="286" y="112" width="52" height="44" rx="4"/>
+    <rect x="344" y="112" width="52" height="44" rx="4"/>
+    <rect x="402" y="112" width="52" height="44" rx="4"/>
+  </g>
+  <g fill="#8491B4" fill-opacity="0.15" stroke="#8491B4" stroke-width="1" stroke-dasharray="4 3">
+    <rect x="460" y="112" width="52" height="44" rx="4"/>
+    <rect x="518" y="112" width="52" height="44" rx="4"/>
+    <rect x="576" y="112" width="52" height="44" rx="4"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="486" y="138">Fwd</text>
+    <text x="544" y="138">Fwd</text>
+    <text x="602" y="138">Fwd</text>
+  </g>
+
+  <!-- 旧表下标 -->
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="196" y="174">0</text><text x="254" y="174">1</text><text x="312" y="174">2</text>
+    <text x="370" y="174">3</text><text x="428" y="174">4</text><text x="486" y="174">5</text>
+    <text x="544" y="174">6</text><text x="602" y="174">7</text>
+  </g>
+
+  <!-- 链表拆分：一个桶的两种去向 -->
+  <path d="M 536 158 C 470 210, 395 250, 366 294" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="372" y="246" text-anchor="end" font-size="11.5" fill="#6B7280">低位链 → 新表位置 i</text>
+  <path d="M 552 158 C 590 215, 603 255, 603 294" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="628" y="246" font-size="11.5" fill="#6B7280">高位链 → 新表位置 i + n</text>
+
+  <!-- 新表左侧标签 -->
+  <text x="160" y="318" text-anchor="end" font-size="12.5" font-weight="600" fill="#252A33">新 table</text>
+  <text x="160" y="334" text-anchor="end" font-size="11.5" fill="#6B7280">容量 2n</text>
+
+  <!-- 新表 16 个桶 -->
+  <g fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1">
+    <rect x="170" y="300" width="26" height="44" rx="3"/><rect x="200" y="300" width="26" height="44" rx="3"/>
+    <rect x="230" y="300" width="26" height="44" rx="3"/><rect x="260" y="300" width="26" height="44" rx="3"/>
+    <rect x="290" y="300" width="26" height="44" rx="3"/><rect x="320" y="300" width="26" height="44" rx="3"/>
+    <rect x="380" y="300" width="26" height="44" rx="3"/><rect x="410" y="300" width="26" height="44" rx="3"/>
+    <rect x="440" y="300" width="26" height="44" rx="3"/><rect x="470" y="300" width="26" height="44" rx="3"/>
+    <rect x="500" y="300" width="26" height="44" rx="3"/><rect x="530" y="300" width="26" height="44" rx="3"/>
+    <rect x="560" y="300" width="26" height="44" rx="3"/><rect x="620" y="300" width="26" height="44" rx="3"/>
+  </g>
+  <rect x="350" y="300" width="26" height="44" rx="3" fill="#00A087" fill-opacity="0.15" stroke="#00A087" stroke-width="1.5"/>
+  <rect x="590" y="300" width="26" height="44" rx="3" fill="#00A087" fill-opacity="0.15" stroke="#00A087" stroke-width="1.5"/>
+
+  <!-- 新表下标 -->
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="183" y="362">0</text><text x="213" y="362">1</text><text x="243" y="362">2</text>
+    <text x="273" y="362">3</text><text x="303" y="362">4</text><text x="333" y="362">5</text>
+    <text x="363" y="362">6</text><text x="393" y="362">7</text><text x="423" y="362">8</text>
+    <text x="453" y="362">9</text><text x="483" y="362">10</text><text x="513" y="362">11</text>
+    <text x="543" y="362">12</text><text x="573" y="362">13</text><text x="603" y="362">14</text>
+    <text x="633" y="362">15</text>
+  </g>
+
+  <!-- 底部要点 -->
+  <circle cx="140" cy="402" r="3" fill="#8491B4"/>
+  <text x="152" y="406" font-size="12" fill="#252A33">已迁移的桶放入 ForwardingNode（hash = MOVED）</text>
+  <circle cx="140" cy="430" r="3" fill="#3C5488"/>
+  <text x="152" y="434" font-size="12" fill="#252A33">写线程遇到它 → 帮忙扩容；读线程遇到它 → 到新表继续找</text>
+  <circle cx="140" cy="458" r="3" fill="#00A087"/>
+  <text x="152" y="462" font-size="12" fill="#252A33">扩容期间不阻塞读写：新旧两表并存，逐步搬家</text>
+
+  <text x="410" y="500" text-anchor="middle" font-size="12" fill="#6B7280">图 12｜多线程协助扩容：认领区间 + ForwardingNode 转发</text>
+</svg>

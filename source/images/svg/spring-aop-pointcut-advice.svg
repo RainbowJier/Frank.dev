@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：切点筛选 -->
+  <rect x="40" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">切点：从方法堆里挑出目标</text>
+
+  <rect x="65" y="90" width="290" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="80" y="113" font-size="12" font-weight="500" fill="#252A33">OrderService.create()</text>
+  <rect x="65" y="134" width="290" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="80" y="157" font-size="12" font-weight="500" fill="#252A33">OrderService.refund()</text>
+  <rect x="65" y="178" width="290" height="36" rx="6" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="80" y="201" font-size="12" fill="#6B7280">UserService.login()</text>
+  <rect x="65" y="222" width="290" height="36" rx="6" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="80" y="245" font-size="12" fill="#6B7280">UserService.register()</text>
+  <rect x="65" y="266" width="290" height="36" rx="6" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="80" y="289" font-size="12" fill="#6B7280">MailService.send()</text>
+
+  <text x="220" y="326" text-anchor="middle" font-size="11" fill="#6B7280">蓝：命中切点的连接点 · 灰虚线：未命中（仍是合法连接点）</text>
+
+  <!-- 面板 B：五种通知 -->
+  <rect x="420" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">通知：在方法执行的哪一刻切入</text>
+
+  <!-- @Around 包裹括线 -->
+  <path d="M442,172 V158 H732 V172" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="524" y="144" width="126" height="26" fill="#FFFFFF" stroke="#F39B7F" stroke-width="1"/>
+  <text x="587" y="161" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">@Around 环绕全程</text>
+
+  <!-- 时间轴上的通知芯片 -->
+  <rect x="442" y="196" width="78" height="38" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="481" y="220" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">@Before</text>
+  <line x1="524" y1="215" x2="530" y2="215" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="532" y="196" width="126" height="38" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="595" y="220" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">目标方法</text>
+  <line x1="662" y1="215" x2="680" y2="215" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="685" y="196" width="64" height="38" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="717" y="220" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">@After</text>
+
+  <!-- 时间轴 -->
+  <line x1="442" y1="258" x2="770" y2="258" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="770" y="274" text-anchor="end" font-size="11" fill="#6B7280">时间</text>
+
+  <text x="442" y="288" font-size="11" fill="#6B7280">正常返回：@After → @AfterReturning</text>
+  <text x="442" y="306" font-size="11" fill="#6B7280">抛出异常：@After → @AfterThrowing</text>
+
+  <text x="410" y="378" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜切点从连接点中筛选目标（A），五种通知切入方法执行轴（B）</text>
+</svg>

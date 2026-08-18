@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+
+  <text x="410" y="44" text-anchor="middle" font-size="12" fill="#6B7280">HTTP/1.1 404 Not Found —— 状态码出现在响应状态行，一眼看出结果</text>
+
+  <!-- 2xx 成功 -->
+  <rect x="40" y="64" width="176" height="290" rx="10" fill="#00A087" fill-opacity="0.06" stroke="#00A087" stroke-width="1.5"/>
+  <rect x="60" y="86" width="10" height="10" fill="#00A087"/>
+  <text x="78" y="95" font-size="14" font-weight="600" fill="#252A33">2xx 成功</text>
+  <text x="60" y="116" font-size="11" fill="#6B7280">请求被正确处理</text>
+  <line x1="56" y1="128" x2="200" y2="128" stroke="#E8EDF3" stroke-width="1"/>
+  <g font-size="12" font-weight="600" fill="#252A33">
+    <text x="60" y="152">200</text>
+    <text x="60" y="184">201</text>
+    <text x="60" y="216">204</text>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="92" y="152">通用成功</text>
+    <text x="92" y="184">创建成功</text>
+    <text x="92" y="216">删除成功，无响应体</text>
+  </g>
+
+  <!-- 3xx 重定向 -->
+  <rect x="228" y="64" width="176" height="290" rx="10" fill="#8491B4" fill-opacity="0.06" stroke="#8491B4" stroke-width="1.5"/>
+  <rect x="248" y="86" width="10" height="10" fill="#8491B4"/>
+  <text x="266" y="95" font-size="14" font-weight="600" fill="#252A33">3xx 重定向</text>
+  <text x="248" y="116" font-size="11" fill="#6B7280">资源换了地方</text>
+  <line x1="244" y1="128" x2="388" y2="128" stroke="#E8EDF3" stroke-width="1"/>
+  <g font-size="12" font-weight="600" fill="#252A33">
+    <text x="248" y="152">301</text>
+    <text x="248" y="184">304</text>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="280" y="152">永久移动</text>
+    <text x="280" y="184">缓存仍有效</text>
+  </g>
+
+  <!-- 4xx 客户端错误 -->
+  <rect x="416" y="64" width="176" height="290" rx="10" fill="#3C5488" fill-opacity="0.06" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="436" y="86" width="10" height="10" fill="#3C5488"/>
+  <text x="454" y="95" font-size="14" font-weight="600" fill="#252A33">4xx 客户端错误</text>
+  <text x="436" y="116" font-size="11" fill="#6B7280">请求本身有问题</text>
+  <line x1="432" y1="128" x2="576" y2="128" stroke="#E8EDF3" stroke-width="1"/>
+  <g font-size="12" font-weight="600" fill="#252A33">
+    <text x="436" y="152">400</text>
+    <text x="436" y="184">401</text>
+    <text x="436" y="216">403</text>
+    <text x="436" y="248">404</text>
+    <text x="436" y="280">409</text>
+    <text x="436" y="312">429</text>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="468" y="152">参数错误</text>
+    <text x="468" y="184">未认证</text>
+    <text x="468" y="216">无权限</text>
+    <text x="468" y="248">资源不存在</text>
+    <text x="468" y="280">状态冲突</text>
+    <text x="468" y="312">触发限流</text>
+  </g>
+
+  <!-- 5xx 服务端错误 -->
+  <rect x="604" y="64" width="176" height="290" rx="10" fill="#E64B35" fill-opacity="0.06" stroke="#E64B35" stroke-width="1.5"/>
+  <rect x="624" y="86" width="10" height="10" fill="#E64B35"/>
+  <text x="642" y="95" font-size="14" font-weight="600" fill="#252A33">5xx 服务端错误</text>
+  <text x="624" y="116" font-size="11" fill="#6B7280">服务器出问题了</text>
+  <line x1="620" y1="128" x2="764" y2="128" stroke="#E8EDF3" stroke-width="1"/>
+  <g font-size="12" font-weight="600" fill="#252A33">
+    <text x="624" y="152">500</text>
+    <text x="624" y="184">502</text>
+    <text x="624" y="216">503</text>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="656" y="152">内部错误</text>
+    <text x="656" y="184">网关错误</text>
+    <text x="656" y="216">暂不可用</text>
+  </g>
+
+  <text x="410" y="382" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜HTTP 状态码家族地图：先认家族，再记具体码</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 两列表头 -->
+  <rect x="86" y="38" width="10" height="10" fill="#3C5488"/>
+  <text x="102" y="48" font-size="15" font-weight="600" fill="#252A33">Options API</text>
+  <rect x="486" y="38" width="10" height="10" fill="#00A087"/>
+  <text x="502" y="48" font-size="15" font-weight="600" fill="#252A33">Composition API</text>
+  <line x1="60" y1="60" x2="760" y2="60" stroke="#D9DFE8" stroke-width="1"/>
+
+  <!-- 对照行：左列 -->
+  <g fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5">
+    <rect x="60"  y="74"  width="300" height="34" rx="6"/>
+    <rect x="60"  y="118" width="300" height="34" rx="6"/>
+    <rect x="60"  y="162" width="300" height="34" rx="6"/>
+    <rect x="60"  y="206" width="300" height="34" rx="6"/>
+    <rect x="60"  y="250" width="300" height="34" rx="6"/>
+    <rect x="60"  y="294" width="300" height="34" rx="6"/>
+    <rect x="60"  y="338" width="300" height="34" rx="6"/>
+    <rect x="60"  y="382" width="300" height="34" rx="6"/>
+  </g>
+  <!-- 对照行：右列 -->
+  <g fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5">
+    <rect x="460" y="74"  width="300" height="34" rx="6"/>
+    <rect x="460" y="118" width="300" height="34" rx="6"/>
+    <rect x="460" y="162" width="300" height="34" rx="6"/>
+    <rect x="460" y="206" width="300" height="34" rx="6"/>
+    <rect x="460" y="250" width="300" height="34" rx="6"/>
+    <rect x="460" y="294" width="300" height="34" rx="6"/>
+    <rect x="460" y="338" width="300" height="34" rx="6"/>
+    <rect x="460" y="382" width="300" height="34" rx="6"/>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="210" y="96">beforeCreate / created</text>
+    <text x="210" y="140">beforeMount</text>
+    <text x="210" y="184">mounted</text>
+    <text x="210" y="228">beforeUpdate</text>
+    <text x="210" y="272">updated</text>
+    <text x="210" y="316">beforeUnmount *</text>
+    <text x="210" y="360">activated / deactivated</text>
+    <text x="210" y="404">errorCaptured</text>
+    <text x="610" y="96">setup()（两者合并）</text>
+    <text x="610" y="140">onBeforeMount()</text>
+    <text x="610" y="184">onMounted()</text>
+    <text x="610" y="228">onBeforeUpdate()</text>
+    <text x="610" y="272">onUpdated()</text>
+    <text x="610" y="316">onUnmounted() *</text>
+    <text x="610" y="360">onActivated / onDeactivated</text>
+    <text x="610" y="404">onErrorCaptured()</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="364" y1="91"  x2="454" y2="91"  marker-end="url(#arrow)"/>
+    <line x1="364" y1="135" x2="454" y2="135" marker-end="url(#arrow)"/>
+    <line x1="364" y1="179" x2="454" y2="179" marker-end="url(#arrow)"/>
+    <line x1="364" y1="223" x2="454" y2="223" marker-end="url(#arrow)"/>
+    <line x1="364" y1="267" x2="454" y2="267" marker-end="url(#arrow)"/>
+    <line x1="364" y1="311" x2="454" y2="311" marker-end="url(#arrow)"/>
+    <line x1="364" y1="355" x2="454" y2="355" marker-end="url(#arrow)"/>
+    <line x1="364" y1="399" x2="454" y2="399" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 脚注 -->
+  <circle cx="70" cy="434" r="3" fill="#E64B35"/>
+  <text x="82" y="438" font-size="11" fill="#6B7280">* Vue 2 名为 beforeDestroy / destroyed，Vue 3 已更名 —— 写成旧名不会执行</text>
+  <circle cx="70" cy="456" r="3" fill="#8491B4"/>
+  <text x="82" y="460" font-size="11" fill="#6B7280">activated / deactivated 用于 keep-alive 缓存组件 · errorCaptured 捕获后代组件错误</text>
+
+  <text x="410" y="486" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜两套 API 的生命周期钩子一一对应，setup 吸收了前两个钩子</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" width="820" height="310"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="310" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="309" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 主链路 6 节点 -->
+  <g stroke-width="1.5">
+    <rect x="20"  y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="154" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="288" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="422" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="556" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="690" y="56" width="110" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="75"  y="84">预签名 URL</text>
+    <text x="209" y="84">探测大小</text>
+    <text x="343" y="84">Range 分片</text>
+    <text x="477" y="84">分片落盘</text>
+    <text x="611" y="84">校验合并</text>
+    <text x="745" y="84">下载完成</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="75"  y="104">OPS 换取</text>
+    <text x="209" y="104">Content-Range</text>
+    <text x="343" y="104">6 并发下载</text>
+    <text x="477" y="104">IndexedDB</text>
+    <text x="611" y="104">大小一致性</text>
+    <text x="745" y="104">saveBlob</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="132" y1="88" x2="150" y2="88" marker-end="url(#arrow)"/>
+    <line x1="266" y1="88" x2="284" y2="88" marker-end="url(#arrow)"/>
+    <line x1="400" y1="88" x2="418" y2="88" marker-end="url(#arrow)"/>
+    <line x1="534" y1="88" x2="552" y2="88" marker-end="url(#arrow)"/>
+    <line x1="668" y1="88" x2="686" y2="88" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 失败重试回路：校验合并 → Range 分片 -->
+  <path d="M 611 122 C 611 158, 343 158, 343 126" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="477" y="152" text-anchor="middle" font-size="11" fill="#6B7280">分片失败重试 · 403 过期自动刷新预签名</text>
+
+  <!-- 配额降级分支 -->
+  <path d="M 477 122 C 477 190, 540 200, 556 218" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="520" y="188" font-size="11" fill="#6B7280">Quota 错误</text>
+  <rect x="560" y="196" width="210" height="52" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="665" y="218" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">配额降级</text>
+  <text x="665" y="236" text-anchor="middle" font-size="11" fill="#6B7280">IndexedDB → 内存模式</text>
+
+  <!-- 恢复优化说明 -->
+  <text x="410" y="268" text-anchor="middle" font-size="11" fill="#6B7280">恢复优化：tasks / chunks 双 store 记录进度，续传时仅枚举分片 key，不把历史分片读入内存</text>
+
+  <text x="410" y="296" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜断点续传下载：Range 分片、IndexedDB 持久化与降级策略</text>
+</svg>

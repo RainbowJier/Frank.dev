@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" width="820" height="450"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="450" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="449" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：摄入管道 -->
+  <rect x="40" y="40" width="360" height="330" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="70" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="69" font-size="14" font-weight="600" fill="#252A33">摄入管道（已上线）</text>
+
+  <g stroke-width="1.5">
+    <rect x="64" y="88"  width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="64" y="144" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="64" y="200" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="64" y="256" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="64" y="312" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="220" y="113">上传 PDF / DOC / DOCX（≤20MB）</text>
+    <text x="220" y="169">落盘 + 登记 ai_document（pending）</text>
+    <text x="220" y="225">@Async 解析提取全文</text>
+    <text x="220" y="281">滑动窗口切分（500 / 重叠 50）</text>
+    <text x="220" y="337">bge-small 向量化 → 向量入库</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="220" y1="128" x2="220" y2="140" marker-end="url(#arrow)"/>
+    <line x1="220" y1="184" x2="220" y2="196" marker-end="url(#arrow)"/>
+    <line x1="220" y1="240" x2="220" y2="252" marker-end="url(#arrow)"/>
+    <line x1="220" y1="296" x2="220" y2="308" marker-end="url(#arrow)"/>
+  </g>
+  <text x="64" y="362" font-size="11" fill="#6B7280">状态机 pending → parsing → success / failed · 前端 3s 轮询</text>
+
+  <!-- 面板 B：检索管道（已接入对话） -->
+  <rect x="420" y="40" width="360" height="330" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="70" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="69" font-size="14" font-weight="600" fill="#252A33">检索管道（已接入对话）</text>
+
+  <g stroke-width="1.5">
+    <rect x="444" y="88"  width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="444" y="144" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="444" y="200" width="312" height="40" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="444" y="256" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="444" y="312" width="312" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="600" y="113">解析智能体 RAG 配置</text>
+    <text x="600" y="169">按知识库过滤向量检索 Top-K</text>
+    <text x="600" y="225">命中内容注入用户消息</text>
+    <text x="600" y="281">onRetrieved → RagHit 溯源</text>
+    <text x="600" y="337">落库 referencedDocs + ragHit</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="600" y1="128" x2="600" y2="140" marker-end="url(#arrow)"/>
+    <line x1="600" y1="184" x2="600" y2="196" marker-end="url(#arrow)"/>
+    <line x1="600" y1="240" x2="600" y2="252" marker-end="url(#arrow)"/>
+    <line x1="600" y1="296" x2="600" y2="308" marker-end="url(#arrow)"/>
+  </g>
+  <text x="444" y="362" font-size="11" fill="#6B7280">topK 默认 4 · minScore 可选 · 向量库当前为 InMemory 占位</text>
+
+  <text x="410" y="418" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜知识库 RAG：摄入与检索双管道上线，命中可溯源到分段与文档</text>
+</svg>

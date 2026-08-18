@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 580" width="820" height="580"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="580" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="579" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 面板 A：固定窗口 ================= -->
+  <rect x="35" y="36" width="370" height="240" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="57" y="66" font-size="16" font-weight="700" fill="#3C5488">A</text>
+  <text x="79" y="65" font-size="14" font-weight="600" fill="#252A33">固定窗口计数</text>
+
+  <text x="230" y="88" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">临界问题</text>
+  <text x="230" y="104" text-anchor="middle" font-size="11" fill="#6B7280">边界两侧瞬时可达 2 倍阈值</text>
+
+  <text x="150" y="134" text-anchor="middle" font-size="11" fill="#6B7280">窗口 1</text>
+  <text x="307" y="134" text-anchor="middle" font-size="11" fill="#6B7280">窗口 2</text>
+
+  <!-- 请求刻度：稀疏 + 边界处密集 -->
+  <g stroke="#4DBBD5" stroke-width="2" stroke-linecap="round">
+    <line x1="85"  y1="180" x2="85"  y2="196"/>
+    <line x1="115" y1="180" x2="115" y2="196"/>
+    <line x1="145" y1="180" x2="145" y2="196"/>
+    <line x1="175" y1="180" x2="175" y2="196"/>
+    <line x1="198" y1="172" x2="198" y2="196"/>
+    <line x1="207" y1="172" x2="207" y2="196"/>
+    <line x1="216" y1="172" x2="216" y2="196"/>
+    <line x1="225" y1="172" x2="225" y2="196"/>
+    <line x1="235" y1="172" x2="235" y2="196"/>
+    <line x1="244" y1="172" x2="244" y2="196"/>
+    <line x1="253" y1="172" x2="253" y2="196"/>
+    <line x1="262" y1="172" x2="262" y2="196"/>
+    <line x1="300" y1="180" x2="300" y2="196"/>
+    <line x1="330" y1="180" x2="330" y2="196"/>
+    <line x1="360" y1="180" x2="360" y2="196"/>
+  </g>
+
+  <!-- 时间轴与窗口边界 -->
+  <line x1="70" y1="196" x2="385" y2="196" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="230" y1="112" x2="230" y2="196" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="70" y="214">0s</text><text x="230" y="214">60s</text><text x="385" y="214">120s</text>
+  </g>
+
+  <circle cx="77" cy="254" r="3" fill="#8491B4"/>
+  <text x="89" y="258" font-size="12" fill="#6B7280">最简单省内存，但交界处可能放进 2 倍流量</text>
+
+  <!-- ================= 面板 B：滑动窗口 ================= -->
+  <rect x="415" y="36" width="370" height="240" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="437" y="66" font-size="16" font-weight="700" fill="#3C5488">B</text>
+  <text x="459" y="65" font-size="14" font-weight="600" fill="#252A33">滑动窗口计数</text>
+
+  <text x="610" y="84" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">窗口随时间连续滑动</text>
+  <text x="610" y="102" text-anchor="middle" font-size="11" fill="#6B7280">任意时刻只统计最近 60 秒</text>
+
+  <!-- 两个窗口位置：当前（实线）与下一刻（虚线） -->
+  <rect x="560" y="140" width="120" height="56" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="520" y="140" width="120" height="56" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="580" y="156" text-anchor="middle" font-size="11" fill="#6B7280">当前窗口</text>
+  <line x1="648" y1="128" x2="676" y2="128" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <g stroke="#4DBBD5" stroke-width="2" stroke-linecap="round">
+    <line x1="470" y1="180" x2="470" y2="196"/>
+    <line x1="495" y1="180" x2="495" y2="196"/>
+    <line x1="552" y1="172" x2="552" y2="196"/>
+    <line x1="560" y1="172" x2="560" y2="196"/>
+    <line x1="568" y1="172" x2="568" y2="196"/>
+    <line x1="576" y1="172" x2="576" y2="196"/>
+    <line x1="584" y1="172" x2="584" y2="196"/>
+    <line x1="592" y1="172" x2="592" y2="196"/>
+    <line x1="645" y1="180" x2="645" y2="196"/>
+    <line x1="675" y1="180" x2="675" y2="196"/>
+    <line x1="705" y1="180" x2="705" y2="196"/>
+  </g>
+
+  <line x1="450" y1="196" x2="765" y2="196" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="450" y="214">0s</text><text x="610" y="214">60s</text><text x="765" y="214">120s</text>
+  </g>
+
+  <circle cx="457" cy="254" r="3" fill="#8491B4"/>
+  <text x="469" y="258" font-size="12" fill="#6B7280">统计更精确，彻底消除边界突刺</text>
+
+  <!-- ================= 面板 C：漏桶 ================= -->
+  <rect x="35" y="306" width="370" height="240" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="57" y="336" font-size="16" font-weight="700" fill="#3C5488">C</text>
+  <text x="79" y="335" font-size="14" font-weight="600" fill="#252A33">漏桶算法</text>
+
+  <text x="205" y="318" text-anchor="middle" font-size="11" fill="#6B7280">请求任意速率注入</text>
+  <line x1="205" y1="326" x2="205" y2="356" stroke="#5A6472" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 桶体与水 -->
+  <path d="M140 364 L270 364 L230 470 L180 470 Z" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="2"/>
+  <path d="M152 388 L258 388 L224 464 L186 464 Z" fill="#4DBBD5" fill-opacity="0.25"/>
+
+  <line x1="262" y1="390" x2="298" y2="384" stroke="#9AA4B2" stroke-width="1"/>
+  <circle cx="262" cy="390" r="2.5" fill="#9AA4B2"/>
+  <text x="304" y="388" font-size="11" fill="#6B7280">桶满则溢出丢弃</text>
+
+  <line x1="205" y1="476" x2="205" y2="498" stroke="#5A6472" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="222" y="492" font-size="11" fill="#6B7280">恒定速率流出</text>
+
+  <circle cx="77" cy="524" r="3" fill="#8491B4"/>
+  <text x="89" y="528" font-size="12" fill="#6B7280">流出速率绝对恒定，无法应对突发流量</text>
+
+  <!-- ================= 面板 D：令牌桶 ================= -->
+  <rect x="415" y="306" width="370" height="240" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="437" y="336" font-size="16" font-weight="700" fill="#3C5488">D</text>
+  <text x="459" y="335" font-size="14" font-weight="600" fill="#252A33">令牌桶算法</text>
+
+  <!-- 匀速投令牌 -->
+  <line x1="625" y1="348" x2="625" y2="382" stroke="#00A087" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowGreen)"/>
+  <text x="640" y="368" font-size="11" fill="#6B7280">匀速投入令牌</text>
+
+  <rect x="560" y="386" width="130" height="86" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="2"/>
+  <g fill="#00A087">
+    <circle cx="586" cy="458" r="5.5"/><circle cx="608" cy="458" r="5.5"/>
+    <circle cx="630" cy="458" r="5.5"/><circle cx="652" cy="458" r="5.5"/>
+    <circle cx="597" cy="436" r="5.5"/><circle cx="619" cy="436" r="5.5"/>
+    <circle cx="641" cy="436" r="5.5"/><circle cx="625" cy="414" r="5.5"/>
+  </g>
+
+  <line x1="448" y1="412" x2="554" y2="412" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="501" y="402" text-anchor="middle" font-size="11" fill="#6B7280">请求到达</text>
+  <line x1="696" y1="412" x2="766" y2="412" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="731" y="402" text-anchor="middle" font-size="11" fill="#6B7280">拿到令牌放行</text>
+
+  <text x="625" y="496" text-anchor="middle" font-size="11" fill="#6B7280">容量 b：桶满则暂停投放</text>
+
+  <circle cx="457" cy="524" r="3" fill="#8491B4"/>
+  <text x="469" y="528" font-size="12" fill="#6B7280">允许突发流量，工业界最常用</text>
+
+  <text x="410" y="568" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜四种经典限流算法对比：固定窗口、滑动窗口、漏桶、令牌桶</text>
+</svg>

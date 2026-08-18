@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 客户端连接 -->
+  <g fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5">
+    <rect x="40" y="50" width="110" height="48" rx="6"/>
+    <rect x="40" y="140" width="110" height="48" rx="6"/>
+    <rect x="40" y="230" width="110" height="48" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="95" y="79">客户端 1</text>
+    <text x="95" y="169">客户端 2</text>
+    <text x="95" y="259">客户端 N</text>
+  </g>
+
+  <!-- 连接线到多路复用器 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="152" y1="74" x2="194" y2="148" marker-end="url(#arrow)"/>
+    <line x1="152" y1="164" x2="194" y2="170" marker-end="url(#arrow)"/>
+    <line x1="152" y1="254" x2="194" y2="192" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- IO 多路复用 -->
+  <rect x="200" y="110" width="170" height="120" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="285" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">IO 多路复用</text>
+  <text x="285" y="182" text-anchor="middle" font-size="12" fill="#6B7280">epoll 事件循环</text>
+
+  <line x1="372" y1="170" x2="404" y2="170" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 单线程命令执行器 -->
+  <rect x="408" y="95" width="190" height="160" rx="10" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="2"/>
+  <text x="503" y="122" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">单线程命令执行</text>
+  <g fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5">
+    <rect x="428" y="136" width="150" height="30" rx="6"/>
+    <rect x="428" y="172" width="150" height="30" rx="6"/>
+    <rect x="428" y="208" width="150" height="30" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="503" y="156">解析命令</text>
+    <text x="503" y="192">执行命令</text>
+    <text x="503" y="228">回写响应</text>
+  </g>
+
+  <line x1="600" y1="170" x2="634" y2="170" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 内存 -->
+  <rect x="638" y="95" width="140" height="160" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="708" y="162" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">内存数据集</text>
+  <text x="708" y="186" text-anchor="middle" font-size="12" fill="#6B7280">全局哈希表</text>
+
+  <!-- 底注 -->
+  <text x="410" y="292" text-anchor="middle" font-size="12" fill="#6B7280">注：「单线程」指命令执行；Redis 6.0+ 网络读写可多线程，命令执行仍为单线程</text>
+
+  <text x="410" y="322" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Redis 单线程模型：一个线程借 IO 多路复用处理所有连接</text>
+</svg>

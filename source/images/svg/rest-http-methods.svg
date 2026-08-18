@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 表格外框与表头 -->
+  <rect x="85" y="64" width="650" height="254" rx="8" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <path d="M85 72 h650 v26 h-650 z" fill="#F4F7FA"/>
+  <line x1="85" y1="98" x2="735" y2="98" stroke="#D9DFE8" stroke-width="1.5"/>
+
+  <!-- 列分隔线 -->
+  <g stroke="#E8EDF3" stroke-width="1">
+    <line x1="185" y1="64" x2="185" y2="318"/>
+    <line x1="345" y1="64" x2="345" y2="318"/>
+    <line x1="475" y1="64" x2="475" y2="318"/>
+    <line x1="615" y1="64" x2="615" y2="318"/>
+    <line x1="85" y1="142" x2="735" y2="142"/>
+    <line x1="85" y1="186" x2="735" y2="186"/>
+    <line x1="85" y1="230" x2="735" y2="230"/>
+    <line x1="85" y1="274" x2="735" y2="274"/>
+  </g>
+
+  <!-- 表头 -->
+  <g font-size="13" font-weight="600" fill="#252A33">
+    <text x="105" y="90">方法</text>
+    <text x="205" y="90">语义</text>
+    <text x="363" y="90">安全性</text>
+    <text x="493" y="90">幂等性</text>
+    <text x="633" y="90">常见状态码</text>
+  </g>
+
+  <!-- 数据行 -->
+  <g font-size="14" font-weight="600" fill="#252A33">
+    <text x="105" y="125">GET</text>
+    <text x="105" y="169">POST</text>
+    <text x="105" y="213">PUT</text>
+    <text x="105" y="257">PATCH</text>
+    <text x="105" y="301">DELETE</text>
+  </g>
+  <g font-size="13" fill="#252A33">
+    <text x="205" y="125">查询资源</text>
+    <text x="205" y="169">创建资源</text>
+    <text x="205" y="213">全量替换更新</text>
+    <text x="205" y="257">部分字段更新</text>
+    <text x="205" y="301">删除资源</text>
+  </g>
+  <g font-size="13" fill="#252A33">
+    <text x="363" y="125">只读 · 安全</text>
+    <text x="363" y="169">写 · 不安全</text>
+    <text x="363" y="213">写 · 不安全</text>
+    <text x="363" y="257">写 · 不安全</text>
+    <text x="363" y="301">写 · 不安全</text>
+  </g>
+  <!-- 幂等性圆点：红仅用于 POST 这一关键差异 -->
+  <g>
+    <circle cx="499" cy="121" r="4" fill="#00A087"/>
+    <circle cx="499" cy="165" r="4" fill="#E64B35"/>
+    <circle cx="499" cy="209" r="4" fill="#00A087"/>
+    <circle cx="499" cy="253" r="4" fill="#8491B4"/>
+    <circle cx="499" cy="297" r="4" fill="#00A087"/>
+  </g>
+  <g font-size="13" fill="#252A33">
+    <text x="511" y="125">幂等</text>
+    <text x="511" y="169" font-weight="600">不幂等</text>
+    <text x="511" y="213">幂等</text>
+    <text x="511" y="257">视实现而定</text>
+    <text x="511" y="301">幂等</text>
+  </g>
+  <g font-size="13" fill="#252A33">
+    <text x="633" y="125">200</text>
+    <text x="633" y="169">201</text>
+    <text x="633" y="213">200 或 201</text>
+    <text x="633" y="257">200</text>
+    <text x="633" y="301">204</text>
+  </g>
+
+  <!-- 底部注释 -->
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="410" y="346">幂等：同一请求重复发送 N 次，结果与只发一次相同——只有幂等方法可以放心重试</text>
+    <text x="410" y="366">POST 天生不幂等：超时重试可能重复下单，支付类接口要用幂等令牌兜底</text>
+  </g>
+
+  <text x="410" y="390" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜五种 HTTP 方法的语义、安全性与幂等性</text>
+</svg>

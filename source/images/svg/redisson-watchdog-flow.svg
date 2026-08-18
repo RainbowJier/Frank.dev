@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 泳道标题 -->
+  <rect x="80" y="40" width="140" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="150" y="63" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">业务线程</text>
+  <rect x="370" y="40" width="120" height="36" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="430" y="63" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">Redis</text>
+  <rect x="610" y="40" width="140" height="36" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="680" y="63" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">看门狗</text>
+
+  <!-- 生命线 -->
+  <g stroke="#9AA4B2" stroke-width="1" stroke-dasharray="4 4">
+    <line x1="150" y1="76" x2="150" y2="380"/>
+    <line x1="430" y1="76" x2="430" y2="380"/>
+    <line x1="680" y1="76" x2="680" y2="380"/>
+  </g>
+
+  <!-- 1. 加锁 -->
+  <line x1="150" y1="104" x2="426" y2="104" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="288" y="98" text-anchor="middle" font-size="11" fill="#6B7280">lock()：SET lock uuid NX PX 30000</text>
+  <text x="445" y="126" font-size="11" fill="#6B7280">加锁成功，TTL = 30s</text>
+
+  <!-- 2. 启动看门狗 -->
+  <line x1="150" y1="156" x2="676" y2="156" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="413" y="150" text-anchor="middle" font-size="11" fill="#6B7280">启动后台定时任务（每 1/3 TTL = 10s 检查一次）</text>
+
+  <!-- 3. 业务执行（激活条） -->
+  <rect x="146" y="172" width="8" height="96" fill="#3C5488" fill-opacity="0.55"/>
+  <text x="166" y="204" font-size="12" fill="#252A33">执行业务逻辑</text>
+  <text x="166" y="222" font-size="11" fill="#6B7280">哪怕跑 60s 也不会锁先过期</text>
+
+  <!-- 4. 续期 -->
+  <line x1="680" y1="240" x2="434" y2="240" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#arrowO)"/>
+  <text x="557" y="234" text-anchor="middle" font-size="11" fill="#6B7280">PEXPIRE：仍持有 → 续回 30s</text>
+  <text x="445" y="262" font-size="11" fill="#6B7280">TTL 恢复为 30s（循环进行）</text>
+
+  <!-- 5. 解锁 -->
+  <line x1="150" y1="300" x2="426" y2="300" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="288" y="294" text-anchor="middle" font-size="11" fill="#6B7280">unlock()：Lua 校验 uuid 后删除</text>
+
+  <!-- 6. 停止续期 -->
+  <line x1="150" y1="340" x2="676" y2="340" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowO)"/>
+  <text x="413" y="334" text-anchor="middle" font-size="11" fill="#6B7280">停止续期；进程崩溃时看门狗同死，锁最多 30s 自动释放</text>
+
+  <text x="410" y="412" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Redisson 看门狗：业务运行多久，锁就续多久</text>
+</svg>

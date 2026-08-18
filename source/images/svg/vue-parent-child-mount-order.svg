@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：初次挂载 -->
+  <rect x="30" y="36" width="380" height="424" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="50" y="68" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="72" y="67" font-size="14" font-weight="600" fill="#252A33">初次挂载顺序</text>
+
+  <rect x="78" y="82" width="10" height="10" fill="#3C5488"/>
+  <text x="94" y="92" font-size="13" font-weight="600" fill="#252A33">父组件</text>
+  <rect x="248" y="82" width="10" height="10" fill="#4DBBD5"/>
+  <text x="264" y="92" font-size="13" font-weight="600" fill="#252A33">子组件</text>
+
+  <g stroke-width="1.5">
+    <rect x="60"  y="110" width="140" height="28" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="60"  y="152" width="140" height="28" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="60"  y="194" width="140" height="28" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="230" y="236" width="140" height="28" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="230" y="278" width="140" height="28" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="230" y="320" width="140" height="28" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="230" y="362" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="60"  y="404" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="130" y="129">beforeCreate</text>
+    <text x="130" y="171">created</text>
+    <text x="130" y="213">beforeMount</text>
+    <text x="300" y="255">beforeCreate</text>
+    <text x="300" y="297">created</text>
+    <text x="300" y="339">beforeMount</text>
+    <text x="300" y="381">mounted</text>
+    <text x="130" y="423">mounted</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="130" y1="138" x2="130" y2="148" marker-end="url(#arrow)"/>
+    <line x1="130" y1="180" x2="130" y2="190" marker-end="url(#arrow)"/>
+    <line x1="130" y1="222" x2="292" y2="234" marker-end="url(#arrow)"/>
+    <line x1="300" y1="264" x2="300" y2="274" marker-end="url(#arrow)"/>
+    <line x1="300" y1="306" x2="300" y2="316" marker-end="url(#arrow)"/>
+    <line x1="300" y1="348" x2="300" y2="358" marker-end="url(#arrow)"/>
+    <line x1="300" y1="390" x2="138" y2="402" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 面板 B：更新与卸载 -->
+  <rect x="410" y="36" width="380" height="424" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="430" y="68" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="452" y="67" font-size="14" font-weight="600" fill="#252A33">更新与卸载顺序</text>
+
+  <rect x="458" y="82" width="10" height="10" fill="#3C5488"/>
+  <text x="474" y="92" font-size="13" font-weight="600" fill="#252A33">父组件</text>
+  <rect x="628" y="82" width="10" height="10" fill="#4DBBD5"/>
+  <text x="644" y="92" font-size="13" font-weight="600" fill="#252A33">子组件</text>
+
+  <text x="440" y="112" font-size="12" font-weight="600" fill="#6B7280">更新 · 父组件数据变化</text>
+  <g stroke-width="1.5">
+    <rect x="440" y="120" width="140" height="28" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="610" y="160" width="140" height="28" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="610" y="200" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="440" y="240" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="510" y="139">beforeUpdate</text>
+    <text x="680" y="179">beforeUpdate</text>
+    <text x="680" y="219">updated</text>
+    <text x="510" y="259">updated</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="510" y1="148" x2="510" y2="156" marker-end="url(#arrow)"/>
+    <line x1="680" y1="188" x2="680" y2="196" marker-end="url(#arrow)"/>
+    <line x1="680" y1="228" x2="518" y2="238" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="440" y="288" font-size="12" font-weight="600" fill="#6B7280">卸载 · 组件被移除</text>
+  <g stroke-width="1.5">
+    <rect x="440" y="298" width="140" height="28" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="610" y="338" width="140" height="28" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="610" y="378" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="440" y="418" width="140" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="510" y="317">beforeUnmount</text>
+    <text x="680" y="357">beforeUnmount</text>
+    <text x="680" y="397">unmounted</text>
+    <text x="510" y="437">unmounted</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="510" y1="326" x2="510" y2="334" marker-end="url(#arrow)"/>
+    <line x1="680" y1="366" x2="680" y2="374" marker-end="url(#arrow)"/>
+    <line x1="680" y1="406" x2="518" y2="416" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="486" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜父子组件生命周期顺序：创建与开始父先子后，完成子先父后（Vue 3 钩子名）</text>
+</svg>

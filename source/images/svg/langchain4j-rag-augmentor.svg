@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 编排范围 -->
+  <rect x="48" y="64" width="724" height="176" rx="10" fill="#FFFFFF" stroke="#8491B4" stroke-width="1" stroke-dasharray="6 5"/>
+  <text x="64" y="86" font-size="11" fill="#8491B4">RetrievalAugmentor（RAG 编排器）</text>
+
+  <!-- 输入 -->
+  <text x="54" y="140" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">用户输入</text>
+  <line x1="54" y1="150" x2="54" y2="168" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 查询变换 -->
+  <rect x="60" y="176" width="130" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="125" y="199" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">查询变换</text>
+  <text x="125" y="217" text-anchor="middle" font-size="11" fill="#6B7280">改写 · 扩展 · 压缩</text>
+
+  <!-- 查询路由 -->
+  <rect x="226" y="176" width="104" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="278" y="199" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">查询路由</text>
+  <text x="278" y="217" text-anchor="middle" font-size="11" fill="#6B7280">分发到检索器</text>
+
+  <!-- 检索器栈 -->
+  <g stroke-width="1.5">
+    <rect x="366" y="96"  width="140" height="36" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="366" y="144" width="140" height="36" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="366" y="192" width="140" height="36" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="436" y="119">向量库检索器</text>
+    <text x="436" y="167">全文检索器</text>
+    <text x="436" y="215">Web 检索器</text>
+  </g>
+
+  <!-- 内容聚合 -->
+  <rect x="540" y="176" width="104" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="592" y="199" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">内容聚合</text>
+  <text x="592" y="217" text-anchor="middle" font-size="11" fill="#6B7280">合并 · 去重 · 重排</text>
+
+  <!-- 内容注入 -->
+  <rect x="668" y="176" width="104" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="720" y="199" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">内容注入</text>
+  <text x="720" y="217" text-anchor="middle" font-size="11" fill="#6B7280">拼入提示词</text>
+
+  <!-- 箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="190" y1="204" x2="222" y2="204" marker-end="url(#arrow)"/>
+    <line x1="330" y1="162" x2="362" y2="138" marker-end="url(#arrow)"/>
+    <line x1="330" y1="204" x2="362" y2="162" marker-end="url(#arrow)"/>
+    <line x1="330" y1="204" x2="362" y2="192" marker-end="url(#arrow)"/>
+    <line x1="330" y1="246" x2="362" y2="212" marker-end="url(#arrow)"/>
+    <line x1="506" y1="204" x2="536" y2="204" marker-end="url(#arrow)"/>
+    <line x1="644" y1="204" x2="664" y2="204" marker-end="url(#arrow)"/>
+  </g>
+  <line x1="772" y1="204" x2="790" y2="204" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="781" y="188" text-anchor="middle" font-size="11" fill="#6B7280">交给</text>
+  <text x="781" y="202" text-anchor="middle" font-size="11" fill="#6B7280">模型</text>
+
+  <!-- 底部说明 -->
+  <text x="40" y="286" font-size="11" fill="#6B7280">AiServices.builder().contentRetriever(retriever) 的默认行为：全默认组件 + 单检索器直通（查询原样进、命中直接注入用户消息）</text>
+  <text x="40" y="310" font-size="11" fill="#6B7280">需要多路检索、查询改写或重排时，才需要显式组装 RetrievalAugmentor 替换默认编排</text>
+
+  <text x="410" y="372" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜RetrievalAugmentor 高级 RAG 管道：变换 → 路由 → 检索 → 聚合 → 注入</text>
+</svg>

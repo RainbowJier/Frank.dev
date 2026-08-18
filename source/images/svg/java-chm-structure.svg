@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 460" width="820" height="460"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="460" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="459" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 表上方两个标注 -->
+  <text x="165" y="96" font-size="12" fill="#6B7280">volatile Node[] table（长度恒为 2 的幂）</text>
+  <text x="655" y="96" text-anchor="end" font-size="12" fill="#6B7280">定位桶：i = hash &amp; (n-1)</text>
+
+  <!-- 数组容器 -->
+  <rect x="165" y="104" width="490" height="78" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g stroke-width="1">
+    <rect x="173" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+    <rect x="233" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+    <rect x="293" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+    <rect x="413" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+    <rect x="473" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+    <rect x="593" y="126" width="54" height="42" rx="4" fill="#FFFFFF" stroke="#D9DFE8"/>
+  </g>
+  <rect x="353" y="126" width="54" height="42" rx="4" fill="#4DBBD5" fill-opacity="0.15" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="380" y="151" text-anchor="middle" font-size="11" fill="#252A33">链表头</text>
+  <rect x="533" y="126" width="54" height="42" rx="4" fill="#00A087" fill-opacity="0.15" stroke="#00A087" stroke-width="1.5"/>
+  <text x="560" y="151" text-anchor="middle" font-size="11" fill="#252A33">树根</text>
+
+  <!-- 桶下标 -->
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="200" y="190">0</text><text x="260" y="190">1</text><text x="320" y="190">2</text>
+    <text x="380" y="190">3</text><text x="440" y="190">4</text><text x="500" y="190">5</text>
+    <text x="560" y="190">6</text><text x="620" y="190">7</text>
+  </g>
+
+  <!-- 桶 3：链表 -->
+  <line x1="380" y1="182" x2="380" y2="202" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="354" y="206" width="52" height="30" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="380" y="225" text-anchor="middle" font-size="11.5" fill="#252A33">Node</text>
+  <line x1="380" y1="236" x2="380" y2="252" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="354" y="256" width="52" height="30" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="380" y="275" text-anchor="middle" font-size="11.5" fill="#252A33">Node</text>
+  <line x1="380" y1="286" x2="380" y2="302" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="354" y="306" width="52" height="30" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="380" y="325" text-anchor="middle" font-size="11.5" fill="#252A33">Node</text>
+  <line x1="380" y1="336" x2="380" y2="352" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="380" y="370" text-anchor="middle" font-size="11.5" fill="#6B7280">null</text>
+
+  <!-- 桶 6：红黑树 -->
+  <line x1="560" y1="182" x2="560" y2="231" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="560" y1="248" x2="530" y2="298"/>
+    <line x1="560" y1="248" x2="590" y2="298"/>
+    <line x1="530" y1="298" x2="512" y2="346"/>
+    <line x1="530" y1="298" x2="544" y2="346"/>
+    <line x1="590" y1="298" x2="576" y2="346"/>
+    <line x1="590" y1="298" x2="608" y2="346"/>
+  </g>
+  <g fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5">
+    <circle cx="560" cy="248" r="13"/>
+    <circle cx="530" cy="298" r="12"/>
+    <circle cx="590" cy="298" r="12"/>
+    <circle cx="512" cy="346" r="10"/>
+    <circle cx="544" cy="346" r="10"/>
+    <circle cx="576" cy="346" r="10"/>
+    <circle cx="608" cy="346" r="10"/>
+  </g>
+  <text x="636" y="252" font-size="11.5" fill="#6B7280">红黑树 TreeNode</text>
+  <text x="636" y="270" font-size="11.5" fill="#6B7280">查找 O(log n)</text>
+
+  <!-- 左侧：Node 结构放大 -->
+  <text x="40" y="198" font-size="12.5" font-weight="600" fill="#252A33">Node 结构（放大）</text>
+  <rect x="40" y="206" width="180" height="130" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="52" y="222" width="64" height="32" rx="4" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="84" y="242" text-anchor="middle" font-size="11.5" fill="#252A33">hash</text>
+  <rect x="140" y="222" width="64" height="32" rx="4" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="172" y="242" text-anchor="middle" font-size="11.5" fill="#252A33">key</text>
+  <rect x="52" y="272" width="64" height="32" rx="4" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5"/>
+  <text x="84" y="292" text-anchor="middle" font-size="11.5" fill="#252A33">val</text>
+  <rect x="140" y="272" width="64" height="32" rx="4" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5"/>
+  <text x="172" y="292" text-anchor="middle" font-size="11.5" fill="#252A33">next</text>
+  <line x1="52" y1="310" x2="204" y2="310" stroke="#4DBBD5" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="128" y="328" text-anchor="middle" font-size="11" fill="#6B7280">val 与 next 声明为 volatile</text>
+  <!-- 引线：链表节点 → 解剖图 -->
+  <circle cx="354" cy="221" r="2.5" fill="#9AA4B2"/>
+  <line x1="354" y1="221" x2="224" y2="238" stroke="#9AA4B2" stroke-width="1" stroke-dasharray="2 3"/>
+
+  <!-- 底部两条规则 -->
+  <circle cx="140" cy="396" r="3" fill="#3C5488"/>
+  <text x="152" y="400" font-size="12" fill="#252A33">链表长度 ≥ 8 且数组 ≥ 64 → 树化</text>
+  <circle cx="480" cy="396" r="3" fill="#3C5488"/>
+  <text x="492" y="400" font-size="12" fill="#252A33">树节点数 ≤ 6 → 退化回链表</text>
+
+  <text x="410" y="436" text-anchor="middle" font-size="12" fill="#6B7280">图 10｜JDK 8 ConcurrentHashMap 存储结构：数组 + 链表 + 红黑树</text>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+  </defs>
+
+  <!-- 输入：产品规格 -->
+  <text x="120" y="64" text-anchor="middle" font-size="12" fill="#6B7280">产品规格</text>
+  <line x1="120" y1="70" x2="120" y2="84" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 三个智能体 + 交付产物 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="90" width="160" height="88" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="250" y="90" width="160" height="88" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="460" y="90" width="160" height="88" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="670" y="90" width="110" height="88" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="120" y="127" font-size="15" font-weight="600" fill="#252A33">规划器</text>
+    <text x="120" y="149" font-size="11" fill="#6B7280">Planner</text>
+    <text x="330" y="127" font-size="15" font-weight="600" fill="#252A33">生成器</text>
+    <text x="330" y="149" font-size="11" fill="#6B7280">Generator</text>
+    <text x="540" y="127" font-size="15" font-weight="600" fill="#252A33">评估器</text>
+    <text x="540" y="149" font-size="11" fill="#6B7280">Evaluator</text>
+    <text x="725" y="127" font-size="15" font-weight="600" fill="#252A33">交付产物</text>
+    <text x="725" y="149" font-size="11" fill="#6B7280">Artifact</text>
+  </g>
+
+  <!-- 主流程箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="203" y1="134" x2="245" y2="134" marker-end="url(#arrow)"/>
+    <line x1="413" y1="134" x2="455" y2="134" marker-end="url(#arrow)"/>
+  </g>
+  <line x1="623" y1="134" x2="665" y2="134" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="224" y="118">任务列表</text>
+    <text x="434" y="118">实现产物</text>
+    <text x="644" y="118">通过</text>
+  </g>
+
+  <!-- 反馈回路：不通过则打回生成器修订 -->
+  <path d="M545 182 C 545 252, 335 252, 335 186" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow-orange)"/>
+  <text x="440" y="252" text-anchor="middle" font-size="11" fill="#6B7280">不通过 · 修订</text>
+
+  <text x="410" y="284" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜三智能体 Harness 架构：规划 → 生成 → 评估闭环</text>
+</svg>

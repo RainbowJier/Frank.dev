@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" width="820" height="440"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="440" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="439" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9AA4B2"/>
+    </marker>
+  </defs>
+
+  <!-- ThreadLocal 实例（右上） -->
+  <rect x="650" y="40" width="140" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="720" y="64" font-size="13" font-weight="500" fill="#252A33">ThreadLocal 实例</text>
+    <text x="720" y="86" font-size="11" fill="#6B7280">业务中的静态字段</text>
+  </g>
+
+  <!-- 线程 1 -->
+  <rect x="40" y="70" width="160" height="64" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="120" y="96" font-size="13" font-weight="500" fill="#252A33">线程 1（长期存活）</text>
+    <text x="120" y="118" font-size="11" fill="#6B7280">threadLocals</text>
+  </g>
+
+  <!-- 线程 1 的 ThreadLocalMap -->
+  <rect x="280" y="60" width="340" height="130" rx="10" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="300" y="84" font-size="13" font-weight="600" fill="#252A33">线程 1 的 ThreadLocalMap</text>
+
+  <!-- Entry[0]：正常 -->
+  <rect x="300" y="100" width="150" height="50" rx="6" fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="11" fill="#252A33">
+    <text x="375" y="120">key：ThreadLocal</text>
+    <text x="375" y="140">value：用户上下文</text>
+  </g>
+
+  <!-- Entry[1]：脏 Entry（红色警示） -->
+  <rect x="470" y="100" width="130" height="50" rx="6" fill="#E64B35" fill-opacity="0.06" stroke="#E64B35" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="11" fill="#252A33">
+    <text x="535" y="120">key：null（已被 GC）</text>
+    <text x="535" y="140">value：大对象</text>
+  </g>
+
+  <!-- 强引用：线程 → Map -->
+  <line x1="200" y1="102" x2="276" y2="102" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="238" y="92" text-anchor="middle" font-size="11" fill="#6B7280">强引用</text>
+
+  <!-- 弱引用：Entry key → ThreadLocal 实例（虚线灰） -->
+  <line x1="445" y1="105" x2="655" y2="95" stroke="#9AA4B2" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowGray)"/>
+  <text x="550" y="84" text-anchor="middle" font-size="11" fill="#6B7280">弱引用（GC 可回收）</text>
+
+  <!-- 线程 2 -->
+  <rect x="40" y="250" width="160" height="64" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="120" y="276" font-size="13" font-weight="500" fill="#252A33">线程 2</text>
+    <text x="120" y="298" font-size="11" fill="#6B7280">threadLocals</text>
+  </g>
+  <line x1="200" y1="282" x2="276" y2="282" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 线程 2 的 ThreadLocalMap（折叠） -->
+  <rect x="280" y="240" width="340" height="80" rx="10" fill="#8491B4" fill-opacity="0.05" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="450" y="286" text-anchor="middle" font-size="12" fill="#252A33">线程 2 的 ThreadLocalMap —— 各线程互不可见</text>
+
+  <!-- 泄漏链说明 -->
+  <text x="450" y="212" text-anchor="middle" font-size="12" fill="#6B7280">强引用链 Thread → Map → Entry → value 一直拽住 value</text>
+
+  <!-- 最佳实践 -->
+  <rect x="60" y="344" width="700" height="58" rx="10" fill="none" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="410" y="370" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">线程池铁律：set() 之后必须在 finally 中 remove()</text>
+  <text x="410" y="390" text-anchor="middle" font-size="12" fill="#6B7280">线程长期存活时，脏 Entry 只能等 set/get/remove 顺路清理</text>
+
+  <text x="410" y="424" text-anchor="middle" font-size="12" fill="#6B7280">图 8｜ThreadLocalMap：弱引用 key 与强引用 value 的泄漏路径</text>
+</svg>

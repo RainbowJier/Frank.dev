@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowO2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 上行：进入延迟队列 ===== -->
+  <rect x="40" y="64" width="110" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="95" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">生产者</text>
+  <text x="95" y="102" text-anchor="middle" font-size="11" fill="#6B7280">下单成功</text>
+
+  <line x1="150" y1="88" x2="196" y2="88" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowD)"/>
+
+  <rect x="200" y="64" width="130" height="48" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="265" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">业务交换机</text>
+  <text x="265" y="102" text-anchor="middle" font-size="11" fill="#6B7280">rk = order.created</text>
+
+  <line x1="330" y1="88" x2="376" y2="88" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowD)"/>
+
+  <rect x="380" y="56" width="180" height="64" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="470" y="80" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">延迟队列 order.delay</text>
+  <text x="470" y="100" text-anchor="middle" font-size="11" fill="#6B7280">TTL=30s · DLX=pay.dlx</text>
+
+  <!-- 过期转投（延迟路径，橙色） -->
+  <line x1="470" y1="120" x2="470" y2="166" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowO2)"/>
+  <text x="482" y="140" font-size="11" fill="#6B7280">30 秒后消息过期</text>
+  <text x="482" y="156" font-size="11" fill="#6B7280">成为死信，自动转投 DLX</text>
+
+  <!-- ===== 下行：死信链路 ===== -->
+  <rect x="420" y="172" width="150" height="52" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="495" y="192" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">死信交换机 DLX</text>
+  <text x="495" y="210" text-anchor="middle" font-size="11" fill="#6B7280">pay.dlx</text>
+
+  <line x1="416" y1="198" x2="381" y2="198" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowD)"/>
+  <text x="398" y="164" text-anchor="middle" font-size="11" fill="#6B7280">cancel.check</text>
+
+  <rect x="215" y="172" width="160" height="52" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="295" y="192" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">真实消费队列</text>
+  <text x="295" y="210" text-anchor="middle" font-size="11" fill="#6B7280">order.cancel.queue</text>
+
+  <line x1="211" y1="198" x2="166" y2="198" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowD)"/>
+  <text x="188" y="216" text-anchor="middle" font-size="11" fill="#6B7280">推送</text>
+
+  <rect x="45" y="172" width="115" height="52" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="102" y="192" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者</text>
+  <text x="102" y="210" text-anchor="middle" font-size="11" fill="#6B7280">检查支付状态</text>
+
+  <!-- ===== 死信三来源 ===== -->
+  <text x="40" y="276" font-size="13" font-weight="600" fill="#3C5488">死信的三种来源</text>
+  <g fill="#FFFFFF" stroke="#D9DFE8">
+    <rect x="40" y="292" width="225" height="32" rx="16"/>
+    <rect x="285" y="292" width="190" height="32" rx="16"/>
+    <rect x="495" y="292" width="185" height="32" rx="16"/>
+  </g>
+  <g text-anchor="middle" font-size="11.5" fill="#252A33">
+    <text x="152" y="312">① 消费者拒绝且不重回队列</text>
+    <text x="380" y="312">② 消息 TTL 过期</text>
+    <text x="587" y="312">③ 队列超长被挤出</text>
+  </g>
+
+  <line x1="40" y1="352" x2="780" y2="352" stroke="#E8EDF3" stroke-width="1"/>
+
+  <!-- ===== 队头阻塞警示 ===== -->
+  <circle cx="46" cy="382" r="3" fill="#E64B35"/>
+  <text x="58" y="386" font-size="13" font-weight="600" fill="#252A33">坑：队头阻塞</text>
+  <text x="160" y="386" font-size="11" fill="#6B7280">TTL + DLX 方案只适用于固定延迟</text>
+
+  <text x="74" y="408" font-size="11" fill="#6B7280">延迟队列（只检查队头）</text>
+  <rect x="74" y="416" width="240" height="46" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="82" y="424" width="110" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1"/>
+  <text x="137" y="443" text-anchor="middle" font-size="11" fill="#252A33">TTL=10min</text>
+  <rect x="198" y="424" width="108" height="30" rx="4" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="252" y="443" text-anchor="middle" font-size="11" fill="#252A33">TTL=10s</text>
+
+  <text x="344" y="428" font-size="12" font-weight="500" fill="#252A33">队头的 10min 消息没过期，出不了队</text>
+  <text x="344" y="448" font-size="11" fill="#6B7280">后面的 10s 消息永远不会被检查 —— 短延迟被长延迟堵死</text>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜TTL + 死信交换机实现延迟队列，及队头阻塞问题</text>
+</svg>

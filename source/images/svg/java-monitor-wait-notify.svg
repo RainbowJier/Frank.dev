@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 左侧竞争线程 -->
+  <text x="125" y="80" text-anchor="middle" font-size="11" fill="#6B7280">竞争 monitor 的线程</text>
+  <g stroke="#4DBBD5" stroke-width="1.5" fill="#4DBBD5" fill-opacity="0.12">
+    <rect x="40" y="90"  width="170" height="44" rx="6"/>
+    <rect x="40" y="150" width="170" height="44" rx="6"/>
+    <rect x="40" y="210" width="170" height="44" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="125" y="116">线程 T1</text>
+    <text x="125" y="176">线程 T2</text>
+    <text x="125" y="236">线程 T3</text>
+  </g>
+
+  <!-- 监视器外框 -->
+  <rect x="250" y="50" width="540" height="300" rx="12" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+  <text x="520" y="78" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">对象监视器 Monitor（每个对象一把）</text>
+
+  <!-- Owner -->
+  <rect x="300" y="100" width="260" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="430" y="126" font-size="14" font-weight="500" fill="#252A33">Owner（持锁线程）</text>
+    <text x="430" y="146" font-size="11" fill="#6B7280">同一时刻至多一个</text>
+  </g>
+
+  <!-- EntrySet -->
+  <rect x="300" y="210" width="260" height="70" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="430" y="240" font-size="14" font-weight="500" fill="#252A33">EntrySet（锁池）</text>
+    <text x="430" y="262" font-size="11" fill="#6B7280">竞争失败者阻塞于此（BLOCKED）</text>
+  </g>
+
+  <!-- WaitSet -->
+  <rect x="590" y="210" width="170" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="675" y="240" font-size="14" font-weight="500" fill="#252A33">WaitSet（等待池）</text>
+    <text x="675" y="262" font-size="11" fill="#6B7280">wait() 挂起的线程</text>
+  </g>
+
+  <!-- 流转箭头 -->
+  <line x1="210" y1="172" x2="294" y2="240" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="240" y="206" text-anchor="middle" font-size="11" fill="#6B7280">进入同步块</text>
+
+  <line x1="430" y1="210" x2="430" y2="164" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="440" y="192" font-size="11" fill="#6B7280">抢到锁后进入</text>
+
+  <path d="M560 130 L675 130 L675 206" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="600" y="120" font-size="11" fill="#6B7280">wait()：释放锁</text>
+
+  <line x1="590" y1="245" x2="564" y2="245" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="577" y1="250" x2="577" y2="292" stroke="#9AA4B2" stroke-width="1"/>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="577" y="306">notify()/notifyAll() 后</text>
+    <text x="577" y="322">迁回 EntrySet 重新竞争</text>
+  </g>
+
+  <line x1="300" y1="130" x2="216" y2="124" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="258" y="112" text-anchor="middle" font-size="11" fill="#6B7280">执行完 / 释放锁</text>
+
+  <text x="410" y="408" text-anchor="middle" font-size="12" fill="#6B7280">图 7｜对象监视器：EntrySet 与 WaitSet 的流转</text>
+</svg>

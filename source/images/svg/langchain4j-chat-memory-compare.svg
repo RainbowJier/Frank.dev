@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：按条数窗口 -->
+  <rect x="40" y="40" width="360" height="290" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="70" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="69" font-size="14" font-weight="600" fill="#252A33">MessageWindowChatMemory</text>
+
+  <text x="64" y="100" font-size="12" fill="#6B7280">maxMessages = 6（示意），逐条驱逐最旧</text>
+  <g>
+    <rect x="64"  y="116" width="40" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="112" y="116" width="40" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="160" y="116" width="40" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="208" y="116" width="40" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="256" y="116" width="40" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="304" y="116" width="40" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="352" y="116" width="24" height="24" fill="#3C5488" fill-opacity="0.45"/>
+  </g>
+  <text x="64" y="158" font-size="11" fill="#6B7280">已驱逐（超出窗口）</text>
+  <text x="256" y="158" font-size="11" fill="#3C5488">窗口内</text>
+  <line x1="64" y1="170" x2="368" y2="170" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="216" y="186" text-anchor="middle" font-size="11" fill="#6B7280">窗口滑动方向</text>
+
+  <g font-size="12" fill="#252A33">
+    <circle cx="72" cy="216" r="3" fill="#00A087"/>
+    <text x="86" y="220">条数精确可控，行为一目了然</text>
+    <circle cx="72" cy="250" r="3" fill="#00A087"/>
+    <text x="86" y="254">SystemMessage 例外：不参与驱逐</text>
+    <circle cx="72" cy="284" r="3" fill="#00A087"/>
+    <text x="86" y="288">不依赖 Tokenizer，零额外开销</text>
+  </g>
+
+  <!-- 面板 B：按 token 窗口 -->
+  <rect x="420" y="40" width="360" height="290" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="70" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="69" font-size="14" font-weight="600" fill="#252A33">TokenWindowChatMemory</text>
+
+  <text x="444" y="100" font-size="12" fill="#6B7280">maxTokens 上限，按估算 token 总量驱逐</text>
+  <g>
+    <rect x="444" y="116" width="16" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="464" y="116" width="26" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="494" y="116" width="38" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="536" y="116" width="22" height="24" fill="#8491B4" fill-opacity="0.25"/>
+    <rect x="562" y="116" width="34" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="600" y="116" width="44" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="648" y="116" width="26" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="678" y="116" width="38" height="24" fill="#3C5488" fill-opacity="0.45"/>
+    <rect x="720" y="116" width="30" height="24" fill="#3C5488" fill-opacity="0.45"/>
+  </g>
+  <line x1="556" y1="108" x2="556" y2="148" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="450" y="158" font-size="11" fill="#6B7280">条宽 = 消息 token 量，驱逐仍以"条"为单位</text>
+  <text x="562" y="160" font-size="11" fill="#E64B35">token 上限</text>
+
+  <g font-size="12" fill="#252A33">
+    <circle cx="452" cy="216" r="3" fill="#00A087"/>
+    <text x="466" y="220">Tokenizer 逐条估算，总量不超限</text>
+    <circle cx="452" cy="250" r="3" fill="#F39B7F"/>
+    <text x="466" y="254">容量是近似值（不精确截断）</text>
+    <circle cx="452" cy="284" r="3" fill="#00A087"/>
+    <text x="466" y="288">长对话场景省 token 成本更明显</text>
+  </g>
+
+  <text x="410" y="362" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜两种 ChatMemory 窗口策略：按条数 vs 按 token</text>
+</svg>

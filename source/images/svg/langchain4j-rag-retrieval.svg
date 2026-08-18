@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 五个节点 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="60" width="132" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="192" y="60" width="132" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="344" y="60" width="132" height="64" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="496" y="60" width="132" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="648" y="60" width="132" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="106" y="83">用户问题</text>
+    <text x="258" y="83">问题向量化</text>
+    <text x="410" y="83">构造检索请求</text>
+    <text x="562" y="83">相似度检索</text>
+    <text x="714" y="83">命中内容列表</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="106" y="101">query 原文</text>
+    <text x="106" y="116">（增强前）</text>
+    <text x="258" y="101">embed(query)</text>
+    <text x="258" y="116">与摄入同一模型</text>
+    <text x="410" y="101">maxResults · minScore</text>
+    <text x="410" y="116">metadata Filter</text>
+    <text x="562" y="101">余弦相似度</text>
+    <text x="562" y="116">score ∈ [0, 1]</text>
+    <text x="714" y="101">List&lt;Content&gt;</text>
+    <text x="714" y="116">按得分排序</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="172" y1="92" x2="186" y2="92" marker-end="url(#arrow)"/>
+    <line x1="324" y1="92" x2="338" y2="92" marker-end="url(#arrow)"/>
+    <line x1="476" y1="92" x2="490" y2="92" marker-end="url(#arrow)"/>
+    <line x1="628" y1="92" x2="642" y2="92" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 过滤示例与说明 -->
+  <rect x="40" y="160" width="740" height="64" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="64" y="186" font-size="12" fill="#252A33">Filter 示例：只检索某几个知识库的分段</text>
+  <text x="64" y="208" font-size="12" fill="#3C5488" font-family="'Courier New',monospace">metadataKey("knowledgeBaseId").isIn("1", "2")   //  还支持 isEqualTo / not / 大小比较</text>
+
+  <text x="40" y="252" font-size="11" fill="#6B7280">minScore 是"宁可没有，不要噪音"的闸门：低于阈值的结果直接丢弃，阈值随 embedding 模型不同需要重新标定</text>
+  <text x="40" y="276" font-size="11" fill="#6B7280">ContentRetriever 是这整段的抽象：给一个 Query，还一组 Content——实现可以是向量库、全文检索甚至 Web 搜索</text>
+
+  <text x="410" y="330" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜一次向量检索：向量化 → 过滤与限参 → 余弦排序 → 命中内容</text>
+</svg>

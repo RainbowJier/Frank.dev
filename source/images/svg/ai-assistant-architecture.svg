@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 590" width="820" height="590"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="590" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="589" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 六个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="36"  width="740" height="70" rx="10"/>
+    <rect x="40" y="120" width="740" height="70" rx="10"/>
+    <rect x="40" y="204" width="740" height="70" rx="10"/>
+    <rect x="40" y="288" width="740" height="70" rx="10"/>
+    <rect x="40" y="372" width="740" height="70" rx="10"/>
+    <rect x="40" y="456" width="740" height="70" rx="10"/>
+  </g>
+
+  <!-- 层名：小方块 + 主名 + 灰色子标注 -->
+  <g>
+    <rect x="64" y="61" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="66" font-size="14" font-weight="600" fill="#252A33">前端</text>
+    <text x="82" y="84" font-size="11" fill="#6B7280">ai/ · Vue 3 + Vite</text>
+
+    <rect x="64" y="145" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="150" font-size="14" font-weight="600" fill="#252A33">适配层</text>
+    <text x="82" y="168" font-size="11" fill="#6B7280">adapter</text>
+
+    <rect x="64" y="229" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="234" font-size="14" font-weight="600" fill="#252A33">应用层</text>
+    <text x="82" y="252" font-size="11" fill="#6B7280">application</text>
+
+    <rect x="64" y="313" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="318" font-size="14" font-weight="600" fill="#252A33">领域层</text>
+    <text x="82" y="336" font-size="11" fill="#6B7280">domain</text>
+
+    <rect x="64" y="397" width="10" height="10" fill="#8491B4"/>
+    <text x="82" y="402" font-size="14" font-weight="600" fill="#252A33">基础设施</text>
+    <text x="82" y="420" font-size="11" fill="#6B7280">infrastructure</text>
+
+    <rect x="64" y="481" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="486" font-size="14" font-weight="600" fill="#252A33">数据与模型</text>
+    <text x="82" y="504" font-size="11" fill="#6B7280">存储 · 外部模型</text>
+  </g>
+
+  <!-- 层内元件：白底 + 彩描边，label + sub 两行 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#4DBBD5">
+      <rect x="168" y="47" width="146" height="48" rx="6"/>
+      <rect x="322" y="47" width="146" height="48" rx="6"/>
+      <rect x="476" y="47" width="146" height="48" rx="6"/>
+      <rect x="630" y="47" width="146" height="48" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="168" y="131" width="146" height="48" rx="6"/>
+      <rect x="322" y="131" width="146" height="48" rx="6"/>
+      <rect x="476" y="131" width="146" height="48" rx="6"/>
+      <rect x="630" y="131" width="146" height="48" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="168" y="215" width="146" height="48" rx="6"/>
+      <rect x="322" y="215" width="146" height="48" rx="6"/>
+      <rect x="476" y="215" width="146" height="48" rx="6"/>
+      <rect x="630" y="215" width="146" height="48" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="168" y="299" width="160" height="48" rx="6"/>
+      <rect x="340" y="299" width="160" height="48" rx="6"/>
+      <rect x="512" y="299" width="160" height="48" rx="6"/>
+    </g>
+    <g stroke="#8491B4">
+      <rect x="168" y="383" width="146" height="48" rx="6"/>
+      <rect x="322" y="383" width="146" height="48" rx="6"/>
+      <rect x="476" y="383" width="146" height="48" rx="6"/>
+      <rect x="630" y="383" width="146" height="48" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="168" y="467" width="146" height="48" rx="6"/>
+      <rect x="322" y="467" width="146" height="48" rx="6"/>
+      <rect x="476" y="467" width="146" height="48" rx="6"/>
+      <rect x="630" y="467" width="146" height="48" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 元件文字 -->
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="241" y="67">SSE 客户端解析</text>
+    <text x="395" y="67">会话侧栏</text>
+    <text x="549" y="67">Markdown 渲染</text>
+    <text x="703" y="67">管理页面</text>
+
+    <text x="241" y="151">ChatController</text>
+    <text x="395" y="151">SessionController</text>
+    <text x="549" y="151">AgentController</text>
+    <text x="703" y="151">知识库 Controller</text>
+
+    <text x="241" y="235">ChatService</text>
+    <text x="395" y="235">StreamRegistry</text>
+    <text x="549" y="235">会话/智能体服务</text>
+    <text x="703" y="235">解析执行器</text>
+
+    <text x="248" y="319">技术中立请求模型</text>
+    <text x="420" y="319">实体 + 网关接口</text>
+    <text x="592" y="319">ToolCallDispatcher</text>
+
+    <text x="241" y="403">LlmGatewayImpl</text>
+    <text x="395" y="403">Embedding 网关</text>
+    <text x="549" y="403">MyBatis-Plus</text>
+    <text x="703" y="403">ToolRegistry</text>
+
+    <text x="241" y="487">PostgreSQL</text>
+    <text x="395" y="487">pgvector</text>
+    <text x="549" y="487">OpenAI 兼容 API</text>
+    <text x="703" y="487">本地 ONNX 推理</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="241" y="84">fetch + 半包缓冲</text>
+    <text x="395" y="84">置顶 · 归档 · 搜索</text>
+    <text x="549" y="84">分级节流流式渲染</text>
+    <text x="703" y="84">智能体 · 知识库</text>
+
+    <text x="241" y="168">SseEmitter 流式</text>
+    <text x="395" y="168">CRUD + 归属校验</text>
+    <text x="549" y="168">智能体/提示词</text>
+    <text x="703" y="168">文档上传/轮询</text>
+
+    <text x="241" y="252">对话编排核心</text>
+    <text x="395" y="252">互斥 + 停止标记</text>
+    <text x="549" y="252">单字段精确更新</text>
+    <text x="703" y="252">@Async 文档解析</text>
+
+    <text x="248" y="336">LlmRequest·Handler</text>
+    <text x="420" y="336">MyBatis-Plus 映射</text>
+    <text x="592" y="336">工具分发 SPI</text>
+
+    <text x="241" y="420">AiServices 声明式</text>
+    <text x="395" y="420">bge-small · ONNX</text>
+    <text x="549" y="420">网关实现</text>
+    <text x="703" y="420">4 个内置工具</text>
+
+    <text x="241" y="504">会话·消息·智能体</text>
+    <text x="395" y="504">HNSW 余弦索引</text>
+    <text x="549" y="504">gpt-5.4 流式</text>
+    <text x="703" y="504">512 维向量</text>
+  </g>
+
+  <!-- 领域层红色标注：全图唯一强调点 -->
+  <circle cx="678" cy="323" r="2.5" fill="#E64B35"/>
+  <g text-anchor="middle" font-size="11" fill="#E64B35">
+    <text x="726" y="320">依赖倒置</text>
+    <text x="726" y="336">零框架 import</text>
+  </g>
+
+  <text x="410" y="562" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜AI 客服助手 DDD 分层架构：领域层零框架依赖，LangChain4j 只出现在基础设施层</text>
+</svg>

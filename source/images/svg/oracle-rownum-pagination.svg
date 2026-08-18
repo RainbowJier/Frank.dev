@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：错误写法 -->
+  <rect x="40" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="74" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="88" y="73" font-size="14" font-weight="600" fill="#252A33">WHERE ROWNUM &gt; 1（× 空结果）</text>
+
+  <g fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5">
+    <rect x="70"  y="94" width="84" height="38" rx="6"/>
+    <rect x="168" y="94" width="84" height="38" rx="6"/>
+    <rect x="266" y="94" width="84" height="38" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="112" y="118">第 1 行</text>
+    <text x="210" y="118">第 2 行</text>
+    <text x="308" y="118">第 3 行</text>
+  </g>
+  <line x1="220" y1="140" x2="220" y2="156" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="220" y="176" text-anchor="middle" font-size="11" fill="#6B7280">每行都按 ROWNUM=1 测试</text>
+  <text x="220" y="202" text-anchor="middle" font-size="12" font-weight="600" fill="#E64B35">全部不满足 → 全被丢弃，返回 0 行</text>
+  <text x="220" y="230" text-anchor="middle" font-size="11" fill="#6B7280">ROWNUM 在行被取出时才编号，</text>
+  <text x="220" y="248" text-anchor="middle" font-size="11" fill="#6B7280">被丢弃的行不占号，后续行仍从 1 测起</text>
+  <text x="220" y="286" text-anchor="middle" font-size="11" fill="#6B7280" font-family="Consolas,Menlo,monospace">SELECT * FROM users WHERE ROWNUM &gt; 1;</text>
+
+  <!-- 面板 B：正确写法 -->
+  <rect x="420" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="74" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="468" y="73" font-size="14" font-weight="600" fill="#252A33">先编号，再过滤（子查询）</text>
+
+  <g stroke-width="1.5">
+    <rect x="450" y="94" width="84" height="52" rx="6" fill="#FFFFFF" stroke="#3C5488"/>
+    <rect x="550" y="94" width="84" height="52" rx="6" fill="#FFFFFF" stroke="#3C5488"/>
+    <rect x="650" y="94" width="84" height="52" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="492" y="116">内层查询</text>
+    <text x="602" y="116">外层过滤</text>
+    <text x="692" y="116">第 11–20 行</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="492" y="134">先编号 1…N</text>
+    <text x="602" y="134">rn 11–20</text>
+    <text x="692" y="134">返回结果</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="536" y1="120" x2="546" y2="120" marker-end="url(#arrow)"/>
+    <line x1="636" y1="120" x2="646" y2="120" marker-end="url(#arrow)"/>
+  </g>
+
+  <g font-size="11" fill="#252A33" font-family="Consolas,Menlo,monospace">
+    <text x="444" y="200">SELECT * FROM (</text>
+    <text x="444" y="216">  SELECT a.*, ROWNUM rn FROM (</text>
+    <text x="444" y="232">    SELECT ... ORDER BY id DESC</text>
+    <text x="444" y="248">  ) a WHERE ROWNUM &lt;= 20</text>
+    <text x="444" y="264">) WHERE rn BETWEEN 11 AND 20;</text>
+  </g>
+  <text x="600" y="296" text-anchor="middle" font-size="11" fill="#6B7280">12c 起直接写：OFFSET 10 ROWS FETCH NEXT 10 ROWS ONLY</text>
+
+  <text x="410" y="372" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜ROWNUM 分页：直接用 &gt; 过滤必空，需先编号再取区间（≈ MySQL LIMIT 10,10）</text>
+</svg>

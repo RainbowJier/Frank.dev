@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 700" width="820" height="700"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="700" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="699" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：RDB -->
+  <rect x="40" y="40" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">RDB · 定时快照（BGSAVE）</text>
+
+  <rect x="70" y="95" width="110" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="125" y="124" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">主进程</text>
+  <line x1="184" y1="120" x2="214" y2="120" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="199" y="112" text-anchor="middle" font-size="11" fill="#6B7280">fork</text>
+  <rect x="218" y="95" width="110" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="273" y="116" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">子进程</text>
+  <text x="273" y="136" text-anchor="middle" font-size="11" fill="#6B7280">遍历内存</text>
+  <line x1="332" y1="120" x2="362" y2="120" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="366" y="95" width="100" height="50" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="416" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">dump.rdb</text>
+
+  <text x="510" y="108" font-size="13" fill="#252A33">fork + 写时复制（COW）</text>
+  <text x="510" y="128" font-size="12" fill="#6B7280">父进程持续处理写命令</text>
+  <circle cx="514" cy="148" r="3" fill="#E64B35"/>
+  <text x="524" y="152" font-size="13" fill="#252A33">最坏丢两次快照间的数据</text>
+  <circle cx="514" cy="170" r="3" fill="#00A087"/>
+  <text x="524" y="174" font-size="12" fill="#6B7280">文件紧凑 · 恢复极快</text>
+
+  <!-- 面板 B：AOF -->
+  <rect x="40" y="250" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="282" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="86" y="281" font-size="14" font-weight="600" fill="#252A33">AOF · 追加写命令（appendfsync everysec）</text>
+
+  <rect x="70" y="305" width="90" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="115" y="334" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">写命令</text>
+  <line x1="162" y1="330" x2="188" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="192" y="305" width="104" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="244" y="334" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">aof 缓冲区</text>
+  <line x1="298" y1="330" x2="324" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="311" y="322" text-anchor="middle" font-size="11" fill="#6B7280">fsync</text>
+  <rect x="328" y="305" width="104" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="380" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">AOF 文件</text>
+  <line x1="434" y1="330" x2="460" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="464" y="305" width="110" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="519" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">AOF 重写</text>
+  <line x1="576" y1="330" x2="602" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="606" y="305" width="120" height="50" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="666" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">最精简日志</text>
+
+  <text x="70" y="382" font-size="13" fill="#252A33">三档刷盘：always（每条）· everysec（每秒，推荐）· no（交给 OS）</text>
+  <text x="70" y="404" font-size="12" fill="#6B7280">重写：按当前内存生成等价的最少命令，解决文件膨胀</text>
+
+  <!-- 面板 C：混合持久化 -->
+  <rect x="40" y="460" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="492" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="86" y="491" font-size="14" font-weight="600" fill="#252A33">混合持久化（4.0+）· RDB 打底 + AOF 增量</text>
+
+  <rect x="70" y="515" width="110" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="125" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">AOF 重写触发</text>
+  <line x1="184" y1="540" x2="214" y2="540" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="218" y="515" width="120" height="50" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="278" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">RDB 全量</text>
+  <rect x="338" y="515" width="100" height="50" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="388" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">AOF 增量</text>
+  <line x1="442" y1="540" x2="472" y2="540" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="476" y="515" width="150" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="551" y="536" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">先载入 RDB</text>
+  <text x="551" y="554" text-anchor="middle" font-size="12" fill="#6B7280">再回放 AOF 命令</text>
+
+  <text x="70" y="592" font-size="13" fill="#252A33">恢复速度 ≈ RDB 载入；丢数据窗口 ≤ 1 秒（everysec）</text>
+  <text x="70" y="614" font-size="12" fill="#6B7280">配置：aof-use-rdb-preamble yes（生产默认推荐）</text>
+
+  <text x="410" y="682" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜RDB 快照、AOF 日志与混合持久化的工作方式</text>
+</svg>

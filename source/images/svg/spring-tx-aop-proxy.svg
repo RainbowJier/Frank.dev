@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 顶行：调用方 → 事务代理 → 目标方法 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="58" width="120" height="64" rx="8" fill="#F4F7FA" stroke="#8491B4"/>
+    <rect x="200" y="58" width="230" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="470" y="58" width="190" height="64" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="100" y="90">调用方</text>
+    <text x="315" y="86">事务代理</text>
+    <text x="565" y="86">目标方法</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="100" y="108">Controller</text>
+    <text x="315" y="104">TransactionInterceptor</text>
+    <text x="565" y="104">@Transactional 方法</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="166" y1="90" x2="194" y2="90" marker-end="url(#arrow)"/>
+    <line x1="436" y1="90" x2="464" y2="90" marker-end="url(#arrow)"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="315" y="142">① 开启事务 · Connection 绑定当前线程</text>
+    <text x="565" y="142">② 执行业务逻辑</text>
+  </g>
+
+  <!-- 结果分支 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="545" y1="122" x2="522" y2="202" marker-end="url(#arrow)"/>
+    <line x1="585" y1="122" x2="693" y2="202" marker-end="url(#arrow)"/>
+  </g>
+  <text x="505" y="168" text-anchor="middle" font-size="11" fill="#6B7280">正常返回</text>
+  <text x="755" y="158" text-anchor="end" font-size="11" fill="#6B7280">抛出 RuntimeException</text>
+
+  <rect x="430" y="210" width="170" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <rect x="630" y="210" width="150" height="56" rx="8" fill="#E64B35" fill-opacity="0.12" stroke="#E64B35" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="515" y="234">提交 commit</text>
+    <text x="705" y="234">回滚 rollback</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="515" y="252">方法正常返回</text>
+    <text x="705" y="252">抛出 RuntimeException</text>
+  </g>
+
+  <text x="410" y="300" text-anchor="middle" font-size="12" fill="#6B7280">开启、提交、回滚全部发生在代理层 —— 业务代码对事务无感知</text>
+  <text x="410" y="338" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜@Transactional 工作原理：AOP 代理接管事务边界</text>
+</svg>

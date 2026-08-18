@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 250" width="820" height="250"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="250" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="249" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 主链路：节点 1-5 深蓝，节点 6 目标态青绿 -->
+  <g stroke-width="1.5">
+    <rect x="20"  y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="154" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="288" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="422" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="556" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="690" y="56" width="110" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="75"  y="84">预签名 URL</text>
+    <text x="209" y="84">Range 分片</text>
+    <text x="343" y="84">分片落盘</text>
+    <text x="477" y="84">断点恢复</text>
+    <text x="611" y="84">校验合并</text>
+    <text x="745" y="84">完成下载</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="75"  y="104">OPS 接口</text>
+    <text x="209" y="104">10MB×6 并发</text>
+    <text x="343" y="104">IndexedDB</text>
+    <text x="477" y="104">配额降级内存</text>
+    <text x="611" y="104">分片大小校验</text>
+    <text x="745" y="104">saveBlob</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="132" y1="88" x2="150" y2="88" marker-end="url(#arrow)"/>
+    <line x1="266" y1="88" x2="284" y2="88" marker-end="url(#arrow)"/>
+    <line x1="400" y1="88" x2="418" y2="88" marker-end="url(#arrow)"/>
+    <line x1="534" y1="88" x2="552" y2="88" marker-end="url(#arrow)"/>
+    <line x1="668" y1="88" x2="686" y2="88" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 反馈回路：橙色虚线，失败重试回到分片请求 -->
+  <path d="M 611 122 C 611 168, 209 168, 209 126" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="410" y="162" text-anchor="middle" font-size="11" fill="#6B7280">分片失败重试 · 预签名过期自动刷新</text>
+
+  <text x="410" y="224" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜前端断点续传：HTTP Range 分片 + IndexedDB 持久化</text>
+</svg>

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 面板 A：轮询分发 ===== -->
+  <rect x="40" y="40" width="360" height="290" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">轮询分发（默认）</text>
+  <text x="64" y="93" font-size="12" fill="#6B7280">一人一条轮着派，完全不看忙闲</text>
+
+  <text x="115" y="118" text-anchor="middle" font-size="11" fill="#6B7280">队列 work.queue</text>
+  <rect x="70" y="126" width="90" height="158" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1">
+    <rect x="78" y="138" width="74" height="17" rx="3"/>
+    <rect x="78" y="160" width="74" height="17" rx="3"/>
+    <rect x="78" y="182" width="74" height="17" rx="3"/>
+    <rect x="78" y="204" width="74" height="17" rx="3"/>
+    <rect x="78" y="226" width="74" height="17" rx="3"/>
+    <rect x="78" y="248" width="74" height="17" rx="3"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#252A33">
+    <text x="115" y="151">任务 1</text><text x="115" y="173">任务 2</text>
+    <text x="115" y="195">任务 3</text><text x="115" y="217">任务 4</text>
+    <text x="115" y="239">任务 5</text><text x="115" y="261">任务 6</text>
+  </g>
+
+  <rect x="246" y="122" width="128" height="66" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="310" y="146" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 1（闲）</text>
+  <text x="310" y="168" text-anchor="middle" font-size="11" fill="#6B7280">处理中 1 条 · 很快干完</text>
+
+  <rect x="246" y="222" width="128" height="66" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="310" y="246" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 2（忙）</text>
+  <text x="310" y="268" text-anchor="middle" font-size="11" fill="#6B7280">处理中 3 条 · 大任务阻塞</text>
+
+  <line x1="160" y1="150" x2="240" y2="141" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="200" y="134" text-anchor="middle" font-size="11" fill="#6B7280">1、3、5</text>
+  <line x1="160" y1="230" x2="240" y2="241" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="200" y="256" text-anchor="middle" font-size="11" fill="#6B7280">2、4、6</text>
+
+  <circle cx="70" cy="311" r="3" fill="#E64B35"/>
+  <text x="82" y="315" font-size="12" font-weight="500" fill="#252A33">严格一人一半：忙的更忙、闲的更闲</text>
+
+  <!-- ===== 面板 B：公平分发 ===== -->
+  <rect x="420" y="40" width="360" height="290" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">公平分发（basicQos = 1）</text>
+  <text x="444" y="93" font-size="12" fill="#6B7280">处理完一条、手动 ack 回执，才领下一条</text>
+
+  <text x="495" y="118" text-anchor="middle" font-size="11" fill="#6B7280">队列 work.queue</text>
+  <rect x="450" y="126" width="90" height="158" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1">
+    <rect x="458" y="138" width="74" height="17" rx="3"/>
+    <rect x="458" y="160" width="74" height="17" rx="3"/>
+    <rect x="458" y="182" width="74" height="17" rx="3"/>
+    <rect x="458" y="204" width="74" height="17" rx="3"/>
+    <rect x="458" y="226" width="74" height="17" rx="3"/>
+    <rect x="458" y="248" width="74" height="17" rx="3"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#252A33">
+    <text x="495" y="151">任务 1</text><text x="495" y="173">任务 2</text>
+    <text x="495" y="195">任务 3</text><text x="495" y="217">任务 4</text>
+    <text x="495" y="239">任务 5</text><text x="495" y="261">任务 6</text>
+  </g>
+
+  <rect x="626" y="122" width="128" height="66" rx="8" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="690" y="146" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 1（快）</text>
+  <text x="690" y="168" text-anchor="middle" font-size="11" fill="#6B7280">处理中 1 条 · 速度快</text>
+
+  <rect x="626" y="222" width="128" height="66" rx="8" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="690" y="246" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">消费者 2（慢）</text>
+  <text x="690" y="268" text-anchor="middle" font-size="11" fill="#6B7280">处理中 1 条 · 速度慢</text>
+
+  <line x1="540" y1="150" x2="620" y2="141" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="580" y="134" text-anchor="middle" font-size="11" fill="#6B7280">1、3、4、6</text>
+  <line x1="540" y1="230" x2="620" y2="241" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="580" y="256" text-anchor="middle" font-size="11" fill="#6B7280">2、5</text>
+
+  <!-- ack 回执：处理完才领新的 -->
+  <path d="M624 176 C 596 176, 580 190, 542 192" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowO)"/>
+  <text x="583" y="188" text-anchor="middle" font-size="11" fill="#F39B7F">ack 回执</text>
+
+  <circle cx="450" cy="311" r="3" fill="#00A087"/>
+  <text x="462" y="315" font-size="12" font-weight="500" fill="#252A33">能者多劳：先干完先领，整体吞吐更高</text>
+
+  <text x="410" y="362" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜工作队列的两种分发策略：轮询 vs 公平分发（示意）</text>
+</svg>

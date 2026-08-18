@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" width="820" height="470"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="470" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="469" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 左：三级缓存容器 -->
+  <rect x="50" y="50" width="300" height="330" rx="12" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="200" y="76" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">三级缓存</text>
+
+  <rect x="70" y="88" width="260" height="76" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="90" y="112" font-size="13" font-weight="600" fill="#252A33">一级缓存 · singletonObjects</text>
+  <text x="90" y="134" font-size="11" fill="#6B7280">成品：初始化全部完成</text>
+
+  <rect x="70" y="180" width="260" height="76" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="90" y="204" font-size="13" font-weight="600" fill="#252A33">二级缓存 · earlySingletonObjects</text>
+  <text x="90" y="226" font-size="11" fill="#6B7280">提前暴露的早期引用</text>
+
+  <rect x="70" y="272" width="260" height="76" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="90" y="296" font-size="13" font-weight="600" fill="#252A33">三级缓存 · singletonFactories</text>
+  <text x="90" y="318" font-size="11" fill="#6B7280">对象工厂，可提前生成代理</text>
+
+  <!-- 右：解环五步 -->
+  <line x1="380" y1="86" x2="380" y2="368" stroke="#E8EDF3" stroke-width="1"/>
+  <g fill="#8491B4">
+    <circle cx="380" cy="92"  r="3.5"/>
+    <circle cx="380" cy="158" r="3.5"/>
+    <circle cx="380" cy="224" r="3.5"/>
+    <circle cx="380" cy="290" r="3.5"/>
+    <circle cx="380" cy="356" r="3.5"/>
+  </g>
+  <g font-size="12" fill="#252A33">
+    <text x="394" y="96">① A 实例化完成，把『对象工厂』放入三级缓存</text>
+    <text x="394" y="162">② A 注入属性时需要 B，转身创建 B</text>
+    <text x="394" y="228">③ B 需要 A：从三级缓存取工厂，拿早期引用放入二级</text>
+    <text x="410" y="246" font-size="11" fill="#6B7280">需要代理时，工厂会提前生成并返回</text>
+    <text x="394" y="294">④ B 初始化完成，晋升一级缓存</text>
+    <text x="394" y="360">⑤ A 拿到成品 B，完成自己，也进入一级缓存</text>
+  </g>
+
+  <text x="410" y="402" text-anchor="middle" font-size="11" fill="#6B7280">没有循环依赖时，代理本该在初始化后生成；三级缓存让『提前生成』只在真正需要时发生</text>
+  <text x="410" y="420" text-anchor="middle" font-size="11" fill="#6B7280">Spring Boot 2.6 起默认禁止循环依赖，需显式配置 spring.main.allow-circular-reference=true</text>
+
+  <text x="410" y="448" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜三级缓存如何拆解 A、B 互相依赖的死结</text>
+</svg>

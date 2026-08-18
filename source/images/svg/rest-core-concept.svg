@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 客户端 -->
+  <rect x="40" y="56" width="160" height="170" rx="10" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="120" y="82" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">客户端（调用方）</text>
+  <rect x="56" y="98" width="128" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="120" y="121" text-anchor="middle" font-size="13" fill="#252A33">浏览器前端</text>
+  <rect x="56" y="142" width="128" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="120" y="165" text-anchor="middle" font-size="13" fill="#252A33">手机 App</text>
+
+  <!-- 统一接口 -->
+  <rect x="260" y="56" width="300" height="170" rx="10" fill="#4DBBD5" fill-opacity="0.06" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="410" y="82" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">统一接口 · HTTP 语义</text>
+  <g fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5">
+    <rect x="276" y="96" width="128" height="54" rx="6"/>
+    <rect x="416" y="96" width="128" height="54" rx="6"/>
+    <rect x="276" y="160" width="128" height="54" rx="6"/>
+    <rect x="416" y="160" width="128" height="54" rx="6"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="340" y="118" font-size="13" font-weight="500" fill="#252A33">方法 · 动词</text>
+    <text x="340" y="138" font-size="11" fill="#6B7280">表达做什么</text>
+    <text x="480" y="118" font-size="13" font-weight="500" fill="#252A33">URI · 名词</text>
+    <text x="480" y="138" font-size="11" fill="#6B7280">定位唯一资源</text>
+    <text x="340" y="182" font-size="13" font-weight="500" fill="#252A33">状态码</text>
+    <text x="340" y="202" font-size="11" fill="#6B7280">反馈结果</text>
+    <text x="480" y="182" font-size="13" font-weight="500" fill="#252A33">表示格式</text>
+    <text x="480" y="202" font-size="11" fill="#6B7280">JSON / XML</text>
+  </g>
+
+  <!-- 服务器资源 -->
+  <rect x="620" y="56" width="160" height="170" rx="10" fill="#00A087" fill-opacity="0.05" stroke="#00A087" stroke-width="1.5"/>
+  <text x="700" y="82" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">服务器（资源）</text>
+  <g fill="#FFFFFF" stroke="#00A087" stroke-width="1.5">
+    <rect x="636" y="96" width="128" height="36" rx="6"/>
+    <rect x="636" y="140" width="128" height="36" rx="6"/>
+    <rect x="636" y="184" width="128" height="36" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="700" y="119">/users 用户</text>
+    <text x="700" y="163">/orders 订单</text>
+    <text x="700" y="207">/products 商品</text>
+  </g>
+
+  <!-- 交互箭头 -->
+  <g font-size="11" fill="#6B7280" text-anchor="middle">
+    <text x="230" y="104">HTTP 请求</text>
+    <text x="230" y="216">JSON 响应</text>
+    <text x="590" y="104">操作资源</text>
+    <text x="590" y="216">返回表示</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="206" y1="118" x2="250" y2="118" marker-end="url(#arrow)"/>
+    <line x1="254" y1="204" x2="210" y2="204" marker-end="url(#arrow)"/>
+    <line x1="566" y1="118" x2="610" y2="118" marker-end="url(#arrow)"/>
+    <line x1="614" y1="204" x2="570" y2="204" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 无状态说明 -->
+  <rect x="170" y="252" width="480" height="32" rx="16" fill="#F4F7FA"/>
+  <text x="410" y="273" text-anchor="middle" font-size="12" fill="#6B7280">无状态：每个请求自带全部信息，服务器不记忆上一次请求</text>
+
+  <text x="410" y="314" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜REST 核心思想：URI 定位资源，方法表达意图，状态码反馈结果</text>
+</svg>

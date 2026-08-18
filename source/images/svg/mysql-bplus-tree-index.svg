@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+<rect width="820" height="380" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#5A6472"/></marker></defs>
+<text x="60" y="45" font-size="17" font-weight="600" fill="#252A33">A</text><text x="430" y="45" font-size="17" font-weight="600" fill="#252A33">B</text>
+<rect x="70" y="65" width="220" height="44" rx="8" fill="#3C5488" fill-opacity=".12" stroke="#3C5488" stroke-width="1.5"/><text x="180" y="92" text-anchor="middle" font-size="14" fill="#252A33">根页：键范围</text>
+<line x1="180" y1="109" x2="180" y2="140" stroke="#5A6472" marker-end="url(#a)"/><rect x="70" y="145" width="220" height="44" rx="8" fill="#4DBBD5" fill-opacity=".12" stroke="#4DBBD5" stroke-width="1.5"/><text x="180" y="172" text-anchor="middle" font-size="14" fill="#252A33">非叶子页：继续定位</text>
+<line x1="180" y1="189" x2="180" y2="220" stroke="#5A6472" marker-end="url(#a)"/><rect x="70" y="225" width="220" height="44" rx="8" fill="#00A087" fill-opacity=".12" stroke="#00A087" stroke-width="1.5"/><text x="180" y="252" text-anchor="middle" font-size="14" fill="#252A33">叶子页：完整主键记录</text>
+<rect x="440" y="65" width="300" height="44" rx="8" fill="#3C5488" fill-opacity=".12" stroke="#3C5488" stroke-width="1.5"/><text x="590" y="92" text-anchor="middle" font-size="14" fill="#252A33">二级索引：索引列 + 主键</text>
+<line x1="590" y1="109" x2="590" y2="140" stroke="#5A6472" marker-end="url(#a)"/><rect x="440" y="145" width="300" height="44" rx="8" fill="#4DBBD5" fill-opacity=".12" stroke="#4DBBD5" stroke-width="1.5"/><text x="590" y="172" text-anchor="middle" font-size="14" fill="#252A33">按主键回到聚簇索引</text>
+<line x1="590" y1="189" x2="590" y2="220" stroke="#E64B35" stroke-width="2" marker-end="url(#a)"/><rect x="440" y="225" width="300" height="44" rx="8" fill="#E64B35" fill-opacity=".10" stroke="#E64B35" stroke-width="1.5"/><text x="590" y="252" text-anchor="middle" font-size="14" fill="#252A33">回表：读取未覆盖列</text>
+<text x="410" y="315" text-anchor="middle" font-size="12" fill="#6B7280">若查询列全部位于二级索引叶子，则可直接覆盖，无需回表</text><text x="410" y="350" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜B+Tree 聚簇索引、二级索引与回表路径</text>
+</svg>

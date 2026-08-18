@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 700" width="820" height="700"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="700" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="699" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：穿透 -->
+  <rect x="40" y="40" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">穿透 · 查询根本不存在的数据</text>
+
+  <rect x="70" y="95" width="100" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="120" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">恶意请求</text>
+  <line x1="172" y1="120" x2="198" y2="120" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="202" y="95" width="110" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="257" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">缓存未命中</text>
+  <line x1="314" y1="120" x2="340" y2="120" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="344" y="95" width="130" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="409" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">MySQL 也查无</text>
+  <line x1="476" y1="120" x2="502" y2="120" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="506" y="95" width="130" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="571" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">请求全部穿透</text>
+  <rect x="646" y="95" width="130" height="50" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="711" y="124" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">DB 被打满</text>
+
+  <text x="70" y="175" font-size="12" fill="#6B7280">特征：key 对应的数据不存在，缓存层永远无法命中</text>
+  <circle cx="74" cy="196" r="3" fill="#00A087"/>
+  <text x="84" y="200" font-size="13" fill="#252A33">解法：缓存空值（短 TTL）· 布隆过滤器 · 入参校验</text>
+
+  <!-- 面板 B：击穿 -->
+  <rect x="40" y="250" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="282" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="86" y="281" font-size="14" font-weight="600" fill="#252A33">击穿 · 热点 key 过期的那一瞬间</text>
+
+  <rect x="70" y="305" width="120" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="130" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">热点 key 过期</text>
+  <line x1="192" y1="330" x2="218" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="222" y="305" width="130" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="287" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">并发同时 miss</text>
+  <line x1="354" y1="330" x2="380" y2="330" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="384" y="305" width="120" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="444" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">全部回源 DB</text>
+  <rect x="524" y="305" width="120" height="50" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="584" y="334" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">DB 瞬间尖刺</text>
+  <text x="664" y="326" font-size="12" fill="#6B7280">只塌一个点，</text>
+  <text x="664" y="344" font-size="12" fill="#6B7280">但那个点极热</text>
+
+  <text x="70" y="385" font-size="12" fill="#6B7280">特征：单个热点 key 失效，并发集中打一个点</text>
+  <circle cx="74" cy="406" r="3" fill="#00A087"/>
+  <text x="84" y="410" font-size="13" fill="#252A33">解法：互斥锁（只放一个请求回源）· 逻辑过期</text>
+
+  <!-- 面板 C：雪崩 -->
+  <rect x="40" y="460" width="740" height="195" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="492" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="86" y="491" font-size="14" font-weight="600" fill="#252A33">雪崩 · 大批 key 同时失效或实例宕机</text>
+
+  <rect x="70" y="515" width="150" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="145" y="536" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">大批 key 同刻过期</text>
+  <text x="145" y="554" text-anchor="middle" font-size="11" fill="#6B7280">或 Redis 实例宕机</text>
+  <line x1="222" y1="540" x2="248" y2="540" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="252" y="515" width="130" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="317" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">缓存整体失效</text>
+  <line x1="384" y1="540" x2="410" y2="540" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="414" y="515" width="120" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="474" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">流量全砸 DB</text>
+  <rect x="544" y="515" width="120" height="50" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="604" y="544" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">DB 被压垮</text>
+
+  <text x="70" y="595" font-size="12" fill="#6B7280">特征：成片失效（同一秒集体过期 / 实例整机不可用）</text>
+  <circle cx="74" cy="616" r="3" fill="#00A087"/>
+  <text x="84" y="620" font-size="13" fill="#252A33">解法：TTL 加随机 · 哨兵高可用 · 限流降级 · 多级缓存</text>
+
+  <text x="410" y="682" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜缓存穿透、击穿、雪崩的成因与对策</text>
+</svg>

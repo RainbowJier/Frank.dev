@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 306" width="820" height="306"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="306" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="305" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+  </defs>
+
+  <!-- 主链路 6 节点 -->
+  <g stroke-width="1.5">
+    <rect x="20"  y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="154" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="288" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="422" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="556" y="56" width="110" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="690" y="56" width="110" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="75"  y="84">文件切片</text>
+    <text x="209" y="84">计算指纹</text>
+    <text x="343" y="84">初始化</text>
+    <text x="477" y="84">并发上传</text>
+    <text x="611" y="84">合并分片</text>
+    <text x="745" y="84">上传完成</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="75"  y="104">10MB 每片</text>
+    <text x="209" y="104">SHA-256</text>
+    <text x="343" y="104">三种结果</text>
+    <text x="477" y="104">6并发·跳过已传</text>
+    <text x="611" y="104">compose·校验</text>
+    <text x="745" y="104">清理临时分片</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="132" y1="88" x2="150" y2="88" marker-end="url(#arrow)"/>
+    <line x1="266" y1="88" x2="284" y2="88" marker-end="url(#arrow)"/>
+    <line x1="400" y1="88" x2="418" y2="88" marker-end="url(#arrow)"/>
+    <line x1="534" y1="88" x2="552" y2="88" marker-end="url(#arrow)"/>
+    <line x1="668" y1="88" x2="686" y2="88" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 初始化的三种结果 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="178" width="200" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="310" y="178" width="200" height="56" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+    <rect x="580" y="178" width="200" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="140" y="200">秒传命中</text>
+    <text x="410" y="200">断点续传</text>
+    <text x="680" y="200">全新会话</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="140" y="220">fileId 直接返回</text>
+    <text x="410" y="220">uploadedChunks[]</text>
+    <text x="680" y="220">uploadId + 全部预签名</text>
+  </g>
+
+  <!-- 初始化 → 三种结果 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="320" y1="122" x2="152" y2="174" marker-end="url(#arrow)"/>
+    <line x1="350" y1="122" x2="402" y2="174" marker-end="url(#arrow)"/>
+    <line x1="368" y1="122" x2="668" y2="174" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 断点续传 / 全新会话 → 并发上传 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="452" y1="174" x2="482" y2="124" marker-end="url(#arrow)"/>
+    <line x1="630" y1="174" x2="505" y2="124" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 秒传命中 → 上传完成（跳过上传与合并） -->
+  <path d="M 140 236 L 140 262 L 745 262 L 745 126" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="440" y="256" text-anchor="middle" font-size="11" fill="#6B7280">跳过上传与合并</text>
+
+  <text x="410" y="294" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜分片上传全流程：秒传、断点续传与全新会话三条路径</text>
+</svg>

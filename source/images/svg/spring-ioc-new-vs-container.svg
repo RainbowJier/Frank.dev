@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：传统方式 -->
+  <rect x="40" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">传统方式：自己 new</text>
+
+  <rect x="125" y="95" width="190" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="121" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">OrderService</text>
+  <line x1="220" y1="137" x2="220" y2="151" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="232" y="149" font-size="11" fill="#6B7280">new</text>
+  <rect x="125" y="155" width="190" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="181" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">UserService</text>
+  <line x1="220" y1="197" x2="220" y2="211" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="232" y="209" font-size="11" fill="#6B7280">new</text>
+  <rect x="125" y="215" width="190" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="241" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">UserMapper</text>
+
+  <circle cx="76" cy="278" r="3" fill="#E64B35"/>
+  <text x="88" y="282" font-size="12" fill="#252A33">构造器一变，全链路跟着改</text>
+  <circle cx="76" cy="304" r="3" fill="#8491B4"/>
+  <text x="88" y="308" font-size="12" fill="#252A33">想单测，得连数据库一起造</text>
+
+  <!-- 面板 B：IoC 容器 -->
+  <rect x="420" y="40" width="360" height="300" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">IoC：容器统一发放</text>
+
+  <rect x="500" y="95" width="200" height="40" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="600" y="120" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">Spring IoC 容器</text>
+
+  <line x1="545" y1="137" x2="492" y2="179" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="600" y1="137" x2="600" y2="179" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="655" y1="137" x2="708" y2="179" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="612" y="162" font-size="11" fill="#6B7280">按需注入</text>
+
+  <rect x="437" y="185" width="102" height="40" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="488" y="210" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">OrderService</text>
+  <rect x="549" y="185" width="102" height="40" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="600" y="210" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">UserService</text>
+  <rect x="661" y="185" width="102" height="40" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="712" y="210" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">UserMapper</text>
+
+  <circle cx="456" cy="254" r="3" fill="#00A087"/>
+  <text x="468" y="258" font-size="12" fill="#252A33">只声明需要什么，不管谁造</text>
+  <circle cx="456" cy="280" r="3" fill="#8491B4"/>
+  <text x="468" y="284" font-size="12" fill="#252A33">换实现 = 换配置，不动业务代码</text>
+  <circle cx="456" cy="306" r="3" fill="#8491B4"/>
+  <text x="468" y="310" font-size="12" fill="#252A33">测试时塞个 Mock 进构造器就行</text>
+
+  <text x="410" y="392" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜对象从哪来：自己 new 的耦合链（A）与容器统一装配（B）</text>
+</svg>

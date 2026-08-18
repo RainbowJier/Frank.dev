@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 服务器外框（虚线 = 逻辑归属） -->
+  <rect x="32" y="64" width="756" height="350" rx="12" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="52" y="90" font-size="13" font-weight="600" fill="#252A33">Oracle Server = 实例 + 数据库</text>
+
+  <!-- 左面板：实例（运行态） -->
+  <rect x="56" y="108" width="360" height="286" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="76" y="138" font-size="15" font-weight="600" fill="#252A33">实例 Instance</text>
+  <text x="76" y="158" font-size="11" fill="#6B7280">内存 + 后台进程（运行态）</text>
+
+  <!-- SGA -->
+  <rect x="76" y="170" width="320" height="118" rx="8" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="92" y="192" font-size="12" font-weight="600" fill="#252A33">SGA 系统全局区（共享内存）</text>
+  <g fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5">
+    <rect x="92"  y="204" width="96" height="64" rx="6"/>
+    <rect x="196" y="204" width="96" height="64" rx="6"/>
+    <rect x="300" y="204" width="96" height="64" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="140" y="232">共享池</text>
+    <text x="244" y="232">数据缓冲区</text>
+    <text x="348" y="232">日志缓冲</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="140" y="252">SQL 解析缓存</text>
+    <text x="244" y="252">缓存读入的块</text>
+    <text x="348" y="252">变更记录 Redo</text>
+  </g>
+
+  <!-- 后台进程 -->
+  <text x="76" y="312" font-size="12" font-weight="600" fill="#252A33">后台进程</text>
+  <g fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5">
+    <rect x="76"  y="322" width="60" height="36" rx="6"/>
+    <rect x="141" y="322" width="60" height="36" rx="6"/>
+    <rect x="206" y="322" width="60" height="36" rx="6"/>
+    <rect x="271" y="322" width="60" height="36" rx="6"/>
+    <rect x="336" y="322" width="60" height="36" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="106" y="344">DBWn</text>
+    <text x="171" y="344">LGWR</text>
+    <text x="236" y="344">CKPT</text>
+    <text x="301" y="344">SMON</text>
+    <text x="366" y="344">PMON</text>
+  </g>
+  <text x="76" y="378" font-size="11" fill="#6B7280">写数据块 · 写日志 · 检查点 · 恢复清理 · 进程守护</text>
+
+  <!-- 右面板：数据库（静态文件） -->
+  <rect x="486" y="108" width="302" height="286" rx="10" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="2"/>
+  <text x="506" y="138" font-size="15" font-weight="600" fill="#252A33">数据库 Database</text>
+  <text x="506" y="158" font-size="11" fill="#6B7280">磁盘上的物理文件（静态）</text>
+  <g fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5">
+    <rect x="506" y="172" width="262" height="56" rx="6"/>
+    <rect x="506" y="240" width="262" height="56" rx="6"/>
+    <rect x="506" y="308" width="262" height="56" rx="6"/>
+  </g>
+  <g font-size="13" fill="#252A33">
+    <text x="522" y="196">控制文件</text>
+    <text x="522" y="264">联机重做日志</text>
+    <text x="522" y="332">数据文件</text>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="522" y="214">control01.ctl · 记录库结构与位置</text>
+    <text x="522" y="282">redo01.log · 变更先写日志</text>
+    <text x="522" y="350">users01.dbf · 表与索引的数据</text>
+  </g>
+
+  <!-- 实例 → 文件 的三条写路径 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="420" y1="200" x2="480" y2="200" marker-end="url(#arrow)"/>
+    <line x1="420" y1="268" x2="480" y2="268" marker-end="url(#arrow)"/>
+    <line x1="420" y1="336" x2="480" y2="336" marker-end="url(#arrow)"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="451" y="193">CKPT·检查点</text>
+    <text x="451" y="261">LGWR·写日志</text>
+    <text x="451" y="329">DBWn·写脏块</text>
+  </g>
+
+  <text x="410" y="446" text-anchor="middle" font-size="11" fill="#6B7280">RAC：多个实例可以同时打开同一个数据库（多实例 ↔ 一库）</text>
+  <text x="410" y="478" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜实例（内存 + 进程）运行时读写数据库（磁盘文件）</text>
+</svg>

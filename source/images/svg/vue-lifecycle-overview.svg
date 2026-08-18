@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 744" width="820" height="744"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="744" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="743" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 四个阶段带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="36"  width="740" height="148" rx="10"/>
+    <rect x="40" y="210" width="740" height="148" rx="10"/>
+    <rect x="40" y="384" width="740" height="148" rx="10"/>
+    <rect x="40" y="558" width="740" height="148" rx="10"/>
+  </g>
+
+  <!-- 阶段间主箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="410" y1="184" x2="410" y2="204" marker-end="url(#arrow)"/>
+    <line x1="410" y1="358" x2="410" y2="378" marker-end="url(#arrow)"/>
+    <line x1="410" y1="532" x2="410" y2="552" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 阶段 1：初始化 -->
+  <rect x="64" y="64" width="10" height="10" fill="#3C5488"/>
+  <text x="82" y="74" font-size="14" font-weight="600" fill="#3C5488">初始化阶段</text>
+  <text x="82" y="92" font-size="11" fill="#6B7280">实例创建，响应式数据就绪</text>
+  <rect x="240" y="104" width="190" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="335" y="133" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">beforeCreate</text>
+  <text x="335" y="170" text-anchor="middle" font-size="11" fill="#6B7280">data / methods 不可用</text>
+  <line x1="434" y1="128" x2="470" y2="128" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="480" y="104" width="190" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="575" y="133" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">created</text>
+  <text x="575" y="166" text-anchor="middle" font-size="11" fill="#6B7280">数据可访问 · DOM 未生成</text>
+  <text x="575" y="181" text-anchor="middle" font-size="11" fill="#6B7280">不依赖 DOM 的请求放这里</text>
+
+  <!-- 阶段 2：挂载 -->
+  <rect x="64" y="238" width="10" height="10" fill="#4DBBD5"/>
+  <text x="82" y="248" font-size="14" font-weight="600" fill="#3C5488">挂载阶段</text>
+  <text x="82" y="266" font-size="11" fill="#6B7280">模板编译并渲染到页面</text>
+  <rect x="240" y="278" width="190" height="48" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="335" y="307" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">beforeMount</text>
+  <text x="335" y="344" text-anchor="middle" font-size="11" fill="#6B7280">编译完成，尚未上 DOM</text>
+  <line x1="434" y1="302" x2="470" y2="302" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="480" y="278" width="190" height="48" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="575" y="307" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">mounted</text>
+  <text x="575" y="340" text-anchor="middle" font-size="11" fill="#6B7280">DOM 就绪 · $el 可用</text>
+  <text x="575" y="355" text-anchor="middle" font-size="11" fill="#6B7280">操作 DOM / 初始化图表</text>
+
+  <!-- 阶段 3：更新 -->
+  <rect x="64" y="412" width="10" height="10" fill="#F39B7F"/>
+  <text x="82" y="422" font-size="14" font-weight="600" fill="#3C5488">更新阶段</text>
+  <text x="82" y="440" font-size="11" fill="#6B7280">响应式数据变化触发</text>
+  <rect x="240" y="452" width="190" height="48" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="335" y="481" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">beforeUpdate</text>
+  <text x="335" y="518" text-anchor="middle" font-size="11" fill="#6B7280">数据已变，DOM 未更新</text>
+  <line x1="434" y1="476" x2="470" y2="476" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="480" y="452" width="190" height="48" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="575" y="481" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">updated</text>
+  <text x="575" y="514" text-anchor="middle" font-size="11" fill="#6B7280">DOM 已是新值</text>
+  <text x="575" y="529" text-anchor="middle" font-size="11" fill="#E64B35">此处改数据易死循环</text>
+  <!-- 更新循环：数据变化可重复触发 -->
+  <path d="M 670 476 H 712 Q 720 476 720 468 V 440 Q 720 432 712 432 H 342 Q 335 432 335 440 V 446"
+        fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="527" y="426" text-anchor="middle" font-size="11" fill="#6B7280">数据变化 · 可再次触发</text>
+
+  <!-- 阶段 4：卸载 -->
+  <rect x="64" y="586" width="10" height="10" fill="#8491B4"/>
+  <text x="82" y="596" font-size="14" font-weight="600" fill="#3C5488">卸载阶段</text>
+  <text x="82" y="614" font-size="11" fill="#6B7280">组件移除，清理副作用</text>
+  <rect x="240" y="626" width="190" height="48" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="335" y="655" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">beforeUnmount</text>
+  <text x="335" y="692" text-anchor="middle" font-size="11" fill="#6B7280">实例仍完整，适合清理</text>
+  <line x1="434" y1="650" x2="470" y2="650" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="480" y="626" width="190" height="48" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="575" y="655" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">unmounted</text>
+  <text x="575" y="688" text-anchor="middle" font-size="11" fill="#6B7280">卸载完成 · 子组件均已卸载</text>
+
+  <text x="410" y="728" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Vue 3 组件生命周期全景：四个阶段、八个钩子（Options API 名称）</text>
+</svg>

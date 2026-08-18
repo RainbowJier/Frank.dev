@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 460" width="820" height="460"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="460" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="459" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：主从复制 -->
+  <rect x="40" y="40" width="740" height="210" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">主从复制 · 全量同步 + 增量同步</text>
+
+  <rect x="70" y="92" width="100" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="120" y="121" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">master</text>
+  <rect x="640" y="92" width="100" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="690" y="121" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">replica</text>
+
+  <line x1="174" y1="104" x2="636" y2="104" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="405" y="98" text-anchor="middle" font-size="11" fill="#6B7280">命令传播（异步，不等从库确认）</text>
+  <line x1="636" y1="132" x2="174" y2="132" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="405" y="126" text-anchor="middle" font-size="11" fill="#6B7280">PSYNC（首次 / 断线重连）</text>
+
+  <g>
+    <rect x="70" y="164" width="150" height="44" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+    <text x="145" y="183" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">① PSYNC ? -1</text>
+    <text x="145" y="200" text-anchor="middle" font-size="11" fill="#6B7280">从库什么都还没有</text>
+    <line x1="222" y1="186" x2="244" y2="186" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="248" y="164" width="160" height="44" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+    <text x="328" y="183" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">② BGSAVE 生成 RDB</text>
+    <text x="328" y="200" text-anchor="middle" font-size="11" fill="#6B7280">期间写命令存 backlog</text>
+    <line x1="410" y1="186" x2="432" y2="186" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="436" y="164" width="160" height="44" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+    <text x="516" y="183" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">③ 发送 RDB 并载入</text>
+    <text x="516" y="200" text-anchor="middle" font-size="11" fill="#6B7280">从库清空旧数据后载入</text>
+    <line x1="598" y1="186" x2="620" y2="186" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="624" y="164" width="140" height="44" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+    <text x="694" y="183" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">④ 补发增量命令</text>
+    <text x="694" y="200" text-anchor="middle" font-size="11" fill="#6B7280">追上主库进度</text>
+  </g>
+
+  <text x="70" y="236" font-size="12" fill="#6B7280">断线重连：offset 在 repl_backlog 内 → 只补一段（部分重同步）；超出则退化全量</text>
+
+  <!-- 面板 B：哨兵 -->
+  <rect x="40" y="264" width="740" height="150" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="296" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="86" y="295" font-size="14" font-weight="600" fill="#252A33">哨兵 · 主观下线 → 客观下线 → 自动故障转移</text>
+
+  <g>
+    <rect x="70" y="312" width="120" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="130" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">sdown</text>
+    <text x="130" y="351" text-anchor="middle" font-size="12" fill="#252A33">主观下线</text>
+    <line x1="192" y1="337" x2="214" y2="337" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="218" y="312" width="140" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="288" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">quorum 达标</text>
+    <text x="288" y="351" text-anchor="middle" font-size="12" fill="#252A33">odown 客观下线</text>
+    <line x1="360" y1="337" x2="382" y2="337" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="386" y="312" width="130" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="451" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">哨兵选 leader</text>
+    <text x="451" y="351" text-anchor="middle" font-size="12" fill="#252A33">主持切换</text>
+    <line x1="518" y1="337" x2="540" y2="337" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="544" y="312" width="110" height="50" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="599" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">最优从库</text>
+    <text x="599" y="351" text-anchor="middle" font-size="12" fill="#252A33">升为新主</text>
+    <line x1="656" y1="337" x2="678" y2="337" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <rect x="682" y="312" width="100" height="50" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+    <text x="732" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">客户端</text>
+    <text x="732" y="351" text-anchor="middle" font-size="12" fill="#252A33">改连新主</text>
+  </g>
+
+  <text x="70" y="392" font-size="12" fill="#6B7280">哨兵至少部署 3 个（奇数）；quorum = 判定客观下线所需的票数</text>
+
+  <text x="410" y="440" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜主从复制的数据同步与哨兵的故障转移流程</text>
+</svg>

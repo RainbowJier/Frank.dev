@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+
+  <!-- 请求来源 -->
+  <g stroke-width="1.5">
+    <rect x="40" y="52" width="150" height="50" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="40" y="125" width="150" height="50" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="40" y="198" width="150" height="50" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="115" y="74">正常用户</text>
+    <text x="115" y="147">爬虫脚本</text>
+    <text x="115" y="220">秒杀洪流</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="115" y="92">正常浏览下单</text>
+    <text x="115" y="165">高频恶意抓取</text>
+    <text x="115" y="238">瞬时流量尖峰</text>
+  </g>
+
+  <!-- 来源到限流器的箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5" fill="none">
+    <path d="M190 77 C240 77 255 128 296 140" marker-end="url(#arrow)"/>
+    <path d="M190 150 L296 150" marker-end="url(#arrow)"/>
+    <path d="M190 223 C240 223 255 172 296 160" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 限流器闸门 -->
+  <rect x="301" y="105" width="140" height="90" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="371" y="143" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">接口限流器</text>
+  <text x="371" y="163" text-anchor="middle" font-size="11" fill="#6B7280">阈值内放行</text>
+  <text x="371" y="179" text-anchor="middle" font-size="11" fill="#6B7280">超限拒绝</text>
+
+  <!-- 放行路径 -->
+  <path d="M441 128 C480 128 500 106 552 106" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="487" y="96" text-anchor="middle" font-size="11" fill="#6B7280">放行</text>
+  <rect x="560" y="80" width="210" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="665" y="103" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">后端服务</text>
+  <text x="665" y="123" text-anchor="middle" font-size="11" fill="#6B7280">稳定运行，不被打垮</text>
+
+  <!-- 拒绝路径 -->
+  <path d="M441 172 C480 172 500 218 552 222" fill="none" stroke="#E64B35" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="487" y="214" text-anchor="middle" font-size="11" fill="#6B7280">拒绝</text>
+  <rect x="560" y="196" width="210" height="56" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="665" y="219" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">429 Too Many Requests</text>
+  <text x="665" y="239" text-anchor="middle" font-size="11" fill="#6B7280">礼貌告知稍后再试</text>
+
+  <text x="410" y="282" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜限流的核心思想：让进入系统的流量永远在承受范围内</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" width="820" height="350" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="350" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="349" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+  <text x="40" y="40" font-size="17" font-weight="600" fill="#252A33">SSE 事件流</text>
+  <text x="40" y="63" font-size="11" fill="#6B7280">一次 HTTP 请求，服务器持续写入文本事件</text>
+  <rect x="42" y="90" width="180" height="188" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="598" y="90" width="180" height="188" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="58" y="119" font-size="16" font-weight="600" fill="#3C5488">浏览器</text>
+  <text x="614" y="119" font-size="16" font-weight="600" fill="#00A087">Node.js 服务端</text>
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="62" y="143" width="140" height="44" rx="6" stroke="#3C5488"/>
+    <rect x="62" y="208" width="140" height="44" rx="6" stroke="#3C5488"/>
+    <rect x="618" y="143" width="140" height="44" rx="6" stroke="#00A087"/>
+    <rect x="618" y="208" width="140" height="44" rx="6" stroke="#00A087"/>
+  </g>
+  <g fill="#252A33" text-anchor="middle" font-size="13">
+    <text x="132" y="170">new EventSource()</text>
+    <text x="132" y="235">触发 message 事件</text>
+    <text x="688" y="170">返回 text/event-stream</text>
+    <text x="688" y="235">写入 data + 空行</text>
+  </g>
+  <line x1="222" y1="165" x2="590" y2="165" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="153" text-anchor="middle" font-size="11" fill="#6B7280">GET /events</text>
+  <line x1="598" y1="230" x2="230" y2="230" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="218" text-anchor="middle" font-size="11" fill="#6B7280">event: metric · data: {...}</text>
+  <path d="M132 278 C132 315 688 315 688 278" fill="none" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="410" y="312" text-anchor="middle" font-size="11" fill="#6B7280">断线：按 retry 自动重连</text>
+  <text x="410" y="338" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜SSE 连接、事件推送与浏览器重连</text>
+</svg>

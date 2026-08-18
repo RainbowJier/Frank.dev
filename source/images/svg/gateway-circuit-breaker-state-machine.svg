@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- Closed -->
+  <rect x="95" y="80" width="210" height="72" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="200" y="110" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Closed（关闭）</text>
+  <text x="200" y="132" text-anchor="middle" font-size="11" fill="#6B7280">正常放行 · 统计失败率</text>
+
+  <!-- Open -->
+  <rect x="515" y="80" width="210" height="72" rx="8" fill="#E64B35" fill-opacity="0.12" stroke="#E64B35" stroke-width="2"/>
+  <text x="620" y="110" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Open（打开）</text>
+  <text x="620" y="132" text-anchor="middle" font-size="11" fill="#6B7280">快速失败 · 走降级</text>
+
+  <!-- Half-Open -->
+  <rect x="305" y="280" width="210" height="72" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="2"/>
+  <text x="410" y="310" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Half-Open（半开）</text>
+  <text x="410" y="332" text-anchor="middle" font-size="11" fill="#6B7280">放行少量探测请求</text>
+
+  <!-- Closed -> Open -->
+  <line x1="309" y1="116" x2="511" y2="116" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="100" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">失败率 ≥ 50%</text>
+  <text x="410" y="138" text-anchor="middle" font-size="11" fill="#6B7280">（慢调用比例超阈值同理）</text>
+
+  <!-- Open -> Half-Open -->
+  <path d="M 640 154 C 640 240, 580 306, 523 308" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="652" y="238" font-size="12" font-weight="500" fill="#252A33">冷却期结束</text>
+  <text x="652" y="256" font-size="11" fill="#6B7280">waitDurationInOpenState</text>
+
+  <!-- Half-Open -> Closed -->
+  <path d="M 302 312 C 235 305, 200 240, 200 158" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="188" y="232" text-anchor="end" font-size="12" font-weight="500" fill="#252A33">探测成功 · 恢复</text>
+
+  <!-- Half-Open -> Open（探测失败，虚线） -->
+  <path d="M 465 278 C 500 235, 528 200, 545 158" fill="none" stroke="#5A6472" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="495" y="222" text-anchor="end" font-size="11" fill="#6B7280">任一探测失败</text>
+  <text x="495" y="240" text-anchor="end" font-size="11" fill="#6B7280">重新熔断</text>
+
+  <text x="410" y="380" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜熔断器三态状态机：失败率超阈值跳闸，冷却后半开探测，成功恢复、失败重断</text>
+</svg>

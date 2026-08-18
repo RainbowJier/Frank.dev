@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 580" width="820" height="580"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="580" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="579" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 步骤 1/2/4/5/7/8 实线；3/6 可选虚线 -->
+  <g stroke-width="1.5">
+    <rect x="200" y="48"  width="340" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="200" y="105" width="340" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="200" y="162" width="340" height="44" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-dasharray="6 4"/>
+    <rect x="200" y="219" width="340" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="200" y="276" width="340" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="200" y="333" width="340" height="44" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-dasharray="6 4"/>
+    <rect x="200" y="390" width="340" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="200" y="447" width="340" height="44" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="370" y="67">接口方法调用</text>
+    <text x="370" y="124">模板解析</text>
+    <text x="370" y="181">检索增强（RAG）</text>
+    <text x="370" y="238">记忆装载</text>
+    <text x="370" y="295">调用模型</text>
+    <text x="370" y="352">工具循环</text>
+    <text x="370" y="409">记忆回写</text>
+    <text x="370" y="466">结果转换</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="370" y="84">JDK 动态代理拦截</text>
+    <text x="370" y="141">@SystemMessage · @UserMessage · @V</text>
+    <text x="370" y="198">ContentRetriever 命中 → 注入用户消息</text>
+    <text x="370" y="255">按 memoryId 取历史消息</text>
+    <text x="370" y="312">ChatModel / StreamingChatModel</text>
+    <text x="370" y="369">执行 → 回填 → 再调模型</text>
+    <text x="370" y="426">AI 回答与工具消息入 memory</text>
+    <text x="370" y="483">String / POJO / TokenStream</text>
+  </g>
+
+  <!-- 步骤间箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="370" y1="92"  x2="370" y2="101" marker-end="url(#arrow)"/>
+    <line x1="370" y1="149" x2="370" y2="158" marker-end="url(#arrow)"/>
+    <line x1="370" y1="206" x2="370" y2="215" marker-end="url(#arrow)"/>
+    <line x1="370" y1="263" x2="370" y2="272" marker-end="url(#arrow)"/>
+    <line x1="370" y1="320" x2="370" y2="329" marker-end="url(#arrow)"/>
+    <line x1="370" y1="377" x2="370" y2="386" marker-end="url(#arrow)"/>
+    <line x1="370" y1="434" x2="370" y2="443" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 右侧注释 -->
+  <g font-size="11" fill="#6B7280">
+    <text x="560" y="187">未配置则整段跳过</text>
+    <text x="560" y="301">返回类型决定同步或流式</text>
+    <text x="560" y="358">轮数上限可配</text>
+  </g>
+
+  <!-- 左侧注释 -->
+  <text x="188" y="470" text-anchor="end" font-size="11" fill="#6B7280">结构化输出：</text>
+  <text x="188" y="486" text-anchor="end" font-size="11" fill="#6B7280">POJO 自动生成 Schema</text>
+
+  <text x="410" y="556" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜AiServices 一次调用的执行管道：模板 → 增强 → 记忆 → 模型 → 工具 → 回写 → 转换</text>
+</svg>

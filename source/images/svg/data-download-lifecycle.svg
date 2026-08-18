@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 288" width="820" height="288"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="288" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="287" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+
+  <!-- 主链路：节点 1-6 深蓝，节点 7 目标态青绿 -->
+  <g stroke-width="1.5">
+    <rect x="26"  y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="138" y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="250" y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="362" y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="474" y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="586" y="56" width="96" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="698" y="56" width="96" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="74"  y="84">提交请求</text>
+    <text x="186" y="84">记录入库</text>
+    <text x="298" y="84">投递 MQ</text>
+    <text x="410" y="84">CAS 抢占</text>
+    <text x="522" y="84">GDAL 导出</text>
+    <text x="634" y="84">上传登记</text>
+    <text x="746" y="84">SUCCESS</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="74"  y="104">SETNX 幂等</text>
+    <text x="186" y="104">PROCESSING</text>
+    <text x="298" y="104">basic·core</text>
+    <text x="410" y="104">→EXPORTING</text>
+    <text x="522" y="104">裁剪·加密</text>
+    <text x="634" y="104">MinIO·OPS</text>
+    <text x="746" y="104">统计·删key</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="124" y1="88" x2="134" y2="88" marker-end="url(#arrow)"/>
+    <line x1="236" y1="88" x2="246" y2="88" marker-end="url(#arrow)"/>
+    <line x1="348" y1="88" x2="358" y2="88" marker-end="url(#arrow)"/>
+    <line x1="460" y1="88" x2="470" y2="88" marker-end="url(#arrow)"/>
+    <line x1="572" y1="88" x2="582" y2="88" marker-end="url(#arrow)"/>
+    <line x1="684" y1="88" x2="694" y2="88" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 异常分支：红色虚线回落到 FAILED -->
+  <path d="M 522 122 C 522 168, 520 194, 448 198" fill="none" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowRed)"/>
+  <text x="532" y="176" font-size="11" fill="#6B7280">任一环节异常</text>
+
+  <rect x="300" y="196" width="140" height="52" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="370" y="218" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">FAILED</text>
+  <text x="370" y="236" text-anchor="middle" font-size="11" fill="#6B7280">记录失败原因</text>
+
+  <text x="410" y="274" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜一次下载请求的生命周期与状态流转</text>
+</svg>

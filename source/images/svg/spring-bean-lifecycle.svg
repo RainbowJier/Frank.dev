@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 第一行：创建与装配 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="70" width="150" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="230" y="70" width="150" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="420" y="70" width="150" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="610" y="70" width="150" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">
+    <text x="115" y="93">① 实例化</text>
+    <text x="305" y="93">② 属性填充</text>
+    <text x="495" y="93">③ Aware 回调</text>
+    <text x="685" y="93">④ 初始化前</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="115" y="112">调构造器，字段是 null</text>
+    <text x="305" y="112">@Autowired 注入依赖</text>
+    <text x="495" y="112">拿到容器的自身引用</text>
+    <text x="685" y="112">后置处理器 before</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="194" y1="99" x2="226" y2="99" marker-end="url(#arrow)"/>
+    <line x1="384" y1="99" x2="416" y2="99" marker-end="url(#arrow)"/>
+    <line x1="574" y1="99" x2="606" y2="99" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 换行连接 -->
+  <line x1="685" y1="128" x2="685" y2="196" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 第二行：增强、服役与销毁（自右向左） -->
+  <g stroke-width="1.5">
+    <rect x="610" y="200" width="150" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="420" y="200" width="150" height="58" rx="6" fill="#F39B7F" fill-opacity="0.14" stroke="#F39B7F" stroke-width="2"/>
+    <rect x="230" y="200" width="150" height="58" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="40"  y="200" width="150" height="58" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">
+    <text x="685" y="223">⑤ 初始化</text>
+    <text x="495" y="223">⑥ 初始化后</text>
+    <text x="305" y="223">⑦ 就绪使用</text>
+    <text x="115" y="223">⑧ @PreDestroy</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="685" y="242">@PostConstruct 等回调</text>
+    <text x="495" y="242">AOP 代理常在此生成</text>
+    <text x="305" y="242">容器里存的是它或代理</text>
+    <text x="115" y="242">容器关闭时的销毁回调</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="606" y1="229" x2="576" y2="229" marker-end="url(#arrow)"/>
+    <line x1="416" y1="229" x2="386" y2="229" marker-end="url(#arrow)"/>
+    <line x1="226" y1="229" x2="196" y2="229" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="310" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Bean 生命周期：从构造到销毁的八个阶段（⑥ 是 AOP 的入口）</text>
+</svg>

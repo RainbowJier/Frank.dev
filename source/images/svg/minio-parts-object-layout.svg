@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 中央：MinIO 存储桶 -->
+  <rect x="250" y="56" width="340" height="250" rx="12" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="420" y="86" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">MinIO 存储桶</text>
+
+  <!-- 分片暂存区 -->
+  <rect x="272" y="104" width="130" height="180" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="337" y="128" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">分片暂存区</text>
+  <g fill="#FFFFFF" stroke="#8491B4" stroke-width="1">
+    <rect x="288" y="142" width="98" height="28" rx="4"/>
+    <rect x="288" y="178" width="98" height="28" rx="4"/>
+    <rect x="288" y="214" width="98" height="28" rx="4"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="337" y="160">分片 1</text>
+    <text x="337" y="196">分片 2</text>
+    <text x="337" y="232">分片 N</text>
+  </g>
+
+  <!-- 最终对象 -->
+  <rect x="452" y="150" width="120" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="512" y="178" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">最终对象</text>
+  <text x="512" y="198" text-anchor="middle" font-size="11" fill="#6B7280">{objectName}</text>
+
+  <!-- compose 箭头 -->
+  <line x1="404" y1="182" x2="448" y2="182" stroke="#5A6472" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="426" y="170" text-anchor="middle" font-size="11" fill="#6B7280">compose</text>
+
+  <!-- 左侧：孤儿清理调度器 -->
+  <rect x="40" y="104" width="170" height="96" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="125" y="132" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">孤儿清理调度器</text>
+  <text x="125" y="152" text-anchor="middle" font-size="11" fill="#6B7280">每日 03:00 · 会话聚合</text>
+  <text x="125" y="170" text-anchor="middle" font-size="11" fill="#6B7280">保留 24 小时</text>
+  <line x1="212" y1="152" x2="268" y2="152" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="240" y="140" text-anchor="middle" font-size="11" fill="#6B7280">超期会话</text>
+
+  <!-- 右侧引线标注 -->
+  <circle cx="426" cy="224" r="2.5" fill="#9AA4B2"/>
+  <line x1="426" y1="224" x2="560" y2="224" stroke="#9AA4B2" stroke-width="1"/>
+  <text x="566" y="228" font-size="12" fill="#6B7280">服务端原子拼接，不占应用带宽</text>
+
+  <circle cx="480" cy="252" r="2.5" fill="#9AA4B2"/>
+  <line x1="480" y1="252" x2="560" y2="252" stroke="#9AA4B2" stroke-width="1"/>
+  <text x="566" y="256" font-size="12" fill="#6B7280">合并成功后删除暂存分片</text>
+
+  <!-- 命名规则说明 -->
+  <text x="410" y="344" text-anchor="middle" font-size="11" fill="#6B7280">分片对象名：file-parts/{objectName}.parts/{uploadId}/0000000001（序号定长补零，字典序即分片序）</text>
+
+  <text x="410" y="374" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜分片对象的存储布局：暂存、合并与孤儿清理</text>
+</svg>

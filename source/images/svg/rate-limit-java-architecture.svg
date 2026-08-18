@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 405" width="820" height="405"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="405" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="404" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 三个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="40" width="740" height="90" rx="10"/>
+    <rect x="40" y="150" width="740" height="90" rx="10"/>
+    <rect x="40" y="260" width="740" height="90" rx="10"/>
+  </g>
+
+  <!-- 层名 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="79" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="89">接入层 · Nginx</text>
+    <rect x="64" y="189" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="199">应用层 · 进程内</text>
+    <rect x="64" y="299" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="309">分布式层 · Redis</text>
+  </g>
+
+  <!-- 层间流向箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="410" y1="132" x2="410" y2="147" marker-end="url(#arrow)"/>
+    <line x1="410" y1="242" x2="410" y2="257" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 层内元件：白底彩描边 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#4DBBD5">
+      <rect x="220" y="60" width="190" height="50" rx="6"/>
+      <rect x="426" y="60" width="190" height="50" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="220" y="170" width="190" height="50" rx="6"/>
+      <rect x="426" y="170" width="190" height="50" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="220" y="280" width="190" height="50" rx="6"/>
+      <rect x="426" y="280" width="190" height="50" rx="6"/>
+    </g>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="315" y="82">Nginx limit_req</text><text x="521" y="82">limit_conn</text>
+    <text x="315" y="192">Guava RateLimiter</text><text x="521" y="192">@RateLimit + AOP</text>
+    <text x="315" y="302">INCR + EXPIRE</text><text x="521" y="302">Lua + ZSET</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="315" y="100">限制请求速率（漏桶）</text><text x="521" y="100">限制并发连接数</text>
+    <text x="315" y="210">令牌桶 · 单机版</text><text x="521" y="210">注解式 · 方法级限流</text>
+    <text x="315" y="320">固定窗口计数</text><text x="521" y="320">滑动窗口 · 原子操作</text>
+  </g>
+
+  <!-- 右侧适用说明 -->
+  <g font-size="11" fill="#6B7280" text-anchor="end">
+    <text x="758" y="84">全局粗粒度</text>
+    <text x="758" y="100">先挡一层洪峰</text>
+    <text x="758" y="194">精细到方法</text>
+    <text x="758" y="210">无需中间件</text>
+    <text x="758" y="304">多实例共享阈值</text>
+    <text x="758" y="320">集群统一计数</text>
+  </g>
+
+  <text x="410" y="383" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Java 项目三层限流体系：接入层、应用层、分布式层各司其职</text>
+</svg>

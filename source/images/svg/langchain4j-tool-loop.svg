@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 第一行 -->
+  <g stroke-width="1.5">
+    <rect x="48" y="64" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="258" y="64" width="160" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="672" y="64" width="110" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="435" y="180" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="435" y="276" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <polygon points="560,56 652,92 560,128 468,92" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="133" y="87">组装消息与工具声明</text>
+    <text x="338" y="87">调用模型</text>
+    <text x="560" y="88">带工具调用请求？</text>
+    <text x="727" y="87">流式输出</text>
+    <text x="727" y="105" font-size="11" font-weight="400" fill="#6B7280">最终回答</text>
+    <text x="520" y="203">逐个执行 ToolExecutor</text>
+    <text x="520" y="299">结果追加为工具消息</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="133" y="105">消息列表 + ToolSpecification</text>
+    <text x="338" y="105">带 tools 参数</text>
+    <text x="520" y="221">返回结果 JSON 字符串</text>
+    <text x="520" y="317">ToolExecutionResultMessage</text>
+  </g>
+
+  <!-- 第一行箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="218" y1="92" x2="252" y2="92" marker-end="url(#arrow)"/>
+    <line x1="418" y1="92" x2="462" y2="92" marker-end="url(#arrow)"/>
+    <line x1="656" y1="92" x2="666" y2="92" marker-end="url(#arrow)"/>
+  </g>
+  <text x="660" y="80" text-anchor="middle" font-size="11" fill="#6B7280">否</text>
+  <text x="572" y="150" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <line x1="560" y1="128" x2="560" y2="174" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="520" y1="236" x2="520" y2="270" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 反馈回路 -->
+  <path d="M 435 304 C 348 304 338 218 338 126" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowOrange)"/>
+  <text x="352" y="222" text-anchor="middle" font-size="11" fill="#F39B7F">再次调用模型</text>
+  <text x="352" y="238" text-anchor="middle" font-size="11" fill="#F39B7F">轮数上限可配</text>
+
+  <!-- 说明 -->
+  <text x="48" y="152" font-size="11" fill="#6B7280">并行调用：一条 AiMessage 可含多个请求，逐个执行</text>
+  <text x="48" y="372" font-size="11" fill="#6B7280">循环由 AiServices 引擎驱动，业务代码只提供 ToolExecutor 实现</text>
+
+  <text x="410" y="392" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜工具调用循环：模型决策、框架执行、结果回填、直至收敛</text>
+</svg>

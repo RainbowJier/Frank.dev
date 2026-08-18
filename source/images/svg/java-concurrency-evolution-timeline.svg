@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 270" width="820" height="270"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="270" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="269" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 主轴 -->
+  <line x1="60" y1="150" x2="770" y2="150" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 连接短竖线 -->
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="95"  y1="150" x2="95"  y2="130"/>
+    <line x1="255" y1="150" x2="255" y2="170"/>
+    <line x1="410" y1="150" x2="410" y2="130"/>
+    <line x1="565" y1="150" x2="565" y2="170"/>
+    <line x1="720" y1="150" x2="720" y2="130"/>
+  </g>
+
+  <!-- 里程碑圆点，颜色循环 -->
+  <circle cx="95"  cy="150" r="5" fill="#4DBBD5"/>
+  <circle cx="255" cy="150" r="5" fill="#3C5488"/>
+  <circle cx="410" cy="150" r="5" fill="#00A087"/>
+  <circle cx="565" cy="150" r="5" fill="#F39B7F"/>
+  <circle cx="720" cy="150" r="5" fill="#8491B4"/>
+
+  <!-- 标注上下交错 -->
+  <g text-anchor="middle">
+    <text x="95"  y="104" font-size="13" font-weight="600" fill="#252A33">JDK 1.0 · 1996</text>
+    <text x="95"  y="120" font-size="11" fill="#6B7280">Thread 与 synchronized</text>
+    <text x="255" y="178" font-size="13" font-weight="600" fill="#252A33">JDK 1.2 · 1998</text>
+    <text x="255" y="194" font-size="11" fill="#6B7280">绿色线程 → 原生线程</text>
+    <text x="410" y="104" font-size="13" font-weight="600" fill="#252A33">JDK 1.5 · 2004</text>
+    <text x="410" y="120" font-size="11" fill="#6B7280">JUC 并发工具包发布</text>
+    <text x="565" y="178" font-size="13" font-weight="600" fill="#252A33">JDK 1.8 · 2014</text>
+    <text x="565" y="194" font-size="11" fill="#6B7280">并行流 CompletableFuture</text>
+    <text x="720" y="104" font-size="13" font-weight="600" fill="#252A33">JDK 21 · 2023</text>
+    <text x="720" y="120" font-size="11" fill="#6B7280">虚拟线程 JEP 444</text>
+  </g>
+
+  <text x="410" y="248" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Java 并发 API 三十年演进时间线</text>
+</svg>

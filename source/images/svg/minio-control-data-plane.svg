@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4DBBD5"/>
+    </marker>
+  </defs>
+
+  <!-- 数据面：浏览器 ⇆ MinIO 直连（顶部弧线） -->
+  <path d="M 145 56 C 145 18, 710 18, 710 54" fill="none" stroke="#4DBBD5" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowCyan)"/>
+  <text x="428" y="38" text-anchor="middle" font-size="11" fill="#6B7280">数据面 · 预签名 URL 直连（PUT / GET 分片字节）</text>
+
+  <!-- 浏览器容器 -->
+  <rect x="40" y="60" width="210" height="280" rx="10" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="145" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">浏览器前端</text>
+  <g stroke="#3C5488" stroke-width="1.5">
+    <rect x="56" y="104" width="178" height="90" rx="6" fill="#3C5488" fill-opacity="0.10"/>
+    <rect x="56" y="210" width="178" height="90" rx="6" fill="#3C5488" fill-opacity="0.10"/>
+  </g>
+  <text x="145" y="142" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">chunkUpload.js</text>
+  <text x="145" y="162" text-anchor="middle" font-size="11" fill="#6B7280">切片 · SHA-256 · 并发池</text>
+  <text x="145" y="248" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">resumableDownload.js</text>
+  <text x="145" y="268" text-anchor="middle" font-size="11" fill="#6B7280">Range · IndexedDB · 重试</text>
+
+  <!-- OPS 容器 -->
+  <rect x="330" y="60" width="240" height="280" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="450" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">OPS 服务 · file-info</text>
+  <g stroke="#3C5488" stroke-width="1.5" fill="#FFFFFF">
+    <rect x="346" y="104" width="208" height="48" rx="6"/>
+    <rect x="346" y="160" width="208" height="48" rx="6"/>
+    <rect x="346" y="216" width="208" height="48" rx="6"/>
+    <rect x="346" y="272" width="208" height="48" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="450" y="125">初始化 / 秒传检测</text>
+    <text x="450" y="181">合并分片</text>
+    <text x="450" y="237">预签名下载</text>
+    <text x="450" y="293">中止 / 清理</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="450" y="143">presigned/upload-url</text>
+    <text x="450" y="199">chunk/merge · 幂等校验</text>
+    <text x="450" y="255">download/presigned</text>
+    <text x="450" y="311">chunk/abort</text>
+  </g>
+
+  <!-- 控制面：浏览器 ⇆ OPS（双向实线） -->
+  <line x1="252" y1="152" x2="326" y2="152" stroke="#5A6472" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <line x1="252" y1="252" x2="326" y2="252" stroke="#5A6472" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="289" y="140" text-anchor="middle" font-size="11" fill="#6B7280">控制指令</text>
+  <text x="289" y="240" text-anchor="middle" font-size="11" fill="#6B7280">控制指令</text>
+
+  <!-- MinIO 容器 -->
+  <rect x="640" y="60" width="140" height="280" rx="10" fill="#00A087" fill-opacity="0.05" stroke="#00A087" stroke-width="2"/>
+  <text x="710" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">MinIO</text>
+  <g stroke="#00A087" stroke-width="1.5">
+    <rect x="654" y="104" width="112" height="90" rx="6" fill="#00A087" fill-opacity="0.10"/>
+    <rect x="654" y="210" width="112" height="90" rx="6" fill="#00A087" fill-opacity="0.10"/>
+  </g>
+  <text x="710" y="142" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">分片对象</text>
+  <text x="710" y="162" text-anchor="middle" font-size="11" fill="#6B7280">.parts/ 前缀</text>
+  <text x="710" y="248" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">最终对象</text>
+  <text x="710" y="268" text-anchor="middle" font-size="11" fill="#6B7280">compose 合并</text>
+
+  <!-- 图例 -->
+  <g stroke-width="1.5">
+    <line x1="200" y1="368" x2="240" y2="368" stroke="#5A6472"/>
+    <line x1="420" y1="368" x2="460" y2="368" stroke="#4DBBD5" stroke-dasharray="5 4"/>
+  </g>
+  <text x="250" y="372" font-size="11" fill="#6B7280">控制流（经网关，只传指令）</text>
+  <text x="470" y="372" font-size="11" fill="#6B7280">数据流（分片字节不过应用服务器）</text>
+
+  <text x="410" y="392" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜控制面与数据面分离：服务端只做调度，字节直连对象存储</text>
+</svg>

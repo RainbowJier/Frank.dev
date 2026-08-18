@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" width="820" height="450"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="450" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="449" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+    <marker id="arrowS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 客户端 -->
+  <rect x="360" y="36" width="100" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="62" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">客户端</text>
+
+  <!-- 请求打到节点 B（key 不在 B） -->
+  <line x1="402" y1="78" x2="386" y2="176" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowS)"/>
+  <text x="356" y="120" font-size="11" fill="#6B7280" text-anchor="end">任意节点可接入</text>
+
+  <!-- B 回 MOVED（红虚线） -->
+  <line x1="420" y1="176" x2="440" y2="78" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowR)"/>
+  <text x="456" y="120" font-size="11" fill="#252A33">MOVED：</text>
+  <text x="456" y="136" font-size="11" fill="#252A33">该槽归节点 A</text>
+
+  <!-- 客户端重定向后直连 A（青绿） -->
+  <line x1="376" y1="70" x2="200" y2="176" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="250" y="106" font-size="11" fill="#252A33" text-anchor="end">重定向后直连正确节点</text>
+
+  <!-- 主节点 -->
+  <rect x="110" y="180" width="170" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="195" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">节点 A（主）</text>
+  <text x="195" y="228" text-anchor="middle" font-size="12" fill="#6B7280">slot 0 – 5460</text>
+
+  <rect x="325" y="180" width="170" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">节点 B（主）</text>
+  <text x="410" y="228" text-anchor="middle" font-size="12" fill="#6B7280">slot 5461 – 10922</text>
+
+  <rect x="540" y="180" width="170" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="625" y="206" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">节点 C（主）</text>
+  <text x="625" y="228" text-anchor="middle" font-size="12" fill="#6B7280">slot 10923 – 16383</text>
+
+  <!-- Gossip 通信 -->
+  <line x1="282" y1="196" x2="323" y2="196" stroke="#5A6472" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrowS)"/>
+  <line x1="323" y1="210" x2="282" y2="210" stroke="#5A6472" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrowS)"/>
+  <line x1="497" y1="196" x2="538" y2="196" stroke="#5A6472" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrowS)"/>
+  <line x1="538" y1="210" x2="497" y2="210" stroke="#5A6472" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrowS)"/>
+  <text x="302" y="172" text-anchor="middle" font-size="11" fill="#6B7280">Gossip</text>
+  <text x="517" y="172" text-anchor="middle" font-size="11" fill="#6B7280">Gossip</text>
+
+  <!-- 从节点 -->
+  <g stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" fill="#8491B4" fill-opacity="0.08">
+    <rect x="110" y="300" width="170" height="40" rx="6"/>
+    <rect x="325" y="300" width="170" height="40" rx="6"/>
+    <rect x="540" y="300" width="170" height="40" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="195" y="325">replica of A</text>
+    <text x="410" y="325">replica of B</text>
+    <text x="625" y="325">replica of C</text>
+  </g>
+  <g stroke="#8491B4" stroke-width="1" stroke-dasharray="4 3">
+    <line x1="195" y1="244" x2="195" y2="296" marker-end="url(#arrowS)"/>
+    <line x1="410" y1="244" x2="410" y2="296" marker-end="url(#arrowS)"/>
+    <line x1="625" y1="244" x2="625" y2="296" marker-end="url(#arrowS)"/>
+  </g>
+
+  <!-- 底部说明 -->
+  <text x="410" y="376" text-anchor="middle" font-size="12" fill="#6B7280">slot = CRC16(key) mod 16384；主节点挂掉后其从库自动补位（故障转移内置）</text>
+  <text x="410" y="398" text-anchor="middle" font-size="12" fill="#6B7280">跨 slot 多 key 命令需 hash tag：{user:1001}:name 与 {user:1001}:cart 同槽</text>
+
+  <text x="410" y="432" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Redis Cluster：16384 槽位分片、MOVED 重定向与 Gossip 通信</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 表头 -->
+  <g font-size="13" font-weight="600" fill="#3C5488" text-anchor="middle">
+    <text x="100" y="52">类型</text>
+    <text x="315" y="52">底层编码</text>
+    <text x="625" y="52">典型场景</text>
+  </g>
+  <line x1="40" y1="62" x2="780" y2="62" stroke="#D9DFE8"/>
+
+  <!-- 行 1：String -->
+  <rect x="40" y="68" width="120" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="175" y="68" width="280" height="56" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="470" y="68" width="310" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="100" y="91" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">String</text>
+  <text x="100" y="111" text-anchor="middle" font-size="11" fill="#6B7280">SET / GET / INCR</text>
+  <text x="315" y="102" text-anchor="middle" font-size="13" fill="#252A33">SDS 简单动态字符串</text>
+  <text x="625" y="102" text-anchor="middle" font-size="13" fill="#252A33">缓存对象 · 计数器 · 分布式锁</text>
+
+  <!-- 行 2：Hash -->
+  <rect x="40" y="132" width="120" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="175" y="132" width="280" height="56" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="470" y="132" width="310" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="100" y="155" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Hash</text>
+  <text x="100" y="175" text-anchor="middle" font-size="11" fill="#6B7280">HSET / HGET</text>
+  <text x="315" y="166" text-anchor="middle" font-size="13" fill="#252A33">小数据 listpack · 大数据 hashtable</text>
+  <text x="625" y="166" text-anchor="middle" font-size="13" fill="#252A33">购物车 · 字段级读写</text>
+
+  <!-- 行 3：List -->
+  <rect x="40" y="196" width="120" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="175" y="196" width="280" height="56" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="470" y="196" width="310" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="100" y="219" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">List</text>
+  <text x="100" y="239" text-anchor="middle" font-size="11" fill="#6B7280">LPUSH / BRPOP</text>
+  <text x="315" y="230" text-anchor="middle" font-size="13" fill="#252A33">quicklist（链表套 listpack）</text>
+  <text x="625" y="230" text-anchor="middle" font-size="13" fill="#252A33">最新列表 · 简单队列</text>
+
+  <!-- 行 4：Set -->
+  <rect x="40" y="260" width="120" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="175" y="260" width="280" height="56" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="470" y="260" width="310" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="100" y="283" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Set</text>
+  <text x="100" y="303" text-anchor="middle" font-size="11" fill="#6B7280">SADD / SINTER</text>
+  <text x="315" y="294" text-anchor="middle" font-size="13" fill="#252A33">intset 或 hashtable</text>
+  <text x="625" y="294" text-anchor="middle" font-size="13" fill="#252A33">去重 · 共同好友 · 抽奖</text>
+
+  <!-- 行 5：ZSet -->
+  <rect x="40" y="324" width="120" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="175" y="324" width="280" height="56" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="470" y="324" width="310" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="100" y="347" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">ZSet</text>
+  <text x="100" y="367" text-anchor="middle" font-size="11" fill="#6B7280">ZADD / ZREVRANGE</text>
+  <text x="315" y="358" text-anchor="middle" font-size="13" fill="#252A33">小数据 listpack · 大数据 跳表 + 字典</text>
+  <text x="625" y="358" text-anchor="middle" font-size="13" fill="#252A33">排行榜 · 延迟队列</text>
+
+  <text x="410" y="412" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜五大核心数据结构：底层编码与典型场景</text>
+</svg>

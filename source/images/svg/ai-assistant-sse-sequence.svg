@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 598" width="820" height="598"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="598" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="597" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#3C5488"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8491B4"/>
+    </marker>
+  </defs>
+
+  <!-- 生命线头 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="40"  y="40" width="120" height="34" rx="6" stroke="#4DBBD5"/>
+    <rect x="200" y="40" width="120" height="34" rx="6" stroke="#3C5488"/>
+    <rect x="360" y="40" width="120" height="34" rx="6" stroke="#3C5488"/>
+    <rect x="520" y="40" width="120" height="34" rx="6" stroke="#00A087"/>
+    <rect x="664" y="40" width="120" height="34" rx="6" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="100" y="62">浏览器</text>
+    <text x="260" y="62">ChatController</text>
+    <text x="420" y="62">ChatService</text>
+    <text x="580" y="62">PostgreSQL</text>
+    <text x="724" y="62">LLM 网关</text>
+  </g>
+
+  <!-- 生命线 -->
+  <g stroke="#D9DFE8" stroke-width="1.25">
+    <line x1="100" y1="74" x2="100" y2="548"/>
+    <line x1="260" y1="74" x2="260" y2="548"/>
+    <line x1="420" y1="74" x2="420" y2="548"/>
+    <line x1="580" y1="74" x2="580" y2="548"/>
+    <line x1="724" y1="74" x2="724" y2="548"/>
+  </g>
+
+  <!-- 消息 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="106" y1="104" x2="252" y2="104" marker-end="url(#arrow)"/>
+    <line x1="266" y1="158" x2="412" y2="158" marker-end="url(#arrow)"/>
+    <line x1="426" y1="200" x2="572" y2="200" marker-end="url(#arrow)"/>
+    <line x1="426" y1="230" x2="716" y2="230" marker-end="url(#arrow)"/>
+    <line x1="718" y1="374" x2="426" y2="374" marker-end="url(#arrow)"/>
+    <line x1="426" y1="400" x2="572" y2="400" marker-end="url(#arrow)"/>
+  </g>
+  <g stroke="#9AA4B2" stroke-width="1.5" stroke-dasharray="5 4">
+    <line x1="254" y1="130" x2="108" y2="130" marker-end="url(#arrowGray)"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="178" y="97">① POST /chat/stream</text>
+    <text x="178" y="124">② 返回 SseEmitter</text>
+    <text x="340" y="151">③ stream()（异步线程执行）</text>
+    <text x="500" y="182">④ 落库 user 消息</text>
+    <text x="500" y="195">＋ assistant 占位(sending)</text>
+    <text x="570" y="223">⑤ 流式调用（记忆 / 工具 / RAG 装配后）</text>
+    <text x="570" y="367">⑥ onComplete(全文, tokens)</text>
+    <text x="500" y="393">⑦ 回写 success + 用量与溯源</text>
+  </g>
+
+  <!-- 流式循环分组 -->
+  <rect x="80" y="246" width="672" height="104" rx="8" fill="none" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="92" y="262" font-size="11" fill="#6B7280">流式循环（检索命中先注入提示词，再逐 token 输出）</text>
+  <line x1="718" y1="278" x2="426" y2="278" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="570" y="271" text-anchor="middle" font-size="11" fill="#6B7280">onRetrieved(命中段落 → RagHit)</text>
+  <line x1="718" y1="304" x2="426" y2="304" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="570" y="297" text-anchor="middle" font-size="11" fill="#6B7280">onToken(片段)</text>
+  <line x1="414" y1="332" x2="108" y2="332" stroke="#3C5488" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <text x="260" y="325" text-anchor="middle" font-size="11" fill="#3C5488">event: token</text>
+
+  <!-- done 事件 -->
+  <line x1="414" y1="426" x2="108" y2="426" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+  <text x="260" y="419" text-anchor="middle" font-size="11" fill="#00A087">event: done（messageId · tokens · 引用溯源）</text>
+  <line x1="414" y1="450" x2="108" y2="450" stroke="#9AA4B2" stroke-width="1" stroke-dasharray="5 4" marker-end="url(#arrowGray)"/>
+  <text x="260" y="443" text-anchor="middle" font-size="11" fill="#6B7280">SseEmitter.complete()</text>
+
+  <!-- 停止分组 -->
+  <rect x="80" y="466" width="672" height="74" rx="8" fill="none" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="92" y="480" font-size="11" fill="#6B7280">用户点击「停止生成」（协作式取消）</text>
+  <line x1="106" y1="496" x2="252" y2="496" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="178" y="489" text-anchor="middle" font-size="11" fill="#6B7280">⑧ POST /chat/stop</text>
+  <line x1="266" y1="524" x2="412" y2="524" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="340" y="508" text-anchor="middle" font-size="11" fill="#6B7280">标记 stopped</text>
+  <text x="340" y="522" text-anchor="middle" font-size="11" fill="#6B7280">落库 interrupted</text>
+
+  <text x="410" y="578" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜一次流式对话的完整时序：请求线程即刻释放，RAG 命中先注入提示词，token / done 事件经 SseEmitter 异步推送</text>
+</svg>
