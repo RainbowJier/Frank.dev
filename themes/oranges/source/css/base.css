@@ -1806,9 +1806,10 @@ button:focus-visible {
   word-break: break-word;
 }
 
+/* AI 回复不用气泡，纯文本靠左展示（贴合站点极简风格）；仅用户消息保留深色气泡 */
 .ai-chat-msg-bot .ai-chat-bubble {
-  background-color: var(--bg-ai-bubble-bot);
-  border-bottom-left-radius: 4px;
+  max-width: 100%;
+  padding: 2px 0;
   color: var(--color-text-md-content);
 }
 
@@ -1861,7 +1862,7 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 14px 13px;
+  padding: 8px 0;
 }
 
 .ai-chat-dot {
