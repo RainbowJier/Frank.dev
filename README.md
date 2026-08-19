@@ -45,6 +45,7 @@
 - **文章体验**：代码高亮 + 复制、目录导航与滚动高亮、锚点平滑滚动、上一篇/下一篇
 - **首页动效**：内容错落入场、悬停微交互、跨页过渡（`prefers-reduced-motion` 自动降级）
 - **本地搜索**：原生 `fetch` + `DOMParser` 实现的全文搜索
+- **AI 阅读助手**：文章页悬浮入口 + 侧边聊天面板，提问时把文章全文发给 OpenAI 兼容接口（中转站），流式输出、多轮追问
 - **RSS 订阅**：`hexo-generator-feed` 生成 `/atom.xml`
 - **自动部署**：推送 `main` 分支即通过 GitHub Actions 构建并发布
 
@@ -133,6 +134,24 @@ description: 一句话项目简介
 - 动画统一定义在 `themes/oranges/source/css/base.css` 末尾「动效与细节」段
 - 头像与 favicon 资源在 `source/images/favicon.png`，直接覆盖即换图
 - 文章目录 `catalog`、代码复制 `codeBlock`、搜索 `search` 等功能均有独立开关
+
+## AI 阅读助手配置
+
+文章页右下角工具栏的 AI 入口，配置在 `_config.oranges.yml` 的 `aiChat` 块：
+
+```yaml
+aiChat:
+  enable: true
+  endpoint: ""            # OpenAI 兼容接口完整地址（中转站），留空则不渲染
+  apiKey: ""              # 优先读环境变量 AI_CHAT_KEY
+  model: "glm-4.7-flash"  # 按中转站可用模型填写
+  stream: true            # 中转站不支持 SSE 透传时改 false
+  maxContextTurns: 6      # 每次请求携带的最近对话轮数
+```
+
+**key 的注入方式（避免进公开仓库）**：GitHub 仓库 `Settings → Secrets and variables → Actions` 添加 `AI_CHAT_KEY`，`deploy.yml` 构建时会通过环境变量传给 Hexo；本地联调用 `AI_CHAT_KEY=sk-xxx pnpm server`。
+
+**安全须知**：前端直连方案下，key 会出现在部署后的网页源码中（用户知情选择），任何访客都可能提取。务必在中转站侧为该 key 单独设置额度上限/限流，且不要使用与付费服务共用的 key。
 
 ## 部署
 

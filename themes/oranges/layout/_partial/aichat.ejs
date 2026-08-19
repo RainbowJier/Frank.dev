@@ -1,0 +1,74 @@
+<%
+  // 文章页 AI 阅读助手：tools-bar 图标 + 侧边聊天面板。
+  // 仅在真实文章页渲染；endpoint 或 apiKey 任一缺失时整块不输出。
+  var aiChat = theme.aiChat || {}
+  var aiChatKey = (process.env.AI_CHAT_KEY || aiChat.apiKey || '').trim()
+  if (aiChat.enable && aiChat.endpoint && aiChatKey && is_post()) {
+    var aiChatConfig = {
+      endpoint: aiChat.endpoint,
+      apiKey: aiChatKey,
+      model: aiChat.model || '',
+      stream: aiChat.stream !== false,
+      maxContextTurns: aiChat.maxContextTurns || 6,
+      articleTitle: page.title || '',
+      i18n: {
+        send: __('aiChatSend'),
+        stop: __('aiChatStop'),
+        netError: __('aiChatNetError'),
+        authError: __('aiChatAuthError'),
+        rateError: __('aiChatRateError'),
+        serverError: __('aiChatServerError'),
+        aborted: __('aiChatAborted')
+      }
+    }
+%>
+  <div class="ai-chat-icon tools-bar-item" id="ai-chat-icon">
+    <a href="javascript: void(0)" aria-label="<%= __('aiChat') %>" role="button">
+      <svg class="ai-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.85-.93L3 20.5l1.46-5.4A8.5 8.5 0 1 1 21 11.5Z"/>
+        <path d="M12.5 7.4l.75 2.05 2.05.75-2.05.75-.75 2.05-.75-2.05-2.05-.75 2.05-.75.75-2.05Z"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="ai-chat-backdrop" id="ai-chat-backdrop"></div>
+
+  <aside class="ai-chat-panel" id="ai-chat-panel" role="dialog" aria-modal="true" aria-label="<%= __('aiChat') %>">
+    <header class="ai-chat-header">
+      <span class="ai-chat-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.85-.93L3 20.5l1.46-5.4A8.5 8.5 0 1 1 21 11.5Z"/>
+          <path d="M12.5 7.4l.75 2.05 2.05.75-2.05.75-.75 2.05-.75-2.05-2.05-.75 2.05-.75.75-2.05Z"/>
+        </svg>
+      </span>
+      <div class="ai-chat-heading">
+        <span class="ai-chat-name"><%= __('aiChat') %></span>
+        <span class="ai-chat-subtitle"><%= __('aiChatSubtitle') %></span>
+      </div>
+      <button type="button" class="ai-chat-close" id="ai-chat-close" aria-label="<%= __('aiChatClose') %>">
+        <i class="iconfont icon-close"></i>
+      </button>
+    </header>
+    <div class="ai-chat-messages" id="ai-chat-messages" aria-live="polite">
+      <div class="ai-chat-msg ai-chat-msg-bot">
+        <div class="ai-chat-bubble"><%= __('aiChatWelcome') %></div>
+      </div>
+    </div>
+    <div class="ai-chat-inputbar">
+      <textarea id="ai-chat-input" rows="1" placeholder="<%= __('aiChatPlaceholder') %>" aria-label="<%= __('aiChatPlaceholder') %>"></textarea>
+      <button type="button" class="ai-chat-send" id="ai-chat-send" aria-label="<%= __('aiChatSend') %>">
+        <svg class="ai-chat-send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21.5 2.5 10.8 13.2"/>
+          <path d="M21.5 2.5 14.5 21.5l-3.7-8.3-8.3-3.7 19-7Z"/>
+        </svg>
+        <svg class="ai-chat-stop-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="7" y="7" width="10" height="10" rx="2" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+    <div class="ai-chat-footnote"><%= __('aiChatDisclaimer') %></div>
+  </aside>
+
+  <script type="application/json" id="ai-chat-config"><%- JSON.stringify(aiChatConfig).replace(/</g, '\\u003c') %></script>
+  <%- js(['/js/aichat.js']) %>
+<% } %>

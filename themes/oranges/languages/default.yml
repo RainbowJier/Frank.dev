@@ -28,3 +28,16 @@ updateTime: Update time
 about: About
 posts_count: Posts
 projects: Projects
+aiChat: 'AI Reading Assistant'
+aiChatSubtitle: 'Answers based on this article'
+aiChatWelcome: 'Hi! I am the AI assistant for this article. Ask me anything about it.'
+aiChatPlaceholder: 'Ask a question about this article...'
+aiChatSend: 'Send'
+aiChatStop: 'Stop generating'
+aiChatClose: 'Close'
+aiChatDisclaimer: 'AI-generated, for reference only'
+aiChatNetError: 'Network request failed. Please try again later.'
+aiChatAuthError: 'Invalid or unauthorized API key. Please contact the site owner.'
+aiChatRateError: 'Too many requests. Please try again later.'
+aiChatServerError: 'Service error ({n}). Please try again later.'
+aiChatAborted: 'Generation stopped'

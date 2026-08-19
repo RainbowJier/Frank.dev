@@ -23,6 +23,13 @@
   --bg-block-md-table: #ffffff;
   --bg-block-md-table-2: #f6f8fa;
   --color-border-md-table: #dfe2e5;
+  --bg-ai-panel: rgb(255 255 255 / 97%);
+  --border-ai-panel: rgba(0, 0, 0, 0.08);
+  --bg-ai-bubble-bot: rgba(0, 0, 0, 0.045);
+  --bg-ai-bubble-user: #3a3f49;
+  --color-ai-bubble-user: #ffffff;
+  --bg-ai-input: rgba(0, 0, 0, 0.035);
+  --color-ai-error: #c0504a;
 }
 
 /* dark scheme */
@@ -50,4 +57,11 @@
   --bg-block-md-table: #2E3440;
   --bg-block-md-table-2: #313744;
   --color-border-md-table: #4c566a;
+  --bg-ai-panel: rgb(41 46 58 / 97%);
+  --border-ai-panel: rgba(255, 255, 255, 0.08);
+  --bg-ai-bubble-bot: rgba(255, 255, 255, 0.06);
+  --bg-ai-bubble-user: #c8ceda;
+  --color-ai-bubble-user: #2E3440;
+  --bg-ai-input: rgba(255, 255, 255, 0.05);
+  --color-ai-error: #e5837b;
 }

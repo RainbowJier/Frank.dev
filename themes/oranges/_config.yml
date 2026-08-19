@@ -7,6 +7,7 @@
   # prevnext: 文章末尾的上一页与下一页
   # footer: 页脚信息
   # search: 文章搜索
+  # aiChat: 文章页 AI 阅读助手
   # colorSwitch: 深/浅配色切换
   # postShare: 文章分享
   # codeBlock: 代码块配置
@@ -116,7 +117,19 @@ footer:
 # 文章搜索
 search:
   enable: true
-  placeholder: 
+  placeholder:
+
+# 文章页 AI 阅读助手（仅文章页显示，endpoint 与 apiKey 均就绪后才渲染）
+aiChat:
+  enable: true
+  # OpenAI 兼容接口完整地址
+  endpoint: ""
+  # API Key，也可用环境变量 AI_CHAT_KEY 注入
+  apiKey: ""
+  model: "glm-4.7-flash"
+  stream: true
+  # 每次请求携带的最近对话轮数
+  maxContextTurns: 6
 
 # 深/浅配色切换
 colorSwitch:
