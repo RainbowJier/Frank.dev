@@ -741,6 +741,21 @@ a.home-exp-item {
   padding: 0 10px;
 }
 
+/* 分页局部刷新的加载态 */
+.post-navigation.is-loading,
+.post-list.is-loading {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.post-list {
+  transition: opacity 0.2s ease;
+}
+
+.post-navigation {
+  transition: opacity 0.2s ease;
+}
+
 @media (max-width: 888px) {
   .post-navigation {
     padding: 20px 0;
