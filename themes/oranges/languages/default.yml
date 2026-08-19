@@ -1,13 +1,22 @@
 categories: Categories
 search: Search...
-searchFirst: First search, index file loading, please wait...
-searchNoResult: No result
+searchFirst: Loading the search index, please wait...
+searchNoResult: No results found. Try different keywords.
 searchFilesNotfound: The search.xml file was not found, please refer to：
-searchServiceErrors: The request failed, Try to refresh the page or try again later.
+searchServiceErrors: The request failed. Try to refresh the page or try again later.
+searchClear: Clear
+searchClose: Close
+searchResultCount: '{n} results'
+searchResultHint: '↑↓ Select · ↵ Open'
 tags: Tags
 prev: Prev
 next: Next
 archive_a: Archives
+archivesViewLabel: Browse mode
+archivesViewTime: By Time
+archivesViewGroup: By Topic
+archivesTotal: '{n} posts'
+archivesGroupCount: '{n} posts'
 category: Category
 tag: Tag
 catalog: Contents

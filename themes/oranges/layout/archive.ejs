@@ -1,23 +1,71 @@
-<!-- 文章页（原归档页），按年份降序归类展示博客文章，url形式：https://yoursite/archives/ -->
+<!-- 文章页（原归档页），支持「按时间」「按分组」两种浏览方式，url形式：https://yoursite/archives/ -->
+<!-- 按时间：沿用年份分组，按发布时间降序 -->
+<!-- 按分组：按文章所在目录（技术专栏）归类，组内按时间降序，组间按最近一篇的发布时间排序 -->
 
-<!-- last: 按年份把文章分组，当前遍历到的年份 -->
-<!-- now: 当前遍历到的文章的发布年份 -->
+<%
+  // 只列博客文章；项目经历有独立的 /projects/ 页面
+  var blogPosts = site.posts.filter(function(item) {
+    return !(item.categories.data || []).some(function(c) { return c.name === '项目经历'; });
+  }).sort('date', -1).data;
+
+  // 专栏目录名 → 展示名（与 source/_posts/articles 下的子目录对应，新增目录时在此补一行）
+  var groupDisplayNames = {
+    'Java': 'Java',
+    'MYSQL': 'MySQL',
+    'Redis': 'Redis',
+    'RabbitMQ': 'RabbitMQ',
+    'Oracle': 'Oracle',
+    'Vue': 'Vue',
+    'AI': 'AI',
+    'RESTful': 'RESTful',
+    'MinIO': 'MinIO',
+    'http-sse-websocket': 'SSE / WebSocket'
+  };
+
+  // 用源路径判断所属专栏（_posts/articles/<目录>/<文件>.md）；permalink 形如 .../articles/<目录>/<slug>/，
+  // 但 articles 根目录下的散文名为 .../articles/<slug>/，形状相同，故仅作兜底并要求两段路径。
+  // 不在子目录的归入「其他」
+  var groupOf = function(item) {
+    var source = String(item.source || '').replace(/\\/g, '/');
+    var match = source.match(/_posts\/articles\/([^/]+)\/[^/]+$/);
+    if (match) return groupDisplayNames[match[1]] || match[1];
+    match = String(item.path || '').match(/articles\/([^/]+)\/[^/]+\/$/);
+    if (match) return groupDisplayNames[match[1]] || match[1];
+    return '其他';
+  };
+
+  var groups = [];
+  var groupIndex = {};
+  blogPosts.forEach(function(item) {
+    var name = groupOf(item);
+    if (!(name in groupIndex)) {
+      groupIndex[name] = { name: name, posts: [] };
+      groups.push(groupIndex[name]);
+    }
+    groupIndex[name].posts.push(item);
+  });
+%>
 
 <div class="container archives">
-  <div class="post-list">
-    <%
-      var prev = -10086;// prev year
-      var curr;// curr year, ever step be updated
+  <div class="archives-toolbar">
+    <span class="archives-total"><%= __('archivesTotal').replace('{n}', blogPosts.length) %></span>
+    <div class="archives-switch" role="group" aria-label="<%= __('archivesViewLabel') %>">
+      <button type="button" class="archives-switch-item active" data-view="time" aria-pressed="true"><%= __('archivesViewTime') %></button>
+      <button type="button" class="archives-switch-item" data-view="group" aria-pressed="false"><%= __('archivesViewGroup') %></button>
+    </div>
+  </div>
 
-      // 只列博客文章；项目经历有独立的 /projects/ 页面
-      site.posts.filter(function(item) {
-        return !(item.categories.data || []).some(function(c) { return c.name === '项目经历'; });
-      }).sort('date', -1).each(function(item, index) {
-        curr = item.date.year()
+  <!-- 按时间视图：年份分组 -->
+  <div class="post-list archives-view" data-view="time">
+    <%
+      var prev = -10086; // 上一条文章的年份
+    %>
+    <% blogPosts.forEach(function(item) { %>
+      <%
+        var curr = item.date.year();
         if (curr !== prev) {
           prev = curr;
       %>
-        <!-- 后续文章的发布年份呈现 -->
         <div class="content-title">
           <h2>
             <span><%- curr %></span>
@@ -34,8 +82,30 @@
           </a>
         </div>
       </div>
-    <%
-      });
-    %>
+    <% }) %>
+  </div>
+
+  <!-- 按分组视图：技术专栏分组 -->
+  <div class="post-list archives-view hidden" data-view="group">
+    <% groups.forEach(function(group) { %>
+      <div class="content-title archives-group-title">
+        <h2>
+          <span><%- group.name %></span>
+          <span class="archives-group-count"><%= __('archivesGroupCount').replace('{n}', group.posts.length) %></span>
+        </h2>
+      </div>
+      <% group.posts.forEach(function(item) { %>
+        <div class="post-item" title="<%- item.title %>">
+          <div class="time-m-d"><%- item.date.format("YYYY-MM-DD") %></div>
+          <div class="title">
+            <a href="<%- url_for(item.path) %>">
+              <span><%- item.title %></span>
+            </a>
+          </div>
+        </div>
+      <% }) %>
+    <% }) %>
   </div>
 </div>
+
+<%- js(['/js/archivesView.js']) %>

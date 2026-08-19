@@ -101,7 +101,7 @@ navbar:
     key: categories
   -
     name: 标签
-    enable: true
+    enable: false
     path: /tags/
     key: tags
   -

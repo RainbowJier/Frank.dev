@@ -1,30 +1,30 @@
 <% if (theme.search.enable) { %>
   <div class="search-icon tools-bar-item" id="search-icon">
-    <a href="javascript: void(0)">
+    <a href="javascript: void(0)" aria-label="<%= __('search') %>">
       <i class="iconfont icon-search"></i>
     </a>
   </div>
 
-  <div class="search-overlay hidden">
-    <div class="search-content" tabindex="0">
+  <div class="search-overlay hidden" role="dialog" aria-modal="true" aria-label="<%= __('search') %>">
+    <div class="search-content">
       <div class="search-title">
-        <span class="search-icon-input">
-          <a href="javascript: void(0)">
-            <i class="iconfont icon-search"></i>
-          </a>
+        <span class="search-icon-input" aria-hidden="true">
+          <i class="iconfont icon-search"></i>
         </span>
         <% if (theme.search.placeholder) { %>
-          <input type="text" class="search-input" id="search-input" placeholder="<%- theme.search.placeholder %>">
+          <input type="text" class="search-input" id="search-input" placeholder="<%- theme.search.placeholder %>" aria-label="<%- theme.search.placeholder %>">
         <% } else { %>
-          <input type="text" class="search-input" id="search-input" placeholder="<%= __('search') %>">
+          <input type="text" class="search-input" id="search-input" placeholder="<%= __('search') %>" aria-label="<%= __('search') %>">
         <% } %>
-        <span class="search-close-icon" id="search-close-icon">
-          <a href="javascript: void(0)">
-            <i class="iconfont icon-close"></i>
-          </a>
-        </span>
+        <button type="button" class="search-clear hidden" id="search-clear" aria-label="<%= __('searchClear') %>">
+          <i class="iconfont icon-close"></i>
+        </button>
+        <button type="button" class="search-close" id="search-close" aria-label="<%= __('searchClose') %>">
+          <span class="search-esc-kbd"><kbd>Esc</kbd></span>
+          <i class="iconfont icon-close search-close-icon"></i>
+        </button>
       </div>
-      <div class="search-result" id="search-result"></div>
+      <div class="search-result hidden" id="search-result"></div>
     </div>
   </div>
 
@@ -32,81 +32,194 @@
     (() => {
       const input = document.querySelector('#search-input')
       const overlay = document.querySelector('.search-overlay')
-      const result = document.querySelector('#search-result')
-      const searchIcon = document.querySelector('#search-icon')
-      const closeIcon = document.querySelector('#search-close-icon')
+      const resultBox = document.querySelector('#search-result')
+      const trigger = document.querySelector('#search-icon')
+      const clearButton = document.querySelector('#search-clear')
+      const closeButton = document.querySelector('#search-close')
+      const EXCERPT_BEFORE = 24
+      const EXCERPT_LENGTH = 110
+      const RESULT_LIMIT = 50
       let entries = null
+      let loadPromise = null
+      let debounceTimer = 0
+      let activeIndex = -1
 
-      const setResultMessage = (message, link) => {
-        result.replaceChildren()
-        const list = document.createElement('ul')
-        const item = document.createElement('span')
-        item.className = 'local-search-empty'
-        item.textContent = message
-        list.appendChild(item)
+      const stripTags = value => {
+        const node = document.createElement('div')
+        node.innerHTML = value
+        return (node.textContent || '').replace(/\s+/g, ' ').trim()
+      }
+
+      const setStatus = (message, options) => {
+        const { spinner = false, link = null } = options || {}
+        resultBox.classList.remove('hidden')
+        resultBox.replaceChildren()
+        const status = document.createElement('div')
+        status.className = 'search-status'
+        if (spinner) {
+          const spin = document.createElement('span')
+          spin.className = 'search-spinner'
+          spin.setAttribute('aria-hidden', 'true')
+          status.appendChild(spin)
+        }
+        const text = document.createElement('span')
+        text.textContent = message
+        status.appendChild(text)
         if (link) {
           const anchor = document.createElement('a')
           anchor.href = link.href
           anchor.target = '_blank'
           anchor.rel = 'noreferrer'
           anchor.textContent = link.label
-          list.appendChild(anchor)
+          status.appendChild(anchor)
         }
-        result.appendChild(list)
+        resultBox.appendChild(status)
       }
 
-      const stripTags = value => {
-        const node = document.createElement('div')
-        node.innerHTML = value
-        return node.textContent || ''
+      const hideResult = () => {
+        resultBox.classList.add('hidden')
+        resultBox.replaceChildren()
+      }
+
+      // 把文本按关键词命中区间拆成 text 节点 + <mark>，不做 innerHTML 拼接，避免注入
+      const appendHighlighted = (parent, text, keywords) => {
+        const lower = text.toLowerCase()
+        const ranges = []
+        keywords.forEach(keyword => {
+          let index = lower.indexOf(keyword)
+          while (index !== -1) {
+            ranges.push([index, index + keyword.length])
+            index = lower.indexOf(keyword, index + keyword.length)
+          }
+        })
+        if (!ranges.length) {
+          parent.appendChild(document.createTextNode(text))
+          return
+        }
+        ranges.sort((a, b) => a[0] - b[0])
+        let cursor = 0
+        ranges.forEach(([start, end]) => {
+          if (start < cursor) {
+            cursor = Math.max(cursor, end)
+            return
+          }
+          if (start > cursor) parent.appendChild(document.createTextNode(text.slice(cursor, start)))
+          const mark = document.createElement('mark')
+          mark.textContent = text.slice(start, end)
+          parent.appendChild(mark)
+          cursor = end
+        })
+        if (cursor < text.length) parent.appendChild(document.createTextNode(text.slice(cursor)))
+      }
+
+      const countOccurrences = (text, keyword, cap) => {
+        let count = 0
+        let index = text.indexOf(keyword)
+        while (index !== -1 && count < cap) {
+          count += 1
+          index = text.indexOf(keyword, index + keyword.length)
+        }
+        return count
+      }
+
+      // 相关度排序：标题命中权重远高于正文，标题前缀命中再加权，正文更早命中略占优
+      const searchEntries = keywords => {
+        const matches = []
+        entries.forEach((entry, order) => {
+          let score = 0
+          let firstIndex = -1
+          let matched = true
+          keywords.forEach(keyword => {
+            const titleHits = countOccurrences(entry.titleLower, keyword, 5)
+            const contentHits = countOccurrences(entry.contentLower, keyword, 100)
+            if (!titleHits && !contentHits) {
+              matched = false
+              return
+            }
+            score += titleHits * 80 + Math.min(contentHits, 25) * 2
+            if (entry.titleLower.startsWith(keyword)) score += 40
+            const index = entry.contentLower.indexOf(keyword)
+            if (index !== -1) firstIndex = firstIndex === -1 ? index : Math.min(firstIndex, index)
+          })
+          if (!matched) return
+          if (firstIndex > 0) score += Math.max(0, 10 - Math.floor(firstIndex / 400))
+          matches.push({ entry, score, firstIndex, order })
+        })
+        matches.sort((a, b) => b.score - a.score || a.order - b.order)
+        return matches
       }
 
       const renderResults = () => {
-        const keywords = input.value.trim().toLowerCase().split(/[\s\-]+/).filter(Boolean)
-        result.replaceChildren()
-        if (!keywords.length) return
+        activeIndex = -1
+        const keywords = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean)
+        if (!keywords.length || !entries) {
+          hideResult()
+          return
+        }
+        const matches = searchEntries(keywords)
+        if (!matches.length) {
+          setStatus('<%= __('searchNoResult') %>')
+          return
+        }
+
         const list = document.createElement('ul')
         list.className = 'search-result-list'
-        let matches = 0
-
-        entries.forEach(entry => {
-          const title = (entry.title || 'Untitled').trim()
-          const content = stripTags(entry.content || '').trim()
-          const titleLower = title.toLowerCase()
-          const contentLower = content.toLowerCase()
-          if (!content || !keywords.every(keyword => titleLower.includes(keyword) || contentLower.includes(keyword))) return
-
-          const firstOccurrence = Math.max(0, ...keywords.map(keyword => {
-            const index = contentLower.indexOf(keyword)
-            return index < 0 ? 0 : index
-          }))
-          const excerpt = content.slice(Math.max(0, firstOccurrence - 20), firstOccurrence + 80)
-          const titleLink = document.createElement('a')
-          titleLink.className = 'search-result-title'
-          titleLink.href = entry.url
-          titleLink.textContent = title
-
+        matches.slice(0, RESULT_LIMIT).forEach(match => {
           const item = document.createElement('li')
-          item.appendChild(titleLink)
-          const abstract = document.createElement('p')
+          item.className = 'search-result-item'
+          const link = document.createElement('a')
+          link.className = 'search-result-link'
+          link.href = match.entry.url
+          const title = document.createElement('span')
+          title.className = 'search-result-title'
+          appendHighlighted(title, match.entry.title || 'Untitled', keywords)
+          const start = Math.max(0, match.firstIndex - EXCERPT_BEFORE)
+          const abstract = document.createElement('span')
           abstract.className = 'search-result-abstract'
-          abstract.textContent = `${excerpt}${excerpt.length < content.length ? '...' : ''}`
-          item.appendChild(abstract)
+          if (start > 0) abstract.appendChild(document.createTextNode('…'))
+          appendHighlighted(abstract, match.entry.content.slice(start, start + EXCERPT_LENGTH), keywords)
+          if (start + EXCERPT_LENGTH < match.entry.content.length) abstract.appendChild(document.createTextNode('…'))
+          link.appendChild(title)
+          link.appendChild(abstract)
+          item.appendChild(link)
           list.appendChild(item)
-          matches += 1
         })
 
-        if (matches) {
-          result.appendChild(list)
-        } else {
-          setResultMessage('<%= __('searchNoResult') %>')
-        }
+        const footer = document.createElement('div')
+        footer.className = 'search-result-footer'
+        const count = document.createElement('span')
+        count.className = 'search-result-count'
+        count.textContent = '<%= __('searchResultCount') %>'.replace('{n}', matches.length)
+        footer.appendChild(count)
+        const hints = document.createElement('span')
+        hints.className = 'search-result-hints'
+        hints.textContent = '<%= __('searchResultHint') %>'
+        footer.appendChild(hints)
+
+        resultBox.classList.remove('hidden')
+        resultBox.replaceChildren(list, footer)
+      }
+
+      const moveActive = step => {
+        const items = Array.from(resultBox.querySelectorAll('.search-result-item'))
+        if (!items.length) return
+        if (activeIndex === -1) activeIndex = step > 0 ? 0 : items.length - 1
+        else activeIndex = (activeIndex + step + items.length) % items.length
+        items.forEach((item, index) => item.classList.toggle('active', index === activeIndex))
+        items[activeIndex].scrollIntoView({ block: 'nearest' })
+      }
+
+      const openResult = () => {
+        const link = resultBox.querySelector('.search-result-item.active .search-result-link')
+          || resultBox.querySelector('.search-result-item .search-result-link')
+        if (link) window.location.href = link.href
       }
 
       const loadSearchIndex = () => {
-        if (entries) return Promise.resolve()
-        setResultMessage('<%= __('searchFirst') %>')
-        return fetch('<%- url_for("search.xml") %>')
+        if (entries) return Promise.resolve(entries)
+        if (loadPromise) return loadPromise
+        setStatus('<%= __('searchFirst') %>', { spinner: true })
+        loadPromise = fetch('<%- url_for("search.xml") %>')
           .then(response => {
             if (!response.ok) {
               const error = new Error('search-index')
@@ -117,39 +230,96 @@
           })
           .then(xml => {
             const documentXml = new DOMParser().parseFromString(xml, 'application/xml')
-            entries = Array.from(documentXml.querySelectorAll('entry')).map(entry => ({
-              title: entry.querySelector('title')?.textContent || '',
-              content: entry.querySelector('content')?.textContent || '',
-              url: entry.querySelector('url')?.textContent || ''
-            }))
-            input.addEventListener('input', renderResults)
-            renderResults()
+            entries = Array.from(documentXml.querySelectorAll('entry')).map(entry => {
+              const title = (entry.querySelector('title')?.textContent || '').trim()
+              const content = stripTags(entry.querySelector('content')?.textContent || '')
+              return {
+                url: entry.querySelector('url')?.textContent || '',
+                title,
+                content,
+                titleLower: title.toLowerCase(),
+                contentLower: content.toLowerCase()
+              }
+            })
+            loadPromise = null
+            if (input.value.trim() && !overlay.classList.contains('hidden')) renderResults()
+            else hideResult()
+            return entries
           })
           .catch(error => {
-            const message = error.status === 404 ? '<%= __('searchFilesNotfound') %>' : '<%= __('searchServiceErrors') %>'
-            const link = error.status === 404 ? {
-              href: 'https://github.com/zchengsite/hexo-theme-oranges#configuration',
-              label: '配置说明'
-            } : null
-            setResultMessage(message, link)
+            loadPromise = null
+            const notFound = error.status === 404
+            setStatus(notFound ? '<%= __('searchFilesNotfound') %>' : '<%= __('searchServiceErrors') %>', {
+              link: notFound ? { href: 'https://github.com/zchengsite/hexo-theme-oranges#configuration', label: '配置说明' } : null
+            })
           })
+        return loadPromise
       }
 
-      const toggleSearch = () => {
-        const hidden = overlay.classList.toggle('hidden')
-        document.body.classList.toggle('hidden', !hidden)
-        if (!hidden) input.focus()
+      const openSearch = () => {
+        overlay.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        clearButton.classList.toggle('hidden', !input.value)
+        loadSearchIndex()
+        if (entries && input.value.trim()) renderResults()
+        input.focus()
+        input.select()
       }
 
-      searchIcon.addEventListener('click', toggleSearch)
-      closeIcon.addEventListener('click', toggleSearch)
+      const closeSearch = () => {
+        overlay.classList.add('hidden')
+        document.body.classList.remove('hidden')
+        activeIndex = -1
+        input.blur()
+      }
+
+      trigger.addEventListener('click', openSearch)
+      closeButton.addEventListener('click', closeSearch)
       overlay.addEventListener('click', event => {
-        if (event.target === overlay) toggleSearch()
+        if (event.target === overlay) closeSearch()
       })
+      clearButton.addEventListener('click', () => {
+        input.value = ''
+        clearButton.classList.add('hidden')
+        hideResult()
+        input.focus()
+      })
+
+      input.addEventListener('input', () => {
+        clearButton.classList.toggle('hidden', !input.value)
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(renderResults, 120)
+      })
+
       input.addEventListener('keydown', event => {
-        if (event.key === 'Enter') event.preventDefault()
+        if (event.isComposing) return
+        if (event.key === 'ArrowDown') {
+          event.preventDefault()
+          moveActive(1)
+        } else if (event.key === 'ArrowUp') {
+          event.preventDefault()
+          moveActive(-1)
+        } else if (event.key === 'Enter') {
+          event.preventDefault()
+          openResult()
+        }
       })
-      input.addEventListener('focus', loadSearchIndex, { once: true })
+
+      document.addEventListener('keydown', event => {
+        if (overlay.classList.contains('hidden')) return
+        if (event.key === 'Escape' && !event.defaultPrevented) {
+          event.preventDefault()
+          closeSearch()
+        }
+      })
+
+      // 空闲时预载索引，首次打开搜索即用
+      const preloadIndex = () => { loadSearchIndex() }
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(preloadIndex, { timeout: 4000 })
+      } else {
+        window.setTimeout(preloadIndex, 800)
+      }
     })()
   </script>
 <% } %>

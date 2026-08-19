@@ -45,10 +45,10 @@
       var projCat = site.categories.findOne({ name: '项目经历' });
       var projList = projCat ? projCat.posts.sort('date', -1).data : [];
     %>
-    <% if (workList.length) { %>
+    <% if (eduList.length) { %>
     <div class="home-exp">
-      <div class="home-exp-title"><%= __('work') %></div>
-      <% workList.forEach(function(item) { %>
+      <div class="home-exp-title"><%= __('education') %></div>
+      <% eduList.forEach(function(item) { %>
         <div class="home-exp-item">
           <span class="home-exp-logo">
             <span class="home-exp-monogram<%- item.logo ? ' hidden' : '' %>"><%- item.short || item.name %></span>
@@ -65,10 +65,10 @@
       <% }) %>
     </div>
     <% } %>
-    <% if (eduList.length) { %>
+    <% if (workList.length) { %>
     <div class="home-exp">
-      <div class="home-exp-title"><%= __('education') %></div>
-      <% eduList.forEach(function(item) { %>
+      <div class="home-exp-title"><%= __('work') %></div>
+      <% workList.forEach(function(item) { %>
         <div class="home-exp-item">
           <span class="home-exp-logo">
             <span class="home-exp-monogram<%- item.logo ? ' hidden' : '' %>"><%- item.short || item.name %></span>
