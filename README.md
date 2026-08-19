@@ -45,7 +45,7 @@
 - **文章体验**：代码高亮 + 复制、目录导航与滚动高亮、锚点平滑滚动、上一篇/下一篇
 - **首页动效**：内容错落入场、悬停微交互、跨页过渡（`prefers-reduced-motion` 自动降级）
 - **本地搜索**：原生 `fetch` + `DOMParser` 实现的全文搜索
-- **AI 阅读助手**：文章页悬浮入口 + 侧边聊天面板，提问时把文章全文发给 OpenAI 兼容接口（中转站），流式输出、多轮追问
+- **AI 阅读助手**：文章页悬浮入口 + 侧边聊天面板，基于文章全文问答，支持 SSE 流式输出、推理思考流、多轮追问与代码块渲染
 - **RSS 订阅**：`hexo-generator-feed` 生成 `/atom.xml`
 - **自动部署**：推送 `main` 分支即通过 GitHub Actions 构建并发布
 
@@ -137,21 +137,45 @@ description: 一句话项目简介
 
 ## AI 阅读助手配置
 
-文章页右下角工具栏的 AI 入口，配置在 `_config.oranges.yml` 的 `aiChat` 块：
+文章页右下角工具栏的 AI 入口，点击后从右侧打开聊天面板。每次提问都会携带当前文章正文和最近几轮对话，回答支持流式输出与 Markdown 代码块。
+
+当前使用硅基流动官方 OpenAI 兼容接口，实测 `THUDM/GLM-4-9B-0414` 对博客文章问答响应较快：
 
 ```yaml
 aiChat:
   enable: true
-  endpoint: ""            # OpenAI 兼容接口完整地址（中转站），留空则不渲染
-  apiKey: ""              # 优先读环境变量 AI_CHAT_KEY
-  model: "glm-4.7-flash"  # 按中转站可用模型填写
-  stream: true            # 中转站不支持 SSE 透传时改 false
-  maxContextTurns: 6      # 每次请求携带的最近对话轮数
+  endpoint: "https://api.siliconflow.cn/v1/chat/completions"
+  apiKey: ""                         # 不要提交 key，优先使用环境变量
+  model: "THUDM/GLM-4-9B-0414"
+  stream: true                        # SSE 流式输出
+  maxContextTurns: 6                  # 每次请求携带的最近对话轮数
 ```
 
-**key 的注入方式（避免进公开仓库）**：GitHub 仓库 `Settings → Secrets and variables → Actions` 添加 `AI_CHAT_KEY`，`deploy.yml` 构建时会通过环境变量传给 Hexo；本地联调用 `AI_CHAT_KEY=sk-xxx pnpm server`。
+### 本地预览
 
-**安全须知**：前端直连方案下，key 会出现在部署后的网页源码中（用户知情选择），任何访客都可能提取。务必在中转站侧为该 key 单独设置额度上限/限流，且不要使用与付费服务共用的 key。
+Git Bash：
+
+```bash
+AI_CHAT_KEY=sk-xxx pnpm server
+```
+
+如果 4000 端口已被占用，可换端口：
+
+```bash
+AI_CHAT_KEY=sk-xxx pnpm exec hexo server -p 4321
+```
+
+### GitHub Pages 部署
+
+1. 打开仓库 `Settings → Secrets and variables → Actions`。
+2. 新建 Secret，名称填写 `AI_CHAT_KEY`，值填写硅基流动 API key。
+3. 打开 `Actions → Deploy to GitHub Pages → Run workflow` 手动触发构建；之后推送 `main` 也会自动部署。
+
+`deploy.yml` 会在构建阶段把 `AI_CHAT_KEY` 注入 Hexo。配置或 key 缺失时，文章页不会渲染 AI 入口。
+
+### 安全须知
+
+这是浏览器直连方案，API key 会出现在部署后的网页请求中，访客可能提取。建议使用单独的低额度 key，只启用免费或低成本模型，并在硅基流动控制台设置尽可能严格的额度与限流。不要使用与其它付费服务共用的 key。
 
 ## 部署
 
