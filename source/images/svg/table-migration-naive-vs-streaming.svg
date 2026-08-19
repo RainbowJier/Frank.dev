@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" width="820" height="370"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="370" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="369" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：一次性全量加载 -->
+  <rect x="40" y="40" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">一次性全量加载</text>
+
+  <rect x="90" y="92" width="260" height="50" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="114" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">源表 t_order · 1000w 行</text>
+  <text x="220" y="132" text-anchor="middle" font-size="11" fill="#6B7280">结果集约 10GB</text>
+
+  <line x1="220" y1="146" x2="220" y2="168" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="236" y="162" font-size="11" fill="#6B7280">SELECT * 全表拉取</text>
+
+  <rect x="90" y="174" width="260" height="58" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="220" y="196" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">JVM 堆内存（-Xmx2g）</text>
+  <text x="220" y="218" text-anchor="middle" font-size="12" font-weight="600" fill="#E64B35">10GB 远超 2GB，OOM</text>
+
+  <circle cx="78" cy="254" r="3" fill="#8491B4"/>
+  <text x="92" y="258" font-size="13" fill="#252A33">结果集一次性全部驻留客户端内存</text>
+  <circle cx="78" cy="282" r="3" fill="#E64B35"/>
+  <text x="92" y="286" font-size="13" fill="#252A33">堆装不下，进程直接崩溃</text>
+
+  <!-- 面板 B：游标分批流式迁移 -->
+  <rect x="420" y="40" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">游标分批流式迁移</text>
+
+  <rect x="470" y="92" width="130" height="58" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="535" y="114" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">读一批</text>
+  <text x="535" y="133" text-anchor="middle" font-size="11" fill="#6B7280">5000 行 ≈ 5MB</text>
+
+  <line x1="604" y1="121" x2="622" y2="121" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="630" y="92" width="130" height="58" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="695" y="114" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">幂等批量写</text>
+  <text x="695" y="133" text-anchor="middle" font-size="11" fill="#6B7280">一批一个短事务</text>
+
+  <path d="M695 154 L695 182 L535 182 L535 158" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowO)"/>
+  <text x="615" y="198" text-anchor="middle" font-size="11" fill="#6B7280">记录断点，继续读下一批</text>
+
+  <circle cx="458" cy="240" r="3" fill="#00A087"/>
+  <text x="472" y="244" font-size="13" fill="#252A33">任意时刻仅驻留一批数据</text>
+  <circle cx="458" cy="268" r="3" fill="#4DBBD5"/>
+  <text x="472" y="272" font-size="13" fill="#252A33">内存恒定约 5MB，与总量无关</text>
+
+  <text x="410" y="348" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜一次性加载必然 OOM；分批流式让内存与表总量脱钩</text>
+</svg>

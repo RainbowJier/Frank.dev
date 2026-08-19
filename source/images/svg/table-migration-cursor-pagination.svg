@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：OFFSET 深分页 -->
+  <rect x="40" y="40" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">LIMIT offset 深分页</text>
+
+  <text x="70" y="94" font-size="11" fill="#6B7280">SELECT * ... LIMIT 9000000, 5000</text>
+
+  <rect x="70" y="116" width="250" height="26" fill="#8491B4" fill-opacity="0.15" stroke="#8491B4" stroke-width="1"/>
+  <rect x="320" y="116" width="50" height="26" fill="#4DBBD5" fill-opacity="0.25" stroke="#4DBBD5" stroke-width="1"/>
+
+  <text x="195" y="158" text-anchor="middle" font-size="11" fill="#6B7280">扫描后丢弃 900w 行</text>
+  <text x="345" y="158" text-anchor="middle" font-size="11" fill="#6B7280">本页 5000 行</text>
+
+  <circle cx="78" cy="196" r="3" fill="#8491B4"/>
+  <text x="92" y="200" font-size="13" fill="#252A33">每页都从头扫，代价随 offset 线性增长</text>
+  <circle cx="78" cy="224" r="3" fill="#8491B4"/>
+  <text x="92" y="228" font-size="13" fill="#252A33">1000w 表翻到深处，单页可达数秒</text>
+  <circle cx="78" cy="252" r="3" fill="#E64B35"/>
+  <text x="92" y="256" font-size="13" fill="#252A33">无稳定排序时，翻页还会丢行重行</text>
+
+  <!-- 面板 B：主键游标分页 -->
+  <rect x="420" y="40" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">主键游标分页（keyset）</text>
+
+  <text x="450" y="92" font-size="11" fill="#6B7280">WHERE id &gt; 1682340 ORDER BY id LIMIT 5000</text>
+
+  <rect x="450" y="116" width="150" height="26" fill="#8491B4" fill-opacity="0.15" stroke="#8491B4" stroke-width="1"/>
+  <rect x="600" y="116" width="60" height="26" fill="#4DBBD5" fill-opacity="0.25" stroke="#4DBBD5" stroke-width="1"/>
+  <rect x="660" y="116" width="90" height="26" fill="none" stroke="#8491B4" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <circle cx="600" cy="106" r="2.5" fill="#3C5488"/>
+  <line x1="600" y1="110" x2="600" y2="150" stroke="#3C5488" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <text x="612" y="106" font-size="11" fill="#3C5488">游标 = 上一批 max_id</text>
+
+  <text x="525" y="158" text-anchor="middle" font-size="11" fill="#6B7280">已迁移，不再扫描</text>
+  <text x="630" y="158" text-anchor="middle" font-size="11" fill="#6B7280">本页 5000 行</text>
+
+  <circle cx="458" cy="196" r="3" fill="#00A087"/>
+  <text x="472" y="200" font-size="13" fill="#252A33">主键索引一次定位，每批代价恒定</text>
+  <circle cx="458" cy="224" r="3" fill="#4DBBD5"/>
+  <text x="472" y="228" font-size="13" fill="#252A33">id 严格递增推进，批间不重不漏</text>
+  <circle cx="458" cy="252" r="3" fill="#4DBBD5"/>
+  <text x="472" y="256" font-size="13" fill="#252A33">断点即 max_id，天然支持续传与并行</text>
+
+  <text x="410" y="340" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜深分页每页从头扫、越翻越慢；主键游标每批代价恒定</text>
+</svg>

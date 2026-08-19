@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 网格线 -->
+  <g stroke="#E8EDF3" stroke-width="1">
+    <line x1="90" y1="110" x2="770" y2="110"/>
+    <line x1="90" y1="160" x2="770" y2="160"/>
+    <line x1="90" y1="210" x2="770" y2="210"/>
+    <line x1="90" y1="260" x2="770" y2="260"/>
+  </g>
+  <line x1="90" y1="310" x2="770" y2="310" stroke="#5A6472" stroke-width="1.5"/>
+
+  <!-- Y 轴刻度与轴标签 -->
+  <g font-size="11" fill="#6B7280" text-anchor="end">
+    <text x="78" y="314">0</text><text x="78" y="264">50</text>
+    <text x="78" y="214">100</text><text x="78" y="164">150</text><text x="78" y="114">200</text>
+  </g>
+  <text transform="translate(30 190) rotate(-90)" text-anchor="middle" font-size="11" fill="#6B7280">迁移总耗时（分钟）</text>
+
+  <!-- 柱：第 1 根灰紫作对照，其余递进上色 -->
+  <rect x="143" y="100" width="64" height="210" fill="#8491B4" fill-opacity="0.35"/>
+  <rect x="313" y="215" width="64" height="95"  fill="#3C5488" fill-opacity="0.85"/>
+  <rect x="483" y="230" width="64" height="80"  fill="#4DBBD5" fill-opacity="0.85"/>
+  <rect x="653" y="284" width="64" height="26"  fill="#00A087" fill-opacity="0.85"/>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="175" y="92">210</text><text x="345" y="207">95</text>
+    <text x="515" y="222">80</text><text x="685" y="276">26</text>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="175" y="334">深分页</text><text x="345" y="334">流式单线程</text>
+    <text x="515" y="334">游标单线程</text><text x="685" y="334">游标+4线程</text>
+  </g>
+
+  <text x="410" y="368" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜四种读取策略迁移 1000w 行的总耗时（示意数据，批间未限速）</text>
+</svg>

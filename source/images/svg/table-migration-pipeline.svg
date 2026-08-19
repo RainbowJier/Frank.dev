@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" width="820" height="320"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="320" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="319" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowO" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 循环回边：更新断点 → 读一批 -->
+  <path d="M720 90 L720 60 L400 60 L400 84" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowO)"/>
+  <text x="560" y="52" text-anchor="middle" font-size="11" fill="#6B7280">循环 · 每批 5000 行，直至读空</text>
+
+  <!-- 第一行：主循环 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="90" width="110" height="56" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+    <rect x="190" y="90" width="110" height="56" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+    <rect x="340" y="90" width="120" height="56" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="500" y="90" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="660" y="90" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="95"  y="112">初始化</text>
+    <text x="245" y="112">读取断点</text>
+    <text x="400" y="112">游标读一批</text>
+    <text x="560" y="112">幂等批量写</text>
+    <text x="720" y="112">更新断点</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="95"  y="131">断点表 · 目标表</text>
+    <text x="245" y="131">last_max_id</text>
+    <text x="400" y="131">id &gt; ? LIMIT 5000</text>
+    <text x="560" y="131">冲突时跳过</text>
+    <text x="720" y="131">max_id + 限速</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="154" y1="118" x2="184" y2="118" marker-end="url(#arrow)"/>
+    <line x1="304" y1="118" x2="334" y2="118" marker-end="url(#arrow)"/>
+    <line x1="464" y1="118" x2="494" y2="118" marker-end="url(#arrow)"/>
+    <line x1="624" y1="118" x2="654" y2="118" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 退出循环 -->
+  <path d="M720 146 L720 178 L115 178 L115 200" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="171" text-anchor="middle" font-size="11" fill="#6B7280">全量读空后退出循环</text>
+
+  <!-- 第二行：收尾 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="206" width="150" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="230" y="206" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="440" y="206" width="170" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="115" y="228">增量补偿</text>
+    <text x="315" y="228">对账校验</text>
+    <text x="525" y="228">切换流量</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="115" y="247">补迁移期间的增量写入</text>
+    <text x="315" y="247">count + 分段聚合比对</text>
+    <text x="525" y="247">校验通过后收尾归档</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="194" y1="234" x2="224" y2="234" marker-end="url(#arrow)"/>
+    <line x1="404" y1="234" x2="434" y2="234" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="300" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜迁移流水线全貌：游标循环 + 增量补偿 + 对账收尾</text>
+</svg>
