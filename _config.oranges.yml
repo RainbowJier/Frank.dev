@@ -25,6 +25,32 @@ intro:
       label: CSDN 访问量
   # 博客态度，引用样式展示
   motto: 这里是我记录思想、学习和生活的地方，希望我的分享能带给你一丝启发。
+  # 个人信息：首页与关于页展示的键值对
+  profile:
+    -
+      label: 姓名
+      value: 刘起杰
+    -
+      label: 性别
+      value: 男
+    -
+      label: 出生日期
+      value: 2001.10.16
+    -
+      label: 学历
+      value: 全日制本科
+    -
+      label: 工作年限
+      value: 3 年
+    -
+      label: 英语水平
+      value: CET-4，口语良好
+    -
+      label: 邮箱
+      value: 3021809270@qq.com
+    -
+      label: 电话
+      value: 13599829312
   skills:
     - Java
     - Spring Boot
