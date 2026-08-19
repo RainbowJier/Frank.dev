@@ -15,21 +15,6 @@
       <% }) %>
     </div>
     <% } %>
-    <% var statList = (theme.intro.stats || []).slice(); %>
-    <% if (site.posts.length) { statList.push({ value: String(site.posts.length), label: __('posts_count') }); } %>
-    <% if (statList.length) { %>
-    <div class="home-intro-stats">
-      <% statList.forEach(function(stat) { %>
-        <div class="stat-item">
-          <span class="stat-value"><%- stat.value %></span>
-          <span class="stat-label"><%- stat.label %></span>
-        </div>
-      <% }) %>
-    </div>
-    <% } %>
-    <% if (theme.intro.motto) { %>
-    <p class="home-intro-motto"><%- theme.intro.motto %></p>
-    <% } %>
     <% if (theme.intro.profile && theme.intro.profile.length) { %>
     <div class="home-exp">
       <div class="home-exp-title"><%= __('profile') %></div>
@@ -112,6 +97,18 @@
           </div>
           <div class="home-exp-period"><%- item.period || item.date.format('YYYY.MM') %></div>
         </a>
+      <% }) %>
+    </div>
+    <% } %>
+    <% var statList = (theme.intro.stats || []).slice(); %>
+    <% if (site.posts.length) { statList.push({ value: String(site.posts.length), label: __('posts_count') }); } %>
+    <% if (statList.length) { %>
+    <div class="home-intro-stats">
+      <% statList.forEach(function(stat) { %>
+        <div class="stat-item">
+          <span class="stat-value"><%- stat.value %></span>
+          <span class="stat-label"><%- stat.label %></span>
+        </div>
       <% }) %>
     </div>
     <% } %>
