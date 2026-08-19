@@ -1933,7 +1933,7 @@ button:focus-visible {
   border-top: 1px solid var(--border-ai-panel);
 }
 
-/* 输入区：输入框与发送按钮合成一个胶囊容器 */
+/* 输入区：输入框与发送按钮合成一个胶囊容器（透明底，贴合站点极简风格） */
 .ai-chat-composer {
   display: flex;
   align-items: flex-end;
@@ -1941,13 +1941,12 @@ button:focus-visible {
   padding: 6px;
   border: 1px solid var(--color-divider-md-border);
   border-radius: 14px;
-  background-color: var(--bg-ai-input);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-color: transparent;
+  transition: border-color 0.15s ease;
 }
 
 .ai-chat-composer:focus-within {
   border-color: var(--color-text-a-hover);
-  box-shadow: 0 0 0 3px var(--bg-ai-bubble-bot);
 }
 
 .ai-chat-input {
