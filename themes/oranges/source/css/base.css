@@ -1929,11 +1929,25 @@ button:focus-visible {
 }
 
 .ai-chat-inputbar {
+  padding: 10px 14px 8px;
+  border-top: 1px solid var(--border-ai-panel);
+}
+
+/* 输入区：输入框与发送按钮合成一个胶囊容器 */
+.ai-chat-composer {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
-  padding: 12px 14px;
-  border-top: 1px solid var(--border-ai-panel);
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 14px;
+  background-color: var(--bg-ai-input);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ai-chat-composer:focus-within {
+  border-color: var(--color-text-a-hover);
+  box-shadow: 0 0 0 3px var(--bg-ai-bubble-bot);
 }
 
 .ai-chat-input {
@@ -1941,20 +1955,14 @@ button:focus-visible {
   min-width: 0;
   max-height: 120px;
   resize: none;
-  border: 1px solid var(--color-divider-md-border);
-  border-radius: 10px;
-  padding: 9px 12px;
-  background-color: var(--bg-ai-input);
+  border: 0;
+  outline: 0;
+  padding: 8px 2px 8px 8px;
+  background-color: transparent;
   color: var(--color-text-a);
   font-family: inherit;
   font-size: 1.4rem;
   line-height: 1.6;
-  outline: 0;
-  transition: border-color 0.15s ease;
-}
-
-.ai-chat-input:focus {
-  border-color: var(--color-text-a-hover);
 }
 
 .ai-chat-input::placeholder {
@@ -1966,10 +1974,10 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 50%;
   background-color: var(--color-text-a-hover);
   color: var(--bg-body);
   cursor: pointer;
@@ -1982,12 +1990,12 @@ button:focus-visible {
 }
 
 .ai-chat-send:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
 
 .ai-chat-send svg {
-  width: 1.7rem;
-  height: 1.7rem;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .ai-chat-send .ai-chat-stop-icon {
@@ -2003,10 +2011,17 @@ button:focus-visible {
 }
 
 .ai-chat-footnote {
-  padding: 6px 14px 10px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 4px 2px;
   font-size: 1.1rem;
   color: var(--color-text-sub);
+}
+
+.ai-chat-hint {
+  flex: none;
 }
 
 /* 移动端：面板改为底部抽屉 */
@@ -2024,5 +2039,13 @@ button:focus-visible {
 
   .ai-chat-panel.open {
     transform: translateY(0);
+  }
+
+  .ai-chat-hint {
+    display: none;
+  }
+
+  .ai-chat-footnote {
+    justify-content: center;
   }
 }
