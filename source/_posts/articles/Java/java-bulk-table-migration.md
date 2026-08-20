@@ -38,7 +38,7 @@ lang: zh-CN
 
 `INSERT INTO new SELECT * FROM old` 一条 SQL 看似能搞定，但 1000w 行意味着一个巨型事务：几十 GB 的 undo log、长时间锁竞争、恐怖的主从延迟，任何一个环节出问题整条回滚。DataX、DTS、存储过程也都被题目"只用 Java"排除。Java 代码真正的价值在于**把大迁移拆成几千个小步骤，每一步都可控制、可重试、可观测**——这正是下面整个方案的主线。
 
-![图 1：一次性加载必然 OOM，分批流式让内存与总量脱钩](/images/svg/table-migration-naive-vs-streaming.svg)
+![图 1：一次性加载必然 OOM，分批流式让内存与总量脱钩](table-migration-naive-vs-streaming.svg)
 
 ## 二、两个必踩的坑
 
@@ -79,7 +79,7 @@ while (true) {
 
 还有一个更隐蔽的坑：这条 SQL **没有稳定的 ORDER BY**。分页期间新数据插入、页与页之间行序变化，会导致某些行被跳过（丢）、某些行出现两次（重）。对"保证数据完整"来说是致命的。
 
-![图 2：深分页每页从头扫、越翻越慢；主键游标每批代价恒定](/images/svg/table-migration-cursor-pagination.svg)
+![图 2：深分页每页从头扫、越翻越慢；主键游标每批代价恒定](table-migration-cursor-pagination.svg)
 
 ### 2.3 坑二的修复尝试：JDBC 流式读取，可用但不优
 
@@ -300,7 +300,7 @@ public class TableMigrator {
 
 中途 kill 掉进程再重启，第一行会变成 `从 id > 7350000 处继续`——这就是断点续传。
 
-![图 3：迁移流水线全貌，游标循环 + 增量补偿 + 对账收尾](/images/svg/table-migration-pipeline.svg)
+![图 3：迁移流水线全貌，游标循环 + 增量补偿 + 对账收尾](table-migration-pipeline.svg)
 
 ### 3.4 三个关键设计决策
 
@@ -351,7 +351,7 @@ pool.awaitTermination(2, TimeUnit.HOURS);
 
 如果目标库磁盘扛得住，4 线程基本能把总耗时压到单线程的 1/3 左右（写侧串行化是瓶颈，不会严格线性加速）。
 
-![图 4：四种读取策略迁移 1000w 行的总耗时对比](/images/svg/table-migration-strategy-benchmark.svg)
+![图 4：四种读取策略迁移 1000w 行的总耗时对比](table-migration-strategy-benchmark.svg)
 
 ## 四、内存为什么小：算一笔账
 

@@ -25,7 +25,7 @@ lang: zh-CN
 - 支付要幂等（同一笔钱不能被扣两次）
 - 状态变更要留审计记录
 
-![图6：电商订单核心表关系与访问路径](/images/svg/mysql-ecommerce-schema.svg)
+![图6：电商订单核心表关系与访问路径](mysql-ecommerce-schema.svg)
 
 ### 核心表结构
 
@@ -134,7 +134,7 @@ pt-online-schema-change \
 
 主库（Master）负责写，从库（Replica）负责读。主库把所有变更写到 binlog，从库的 I/O 线程把 binlog 复制过来，SQL 线程重放，保持数据同步。
 
-![图5：主从复制与备份恢复数据流](/images/svg/mysql-replication-and-recovery.svg)
+![图5：主从复制与备份恢复数据流](mysql-replication-and-recovery.svg)
 
 ```sql
 -- 查看主库的 binlog 状态（主库上执行）

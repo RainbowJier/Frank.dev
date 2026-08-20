@@ -25,7 +25,7 @@ Oracle 是老牌商用数据库，银行、电信、政务系统的常客。我�
 
 开跑前只记一件事：你连接的是**实例**（活着的进程 + 内存），数据存在**数据库**（磁盘上的文件），两者合起来才是常说的一套"Oracle Server"。这个区分现在不重要，以后排错时特别有用——连不上多是实例问题，数据丢了/变慢多是存储问题。
 
-![图1：Oracle 实例与数据库的关系](/images/svg/oracle-instance-architecture.svg)
+![图1：Oracle 实例与数据库的关系](oracle-instance-architecture.svg)
 
 ## 二、5 分钟：装好并连上
 
@@ -88,11 +88,11 @@ docker exec -it oracle-free sqlplus frank/Pass_1234@localhost/FREEPDB1
 
 **这里藏着和 MySQL 最大的不同**：Oracle 没有"库"和 `USE` 切库这回事，**用户就是命名空间（schema）**——frank 建的表全名都是 `frank.xxx`，要访问别人 scott 的表就写 `scott.emp`。
 
-![图3：MySQL 库与 Oracle schema 命名空间对照](/images/svg/oracle-mysql-schema-compare.svg)
+![图3：MySQL 库与 Oracle schema 命名空间对照](oracle-mysql-schema-compare.svg)
 
 顺带一提 `DEFAULT TABLESPACE users`：表在逻辑上放进 USERS 表空间，物理上才落到 `.dbf` 数据文件里（中间还有段、区、块三层，入门阶段只需记住一条铁律：**业务表放 USERS，永远别往 SYSTEM 放**）。
 
-![图2：Oracle 逻辑存储层级](/images/svg/oracle-storage-hierarchy.svg)
+![图2：Oracle 逻辑存储层级](oracle-storage-hierarchy.svg)
 
 ## 四、10 分钟：跑通增删改查
 
@@ -199,7 +199,7 @@ SELECT * FROM (
 
 ROWNUM 有个著名的坑：`WHERE ROWNUM > 1` **永远查不到数据**——编号是行被取出那一刻才分配的，不满足条件的行被丢弃后，下一行又从 1 开始测试，全军覆没。所以必须"子查询先编号，外层再取区间"，口诀：**上界在内，下界在外**。
 
-![图4：ROWNUM 分页原理](/images/svg/oracle-rownum-pagination.svg)
+![图4：ROWNUM 分页原理](oracle-rownum-pagination.svg)
 
 ## 五、避坑速查：和 MySQL 不一样的地方
 

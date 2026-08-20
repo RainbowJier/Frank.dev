@@ -36,7 +36,7 @@ lang: zh-CN
 
 流程图文字描述：**定时下楼问 → 问一次然后原地等 → 订阅广播只管听 → 拨通电话随便聊**。每一代都在减少"白跑的次数"，或者增加"能说话的人"。
 
-![图1：实时通信技术从轮询到双向连接的演进](/images/svg/realtime-communication-evolution.svg)
+![图1：实时通信技术从轮询到双向连接的演进](realtime-communication-evolution.svg)
 
 短轮询长这样，一行 `setInterval` 就能写出来：
 
@@ -85,7 +85,7 @@ retry: 3000            ← 断线后 3 秒再重连
 
 流程图文字描述：**浏览器订阅（GET）→ 服务器回"事件流"响应头 → 响应一直保持打开 → 服务器每写一段，浏览器收到一段 → 万一断线，浏览器自动重连**。
 
-![图2：SSE 从建立连接到自动重连的事件流](/images/svg/sse-event-flow.svg)
+![图2：SSE 从建立连接到自动重连的事件流](sse-event-flow.svg)
 
 ### 2. 动手做：每 2 秒收到一条服务器推送
 
@@ -253,7 +253,7 @@ Sec-WebSocket-Accept: 根据 Key 算出的校验值
 
 流程图文字描述：**浏览器发起带 Upgrade 的请求 → 服务器校验 Key 并回复 101 → 协议切换完成 → 双方随时互发消息**。
 
-![图3：WebSocket HTTP 握手与全双工消息流](/images/svg/websocket-handshake-flow.svg)
+![图3：WebSocket HTTP 握手与全双工消息流](websocket-handshake-flow.svg)
 
 ### 2. 动手做：一个能群聊的聊天室
 

@@ -29,7 +29,7 @@ lang: zh-CN
 | 击穿 | **某个热点 key 过期的那一瞬间**，并发全部涌向 DB | 秒杀商品缓存到期 |
 | 雪崩 | **大面积 key 同时失效**或 Redis 整个挂掉 | 批量预热的缓存同一秒过期 |
 
-![图1：缓存穿透、击穿、雪崩的成因对比](/images/svg/redis-cache-failures.svg)
+![图1：缓存穿透、击穿、雪崩的成因对比](redis-cache-failures.svg)
 
 ## 二、缓存穿透：查一个压根不存在的 key
 
@@ -156,7 +156,7 @@ redis.setex(key, ttl, val);
 
 缓存问题的下半场是经典八股：**改数据时，先动数据库还是先动缓存？更新还是删除？**
 
-![图2：Cache Aside 旁路缓存模式与延迟双删](/images/svg/redis-cache-consistency.svg)
+![图2：Cache Aside 旁路缓存模式与延迟双删](redis-cache-consistency.svg)
 
 ### 标准答案：Cache Aside Pattern
 

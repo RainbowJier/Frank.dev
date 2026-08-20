@@ -33,7 +33,7 @@ lang: zh-CN
 
 整个方案最重要的一个决策是**让字节流绕开应用服务器**：
 
-![图 1：控制面与数据面分离架构](/images/svg/minio-control-data-plane.svg)
+![图 1：控制面与数据面分离架构](minio-control-data-plane.svg)
 
 - **控制面**（实线，经网关到 OPS 服务）：只有轻量指令——初始化上传、查询秒传、合并分片、换取预签名 URL。这些接口的请求体只有几百字节；
 - **数据面**（虚线，浏览器直连 MinIO）：真正的分片字节，通过预签名 URL 用 `PUT`/`GET` 直接与对象存储交互。
@@ -79,7 +79,7 @@ private MinioClient getPresignClient() {
 
 完整链路长这样：
 
-![图 2：分片上传全流程](/images/svg/minio-chunk-upload-flow.svg)
+![图 2：分片上传全流程](minio-chunk-upload-flow.svg)
 
 ### 2.1 前端：切片、指纹与并发池
 
@@ -161,7 +161,7 @@ public String buildPartObjectName(String objectName, String uploadId, int partNu
 
 每个分片是一个完整独立的小对象，序号定长补零到 10 位——字典序就是分片序，列出来直接按序 compose。`uploadId` 不是 S3 的，是系统自己生成的 UUID，仅用于圈定"哪一次上传会话的哪些分片"。
 
-![图 4：分片对象的存储布局](/images/svg/minio-parts-object-layout.svg)
+![图 4：分片对象的存储布局](minio-parts-object-layout.svg)
 
 ### 2.4 合并的防御性设计
 
@@ -207,7 +207,7 @@ public FileInfoDetailResp mergeChunks(ChunkMergeReq req) {
 
 下载侧的完整链路：
 
-![图 3：断点续传下载流程](/images/svg/minio-resumable-download-flow.svg)
+![图 3：断点续传下载流程](minio-resumable-download-flow.svg)
 
 整体思路与上传对称，但进度真相源换了位置：**下载进度存在浏览器 IndexedDB 里**（服务端无从知晓用户下载到哪了），库结构是两个 store：
 

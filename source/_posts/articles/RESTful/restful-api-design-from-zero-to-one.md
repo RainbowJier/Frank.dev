@@ -34,7 +34,7 @@ lang: zh-CN
 
 > 把后端提供的一切都看作**资源**，用 **URI 定位资源**，用 **HTTP 方法表达意图**，用 **状态码反馈结果**。
 
-![图 1：REST 核心思想](/images/svg/rest-core-concept.svg)
+![图 1：REST 核心思想](rest-core-concept.svg)
 
 ### 1.1 一切皆资源：URI 是名词，方法是动词
 
@@ -64,7 +64,7 @@ lang: zh-CN
 
 HTTP 协议早就内置了一套标准动词，不用白不用。先看全景：
 
-![图 2：五种 HTTP 方法的语义、安全性与幂等性](/images/svg/rest-http-methods.svg)
+![图 2：五种 HTTP 方法的语义、安全性与幂等性](rest-http-methods.svg)
 
 两个容易混的概念，面试也常问：
 
@@ -82,7 +82,7 @@ HTTP 协议早就内置了一套标准动词，不用白不用。先看全景：
 
 ## 三、URI 设计规范：名词的语法
 
-![图 3：URI 设计正反对照](/images/svg/rest-uri-design-compare.svg)
+![图 3：URI 设计正反对照](rest-uri-design-compare.svg)
 
 ### 规则 1：资源用复数名词
 
@@ -112,7 +112,7 @@ URL 里字母大小写不敏感但习惯难统一，统一小写；多个单词�
 
 HTTP 状态码是接口的"表情"，出现在响应的第一行，任何 HTTP 客户端、网关、监控都认识它：
 
-![图 4：HTTP 状态码家族地图](/images/svg/rest-status-codes.svg)
+![图 4：HTTP 状态码家族地图](rest-status-codes.svg)
 
 日常开发记住这些就够用：
 

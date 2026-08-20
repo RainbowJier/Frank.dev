@@ -119,6 +119,11 @@ navbar:
     path: /projects/
     key: projects
   -
+    name: Skill-Hub
+    enable: true
+    path: /skills/
+    key: skills
+  -
     name: 分类
     enable: false
     path: /categories/

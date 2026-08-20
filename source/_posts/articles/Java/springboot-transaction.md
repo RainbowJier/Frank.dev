@@ -105,7 +105,7 @@ public class TransferService {
 
 一次调用的完整旅程：
 
-![图1：@Transactional 工作原理——AOP 代理接管事务边界](/images/svg/spring-tx-aop-proxy.svg)
+![图1：@Transactional 工作原理——AOP 代理接管事务边界](spring-tx-aop-proxy.svg)
 
 1. 调用方调用的是**代理对象**的方法；
 2. 代理里的 `TransactionInterceptor` 拦截这次调用，向事务管理器申请开启事务：拿到一个数据库连接、执行 `setAutoCommit(false)`；
@@ -152,7 +152,7 @@ public class OrderService {
 
 `saveOrder` 明明标了注解，`deduct` 扣库存失败时 `insert` 却不会回滚。为什么？对照图 1 的模型：
 
-![图2：自调用失效根源——this 调用直达目标对象，绕过了代理](/images/svg/spring-tx-self-invocation.svg)
+![图2：自调用失效根源——this 调用直达目标对象，绕过了代理](spring-tx-self-invocation.svg)
 
 外部调用 `createOrder` 时走了代理，但 `createOrder` 本身没有注解，代理只是放行；方法体内的 `this.saveOrder()` 是**原始对象自己调自己**——`this` 根本不是代理，这次调用完全绕开了代理层，`@Transactional` 自然形同虚设。
 
@@ -294,7 +294,7 @@ public void batchProcess(List<Task> tasks) {
 
 日常真正用得上的是加粗的前三个：
 
-![图3：REQUIRED / REQUIRES_NEW / NESTED 的事务边界对比](/images/svg/spring-tx-propagation.svg)
+![图3：REQUIRED / REQUIRES_NEW / NESTED 的事务边界对比](spring-tx-propagation.svg)
 
 ### 5.2 REQUIRED：同生共死（默认）
 
@@ -340,7 +340,7 @@ B 在 A 的事务内部执行，入口处打一个 **Savepoint（保存点）**�
 
 隔离级别就是"你愿意用多大开销挡住这几类异常"：
 
-![图4：四大隔离级别与三类读异常对照](/images/svg/spring-tx-isolation.svg)
+![图4：四大隔离级别与三类读异常对照](spring-tx-isolation.svg)
 
 MySQL InnoDB 默认 REPEATABLE READ，并且靠 MVCC + 间隙锁把幻读也基本挡住了，所以实际项目里很少需要动隔离级别。真有需要时用注解指定：
 

@@ -28,7 +28,7 @@ LangChain4j 把协议翻译成了三个类型，循环则由 AiServices 引擎�
 
 以 OpenAI 兼容格式为例（LangChain4j 的 `OpenAiStreamingChatModel` 底层就是这套）：
 
-![图 1：Function Calling 的线上协议](/images/svg/langchain4j-tool-wire-protocol.svg)
+![图 1：Function Calling 的线上协议](langchain4j-tool-wire-protocol.svg)
 
 **第一步：请求里声明工具**。每个工具是名称 + 自然语言描述 + 参数 JSON Schema——模型是靠**读描述**来决定什么时候调、怎么传参的，所以描述质量直接决定调用质量：
 
@@ -69,7 +69,7 @@ LangChain4j 的对应关系：声明 ↔ `ToolSpecification`，请求 ↔ `AiMes
 
 ## 声明工具的三种姿态
 
-![图 2：工具的三种接入姿态](/images/svg/langchain4j-tool-binding.svg)
+![图 2：工具的三种接入姿态](langchain4j-tool-binding.svg)
 
 ### 姿态一：@Tool 注解，方法即工具（默认推荐）
 
@@ -135,7 +135,7 @@ stream.beforeToolExecution(before -> {
 
 声明完工具，AiServices 引擎在每次对话里自动驱动这个循环：
 
-![图 3：工具调用循环](/images/svg/langchain4j-tool-loop.svg)
+![图 3：工具调用循环](langchain4j-tool-loop.svg)
 
 逐帧解释：
 

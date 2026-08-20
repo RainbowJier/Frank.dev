@@ -1,0 +1,12 @@
+<div class="container skill-index">
+  <div class="skill-detail-head">
+    <a class="skill-back" href="<%- url_for('skills/') %>">← Skill-Hub</a>
+    <h1 class="skill-detail-title"><%= page.title %></h1>
+    <% if (page.description) { %>
+    <p class="skill-detail-desc"><%= page.description %></p>
+    <% } %>
+  </div>
+  <div class="markdown-body">
+    <%- page.content %>
+  </div>
+</div>

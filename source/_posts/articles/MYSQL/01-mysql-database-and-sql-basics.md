@@ -51,7 +51,7 @@ MySQL 就是一种**关系型数据库**，数据存在一张张"表"里，就�
 - 2010 年：Oracle 收购，MySQL 持续维护，同时衍生出 MariaDB 等开源分支
 - 现在：MySQL 8.0 加入了窗口函数、JSON、更强的安全机制，企业主流版本
 
-![图1：数据库模型与 MySQL 生态演进时间线](/images/svg/mysql-history-evolution.svg)
+![图1：数据库模型与 MySQL 生态演进时间线](mysql-history-evolution.svg)
 
 ## 二、安装 MySQL（三种方式）
 

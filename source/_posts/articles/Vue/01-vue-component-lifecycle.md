@@ -31,7 +31,7 @@ Vue 在每个关键节点都会**喊一嗓子**——这就是生命周期钩子
 
 先看全景图，对整体有感觉，下面再逐个拆：
 
-![图1：Vue 3 组件生命周期全景——四个阶段八个钩子](/images/svg/vue-lifecycle-overview.svg)
+![图1：Vue 3 组件生命周期全景——四个阶段八个钩子](vue-lifecycle-overview.svg)
 
 （Composition API 的 `setup` 与 `onXxx` 系列和图中钩子的对应关系，见第三节。）
 
@@ -104,7 +104,7 @@ Vue 3 的 `<script setup>` 里找不到 beforeCreate 和 created——因为 **s
 
 其余钩子全部改成了 `onXxx` 注册函数，且必须**在 setup 内同步调用**（直接写在 `<script setup>` 顶层即可）：
 
-![图2：Options API 与 Composition API 钩子对照](/images/svg/vue-lifecycle-api-compare.svg)
+![图2：Options API 与 Composition API 钩子对照](vue-lifecycle-api-compare.svg)
 
 ```vue
 <script setup>
@@ -149,7 +149,7 @@ onUnmounted(() => {
 
 核心差别看图：created 发请求，网络等待和 DOM 渲染是**并行**的；mounted 发请求，要等渲染完才发出，中间有一段网络在"空等"：
 
-![图3：created 与 mounted 发请求的时序对比](/images/svg/vue-lifecycle-fetch-timing.svg)
+![图3：created 与 mounted 发请求的时序对比](vue-lifecycle-fetch-timing.svg)
 
 对首屏来说，`总耗时 ≈ max(渲染, 请求)` 和 `渲染 + 请求` 的差距，在网络越慢的设备上越明显。
 
@@ -172,7 +172,7 @@ onUnmounted(() => {
 
 更新和卸载同理，一句话总结：**开始是父先，完成是子先**。
 
-![图4：父子组件生命周期执行顺序](/images/svg/vue-parent-child-mount-order.svg)
+![图4：父子组件生命周期执行顺序](vue-parent-child-mount-order.svg)
 
 注意一个前提：上图更新链成立的前提是"变化来自父组件的数据"。如果只是子组件自己的 data 变了，父组件从头到尾不会触发任何更新钩子。
 

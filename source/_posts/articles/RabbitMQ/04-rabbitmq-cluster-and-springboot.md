@@ -198,7 +198,7 @@ rabbitmqctl start_app
 rabbitmqctl cluster_status    # 看到 3 个 running 节点即成功
 ```
 
-![图1：普通集群与仲裁队列的高可用对比](/images/svg/rabbitmq-cluster-architecture.svg)
+![图1：普通集群与仲裁队列的高可用对比](rabbitmq-cluster-architecture.svg)
 
 选型结论一句话：**3.9+ 版本直接用仲裁队列**，只有老系统迁移和极端低延迟场景才需要考虑经典队列 + 网络分区策略。
 

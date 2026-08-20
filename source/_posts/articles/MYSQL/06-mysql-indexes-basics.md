@@ -35,7 +35,7 @@ MySQL InnoDB 的索引用的是 **B+Tree**（B+树），不是二叉树，也不
 - 所有实际数据（或主键）都存在**叶子节点**，中间节点只存"路标"
 - 叶子节点之间用**双向链表**连接，范围查询时不需要回到根节点重新找
 
-![图4：B+Tree 聚簇索引与二级索引回表路径](/images/svg/mysql-bplus-tree-index.svg)
+![图4：B+Tree 聚簇索引与二级索引回表路径](mysql-bplus-tree-index.svg)
 
 ## 三、聚簇索引和二级索引
 

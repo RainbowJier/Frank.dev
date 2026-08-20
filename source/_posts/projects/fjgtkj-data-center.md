@@ -38,7 +38,7 @@ description: 平台核心数据服务模块，负责空间数据资源共享下�
 
 整个功能跨了四个边界：运营端前端、resources 服务、异步处理链路、存储与登记。resources 服务内部按 DDD 分层组织（adapter → application → domain → infrastructure），网关接口隔离了 MyBatis-Plus、Feign、MinIO 这些具体依赖：
 
-![图 1：数据下载功能端到端分层架构](/images/svg/data-download-architecture.svg)
+![图 1：数据下载功能端到端分层架构](data-download-architecture.svg)
 
 几个关键的架构决策：
 
@@ -50,7 +50,7 @@ description: 平台核心数据服务模块，负责空间数据资源共享下�
 
 用户点击"提交下载"之后，一条记录会经历 PROCESSING → EXPORTING → SUCCESS/FAILED 四个状态。完整链路如下：
 
-![图 2：一次下载请求的生命周期与状态流转](/images/svg/data-download-lifecycle.svg)
+![图 2：一次下载请求的生命周期与状态流转](data-download-lifecycle.svg)
 
 ### 请求侧：幂等 + 权限 + 审计
 
@@ -115,7 +115,7 @@ private void processDownload(DataDownloadMqMessage message, DataDownloadRecord r
 
 三条业务队列共用一个 Topic 交换机，按 routing key 分流，每条队列都配置了优先级参数和死信路由：
 
-![图 3：RabbitMQ 队列拓扑与死信路由](/images/svg/data-download-mq-topology.svg)
+![图 3：RabbitMQ 队列拓扑与死信路由](data-download-mq-topology.svg)
 
 ```java
 @Bean
@@ -155,7 +155,7 @@ try {
 
 下载侧是最花心思的部分。GDB 文件普遍几百 MB，一次性 blob 下载在网络抖动时就得从头再来，所以我实现了基于 **HTTP Range + IndexedDB** 的断点续传：
 
-![图 4：前端断点续传：HTTP Range 分片 + IndexedDB 持久化](/images/svg/data-download-resumable.svg)
+![图 4：前端断点续传：HTTP Range 分片 + IndexedDB 持久化](data-download-resumable.svg)
 
 流程是：先调 OPS 接口换取 MinIO 预签名 URL（浏览器直连对象存储，不占服务带宽），然后按 10MB 分片、6 并发发 Range 请求；每个分片校验大小后写入 IndexedDB 持久化（配额不足时降级内存），页面刷新后已下载的分片直接复用；全部就绪后合并 Blob 触发保存。分片失败自动重试，预签名过期自动刷新重签。进度实时回显在按钮文案上（"断点下载 45%"），体验上接近网盘客户端。
 

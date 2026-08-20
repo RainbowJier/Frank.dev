@@ -31,7 +31,7 @@ Redis 给出两套方案，思路完全不同：
 - **RDB**：定时**拍快照**——某一时刻内存数据的完整照片，二进制压缩存盘
 - **AOF**：**记日志**——把每一条写命令追加到文件，重启时重新执行一遍
 
-![图1：RDB、AOF 与混合持久化的工作方式](/images/svg/redis-persistence-rdb-aof.svg)
+![图1：RDB、AOF 与混合持久化的工作方式](redis-persistence-rdb-aof.svg)
 
 ## 二、RDB：定时拍照
 

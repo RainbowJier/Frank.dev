@@ -38,7 +38,7 @@ description: 平台的 AI 智能客服子域：基于 LangChain4j 的 SSE 多轮
 
 服务按 DDD 拆成七个 Maven 模块，依赖方向单向：adapter → application → domain ← infrastructure。最核心的约束是**领域层零框架依赖**——`LlmRequest`、`LlmTokenHandler`、`ToolCallDispatcher` 这些技术中立的模型和接口全部住在 domain，LangChain4j 只出现在 infrastructure 的网关实现里，application 编排的是自己的接口而不是别人的 SDK。这一条让"换模型供应商""换向量库"都收敛成 infrastructure 内部的改动：
 
-![图 1：AI 客服助手 DDD 分层架构](/images/svg/ai-assistant-architecture.svg)
+![图 1：AI 客服助手 DDD 分层架构](ai-assistant-architecture.svg)
 
 几个关键的架构决策：
 
@@ -73,7 +73,7 @@ SSE 超时设 300 秒，必须大于网关 120 秒的路由超时，否则网关
 
 完整链路如下：
 
-![图 2：一次流式对话的完整时序](/images/svg/ai-assistant-sse-sequence.svg)
+![图 2：一次流式对话的完整时序](ai-assistant-sse-sequence.svg)
 
 编排层（ChatService）的顺序刻意设计过：
 
@@ -132,7 +132,7 @@ stream.onPartialResponse(token -> handler.onToken(token))
         .start();
 ```
 
-![图 3：AiServices 装配与回调翻译](/images/svg/ai-assistant-tool-loop.svg)
+![图 3：AiServices 装配与回调翻译](ai-assistant-tool-loop.svg)
 
 防御性设计保留了下来：工具执行异常不抛出，而是转成 `{"error": ...}` JSON 回填给模型，让它自己决定怎么向用户解释；每次工具调用经 `beforeToolExecution` 实时推给前端，界面上渲染成胶囊，用户能看到助手"正在查什么"。
 
@@ -140,7 +140,7 @@ stream.onPartialResponse(token -> handler.onToken(token))
 
 知识库是三张业务表（`ai_knowledge_base` / `ai_document` / `ai_document_segment`）加一张向量表（`ai_embedding`，pgvector）。摄入与检索两条管道均已上线：
 
-![图 4：知识库 RAG 摄入与检索管道](/images/svg/ai-assistant-rag-pipeline.svg)
+![图 4：知识库 RAG 摄入与检索管道](ai-assistant-rag-pipeline.svg)
 
 上传侧同步做三件事：白名单校验（pdf / doc / docx，≤20MB）、文件落盘（UUID 重命名）、登记 `ai_document`（pending）并原子累加知识库文档数，然后立刻返回 docId。重活全部丢给独立的异步 Bean 解析：
 

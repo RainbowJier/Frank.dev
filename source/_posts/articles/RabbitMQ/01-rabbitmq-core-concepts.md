@@ -73,7 +73,7 @@ RabbitMQ 是 **AMQP 0-9-1 协议**的实现。它和 Kafka"生产者直接把消
 - **交换机不存消息**，它只是个"路由器"，消息路由失败且没有配置回退时，消息会被**直接丢弃**（这是新手消息丢失的头号原因）
 - 交换机和队列是**多对多**关系：一个交换机可以绑多个队列，一个队列也可以被多个交换机绑定
 
-![图1：AMQP 消息路由模型](/images/svg/rabbitmq-amqp-model.svg)
+![图1：AMQP 消息路由模型](rabbitmq-amqp-model.svg)
 
 ## 三、四种交换机类型
 
@@ -94,7 +94,7 @@ RabbitMQ 是 **AMQP 0-9-1 协议**的实现。它和 Kafka"生产者直接把消
 
 `*` 和 `#` 是按 **`.` 分隔的单词**匹配的：`order.*` 能匹配 `order.paid`，不能匹配 `a.b.order.paid`；`order.#` 两者都能匹配。
 
-![图2：四种交换机类型的路由行为对比](/images/svg/rabbitmq-exchange-types.svg)
+![图2：四种交换机类型的路由行为对比](rabbitmq-exchange-types.svg)
 
 实际业务里 90% 的场景 `direct` 和 `topic` 就够用了：精确的用 direct，带层级的用 topic，全量广播才用 fanout。
 

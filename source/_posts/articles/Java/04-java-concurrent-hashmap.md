@@ -77,7 +77,7 @@ JDK 早期确实给过"线程安全的 Map"：
 
 `ConcurrentHashMap` 的进化史，就是一部**把锁越拆越细**的历史：
 
-![图9：从全表锁到桶级锁——线程安全 Map 的锁粒度演进](/images/svg/java-chm-lock-evolution.svg)
+![图9：从全表锁到桶级锁——线程安全 Map 的锁粒度演进](java-chm-lock-evolution.svg)
 
 | 版本 | 方案 | 锁粒度 | 并发度 |
 |------|------|--------|--------|
@@ -115,7 +115,7 @@ JDK 7 的 `ConcurrentHashMap` 内部是一个 **`Segment` 数组**（默认 16 �
 
 ### 3.1 数组 + 链表 + 红黑树
 
-![图10：JDK 8 ConcurrentHashMap 存储结构——数组 + 链表 + 红黑树](/images/svg/java-chm-structure.svg)
+![图10：JDK 8 ConcurrentHashMap 存储结构——数组 + 链表 + 红黑树](java-chm-structure.svg)
 
 结构和 `HashMap` 一脉相承：
 
@@ -167,7 +167,7 @@ static class Node<K,V> {
 
 ### 4.1 流程总览
 
-![图11：put 的加锁决策流程——CAS 快路径与 synchronized 慢路径](/images/svg/java-chm-put-flow.svg)
+![图11：put 的加锁决策流程——CAS 快路径与 synchronized 慢路径](java-chm-put-flow.svg)
 
 用文字把图串一遍（简化版）：
 
@@ -243,7 +243,7 @@ public V get(Object key) {
 
 扩容是 `ConcurrentHashMap` 最精巧的部分。普通 HashMap 扩容是"一个人搬完整张表"，搬完之前读不了写不了；`ConcurrentHashMap` 的扩容是**大家一起来搬，边搬边营业**。
 
-![图12：多线程协助扩容——ForwardingNode 与迁移区间认领](/images/svg/java-chm-transfer.svg)
+![图12：多线程协助扩容——ForwardingNode 与迁移区间认领](java-chm-transfer.svg)
 
 ### 6.1 整体过程
 

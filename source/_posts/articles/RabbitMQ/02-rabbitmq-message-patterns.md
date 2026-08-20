@@ -88,7 +88,7 @@ channel.basicConsume("work.queue", false, (tag, delivery) -> {
 
 原理：`basicQos(1)` 告诉队列"没收到我的 ack 之前别派新消息"，而 ack 只有处理完才发。于是**谁先干完谁先领下一条**——处理快的消费者自然拿得多，这就是**能者多劳（Fair Dispatch）**。
 
-![图1：轮询分发与公平分发的对比](/images/svg/rabbitmq-work-queues-dispatch.svg)
+![图1：轮询分发与公平分发的对比](rabbitmq-work-queues-dispatch.svg)
 
 注意一个坑：**手动 ack 忘了调用 `basicAck`** 的话，消息会一直处于 unacked 状态，队列不会派新消息（`basicQos(1)` 时直接卡死），积压在管理界面上一眼就能看出来。忘了 ack 的排查方法：Queues 页签看 Unacked 数量。
 

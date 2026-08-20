@@ -71,7 +71,7 @@ ORDER BY 累计消费额 DESC;
 
 我们的订单表里只存了 `user_id`，并没有直接存用户名。想在订单结果里看到用户名，就需要把 `orders` 和 `users` 两张表"拼"在一起——这就是 JOIN。
 
-![图2：一条 SQL 从连接到存储引擎的执行流程](/images/svg/mysql-sql-execution-flow.svg)
+![图2：一条 SQL 从连接到存储引擎的执行流程](mysql-sql-execution-flow.svg)
 
 ### INNER JOIN：只要两边都有的
 

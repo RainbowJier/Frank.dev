@@ -28,7 +28,7 @@ LangChain4j 对三段都有抽象，逐段拆。
 
 ## 一、摄入管道
 
-![图 1：RAG 摄入管道](/images/svg/langchain4j-rag-ingestion.svg)
+![图 1：RAG 摄入管道](langchain4j-rag-ingestion.svg)
 
 ### 解析：DocumentParser
 
@@ -108,7 +108,7 @@ ingestor.ingest(document);
 
 ## 二、检索管道
 
-![图 2：一次向量检索](/images/svg/langchain4j-rag-retrieval.svg)
+![图 2：一次向量检索](langchain4j-rag-retrieval.svg)
 
 检索的输入是问题、输出是命中分段列表，中间四个可调项：
 
@@ -187,7 +187,7 @@ stream.onRetrieved(contents -> {
 
 `contentRetriever(...)` 其实是"全默认组件 + 单检索器直通"的快捷方式。完整编排由 `RetrievalAugmentor` 承担，五个环节各自可替换：
 
-![图 3：RetrievalAugmentor 高级 RAG 管道](/images/svg/langchain4j-rag-augmentor.svg)
+![图 3：RetrievalAugmentor 高级 RAG 管道](langchain4j-rag-augmentor.svg)
 
 - **QueryTransformer（查询变换）**：改写口语化问题、扩展成多个子查询、或压缩超长历史——多查询扩展能显著提高召回，代价是多次检索；
 - **QueryRouter（查询路由）**：把（可能多个）查询分发给（可能多个）检索器——"技术问题路由到向量库，政策问题路由到公文库"；

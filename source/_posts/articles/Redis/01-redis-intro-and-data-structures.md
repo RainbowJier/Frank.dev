@@ -51,7 +51,7 @@ Redis 就是为解决这类问题而生的：**把热数据放进内存**。内�
 
 最反直觉的是第三条：单线程为什么反而快？注意，**"单线程"指的是命令执行那一段**。网络事件的监听交给了操作系统的 epoll：内核替你盯着所有连接，谁的 数据 就绪了才通知 Redis 处理。线程永远不会阻塞在"干等数据"上，每一滴 CPU 都花在执行命令本身。
 
-![图1：Redis 单线程模型与 IO 多路复用](/images/svg/redis-thread-model.svg)
+![图1：Redis 单线程模型与 IO 多路复用](redis-thread-model.svg)
 
 补充两个容易被追问的点：
 
@@ -97,7 +97,7 @@ OK
 
 Redis 的 value 不只是字符串，而是五种核心数据结构。日常很多性能问题，根源就是**"只会用 String"**——把对象序列化成 JSON 塞进 String，改一个字段也要整体读写。
 
-![图2：五大核心数据结构、底层编码与典型场景](/images/svg/redis-data-structures.svg)
+![图2：五大核心数据结构、底层编码与典型场景](redis-data-structures.svg)
 
 ### 1. String：缓存、计数器、分布式锁
 

@@ -43,7 +43,7 @@ lang: zh-CN
 
 注意关键点：**挂掉的只是订单服务，死掉的却是整个网站。** 因为同步调用里，线程是最宝贵的资源，"等待"本身就是占用。而下游故障时，等来的只有超时，纯属白白陪葬。
 
-![图 1：同一场故障的两种结局](/images/svg/gateway-cascade-vs-circuit-breaker.svg)
+![图 1：同一场故障的两种结局](gateway-cascade-vs-circuit-breaker.svg)
 
 熔断器把这条链路拦腰斩断：发现订单接口失败率飙升，立刻跳闸，后续对订单服务的调用毫秒级失败、走降级返回兜底数据——网关线程几乎不被占用，商品、用户服务一切照常。**故障被隔离在单个接口内，这就是"故障隔离"。**
 
@@ -65,7 +65,7 @@ lang: zh-CN
 
 不管底层是 Resilience4j、Sentinel 还是 Hystrix，熔断器都绕不开同一个状态机：
 
-![图 2：熔断器三态状态机](/images/svg/gateway-circuit-breaker-state-machine.svg)
+![图 2：熔断器三态状态机](gateway-circuit-breaker-state-machine.svg)
 
 | 状态 | 行为 |
 | --- | --- |
@@ -147,7 +147,7 @@ spring:
 
 这行配置的含义：所有 `/api/order/**` 的请求，先过 `orderCircuitBreaker` 这只保险丝；熔断器打开时，请求不再发往订单服务，而是在网关内部**转发（forward）到降级接口** `/fallback/order`。
 
-![图 3：网关熔断请求流转](/images/svg/gateway-resilience4j-request-flow.svg)
+![图 3：网关熔断请求流转](gateway-resilience4j-request-flow.svg)
 
 ### 3.3 调保险丝的参数
 

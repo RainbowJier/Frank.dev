@@ -63,7 +63,7 @@ public class UnsafeCounter {
 
 如果两个线程同时执行，就可能出现这种情况：
 
-![图4：i++ 竞态条件——读改写交错导致更新丢失](/images/svg/java-race-condition-increment.svg)
+![图4：i++ 竞态条件——读改写交错导致更新丢失](java-race-condition-increment.svg)
 
 - **线程 A** 读到 100，加完得 101，还没来得及写回去
 - **线程 B** 也读到了 100（因为 A 还没写回去），加完也是 101
@@ -264,7 +264,7 @@ public class ReentrantDemo {
 
 早期 JDK 的 `synchronized` 很慢，因为每次都要找操作系统帮忙（"重量级锁"）。JDK 6 开始做了优化，锁会根据竞争情况"升级"：
 
-![图5：synchronized 锁升级路径](/images/svg/java-lock-upgrade-path.svg)
+![图5：synchronized 锁升级路径](java-lock-upgrade-path.svg)
 
 - **无锁**：对象刚创建，没人用
 - **偏向锁**：只有一个线程在用，记住这个线程 ID，它下次进来不用加锁
@@ -439,7 +439,7 @@ CAS 只检查"值有没有变"，不关心"值变过几次"。如果一个值从
 
 经典的转账场景：
 
-![图6：转账死锁——环形等待](/images/svg/java-deadlock-transfer.svg)
+![图6：转账死锁——环形等待](java-deadlock-transfer.svg)
 
 ```java
 package com.frank.concurrent.ch02;

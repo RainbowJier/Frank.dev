@@ -27,7 +27,7 @@ lang: zh-CN
 
 **限流（Rate Limiting）就是门口的检票员：单位时间内只放固定数量的请求进来，多出来的礼貌拒绝。**
 
-![图 1：限流的核心思想](/images/svg/rate-limit-core-principle.svg)
+![图 1：限流的核心思想](rate-limit-core-principle.svg)
 
 ### 1.2 不限流会发生什么：雪崩
 
@@ -60,7 +60,7 @@ lang: zh-CN
 
 Java 项目的限流通常分三层，各司其职、层层设防：
 
-![图 2：Java 三层限流体系](/images/svg/rate-limit-java-architecture.svg)
+![图 2：Java 三层限流体系](rate-limit-java-architecture.svg)
 
 | 层级 | 常用工具 | 特点 |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ Java 项目的限流通常分三层，各司其职、层层设防：
 
 老规矩，先看全景图，再逐个拆解：
 
-![图 3：四种限流算法对比](/images/svg/rate-limit-four-algorithms.svg)
+![图 3：四种限流算法对比](rate-limit-four-algorithms.svg)
 
 ### 3.1 固定窗口计数：最简单的"按分钟数数"
 
@@ -117,7 +117,7 @@ Nginx 的 `limit_req` 指令就是漏桶思想。
 
 地铁站的投币闸机：后台**匀速生成令牌**（硬币）扔进桶里，桶有容量上限，装满就不再投；每个请求必须先从桶里**取走一个令牌**才能通过，取不到就拒绝或排队。
 
-![图 4：令牌桶工作流程](/images/svg/token-bucket-flow.svg)
+![图 4：令牌桶工作流程](token-bucket-flow.svg)
 
 两个关键参数，务必记牢：
 

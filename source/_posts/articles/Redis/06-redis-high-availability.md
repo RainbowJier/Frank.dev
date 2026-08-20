@@ -27,7 +27,7 @@ lang: zh-CN
 
 三套方案依次解题：主从 → 哨兵 → Cluster。
 
-![图1：主从复制的数据同步流程](/images/svg/redis-replication-sentinel.svg)
+![图1：主从复制的数据同步流程](redis-replication-sentinel.svg)
 
 ## 二、主从复制：一主多从，读写分离
 
@@ -112,7 +112,7 @@ slot = CRC16(key) mod 16384
 - 节点 B：slot 5461 ~ 10922
 - 节点 C：slot 10923 ~ 16383
 
-![图2：Redis Cluster 的槽位分片与 MOVED 重定向](/images/svg/redis-cluster-architecture.svg)
+![图2：Redis Cluster 的槽位分片与 MOVED 重定向](redis-cluster-architecture.svg)
 
 **面试必问：为什么是 16384？** 两个原因：心跳包里要带节点负责的 slot 位图，16384 个 bit = 2KB，再大网络开销就浪费了（CRC16 本身能产生 65536 个值）；同时官方建议集群不超过 1000 个主节点，16384 个槽足够分。
 

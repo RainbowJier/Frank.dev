@@ -31,7 +31,7 @@ LangChain4j 的对话能力从下到上分三层，理解了分层就理解了�
 
 对大模型来说，一次请求就是一个**有序的消息列表**。LangChain4j 用一个 `ChatMessage` 家族来表达：
 
-![图 1：LangChain4j 的消息模型](/images/svg/langchain4j-message-model.svg)
+![图 1：LangChain4j 的消息模型](langchain4j-message-model.svg)
 
 四种角色各司其职：
 
@@ -94,7 +94,7 @@ streamingModel.chat(request, new StreamingChatResponseHandler() {
 
 模型本身无状态，多轮对话全靠把历史消息重新塞进请求。`ChatMemory` 负责管理这个列表，两种内置窗口策略：
 
-![图 2：两种 ChatMemory 窗口策略](/images/svg/langchain4j-chat-memory-compare.svg)
+![图 2：两种 ChatMemory 窗口策略](langchain4j-chat-memory-compare.svg)
 
 ```java
 // A. 按条数：最多保留 N 条消息，超出驱逐最旧
@@ -142,7 +142,7 @@ String answer = assistant.chat("生态保护红线数据怎么申请下载？", 
 
 背后是一个 **JDK 动态代理**拦截你的方法调用，把它翻译成一条完整的执行管道：
 
-![图 3：AiServices 一次调用的执行管道](/images/svg/langchain4j-aiservices-pipeline.svg)
+![图 3：AiServices 一次调用的执行管道](langchain4j-aiservices-pipeline.svg)
 
 逐段拆开这条管道：
 

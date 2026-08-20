@@ -106,7 +106,7 @@ Java 从第一个版本就自带多线程能力，但一开始的实现有点像
 
 一张图看懂 Java 并发 API 是怎么一步步长成现在这样的：
 
-![图1：Java 并发 API 演进时间线](/images/svg/java-concurrency-evolution-timeline.svg)
+![图1：Java 并发 API 演进时间线](java-concurrency-evolution-timeline.svg)
 
 | 版本 | 年份 | 大事件 |
 |------|------|--------|
@@ -155,7 +155,7 @@ Java 从第一个版本就自带多线程能力，但一开始的实现有点像
 
 一句话记住：**局部变量 = 藏在栈里 = 只有自己能动 = 不用担心；对象的字段和静态变量 = 放在堆里 = 大家都能动 = 要当心**。
 
-![图2：JVM 内存布局——共享区与线程私有区](/images/svg/java-jvm-memory-and-threads.svg)
+![图2：JVM 内存布局——共享区与线程私有区](java-jvm-memory-and-threads.svg)
 
 动手验证一下"栈私有、堆共享"：
 
@@ -224,7 +224,7 @@ Java 用 `Thread.State` 定义了六种状态，对应到上班场景就很好�
 | RUNNABLE → BLOCKED | 抢 `synchronized` 锁没抢到 |
 | 任意 → TERMINATED | `run()` 跑完了 |
 
-![图3：Thread.State 六种状态及转换路径](/images/svg/java-thread-state-transitions.svg)
+![图3：Thread.State 六种状态及转换路径](java-thread-state-transitions.svg)
 
 ### 3.2 实战：亲眼看看状态是怎么变的
 

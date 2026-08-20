@@ -36,7 +36,7 @@ lang: zh-CN
 
 Redis 的答案是**惰性删除 + 定期删除，双管齐下**。
 
-![图1：惰性删除与定期删除的配合](/images/svg/redis-expiration-strategies.svg)
+![图1：惰性删除与定期删除的配合](redis-expiration-strategies.svg)
 
 ## 二、惰性删除：访问时才检查
 
@@ -106,7 +106,7 @@ maxmemory-policy allkeys-lru   # 触发淘汰时用什么策略
 
 配合一个小的**淘汰池（eviction pool）**：每轮采样的候选者会放进池子排序，让"更老"的 key 有机会跨轮存活下来，提升命中率。采样数调大更精确也更耗 CPU（`maxmemory-samples 10` 是常见加强档）。
 
-![图2：近似 LRU 随机采样与 LFU 计数衰减](/images/svg/redis-eviction-policies.svg)
+![图2：近似 LRU 随机采样与 LFU 计数衰减](redis-eviction-policies.svg)
 
 ## 六、LFU：4.0 引入的"按频率"淘汰
 

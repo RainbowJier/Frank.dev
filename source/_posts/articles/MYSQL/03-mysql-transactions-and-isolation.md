@@ -60,7 +60,7 @@ SELECT * FROM accounts;
   - Redo Log 记录"要做什么操作"，崩溃重启后重放，保证已提交的不丢
 - **隔离性**：靠 MVCC（多版本并发控制）+ 锁
 
-![图3：InnoDB 事务提交与 Undo、Redo、Binlog 协作流程](/images/svg/mysql-transaction-wal-flow.svg)
+![图3：InnoDB 事务提交与 Undo、Redo、Binlog 协作流程](mysql-transaction-wal-flow.svg)
 
 ## 三、一次完整的转账事务
 

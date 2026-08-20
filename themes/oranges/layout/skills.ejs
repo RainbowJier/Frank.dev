@@ -1,0 +1,26 @@
+<div class="container skills-index">
+  <div class="skills-intro">
+    <h1 class="skills-title"><%= page.title %></h1>
+    <p class="skills-description">仓库中保存的可复用技能目录，点击卡片阅读技能说明。</p>
+  </div>
+
+  <% if (page.skills && page.skills.length) { %>
+  <div class="skills-list">
+    <% page.skills.forEach(function(skill) { %>
+      <% if (skill.readme) { %>
+      <a class="skill-item" href="<%- url_for('skills/' + skill.slug + '/') %>" title="<%= skill.name %>">
+        <h2 class="skill-item-name"><%= skill.name %></h2>
+        <p class="skill-item-description"><%= skill.description %></p>
+      </a>
+      <% } else { %>
+      <article class="skill-item">
+        <h2 class="skill-item-name"><%= skill.name %></h2>
+        <p class="skill-item-description"><%= skill.description %></p>
+      </article>
+      <% } %>
+    <% }) %>
+  </div>
+  <% } else { %>
+  <p class="skills-empty">暂未发现可展示的技能。</p>
+  <% } %>
+</div>

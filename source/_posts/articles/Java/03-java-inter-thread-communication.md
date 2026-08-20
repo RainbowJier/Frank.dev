@@ -55,7 +55,7 @@ synchronized (lock) {           // 铁律①：必须在 synchronized 里面
 
 每个对象的锁背后有两个等候区：
 
-![图7：对象监视器——EntrySet 与 WaitSet 的协作](/images/svg/java-monitor-wait-notify.svg)
+![图7：对象监视器——EntrySet 与 WaitSet 的协作](java-monitor-wait-notify.svg)
 
 - **EntrySet（锁池）**：想抢锁但没抢到的线程，在这里排队（BLOCKED 状态）
 - **WaitSet（等待池）**：调了 `wait()` 的线程在这里睡觉（WAITING 状态）
@@ -326,7 +326,7 @@ USER.remove();
 
 因为 Map 是线程私有的，所以各线程互不干扰——这就是"线程隔离"的全部秘密。
 
-![图8：ThreadLocalMap 的弱引用 key 与强引用 value 的泄漏路径](/images/svg/java-threadlocal-structure.svg)
+![图8：ThreadLocalMap 的弱引用 key 与强引用 value 的泄漏路径](java-threadlocal-structure.svg)
 
 ### 3.4 内存泄漏问题：为什么要 remove()？
 

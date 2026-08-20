@@ -34,7 +34,7 @@ synchronized void deduct() {          // 单机没问题
 
 锁需要放在一个**所有实例都看得见的地方**。Redis 天然合适：`SETNX`（SET if Not eXists）只有一个进程能成功。
 
-![图1：分布式锁的四次进化](/images/svg/redis-lock-evolution.svg)
+![图1：分布式锁的四次进化](redis-lock-evolution.svg)
 
 ## 二、第一次进化：两条命令的坑
 
@@ -96,7 +96,7 @@ Object r = jedis.eval(unlockLua,
 
 效果：**业务跑多久，锁就活多久；进程一崩，看门狗跟着死，锁最多 30 秒后自动放**——两头都安全。
 
-![图2：Redisson 看门狗的加锁与续期流程](/images/svg/redisson-watchdog-flow.svg)
+![图2：Redisson 看门狗的加锁与续期流程](redisson-watchdog-flow.svg)
 
 它的加锁/解锁内部就是上面手写的工业化版本：Lua 脚本 + Hash 结构（field 存 client_id，value 存重入次数），所以还免费获得**可重入**能力。
 

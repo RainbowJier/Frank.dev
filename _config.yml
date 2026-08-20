@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 syntax_highlighter: highlight.js
@@ -50,6 +50,10 @@ highlight:
   tab_replace: ''
   wrap: true
   hljs: false
+
+# 文章资源目录：文章同名目录内的文件发布到文章 URL 下，markdown 里直接写相对文件名引用
+marked:
+  postAsset: true
 
 # Home page setting
 # path: Root path for your blogs index page. (default = '')
@@ -87,6 +91,8 @@ pagination_dir: page
 ## include:/exclude: options only apply to the 'source/' folder
 include:
 exclude:
+  # source/skills 仅供 scripts/skills.js 构建期读取，SKILL.md 全文不发布
+  - skills/**
 ignore:
 
 # Extensions

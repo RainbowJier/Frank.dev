@@ -315,6 +315,104 @@ a.home-exp-item {
   margin-top: 10px;
 }
 
+/* 技能目录页 */
+.skills-index {
+  padding: 0 40px;
+}
+
+.skills-intro {
+  margin-bottom: 20px;
+}
+
+.skills-title {
+  margin: 0;
+  color: var(--color-text-a);
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.skills-description {
+  margin: 8px 0 0;
+  color: var(--color-text-sub);
+  font-size: 1.35rem;
+  line-height: 1.7;
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.skill-item {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.skill-item:hover {
+  border-color: var(--color-text-sub);
+  background: var(--bg-content-search);
+}
+
+.skill-item-name {
+  margin: 0;
+  color: var(--color-text-a);
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.skill-item-description {
+  margin: 8px 0 0;
+  color: var(--color-text-a);
+  font-size: 1.35rem;
+  line-height: 1.7;
+}
+
+.skills-empty {
+  color: var(--color-text-sub);
+  font-size: 1.4rem;
+}
+
+/* Skill-Hub 详情页 */
+.skill-index {
+  padding: 0 40px;
+}
+
+.skill-detail-head {
+  margin-bottom: 20px;
+}
+
+.skill-back {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text-sub);
+  text-decoration: none;
+}
+
+.skill-back:hover {
+  color: var(--color-text-a-hover);
+}
+
+.skill-detail-title {
+  margin: 0;
+  color: var(--color-text-a);
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.skill-detail-desc {
+  margin: 8px 0 0;
+  color: var(--color-text-sub);
+  font-size: 1.35rem;
+  line-height: 1.7;
+}
+
 .home-exp-logo {
   position: relative;
   flex-shrink: 0;
@@ -432,7 +530,9 @@ a.home-exp-item {
   .home-intro-stats {
     gap: 10px 24px;
   }
-  .project-index {
+  .project-index,
+  .skills-index,
+  .skill-index {
     padding: 0;
   }
   .home-exp-item {
@@ -1285,7 +1385,7 @@ a.home-exp-item {
 
 @media (min-width: 889px) {
   #app {
-    --sidebar-width: clamp(208px, 18vw, 280px);
+    --sidebar-width: 30%;
   }
 
   .site-sidebar {
@@ -1359,7 +1459,7 @@ a.home-exp-item {
   }
 
   .site-footer .footer {
-    width: min(100%, 820px);
+    width: 100%;
     margin-inline: auto;
   }
 
@@ -1373,11 +1473,11 @@ a.home-exp-item {
   .site-main .container {
     box-sizing: border-box;
     margin-inline: auto;
-    width: min(100% - 96px, 820px);
+    width: calc(100% - 96px);
   }
 
   .site-main .post-details {
-    width: min(100% - 96px, 980px);
+    width: calc(100% - 96px);
     display: grid;
     grid-template-columns: minmax(0, 1fr) 220px;
     gap: 48px;

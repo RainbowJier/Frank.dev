@@ -35,7 +35,7 @@ lang: zh-CN
 
 每个环节都有对应的解法，全链路示意：
 
-![图1：消息可靠性投递全链路](/images/svg/rabbitmq-reliable-delivery-flow.svg)
+![图1：消息可靠性投递全链路](rabbitmq-reliable-delivery-flow.svg)
 
 ## 二、环节一：生产者确认（Publisher Confirm）
 
@@ -193,7 +193,7 @@ channel.basicPublish("pay.direct", "order.created",
 // 30 秒后 order.cancel.queue 出现这条消息，消费者检查支付状态，未支付则取消
 ```
 
-![图2：TTL + 死信交换机实现延迟队列](/images/svg/rabbitmq-dead-letter-delay.svg)
+![图2：TTL + 死信交换机实现延迟队列](rabbitmq-dead-letter-delay.svg)
 
 ### 队头阻塞：这个方案的坑
 

@@ -40,7 +40,7 @@ public class OrderService {
 
 这就是**强耦合**：每个类都要认识自己的全部下游，还要认识下游的下游。依赖链条越拉越长，改一处，崩一片。
 
-![图1：对象从哪来——自己 new 的耦合链（A）与容器统一装配（B）](/images/svg/spring-ioc-new-vs-container.svg)
+![图1：对象从哪来——自己 new 的耦合链（A）与容器统一装配（B）](spring-ioc-new-vs-container.svg)
 
 ### 1.2 控制反转，到底反转了什么
 
@@ -165,7 +165,7 @@ public class LifecycleDemo {
 
 把这套流程展开，就是完整的八步生命周期：
 
-![图2：Bean 生命周期——从构造到销毁的八个阶段，⑥ 是 AOP 的入口](/images/svg/spring-bean-lifecycle.svg)
+![图2：Bean 生命周期——从构造到销毁的八个阶段，⑥ 是 AOP 的入口](spring-bean-lifecycle.svg)
 
 **盯住第 ⑥ 步**：初始化后的"后置处理"（`BeanPostProcessor`）会在 Bean 就绪前做一次"最后一道加工"——如果这个 Bean 命中了任何切面，**容器放进单例池的就不是原始对象，而是它的代理**。AOP 就是从这里偷偷进来的，第三节细说。
 
@@ -202,7 +202,7 @@ The dependencies of some of the beans in the application context form a cycle:
 
 但setter/字段注入的循环依赖，老版本 Spring 其实能自动解——靠的就是著名的**三级缓存**：
 
-![图3：三级缓存如何拆解 A、B 互相依赖的死结](/images/svg/spring-circular-three-caches.svg)
+![图3：三级缓存如何拆解 A、B 互相依赖的死结](spring-circular-three-caches.svg)
 
 精髓在第三级的"对象工厂"：它像一个承诺书——"A 现在还是半成品，但如果有人急着要，我能现场提前生成一个带代理的早期引用给你"。**只有真的发生循环依赖，这个工厂才会兑现**；一切顺利的话，代理照旧等到初始化之后再生成，设计语义不被破坏。只用两级缓存做不到"按需提前"，这就是第三级存在的理由。
 
@@ -253,7 +253,7 @@ public Order create(OrderRequest req) {
 | 切面 Aspect | 一整套安检规程 | 切点 + 通知的组合，一个类 |
 | 织入 Weaving | 把安检门装到入口处 | 把切面应用到目标对象、生成代理的过程 |
 
-![图4：切点从连接点中筛选目标（A），五种通知切入方法执行轴（B）](/images/svg/spring-aop-pointcut-advice.svg)
+![图4：切点从连接点中筛选目标（A），五种通知切入方法执行轴（B）](spring-aop-pointcut-advice.svg)
 
 ### 2.3 实战：一个接口耗时统计切面
 
@@ -317,7 +317,7 @@ INFO  OrderService.create(..) 耗时 42ms
 
 Spring AOP 的本质是**运行时动态代理**：容器发现 `OrderService` 命中切面，就不把原始对象给你，而是给一个"包装过"的代理对象——方法调用先经过增强逻辑，再转发给原始对象。Java 里造代理有两条路：
 
-![图5：JDK 动态代理与 CGLIB 的构造方式及默认选型](/images/svg/spring-proxy-jdk-vs-cglib.svg)
+![图5：JDK 动态代理与 CGLIB 的构造方式及默认选型](spring-proxy-jdk-vs-cglib.svg)
 
 验证一下你拿到的到底是什么：
 
@@ -360,7 +360,7 @@ public class OrderService {
 
 为什么？容器里注入给别人的是**代理对象**，但对象内部 `this` 永远指向**原始对象自己**。外部调用先过代理（增强生效）；方法内部的 `this.xxx()` 压根不经过代理——抄了近路，也躲掉了所有增强。
 
-![图6：自调用为什么失效——this 拿到的是原始对象](/images/svg/spring-aop-self-invocation.svg)
+![图6：自调用为什么失效——this 拿到的是原始对象](spring-aop-self-invocation.svg)
 
 这就是面试常问的 **@Transactional 失效场景之一**。三种解法：
 
