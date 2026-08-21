@@ -438,7 +438,7 @@ Spring 的话题往后还会写：编程式事务、`@Transactional` 与 MQ 的�
 
 **系列阅读**：
 
-- {% post_link articles/Java/springboot-ioc-aop 'Spring Boot 双支柱：把 IoC 和 AOP 一次讲透' %}
+- {% post_link articles/Springboot/springboot-ioc-aop 'Spring Boot 双支柱：把 IoC 和 AOP 一次讲透' %}
 - {% post_link articles/Java/01-java-multithreading-fundamentals 'Java 并发入门（01）：多线程基础' %}
 - {% post_link articles/Java/02-java-thread-safety-and-mutex 'Java 并发入门（02）：线程安全与互斥' %}
 - {% post_link articles/Java/03-java-inter-thread-communication 'Java 并发入门（03）：线程间通信' %}
