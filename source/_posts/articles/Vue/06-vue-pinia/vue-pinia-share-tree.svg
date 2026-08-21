@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 396" width="820" height="396"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="396" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="395" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <line x1="410" y1="24" x2="410" y2="368" stroke="#E8EDF3" stroke-width="1.5"/>
+
+  <!-- 左：prop drilling -->
+  <text x="60" y="46" font-size="14" font-weight="600" fill="#252A33">props 逐层接力</text>
+  <rect x="130" y="60" width="130" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="195" y="83" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">App</text>
+  <line x1="195" y1="96" x2="195" y2="118" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="207" y="112" font-size="11" fill="#6B7280">:user</text>
+  <rect x="130" y="122" width="130" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="195" y="145" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Layout（搬运）</text>
+  <line x1="160" y1="158" x2="120" y2="180" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="118" y="166" font-size="11" fill="#6B7280">:user</text>
+  <line x1="230" y1="158" x2="270" y2="180" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="240" y="166" font-size="11" fill="#6B7280">:user</text>
+  <rect x="56" y="184" width="128" height="36" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="120" y="207" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Header（使用）</text>
+  <rect x="206" y="184" width="128" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="270" y="207" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Settings（搬运）</text>
+  <line x1="270" y1="220" x2="270" y2="242" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="282" y="236" font-size="11" fill="#6B7280">:user</text>
+  <rect x="206" y="246" width="128" height="36" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="270" y="269" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Logout（使用）</text>
+  <rect x="60" y="308" width="280" height="34" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="200" y="329" text-anchor="middle" font-size="12" fill="#252A33">中间层被迫声明并转发不关心的数据</text>
+
+  <!-- 右：Pinia 直连 -->
+  <text x="450" y="46" font-size="14" font-weight="600" fill="#252A33">Pinia 全局仓库</text>
+  <rect x="460" y="60" width="140" height="36" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="530" y="83" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">App</text>
+  <rect x="460" y="130" width="140" height="36" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="530" y="153" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Header（使用）</text>
+  <rect x="640" y="130" width="140" height="36" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="710" y="153" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Settings（使用）</text>
+  <rect x="640" y="200" width="140" height="36" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="710" y="223" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Logout（使用）</text>
+  <line x1="530" y1="166" x2="580" y2="296" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="710" y1="166" x2="668" y2="296" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="710" y1="236" x2="694" y2="296" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="470" y="300" width="300" height="48" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="620" y="320" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">useAuthStore（应用级单例）</text>
+  <text x="620" y="338" text-anchor="middle" font-size="11" fill="#6B7280">token · userInfo · login/logout</text>
+  <rect x="450" y="308" width="0" height="0" fill="none"/>
+  <text x="620" y="370" text-anchor="middle" font-size="11" fill="#6B7280">谁用谁直连，中间层彻底解放</text>
+
+  <text x="410" y="390" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜prop drilling 与 Pinia：中间层接力搬运 vs 使用者直连全局仓库</text>
+</svg>

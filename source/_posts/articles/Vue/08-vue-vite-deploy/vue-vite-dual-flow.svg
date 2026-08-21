@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 356" width="820" height="356"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="356" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="355" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：开发期 -->
+  <rect x="28" y="24" width="764" height="140" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="52" font-size="14" font-weight="600" fill="#252A33">A · 开发期（vite）：不打包，按需编译</text>
+
+  <rect x="48" y="70" width="200" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="148" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">浏览器（原生 ESM）</text>
+  <text x="148" y="113" text-anchor="middle" font-size="11" fill="#6B7280">逐模块请求源码</text>
+
+  <line x1="252" y1="98" x2="296" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="274" y="90" text-anchor="middle" font-size="11" fill="#6B7280">请求</text>
+
+  <rect x="300" y="70" width="220" height="56" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Vite dev server</text>
+  <text x="410" y="113" text-anchor="middle" font-size="11" fill="#6B7280">只编译当前页面用到的文件</text>
+
+  <line x1="556" y1="98" x2="524" y2="98" stroke="#5A6472" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="540" y="90" text-anchor="middle" font-size="11" fill="#6B7280">供给</text>
+
+  <rect x="560" y="70" width="204" height="56" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="662" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">esbuild 预构建缓存</text>
+  <text x="662" y="113" text-anchor="middle" font-size="11" fill="#6B7280">依赖转 ESM，启动时一次</text>
+
+  <rect x="300" y="132" width="464" height="24" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="532" y="148" text-anchor="middle" font-size="12" fill="#252A33">冷启动秒级：项目越大，与全量打包的差距越明显</text>
+
+  <!-- 面板 B：生产期 -->
+  <rect x="28" y="180" width="764" height="140" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="208" font-size="14" font-weight="600" fill="#252A33">B · 生产期（vite build）：Rollup 全量打包</text>
+
+  <rect x="48" y="226" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="133" y="249" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">源码</text>
+  <text x="133" y="269" text-anchor="middle" font-size="11" fill="#6B7280">组件 / 样式 / 依赖</text>
+
+  <line x1="222" y1="254" x2="246" y2="254" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="250" y="226" width="180" height="56" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="340" y="249" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Rollup 打包</text>
+  <text x="340" y="269" text-anchor="middle" font-size="11" fill="#6B7280">tree-shaking · 压缩 · 分包</text>
+
+  <line x1="434" y1="254" x2="458" y2="254" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="462" y="226" width="160" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="542" y="249" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">dist/</text>
+  <text x="542" y="269" text-anchor="middle" font-size="11" fill="#6B7280">带 hash 的静态文件</text>
+
+  <line x1="626" y1="254" x2="650" y2="254" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="654" y="226" width="110" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="709" y="249" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">nginx</text>
+  <text x="709" y="269" text-anchor="middle" font-size="11" fill="#6B7280">或 CDN</text>
+
+  <text x="410" y="308" text-anchor="middle" font-size="12" fill="#252A33">两条路径互不相干：上线前必须 vite preview 验证生产产物</text>
+
+  <text x="410" y="344" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Vite 双流程：开发期按需编译原生 ESM，生产期 Rollup 全量打包</text>
+</svg>

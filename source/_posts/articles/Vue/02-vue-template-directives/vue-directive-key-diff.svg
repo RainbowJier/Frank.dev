@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 410" width="820" height="410"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="410" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="409" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：index 为 key -->
+  <rect x="28" y="24" width="764" height="166" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="56" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="72" y="56" font-size="16" font-weight="600" fill="#252A33">以 index 为 key：按位置对账</text>
+
+  <rect x="325" y="44" width="200" height="24" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="425" y="60" text-anchor="middle" font-size="12" fill="#252A33">整列被动：2 处改写 + 1 处删除</text>
+
+  <text x="145" y="80" text-anchor="middle" font-size="11" fill="#6B7280">更新前</text>
+  <rect x="60" y="86" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="103" font-size="11" fill="#6B7280">0</text>
+  <text x="152" y="104" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">张三</text>
+  <rect x="60" y="122" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="139" font-size="11" fill="#6B7280">1</text>
+  <text x="152" y="140" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">李四</text>
+  <rect x="60" y="158" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="175" font-size="11" fill="#6B7280">2</text>
+  <text x="152" y="176" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">王五</text>
+
+  <line x1="234" y1="99" x2="554" y2="99" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="394" y="92" text-anchor="middle" font-size="11" fill="#6B7280">改写为李四</text>
+  <line x1="234" y1="135" x2="554" y2="135" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="394" y="128" text-anchor="middle" font-size="11" fill="#6B7280">改写为王五</text>
+  <line x1="234" y1="171" x2="554" y2="171" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="394" y="164" text-anchor="middle" font-size="11" fill="#6B7280">删除</text>
+
+  <text x="645" y="80" text-anchor="middle" font-size="11" fill="#6B7280">更新后</text>
+  <rect x="560" y="86" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="576" y="103" font-size="11" fill="#6B7280">0</text>
+  <text x="652" y="104" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">李四</text>
+  <rect x="560" y="122" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="576" y="139" font-size="11" fill="#6B7280">1</text>
+  <text x="652" y="140" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">王五</text>
+  <rect x="560" y="158" width="170" height="26" rx="6" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="645" y="175" text-anchor="middle" font-size="11" fill="#6B7280">位置 2 已空</text>
+
+  <!-- 面板 B：业务 id 为 key -->
+  <rect x="28" y="206" width="764" height="166" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="238" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="72" y="238" font-size="16" font-weight="600" fill="#252A33">以业务 id 为 key：按身份对账</text>
+
+  <rect x="310" y="226" width="230" height="24" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="425" y="242" text-anchor="middle" font-size="12" fill="#252A33">仅删 1 个节点，其余原样复用</text>
+
+  <text x="145" y="262" text-anchor="middle" font-size="11" fill="#6B7280">更新前</text>
+  <rect x="60" y="268" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="285" font-size="11" fill="#6B7280">a</text>
+  <text x="152" y="286" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">张三</text>
+  <rect x="60" y="304" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="321" font-size="11" fill="#6B7280">b</text>
+  <text x="152" y="322" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">李四</text>
+  <rect x="60" y="340" width="170" height="26" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="76" y="357" font-size="11" fill="#6B7280">c</text>
+  <text x="152" y="358" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">王五</text>
+
+  <rect x="375" y="268" width="70" height="26" rx="6" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="410" y="285" text-anchor="middle" font-size="11" fill="#6B7280">✕ 删除</text>
+  <line x1="234" y1="281" x2="371" y2="281" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <line x1="234" y1="317" x2="554" y2="296" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="394" y="306" text-anchor="middle" font-size="11" fill="#6B7280">复用 b</text>
+  <line x1="234" y1="353" x2="554" y2="332" stroke="#00A087" stroke-width="1.5" marker-end="url(#arrowG)"/>
+  <text x="394" y="348" text-anchor="middle" font-size="11" fill="#6B7280">复用 c</text>
+
+  <text x="645" y="262" text-anchor="middle" font-size="11" fill="#6B7280">更新后</text>
+  <rect x="560" y="268" width="170" height="26" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="576" y="285" font-size="11" fill="#6B7280">b</text>
+  <text x="652" y="286" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">李四</text>
+  <rect x="560" y="304" width="170" height="26" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="576" y="321" font-size="11" fill="#6B7280">c</text>
+  <text x="652" y="322" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">王五</text>
+  <rect x="560" y="340" width="170" height="26" rx="6" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="645" y="357" text-anchor="middle" font-size="11" fill="#6B7280">a 已随删除消失</text>
+
+  <text x="410" y="396" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜列表 diff 的两种对账方式：index 按位置改写，业务 id 按身份复用</text>
+</svg>

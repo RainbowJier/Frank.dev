@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 356" width="820" height="356"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="356" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="355" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 浏览器 -->
+  <rect x="48" y="150" width="160" height="60" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="128" y="175" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">浏览器</text>
+  <text x="128" y="195" text-anchor="middle" font-size="11" fill="#6B7280">admin.example.com</text>
+
+  <line x1="212" y1="180" x2="264" y2="180" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="238" y="170" text-anchor="middle" font-size="11" fill="#6B7280">同源</text>
+
+  <!-- nginx 容器 -->
+  <rect x="270" y="56" width="280" height="230" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="84" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">nginx :80（唯一入口）</text>
+
+  <rect x="290" y="100" width="240" height="48" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="120" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">location /assets/</text>
+  <text x="410" y="138" text-anchor="middle" font-size="11" fill="#6B7280">静态文件 · 缓存一年（immutable）</text>
+
+  <rect x="290" y="156" width="240" height="48" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="176" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">location /</text>
+  <text x="410" y="194" text-anchor="middle" font-size="11" fill="#6B7280">try_files → index.html（不缓存）</text>
+
+  <rect x="290" y="212" width="240" height="48" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="232" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">location /api/</text>
+  <text x="410" y="250" text-anchor="middle" font-size="11" fill="#6B7280">proxy_pass → 127.0.0.1:8080</text>
+
+  <!-- 后端 -->
+  <line x1="554" y1="236" x2="606" y2="220" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="610" y="196" width="160" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="690" y="219" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Spring Boot</text>
+  <text x="690" y="239" text-anchor="middle" font-size="11" fill="#6B7280">127.0.0.1:8080</text>
+
+  <!-- dist 供给 -->
+  <rect x="60" y="296" width="290" height="30" rx="6" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="205" y="315" text-anchor="middle" font-size="12" fill="#6B7280">dist/（pnpm build 产物，文件名带 hash）</text>
+  <line x1="300" y1="292" x2="360" y2="264" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- 收益 -->
+  <rect x="420" y="296" width="350" height="30" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="595" y="315" text-anchor="middle" font-size="12" fill="#252A33">history 404 与生产跨域在此一并消失</text>
+
+  <text x="410" y="350" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜生产部署拓扑：nginx 统一入口——静态托管、路由兜底、API 反代</text>
+</svg>

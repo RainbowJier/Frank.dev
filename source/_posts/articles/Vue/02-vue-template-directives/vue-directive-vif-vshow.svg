@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 356" width="820" height="356"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="356" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="355" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：v-if -->
+  <rect x="28" y="24" width="764" height="140" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="56" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="72" y="56" font-size="16" font-weight="600" fill="#252A33">v-if · 惰性渲染</text>
+
+  <rect x="48" y="78" width="220" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="158" y="96" text-anchor="middle" font-size="11" fill="#6B7280">条件为真</text>
+  <text x="158" y="119" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">元素渲染进 DOM</text>
+
+  <line x1="274" y1="106" x2="300" y2="106" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="304" y="78" width="240" height="56" rx="6" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="424" y="96" text-anchor="middle" font-size="11" fill="#6B7280">条件为假</text>
+  <text x="424" y="119" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">节点根本不存在</text>
+
+  <rect x="572" y="78" width="192" height="56" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="668" y="99" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">切换时：创建 / 销毁</text>
+  <text x="668" y="120" text-anchor="middle" font-size="11" fill="#6B7280">初始为假则零渲染成本</text>
+
+  <!-- 面板 B：v-show -->
+  <rect x="28" y="180" width="764" height="140" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="48" y="212" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="72" y="212" font-size="16" font-weight="600" fill="#252A33">v-show · 样式切换</text>
+
+  <rect x="48" y="234" width="220" height="56" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="158" y="252" text-anchor="middle" font-size="11" fill="#6B7280">条件为真</text>
+  <text x="158" y="275" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">display: block</text>
+
+  <line x1="274" y1="262" x2="300" y2="262" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="304" y="234" width="240" height="56" rx="6" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="424" y="252" text-anchor="middle" font-size="11" fill="#6B7280">条件为假</text>
+  <text x="424" y="275" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">display: none（仍在 DOM）</text>
+
+  <rect x="572" y="234" width="192" height="56" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="668" y="255" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">切换时：仅改样式</text>
+  <text x="668" y="276" text-anchor="middle" font-size="11" fill="#6B7280">初始即渲染，常驻 DOM</text>
+
+  <text x="410" y="344" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜v-if 与 v-show 的成本账本：假值时节点的去向与切换代价</text>
+</svg>

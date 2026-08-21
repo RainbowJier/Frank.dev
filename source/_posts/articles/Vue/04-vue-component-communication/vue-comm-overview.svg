@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 四级阶梯 -->
+  <rect x="40" y="40" width="170" height="160" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="125" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">props + emit</text>
+  <text x="125" y="90" text-anchor="middle" font-size="11" fill="#6B7280">父 ⇄ 子</text>
+  <text x="125" y="116" text-anchor="middle" font-size="12" fill="#252A33">类比方法参数 + 回调</text>
+  <text x="125" y="140" text-anchor="middle" font-size="12" fill="#252A33">耦合最紧、最直白</text>
+  <text x="125" y="170" text-anchor="middle" font-size="12" fill="#6B7280">默认首选</text>
+
+  <rect x="228" y="40" width="170" height="160" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="313" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">defineModel</text>
+  <text x="313" y="90" text-anchor="middle" font-size="11" fill="#6B7280">父 ⇄ 子 双向</text>
+  <text x="313" y="116" text-anchor="middle" font-size="12" fill="#252A33">props + emit 的接线合并</text>
+  <text x="313" y="140" text-anchor="middle" font-size="12" fill="#252A33">v-model 多值可命名</text>
+  <text x="313" y="170" text-anchor="middle" font-size="12" fill="#6B7280">表单类组件</text>
+
+  <rect x="416" y="40" width="170" height="160" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="501" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">provide / inject</text>
+  <text x="501" y="90" text-anchor="middle" font-size="11" fill="#6B7280">祖先 → 深层后代</text>
+  <text x="501" y="116" text-anchor="middle" font-size="12" fill="#252A33">类比 Spring 依赖注入</text>
+  <text x="501" y="140" text-anchor="middle" font-size="12" fill="#252A33">组件树作用域按 key 取</text>
+  <text x="501" y="170" text-anchor="middle" font-size="12" fill="#6B7280">主题 / 当前用户</text>
+
+  <rect x="604" y="40" width="170" height="160" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="689" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">Pinia</text>
+  <text x="689" y="90" text-anchor="middle" font-size="11" fill="#6B7280">任意组件</text>
+  <text x="689" y="116" text-anchor="middle" font-size="12" fill="#252A33">类比全局单例容器</text>
+  <text x="689" y="140" text-anchor="middle" font-size="12" fill="#252A33">跨页面共享业务状态</text>
+  <text x="689" y="170" text-anchor="middle" font-size="12" fill="#6B7280">系列第 6 篇展开</text>
+
+  <!-- 耦合轴 -->
+  <text x="60" y="248" font-size="11" fill="#6B7280">近 · 紧耦合</text>
+  <text x="760" y="248" text-anchor="end" font-size="11" fill="#6B7280">远 · 松耦合</text>
+  <line x1="60" y1="262" x2="760" y2="262" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="410" y="288" text-anchor="middle" font-size="12" fill="#252A33">组件关系由近到远，作用域由小到大</text>
+
+  <text x="410" y="318" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜组件通信选型阶梯：先问传数据还是传结构，再按关系距离选协议</text>
+</svg>

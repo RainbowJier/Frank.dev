@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 左：语法糖 -->
+  <rect x="48" y="110" width="250" height="80" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="173" y="142" text-anchor="middle" font-size="13" fill="#252A33">&lt;input v-model="keyword"&gt;</text>
+  <text x="173" y="168" text-anchor="middle" font-size="11" fill="#6B7280">一行简写的语法糖</text>
+
+  <line x1="304" y1="150" x2="384" y2="150" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="344" y="138" text-anchor="middle" font-size="11" fill="#6B7280">等价于</text>
+
+  <!-- 右上：响应式数据 -->
+  <rect x="530" y="40" width="230" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="645" y="69" text-anchor="middle" font-size="13" fill="#252A33">const keyword = ref('')</text>
+
+  <!-- 右下：input 元素 -->
+  <rect x="530" y="200" width="230" height="44" rx="6" fill="#FFFFFF" stroke="#5A6472" stroke-width="1.5"/>
+  <text x="546" y="227" font-size="13" fill="#252A33">你好</text>
+  <line x1="578" y1="212" x2="578" y2="232" stroke="#5A6472" stroke-width="1.5"/>
+  <text x="726" y="227" text-anchor="end" font-size="11" fill="#6B7280">input 元素</text>
+
+  <!-- 下行数据线 -->
+  <line x1="570" y1="92" x2="570" y2="196" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="580" y="148" font-size="12" fill="#252A33">① :value</text>
+  <text x="580" y="165" font-size="11" fill="#6B7280">数据渲染到输入框</text>
+
+  <!-- 上行事件线 -->
+  <line x1="720" y1="196" x2="720" y2="92" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="710" y="148" text-anchor="end" font-size="12" fill="#252A33">② @input</text>
+  <text x="710" y="165" text-anchor="end" font-size="11" fill="#6B7280">输入回写到 keyword</text>
+
+  <text x="410" y="282" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜v-model 拆解：一根下行数据线（:value）+ 一根上行事件线（@input）</text>
+</svg>

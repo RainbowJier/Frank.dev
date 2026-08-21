@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 262" width="820" height="262"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="262" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="261" fill="none" stroke="#D9DFE8"/>
+
+  <!-- computed -->
+  <rect x="28" y="24" width="240" height="196" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="44" y="40" width="10" height="10" fill="#3C5488"/>
+  <text x="62" y="50" font-size="16" font-weight="600" fill="#252A33">computed</text>
+  <line x1="44" y1="64" x2="252" y2="64" stroke="#E8EDF3" stroke-width="1"/>
+  <text x="44" y="88" font-size="13" font-weight="500" fill="#252A33">定位：派生一个值</text>
+  <text x="44" y="114" font-size="12" fill="#6B7280">带缓存：依赖不变不重算</text>
+  <text x="44" y="136" font-size="12" fill="#6B7280">模板里当普通数据使用</text>
+  <text x="44" y="158" font-size="12" fill="#6B7280">getter 必须无副作用</text>
+  <text x="44" y="196" font-size="12" fill="#252A33">例：列表过滤、购物车总价</text>
+
+  <!-- watch -->
+  <rect x="290" y="24" width="240" height="196" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="306" y="40" width="10" height="10" fill="#4DBBD5"/>
+  <text x="324" y="50" font-size="16" font-weight="600" fill="#252A33">watch</text>
+  <line x1="306" y1="64" x2="514" y2="64" stroke="#E8EDF3" stroke-width="1"/>
+  <text x="306" y="88" font-size="13" font-weight="500" fill="#252A33">定位：变化后做动作</text>
+  <text x="306" y="114" font-size="12" fill="#6B7280">显式指定监听源</text>
+  <text x="306" y="136" font-size="12" fill="#6B7280">能拿到新旧值</text>
+  <text x="306" y="158" font-size="12" fill="#6B7280">默认懒执行，可 immediate</text>
+  <text x="306" y="196" font-size="12" fill="#252A33">例：防抖搜索、自动保存草稿</text>
+
+  <!-- watchEffect -->
+  <rect x="552" y="24" width="240" height="196" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="568" y="40" width="10" height="10" fill="#00A087"/>
+  <text x="586" y="50" font-size="16" font-weight="600" fill="#252A33">watchEffect</text>
+  <line x1="568" y1="64" x2="776" y2="64" stroke="#E8EDF3" stroke-width="1"/>
+  <text x="568" y="88" font-size="13" font-weight="500" fill="#252A33">定位：立即执行 + 自动依赖</text>
+  <text x="568" y="114" font-size="12" fill="#6B7280">回调里读了谁就盯谁</text>
+  <text x="568" y="136" font-size="12" fill="#6B7280">拿不到旧值</text>
+  <text x="568" y="158" font-size="12" fill="#6B7280">起步即跑一次</text>
+  <text x="568" y="196" font-size="12" fill="#252A33">例：初始加载、多源联动日志</text>
+
+  <text x="410" y="246" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜派生与响应的选型：要"值"用 computed，要"动作"用 watch，懒得列依赖用 watchEffect</text>
+</svg>

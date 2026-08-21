@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 五段链路 -->
+  <rect x="40" y="60" width="135" height="62" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="107" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">业务代码</text>
+  <text x="107" y="105" text-anchor="middle" font-size="11" fill="#6B7280">http.get 调用</text>
+
+  <line x1="179" y1="91" x2="201" y2="91" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="205" y="60" width="135" height="62" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="272" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">请求拦截器</text>
+  <text x="272" y="105" text-anchor="middle" font-size="11" fill="#6B7280">挂 Bearer token</text>
+
+  <line x1="344" y1="91" x2="366" y2="91" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="370" y="60" width="135" height="62" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="437" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">网络传输</text>
+  <text x="437" y="105" text-anchor="middle" font-size="11" fill="#6B7280">HTTP 请求 / 响应</text>
+
+  <line x1="509" y1="91" x2="531" y2="91" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="535" y="60" width="135" height="62" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="602" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">响应拦截器</text>
+  <text x="602" y="105" text-anchor="middle" font-size="11" fill="#6B7280">拆 Result 包</text>
+
+  <line x1="674" y1="91" x2="696" y2="91" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="700" y="60" width="80" height="62" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="740" y="84" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">业务</text>
+  <text x="740" y="105" text-anchor="middle" font-size="11" fill="#6B7280">data / 报错</text>
+
+  <!-- 401 分支（唯一红色警示） -->
+  <line x1="602" y1="126" x2="602" y2="166" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="470" y="170" width="270" height="34" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="605" y="191" text-anchor="middle" font-size="12" fill="#252A33">401 → 清会话 → 跳登录（带 redirect）</text>
+
+  <text x="410" y="252" text-anchor="middle" font-size="12" fill="#6B7280">横切关注点收敛：token 挂载与错误兜底只写一次，全部调用点生效</text>
+  <text x="410" y="282" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Axios 拦截器链路：请求侧挂 token，响应侧拆包与 401 兜底</text>
+</svg>

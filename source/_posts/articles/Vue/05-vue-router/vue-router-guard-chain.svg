@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 第一行：左到右 -->
+  <rect x="40" y="70" width="150" height="56" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="115" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">触发导航</text>
+  <text x="115" y="112" text-anchor="middle" font-size="11" fill="#6B7280">点击 / 编程式</text>
+
+  <line x1="194" y1="98" x2="220" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="224" y="70" width="160" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="304" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">beforeRouteLeave</text>
+  <text x="304" y="112" text-anchor="middle" font-size="11" fill="#6B7280">失活组件 · 组件内</text>
+
+  <line x1="388" y1="98" x2="414" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="418" y="70" width="150" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="493" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">beforeEach</text>
+  <text x="493" y="112" text-anchor="middle" font-size="11" fill="#6B7280">全局 · 鉴权在此</text>
+
+  <line x1="572" y1="98" x2="598" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="602" y="70" width="150" height="56" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="677" y="93" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">beforeEnter</text>
+  <text x="677" y="112" text-anchor="middle" font-size="11" fill="#6B7280">路由独享</text>
+
+  <!-- 换行箭头 -->
+  <line x1="677" y1="130" x2="677" y2="174" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 第二行：右到左 -->
+  <rect x="602" y="178" width="150" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="677" y="201" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">beforeRouteEnter</text>
+  <text x="677" y="220" text-anchor="middle" font-size="11" fill="#6B7280">激活组件 · 无 this</text>
+
+  <line x1="598" y1="206" x2="572" y2="206" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="418" y="178" width="150" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="493" y="201" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">beforeResolve</text>
+  <text x="493" y="220" text-anchor="middle" font-size="11" fill="#6B7280">全局 · 最后关卡</text>
+
+  <line x1="414" y1="206" x2="388" y2="206" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="224" y="178" width="160" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="304" y="201" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">afterEach</text>
+  <text x="304" y="220" text-anchor="middle" font-size="11" fill="#6B7280">后置 · 设置标题</text>
+
+  <line x1="220" y1="206" x2="194" y2="206" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="178" width="150" height="56" rx="8" fill="#00A087" fill-opacity="0.18" stroke="#00A087" stroke-width="2"/>
+  <text x="115" y="201" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">导航确认</text>
+  <text x="115" y="220" text-anchor="middle" font-size="11" fill="#6B7280">DOM 更新 · 视图切换</text>
+
+  <!-- 中止分支（唯一红色警示） -->
+  <line x1="493" y1="130" x2="560" y2="292" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <line x1="677" y1="238" x2="640" y2="292" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <rect x="470" y="294" width="300" height="34" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="620" y="315" text-anchor="middle" font-size="12" fill="#252A33">前置守卫返回 false / 重定向 → 导航中止</text>
+
+  <!-- 图例 -->
+  <rect x="40" y="294" width="12" height="12" fill="#3C5488" fill-opacity="0.5"/>
+  <text x="60" y="305" font-size="11" fill="#6B7280">全局</text>
+  <rect x="110" y="294" width="12" height="12" fill="#4DBBD5" fill-opacity="0.5"/>
+  <text x="130" y="305" font-size="11" fill="#6B7280">路由独享</text>
+  <rect x="196" y="294" width="12" height="12" fill="#00A087" fill-opacity="0.5"/>
+  <text x="216" y="305" font-size="11" fill="#6B7280">组件内</text>
+
+  <text x="410" y="360" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜一次导航的守卫执行链：离开 → 全局前置 → 路由独享 → 组件内 → 解析确认 → 后置钩子</text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 左：Pinia store -->
+  <rect x="40" y="36" width="340" height="226" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="64" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Pinia store（useAuthStore）</text>
+  <rect x="60" y="80" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="100" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">state：token、userInfo</text>
+  <text x="210" y="119" text-anchor="middle" font-size="11" fill="#6B7280">ref 字段 · 可被持久化插件落盘</text>
+  <rect x="60" y="138" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="158" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">getters：isLoggedIn</text>
+  <text x="210" y="177" text-anchor="middle" font-size="11" fill="#6B7280">computed 马甲 · 带缓存、必须纯净</text>
+  <rect x="60" y="196" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="216" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">actions：login、logout</text>
+  <text x="210" y="235" text-anchor="middle" font-size="11" fill="#6B7280">可异步、可改 state、可调用其他 store</text>
+
+  <!-- 右：Java Service -->
+  <rect x="440" y="36" width="340" height="226" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="610" y="64" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Java Service 单例 Bean</text>
+  <rect x="460" y="80" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="610" y="100" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">私有字段</text>
+  <text x="610" y="119" text-anchor="middle" font-size="11" fill="#6B7280">private String token</text>
+  <rect x="460" y="138" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="610" y="158" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">getter 方法</text>
+  <text x="610" y="177" text-anchor="middle" font-size="11" fill="#6B7280">isLoggedIn()</text>
+  <rect x="460" y="196" width="300" height="50" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="610" y="216" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">业务方法</text>
+  <text x="610" y="235" text-anchor="middle" font-size="11" fill="#6B7280">login() / logout()，可注入其他 Bean</text>
+
+  <!-- 对应关系 -->
+  <g stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4">
+    <line x1="384" y1="105" x2="436" y2="105"/>
+    <line x1="384" y1="163" x2="436" y2="163"/>
+    <line x1="384" y1="221" x2="436" y2="221"/>
+  </g>
+  <text x="410" y="100" text-anchor="middle" font-size="12" fill="#6B7280">≈</text>
+  <text x="410" y="158" text-anchor="middle" font-size="12" fill="#6B7280">≈</text>
+  <text x="410" y="216" text-anchor="middle" font-size="12" fill="#6B7280">≈</text>
+
+  <text x="410" y="288" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜Pinia 三件套与 Java 类的同构：字段、getter、业务方法一一对应</text>
+</svg>
