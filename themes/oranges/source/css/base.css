@@ -11,9 +11,12 @@ html, body {
   font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Source Han Sans CN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body.hidden {
   overflow: hidden;
-  padding-right: 6px;
 }
 
 .markdown-body {
@@ -1385,7 +1388,7 @@ a.home-exp-item {
 
 @media (min-width: 889px) {
   #app {
-    --sidebar-width: 30%;
+    --sidebar-width: 20%;
   }
 
   .site-sidebar {
@@ -1396,6 +1399,7 @@ a.home-exp-item {
     width: var(--sidebar-width);
     height: 100dvh;
     z-index: 10;
+    view-transition-name: site-sidebar;
   }
 
   .site-sidebar .header {
@@ -1535,6 +1539,11 @@ a.home-exp-item {
 /* 同源页面跳转时平滑过渡（Chrome/Edge 渐进增强） */
 @view-transition {
   navigation: auto;
+}
+
+::view-transition-old(site-sidebar),
+::view-transition-new(site-sidebar) {
+  animation: none;
 }
 
 /* 深/浅色切换（colorscheme.js 触发）：新配色以对角线从左下角扫向右上角 */

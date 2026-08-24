@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 410" width="820" height="410"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="410" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="409" fill="none" stroke="#D9DFE8"/>
+
+  <text x="40" y="48" font-size="18" font-weight="600" fill="#252A33">关系型数据库的典型定位</text>
+  <text x="40" y="71" font-size="12" fill="#6B7280">三者都支持 SQL、事务、索引与主从/高可用；差别主要在默认取舍与生态重心。</text>
+
+  <!-- MySQL panel -->
+  <rect x="40" y="98" width="230" height="250" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="62" y="130" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="88" y="129" font-size="15" font-weight="600" fill="#252A33">MySQL</text>
+  <rect x="62" y="151" width="186" height="42" rx="7" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="155" y="177" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Web / 互联网业务</text>
+  <circle cx="72" cy="221" r="3" fill="#3C5488"/>
+  <text x="86" y="225" font-size="12" fill="#252A33">上手快，运维与人才储备充足</text>
+  <circle cx="72" cy="255" r="3" fill="#4DBBD5"/>
+  <text x="86" y="259" font-size="12" fill="#252A33">InnoDB 适合高并发 OLTP</text>
+  <circle cx="72" cy="289" r="3" fill="#8491B4"/>
+  <text x="86" y="293" font-size="12" fill="#252A33">云服务、工具与中间件丰富</text>
+  <text x="155" y="328" text-anchor="middle" font-size="11" fill="#6B7280">常见：电商、内容、SaaS</text>
+
+  <!-- PostgreSQL panel -->
+  <rect x="295" y="98" width="230" height="250" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="317" y="130" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="343" y="129" font-size="15" font-weight="600" fill="#252A33">PostgreSQL</text>
+  <rect x="317" y="151" width="186" height="42" rx="7" fill="#4DBBD5" fill-opacity="0.13" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="177" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">复杂查询与扩展能力</text>
+  <circle cx="327" cy="221" r="3" fill="#4DBBD5"/>
+  <text x="341" y="225" font-size="12" fill="#252A33">SQL 标准贴合度与类型系统强</text>
+  <circle cx="327" cy="255" r="3" fill="#00A087"/>
+  <text x="341" y="259" font-size="12" fill="#252A33">JSONB、全文检索、GIS 原生可用</text>
+  <circle cx="327" cy="289" r="3" fill="#8491B4"/>
+  <text x="341" y="293" font-size="12" fill="#252A33">扩展生态适合一库多能力</text>
+  <text x="410" y="328" text-anchor="middle" font-size="11" fill="#6B7280">常见：平台、分析、地理数据</text>
+
+  <!-- Oracle panel -->
+  <rect x="550" y="98" width="230" height="250" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="572" y="130" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="598" y="129" font-size="15" font-weight="600" fill="#252A33">Oracle Database</text>
+  <rect x="572" y="151" width="186" height="42" rx="7" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="665" y="177" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">关键核心与企业治理</text>
+  <circle cx="582" cy="221" r="3" fill="#00A087"/>
+  <text x="596" y="225" font-size="12" fill="#252A33">成熟的高可用与容灾体系</text>
+  <circle cx="582" cy="255" r="3" fill="#F39B7F"/>
+  <text x="596" y="259" font-size="12" fill="#252A33">权限、审计、工具链完整</text>
+  <circle cx="582" cy="289" r="3" fill="#E64B35"/>
+  <text x="596" y="293" font-size="12" fill="#252A33">许可成本与专业运维门槛更高</text>
+  <text x="665" y="328" text-anchor="middle" font-size="11" fill="#6B7280">常见：金融、政务、电信</text>
+
+  <line x1="40" y1="370" x2="780" y2="370" stroke="#E8EDF3" stroke-width="1"/>
+  <text x="410" y="394" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜MySQL、PostgreSQL 与 Oracle 的典型生态定位（非能力排名）</text>
+</svg>

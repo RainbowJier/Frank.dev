@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 450" width="820" height="450"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="450" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="449" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <rect x="250" y="38" width="320" height="58" rx="9" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="73" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">先从团队、数据与约束开始</text>
+  <line x1="410" y1="96" x2="410" y2="128" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <path d="M410 130 L510 185 L410 240 L310 185 Z" fill="#F4F7FA" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="181" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">现有系统或客户</text>
+  <text x="410" y="201" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">是否已指定数据库？</text>
+
+  <line x1="510" y1="185" x2="616" y2="185" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="557" y="174" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <rect x="622" y="154" width="150" height="62" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="697" y="180" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">优先遵从既有生态</text>
+  <text x="697" y="199" text-anchor="middle" font-size="11" fill="#6B7280">迁移成本通常最高</text>
+
+  <line x1="410" y1="240" x2="410" y2="271" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="398" y="260" text-anchor="end" font-size="11" fill="#6B7280">否</text>
+  <path d="M410 273 L510 328 L410 383 L310 328 Z" fill="#F4F7FA" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="324" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">是否需要 GIS、复杂 JSON、</text>
+  <text x="410" y="344" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">复杂报表或强扩展？</text>
+
+  <line x1="310" y1="328" x2="190" y2="328" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="252" y="317" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <rect x="48" y="297" width="136" height="62" rx="8" fill="#4DBBD5" fill-opacity="0.13" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="116" y="323" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">PostgreSQL</text>
+  <text x="116" y="342" text-anchor="middle" font-size="11" fill="#6B7280">能力扩展优先</text>
+
+  <line x1="510" y1="328" x2="616" y2="328" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="557" y="317" text-anchor="middle" font-size="11" fill="#6B7280">否</text>
+  <rect x="622" y="297" width="150" height="62" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="697" y="323" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">MySQL</text>
+  <text x="697" y="342" text-anchor="middle" font-size="11" fill="#6B7280">成熟 Web OLTP 优先</text>
+
+  <text x="410" y="423" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜数据库选型先排除硬约束，再按核心负载与团队能力收敛</text>
+</svg>
