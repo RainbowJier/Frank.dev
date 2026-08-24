@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">系统监控四大模块</text>
+
+  <!-- 在线用户监控 -->
+  <rect x="40" y="70" width="180" height="180" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="130" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">在线用户监控</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="125" font-weight="500">监控内容：</text>
+    <text x="60" y="143" fill="#6B7280">• 当前在线用户列表</text>
+    <text x="60" y="158" fill="#6B7280">• 登录时间</text>
+    <text x="60" y="173" fill="#6B7280">• 登录 IP</text>
+    <text x="60" y="188" fill="#6B7280">• 浏览器/操作系统</text>
+    <text x="60" y="203" fill="#6B7280">• Token 有效期</text>
+    
+    <text x="60" y="225" font-weight="500">功能：</text>
+    <text x="60" y="243" fill="#6B7280">✓ 强制下线</text>
+  </g>
+
+  <!-- 服务器监控 -->
+  <rect x="245" y="70" width="180" height="180" rx="10" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="2"/>
+  <text x="335" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#00A087">服务器监控</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="265" y="125" font-weight="500">监控内容：</text>
+    <text x="265" y="143" fill="#6B7280">• CPU 使用率</text>
+    <text x="265" y="158" fill="#6B7280">• 内存使用率</text>
+    <text x="265" y="173" fill="#6B7280">• JVM 堆内存</text>
+    <text x="265" y="188" fill="#6B7280">• 磁盘使用情况</text>
+    <text x="265" y="203" fill="#6B7280">• 服务器信息（OS/IP）</text>
+    
+    <text x="265" y="225" font-weight="500">刷新：</text>
+    <text x="265" y="243" fill="#6B7280">实时（每 3 秒）</text>
+  </g>
+
+  <!-- 缓存监控 -->
+  <rect x="450" y="70" width="180" height="180" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="540" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#4DBBD5">缓存监控（Redis）</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="470" y="125" font-weight="500">监控内容：</text>
+    <text x="470" y="143" fill="#6B7280">• Redis 版本/运行时间</text>
+    <text x="470" y="158" fill="#6B7280">• 连接数/已用内存</text>
+    <text x="470" y="173" fill="#6B7280">• Key 数量</text>
+    <text x="470" y="188" fill="#6B7280">• 命令统计（QPS）</text>
+    <text x="470" y="203" fill="#6B7280">• 缓存命中率</text>
+    
+    <text x="470" y="225" font-weight="500">功能：</text>
+    <text x="470" y="243" fill="#6B7280">✓ 清空缓存</text>
+  </g>
+
+  <!-- 数据源监控 -->
+  <rect x="655" y="70" width="125" height="180" rx="10" fill="#F39B7F" fill-opacity="0.08" stroke="#F39B7F" stroke-width="2"/>
+  <text x="717" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#F39B7F">数据源</text>
+  <text x="717" y="116" text-anchor="middle" font-size="12" fill="#F39B7F">（Druid）</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="667" y="140" font-weight="500">监控：</text>
+    <text x="667" y="158" fill="#6B7280">• SQL 监控</text>
+    <text x="667" y="173" fill="#6B7280">• 慢查询</text>
+    <text x="667" y="188" fill="#6B7280">• 连接池状态</text>
+    <text x="667" y="203" fill="#6B7280">• Web 应用</text>
+    
+    <text x="667" y="225" font-weight="500">访问：</text>
+    <text x="667" y="243" fill="#6B7280" font-size="8">/druid/</text>
+  </g>
+
+  <!-- 日志管理 -->
+  <rect x="40" y="280" width="740" height="180" rx="10" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="2"/>
+  <text x="410" y="310" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">日志管理（操作日志 + 登录日志）</text>
+
+  <g font-size="11" fill="#252A33">
+    <!-- 操作日志 -->
+    <text x="70" y="340" font-weight="600" fill="#3C5488">操作日志（sys_oper_log）</text>
+    <rect x="70" y="350" width="330" height="90" rx="6" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-size="10" fill="#6B7280">
+      <text x="85" y="370">• 记录：增删改操作（@Log 注解）</text>
+      <text x="85" y="387">• 内容：操作模块、方法名、请求参数、返回结果</text>
+      <text x="85" y="404">• 异常：失败时记录异常堆栈</text>
+      <text x="85" y="421">• 功能：查询、导出、删除、清空</text>
+    </g>
+
+    <!-- 登录日志 -->
+    <text x="430" y="340" font-weight="600" fill="#00A087">登录日志（sys_logininfor）</text>
+    <rect x="430" y="350" width="330" height="90" rx="6" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-size="10" fill="#6B7280">
+      <text x="445" y="370">• 记录：登录成功/失败、退出登录</text>
+      <text x="445" y="387">• 内容：用户名、登录 IP、登录地点、浏览器</text>
+      <text x="445" y="404">• 状态：成功/失败（密码错误/账号锁定）</text>
+      <text x="445" y="421">• 功能：查询、导出、删除、清空、解锁</text>
+    </g>
+  </g>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜系统监控：在线用户/服务器/缓存/数据源 + 操作日志/登录日志</text>
+</svg>

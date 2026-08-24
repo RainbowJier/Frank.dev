@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="520" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="519" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">三种执行策略（Misfire Policy）对比</text>
+
+  <!-- 场景说明 -->
+  <rect x="40" y="70" width="740" height="60" rx="8" fill="#FFF3E0" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="410" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">场景：任务每 5 分钟执行一次，但服务器在 10:00-10:15 之间宕机</text>
+  <g font-size="11" fill="#6B7280">
+    <text x="60" y="115">• 预定执行时间：10:05、10:10、10:15</text>
+    <text x="400" y="115">• 实际恢复时间：10:20</text>
+  </g>
+
+  <!-- 策略 1：立即执行 -->
+  <rect x="40" y="160" width="230" height="320" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="155" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">立即执行（默认）</text>
+  <text x="155" y="208" text-anchor="middle" font-size="10" fill="#6B7280">MISFIRE_DEFAULT</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="60" y="235" font-weight="500">行为：</text>
+    <text x="60" y="253" font-size="10" fill="#6B7280">服务器恢复后，立即补</text>
+    <text x="60" y="268" font-size="10" fill="#6B7280">偿执行所有错过的任务</text>
+    
+    <text x="60" y="295" font-weight="500">时间线：</text>
+    <rect x="60" y="305" width="190" height="120" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+      <text x="70" y="322">10:05  ❌ (宕机)</text>
+      <text x="70" y="340">10:10  ❌ (宕机)</text>
+      <text x="70" y="358">10:15  ❌ (宕机)</text>
+      <text x="70" y="376" fill="#3C5488" font-weight="600">10:20  ✓ 立即执行 3 次</text>
+      <text x="70" y="394">       → 10:05 补偿</text>
+      <text x="70" y="409">       → 10:10 补偿</text>
+      <text x="70" y="424">       → 10:15 补偿</text>
+    </g>
+    
+    <text x="60" y="448" font-weight="500">适用场景：</text>
+    <text x="60" y="466" font-size="10" fill="#6B7280">• 数据统计（必须补全）</text>
+    <text x="60" y="481" font-size="10" fill="#6B7280">• 发送通知</text>
+  </g>
+
+  <!-- 策略 2：执行一次 -->
+  <rect x="295" y="160" width="230" height="320" rx="10" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="2"/>
+  <text x="410" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#00A087">执行一次</text>
+  <text x="410" y="208" text-anchor="middle" font-size="10" fill="#6B7280">MISFIRE_DO_NOTHING</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="315" y="235" font-weight="500">行为：</text>
+    <text x="315" y="253" font-size="10" fill="#6B7280">忽略错过的任务，等待</text>
+    <text x="315" y="268" font-size="10" fill="#6B7280">下一个正常调度时间</text>
+    
+    <text x="315" y="295" font-weight="500">时间线：</text>
+    <rect x="315" y="305" width="190" height="120" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+      <text x="325" y="322">10:05  ❌ (宕机)</text>
+      <text x="325" y="340">10:10  ❌ (宕机)</text>
+      <text x="325" y="358">10:15  ❌ (宕机)</text>
+      <text x="325" y="376" fill="#00A087" font-weight="600">10:20  忽略补偿</text>
+      <text x="325" y="394" fill="#00A087" font-weight="600">10:25  ✓ 下次正常执行</text>
+      <text x="325" y="409">10:30  ✓</text>
+      <text x="325" y="424">...</text>
+    </g>
+    
+    <text x="315" y="448" font-weight="500">适用场景：</text>
+    <text x="315" y="466" font-size="10" fill="#6B7280">• 实时性任务（无需补）</text>
+    <text x="315" y="481" font-size="10" fill="#6B7280">• 缓存刷新</text>
+  </g>
+
+  <!-- 策略 3：放弃执行 -->
+  <rect x="550" y="160" width="230" height="320" rx="10" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="2"/>
+  <text x="665" y="190" text-anchor="middle" font-size="14" font-weight="600" fill="#E64B35">放弃执行</text>
+  <text x="665" y="208" text-anchor="middle" font-size="10" fill="#6B7280">MISFIRE_IGNORE</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="570" y="235" font-weight="500">行为：</text>
+    <text x="570" y="253" font-size="10" fill="#6B7280">直接丢弃错过的任务，</text>
+    <text x="570" y="268" font-size="10" fill="#6B7280">继续按原计划执行</text>
+    
+    <text x="570" y="295" font-weight="500">时间线：</text>
+    <rect x="570" y="305" width="190" height="120" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+      <text x="580" y="322">10:05  ❌ (宕机)</text>
+      <text x="580" y="340">10:10  ❌ (宕机)</text>
+      <text x="580" y="358">10:15  ❌ (宕机)</text>
+      <text x="580" y="376" fill="#E64B35" font-weight="600">10:20  直接丢弃</text>
+      <text x="580" y="394">10:25  ✓ 继续执行</text>
+      <text x="580" y="409">10:30  ✓</text>
+      <text x="580" y="424">...</text>
+    </g>
+    
+    <text x="570" y="448" font-weight="500">适用场景：</text>
+    <text x="570" y="466" font-size="10" fill="#6B7280">• 非关键任务</text>
+    <text x="570" y="481" font-size="10" fill="#6B7280">• 监控检查（仅看当前）</text>
+  </g>
+
+  <text x="410" y="504" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜三种策略应对宕机：立即执行补全所有、执行一次跳到下轮、放弃执行直接丢弃</text>
+</svg>

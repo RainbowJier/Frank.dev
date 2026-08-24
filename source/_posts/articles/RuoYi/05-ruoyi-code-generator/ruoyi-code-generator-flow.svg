@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">RuoYi 代码生成器工作流程</text>
+
+  <!-- 步骤 1：配置生成信息 -->
+  <rect x="40" y="70" width="200" height="90" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="140" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">1. 配置生成信息</text>
+  <g font-size="11" fill="#6B7280">
+    <text x="60" y="115">• 导入数据库表</text>
+    <text x="60" y="132">• 设置表信息（类名/注释）</text>
+    <text x="60" y="149">• 配置字段（类型/属性）</text>
+  </g>
+
+  <!-- 步骤 2：选择模板类型 -->
+  <rect x="280" y="70" width="200" height="90" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="380" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">2. 选择模板类型</text>
+  <g font-size="11" fill="#6B7280">
+    <text x="300" y="115">• 单表 CRUD</text>
+    <text x="300" y="132">• 树形表（parent_id）</text>
+    <text x="300" y="149">• 主子表（一对多）</text>
+  </g>
+
+  <!-- 步骤 3：模板引擎渲染 -->
+  <rect x="520" y="70" width="260" height="90" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="650" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">3. Velocity 模板渲染</text>
+  <g font-size="11" fill="#6B7280">
+    <text x="540" y="115">• 读取 vm 模板文件</text>
+    <text x="540" y="132">• 注入上下文变量（$table, $columns）</text>
+    <text x="540" y="149">• 生成代码文件</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="245" y1="115" x2="275" y2="115" marker-end="url(#arrow)"/>
+    <line x1="485" y1="115" x2="515" y2="115" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 生成的文件列表 -->
+  <rect x="40" y="190" width="740" height="270" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="220" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">4. 生成的代码文件（7 个）</text>
+
+  <!-- 后端文件 -->
+  <g font-size="12" fill="#252A33">
+    <text x="60" y="250" font-weight="600" fill="#3C5488">后端（Java）</text>
+    
+    <rect x="70" y="260" width="320" height="30" rx="4" fill="#E8F5E9" stroke="#00A087" stroke-width="1"/>
+    <text x="85" y="280" font-family="'Courier New',monospace" font-size="11">Controller.java</text>
+    <text x="250" y="280" font-size="10" fill="#6B7280">处理 HTTP 请求</text>
+    
+    <rect x="70" y="295" width="320" height="30" rx="4" fill="#E3F2FD" stroke="#4DBBD5" stroke-width="1"/>
+    <text x="85" y="315" font-family="'Courier New',monospace" font-size="11">Service.java / ServiceImpl.java</text>
+    <text x="250" y="315" font-size="10" fill="#6B7280">业务逻辑层</text>
+    
+    <rect x="70" y="330" width="320" height="30" rx="4" fill="#FFF3E0" stroke="#F39B7F" stroke-width="1"/>
+    <text x="85" y="350" font-family="'Courier New',monospace" font-size="11">Mapper.java + XML</text>
+    <text x="250" y="350" font-size="10" fill="#6B7280">MyBatis 数据访问</text>
+    
+    <rect x="70" y="365" width="320" height="30" rx="4" fill="#F3E5F5" stroke="#8491B4" stroke-width="1"/>
+    <text x="85" y="385" font-family="'Courier New',monospace" font-size="11">Domain.java (实体类)</text>
+    <text x="250" y="385" font-size="10" fill="#6B7280">数据库表映射</text>
+  </g>
+
+  <!-- 前端文件 -->
+  <g font-size="12" fill="#252A33">
+    <text x="430" y="250" font-weight="600" fill="#3C5488">前端（Vue）</text>
+    
+    <rect x="440" y="260" width="320" height="30" rx="4" fill="#E8F5E9" stroke="#00A087" stroke-width="1"/>
+    <text x="455" y="280" font-family="'Courier New',monospace" font-size="11">index.vue</text>
+    <text x="620" y="280" font-size="10" fill="#6B7280">列表页面（表格+表单）</text>
+    
+    <rect x="440" y="295" width="320" height="30" rx="4" fill="#E3F2FD" stroke="#4DBBD5" stroke-width="1"/>
+    <text x="455" y="315" font-family="'Courier New',monospace" font-size="11">api/xxx.js</text>
+    <text x="620" y="315" font-size="10" fill="#6B7280">Axios API 请求</text>
+    
+    <rect x="440" y="330" width="320" height="65" rx="4" fill="#FFF8E1" stroke="#F39B7F" stroke-width="1"/>
+    <text x="455" y="350" font-size="11" font-weight="500">包含功能：</text>
+    <text x="455" y="367" font-size="10" fill="#6B7280">• 列表查询 + 分页</text>
+    <text x="455" y="382" font-size="10" fill="#6B7280">• 新增/编辑/删除对话框</text>
+  </g>
+
+  <!-- SQL 菜单 -->
+  <rect x="70" y="410" width="690" height="35" rx="4" fill="#FFEBEE" stroke="#E64B35" stroke-width="1"/>
+  <text x="85" y="432" font-family="'Courier New',monospace" font-size="11" fill="#252A33">menu.sql</text>
+  <text x="250" y="432" font-size="10" fill="#6B7280">菜单权限 SQL（可选，需手动执行插入 sys_menu 表）</text>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜代码生成器从配置到生成 7 个文件的完整流程</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">@DataScope 数据权限注解 SQL 拦截流程</text>
+
+  <!-- 步骤 1：Controller 调用 -->
+  <rect x="60" y="70" width="700" height="60" rx="8" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="95" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">1. Controller 调用 Service 方法</text>
+  <text x="410" y="115" text-anchor="middle" font-size="11" fill="#6B7280" font-family="'Courier New',monospace">@DataScope(deptAlias = "d", userAlias = "u") List&lt;SysUser&gt; selectUserList(SysUser user)</text>
+
+  <!-- 步骤 2：AOP 拦截 -->
+  <rect x="60" y="160" width="340" height="80" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="230" y="185" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">2. DataScopeAspect 拦截</text>
+  <text x="230" y="205" text-anchor="middle" font-size="11" fill="#6B7280">读取注解参数</text>
+  <text x="230" y="220" text-anchor="middle" font-size="11" fill="#6B7280">deptAlias = "d"</text>
+  <text x="230" y="235" text-anchor="middle" font-size="11" fill="#6B7280">userAlias = "u"</text>
+
+  <!-- 步骤 3：获取用户信息 -->
+  <rect x="420" y="160" width="340" height="80" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="590" y="185" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">3. 获取当前用户权限</text>
+  <text x="590" y="205" text-anchor="middle" font-size="11" fill="#6B7280">LoginUser loginUser = getLoginUser()</text>
+  <text x="590" y="220" text-anchor="middle" font-size="11" fill="#6B7280">role.dataScope = 4</text>
+  <text x="590" y="235" text-anchor="middle" font-size="11" fill="#6B7280">user.deptId = 103</text>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="410" y1="135" x2="230" y2="155" marker-end="url(#arrow)"/>
+    <line x1="410" y1="135" x2="590" y2="155" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 步骤 4：构建 SQL 条件 -->
+  <rect x="60" y="270" width="700" height="110" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="410" y="295" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">4. 根据 dataScope 构建 SQL 过滤条件</text>
+  
+  <g font-size="11" fill="#6B7280" font-family="'Courier New',monospace">
+    <text x="75" y="318">if (dataScope == 1) {  // 全部数据权限</text>
+    <text x="90" y="333">sqlString = "";  // 不添加任何条件</text>
+    <text x="75" y="348">} else if (dataScope == 4) {  // 本部门及以下</text>
+    <text x="90" y="363">sqlString = " OR d.dept_id IN ( SELECT dept_id FROM sys_dept WHERE ancestors LIKE '0,100,103%' )";</text>
+    <text x="75" y="378">}</text>
+  </g>
+
+  <line x1="410" y1="245" x2="410" y2="265" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 步骤 5：设置到参数 -->
+  <rect x="60" y="410" width="340" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="230" y="435" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">5. 注入 SQL 条件</text>
+  <text x="230" y="455" text-anchor="middle" font-size="11" fill="#6B7280">user.params.put("dataScope", sqlString)</text>
+
+  <!-- 步骤 6：MyBatis 执行 -->
+  <rect x="420" y="410" width="340" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="590" y="435" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">6. MyBatis 拼接 SQL</text>
+  <text x="590" y="455" text-anchor="middle" font-size="11" fill="#6B7280" font-family="'Courier New',monospace">WHERE 1=1 ${params.dataScope}</text>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="410" y1="385" x2="230" y2="405" marker-end="url(#arrow)"/>
+    <line x1="410" y1="385" x2="590" y2="405" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜@DataScope 注解通过 AOP 拦截 + SQL 动态拼接实现数据权限过滤</text>
+</svg>

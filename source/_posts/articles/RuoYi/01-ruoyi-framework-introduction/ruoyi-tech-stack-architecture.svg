@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 四个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="40" width="740" height="90" rx="10"/>
+    <rect x="40" y="145" width="740" height="90" rx="10"/>
+    <rect x="40" y="250" width="740" height="90" rx="10"/>
+    <rect x="40" y="355" width="740" height="90" rx="10"/>
+  </g>
+
+  <!-- 层名：小方块 + 深蓝粗体 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="78" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="88">前端层</text>
+    <rect x="64" y="183" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="193">网关层</text>
+    <rect x="64" y="288" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="298">应用层</text>
+    <rect x="64" y="393" width="10" height="10" fill="#8491B4"/>
+    <text x="82" y="403">数据层</text>
+  </g>
+
+  <!-- 层内元件：白底 + 彩描边 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <!-- 前端层 -->
+    <g stroke="#4DBBD5">
+      <rect x="200" y="58" width="130" height="56" rx="6"/>
+      <rect x="345" y="58" width="130" height="56" rx="6"/>
+      <rect x="490" y="58" width="130" height="56" rx="6"/>
+      <rect x="635" y="58" width="130" height="56" rx="6"/>
+    </g>
+    <!-- 网关层 -->
+    <g stroke="#00A087">
+      <rect x="200" y="163" width="186" height="56" rx="6"/>
+      <rect x="401" y="163" width="186" height="56" rx="6"/>
+      <rect x="602" y="163" width="163" height="56" rx="6"/>
+    </g>
+    <!-- 应用层 -->
+    <g stroke="#3C5488">
+      <rect x="200" y="268" width="130" height="56" rx="6"/>
+      <rect x="345" y="268" width="130" height="56" rx="6"/>
+      <rect x="490" y="268" width="130" height="56" rx="6"/>
+      <rect x="635" y="268" width="130" height="56" rx="6"/>
+    </g>
+    <!-- 数据层 -->
+    <g stroke="#8491B4">
+      <rect x="200" y="373" width="186" height="56" rx="6"/>
+      <rect x="401" y="373" width="186" height="56" rx="6"/>
+      <rect x="602" y="373" width="163" height="56" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 文字标注 -->
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- 前端层 -->
+    <text x="265" y="86">Vue 3</text>
+    <text x="410" y="86">Element Plus</text>
+    <text x="555" y="86">Pinia</text>
+    <text x="700" y="86">Vite</text>
+    <!-- 网关层 -->
+    <text x="293" y="191">Spring Security</text>
+    <text x="494" y="191">JWT Token</text>
+    <text x="683.5" y="191">CORS</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="265" y="102">Composition API</text>
+    <text x="410" y="102">UI 组件库</text>
+    <text x="555" y="102">状态管理</text>
+    <text x="700" y="102">构建工具</text>
+    <text x="293" y="207">认证授权</text>
+    <text x="494" y="207">无状态认证</text>
+    <text x="683.5" y="207">跨域处理</text>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- 应用层 -->
+    <text x="265" y="296">Spring Boot</text>
+    <text x="410" y="296">MyBatis</text>
+    <text x="555" y="296">Quartz</text>
+    <text x="700" y="296">Velocity</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="265" y="312">应用框架</text>
+    <text x="410" y="312">持久层</text>
+    <text x="555" y="312">定时任务</text>
+    <text x="700" y="312">代码生成</text>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- 数据层 -->
+    <text x="293" y="401">MySQL</text>
+    <text x="494" y="401">Redis</text>
+    <text x="683.5" y="401">Druid</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="293" y="417">关系型数据库</text>
+    <text x="494" y="417">缓存 &amp; Token 存储</text>
+    <text x="683.5" y="417">连接池监控</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜RuoYi-Vue 技术栈四层架构</text>
+</svg>

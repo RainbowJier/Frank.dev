@@ -11,6 +11,35 @@ type: about
 
 热爱技术与持续学习，关注后端架构、微服务、AI 工程化等方向，业余时间通过博客分享技术经验。
 
+## 系列文章
+
+博客的成体系教程都从这里开始，按顺序读即可：
+
+**Vue 从零到一**（8 篇，Vue 3，面向 Java 后端同学）
+
+1. [组件生命周期与八个钩子的正确用法](/2026/08/18/articles/Vue/01-vue-component-lifecycle/)
+2. [模板语法与常用指令](/2026/08/21/articles/Vue/02-vue-template-directives/)
+3. [响应式系统：数据变了视图为什么自动变](/2026/08/21/articles/Vue/03-vue-reactivity/)
+4. [组件通信全解：从 props 到插槽](/2026/08/21/articles/Vue/04-vue-component-communication/)
+5. [Vue Router：单页应用的路由该怎么管](/2026/08/21/articles/Vue/05-vue-router/)
+6. [Pinia：什么时候才真的需要全局状态](/2026/08/21/articles/Vue/06-vue-pinia/)
+7. [Axios 封装与 Spring Boot 联调](/2026/08/21/articles/Vue/07-vue-axios-springboot/)
+8. [Vite 工程化与上线](/2026/08/21/articles/Vue/08-vue-vite-deploy/)
+
+**Java 多线程从零到一**（5 篇）
+
+1. [基础与核心概念](/2026/08/17/articles/Java/01-java-multithreading-fundamentals/)
+2. [线程安全与互斥](/2026/08/17/articles/Java/02-java-thread-safety-and-mutex/)
+3. [线程间通信与协作](/2026/08/17/articles/Java/03-java-inter-thread-communication/)
+4. [ConcurrentHashMap 为什么又快又安全](/2026/08/17/articles/Java/04-java-concurrent-hashmap/)
+5. [线程池：核心线程、队列与拒绝策略](/2026/08/24/articles/Java/05-java-thread-pool/)
+
+**LangChain4j 系列**（3 篇，Java 视角的 LLM 应用开发）
+
+1. [对话的底层执行](/2026/08/17/articles/AI/01-langchain4j-chat-internals/)
+2. [工具调用 Function Calling](/2026/08/17/articles/AI/02-langchain4j-tool-calling/)
+3. [从零构建 RAG](/2026/08/17/articles/AI/03-langchain4j-rag/)
+
 ## 个人信息
 
 - 姓名：刘起杰

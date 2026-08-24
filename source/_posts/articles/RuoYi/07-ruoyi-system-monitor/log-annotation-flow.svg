@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">@Log 注解操作日志记录流程</text>
+
+  <!-- 步骤 1：Controller 添加注解 -->
+  <rect x="40" y="70" width="200" height="100" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="140" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">1. Controller 方法</text>
+  <rect x="60" y="110" width="160" height="45" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+  <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+    <text x="70" y="127">@Log(title="用户管理",</text>
+    <text x="70" y="140">  businessType=INSERT)</text>
+    <text x="70" y="153">public void addUser()</text>
+  </g>
+
+  <!-- 步骤 2：AOP 拦截 -->
+  <rect x="280" y="70" width="200" height="100" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="380" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">2. AOP 切面拦截</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="300" y="118">LogAspect.doBefore()</text>
+    <text x="300" y="133">• 获取注解信息</text>
+    <text x="300" y="148">• 记录请求参数</text>
+    <text x="300" y="163">• 记录开始时间</text>
+  </g>
+
+  <!-- 步骤 3：方法执行 -->
+  <rect x="520" y="70" width="260" height="100" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="650" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">3. 执行业务方法</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="540" y="118">正常执行 → afterReturning()</text>
+    <text x="540" y="133">异常执行 → afterThrowing()</text>
+    <text x="540" y="148"></text>
+    <text x="540" y="163">计算耗时 = 结束时间 - 开始时间</text>
+  </g>
+
+  <!-- 步骤 4：保存日志 -->
+  <rect x="290" y="200" width="240" height="90" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="2"/>
+  <text x="410" y="225" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">4. 异步保存到数据库</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="310" y="248">AsyncManager 异步任务</text>
+    <text x="310" y="263">→ 插入 sys_oper_log 表</text>
+    <text x="310" y="278">（不阻塞主线程）</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="245" y1="120" x2="275" y2="120" marker-end="url(#arrow)"/>
+    <line x1="485" y1="120" x2="515" y2="120" marker-end="url(#arrow)"/>
+    <line x1="650" y1="175" x2="650" y2="195" marker-end="url(#arrow)"/>
+    <line x1="650" y1="195" x2="410" y2="195" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 日志内容示例 -->
+  <rect x="40" y="320" width="740" height="130" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="350" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">sys_oper_log 表字段</text>
+
+  <g font-size="10" fill="#252A33">
+    <!-- 左侧 -->
+    <text x="60" y="375" font-family="'Courier New',monospace">title</text>
+    <text x="180" y="375" fill="#6B7280">模块标题（如"用户管理"）</text>
+    
+    <text x="60" y="392" font-family="'Courier New',monospace">business_type</text>
+    <text x="180" y="392" fill="#6B7280">业务类型（0其他 1新增 2修改 3删除）</text>
+    
+    <text x="60" y="409" font-family="'Courier New',monospace">method</text>
+    <text x="180" y="409" fill="#6B7280">方法名（类名.方法名）</text>
+    
+    <text x="60" y="426" font-family="'Courier New',monospace">request_method</text>
+    <text x="180" y="426" fill="#6B7280">请求方式（GET/POST/PUT/DELETE）</text>
+
+    <!-- 右侧 -->
+    <text x="420" y="375" font-family="'Courier New',monospace">oper_param</text>
+    <text x="540" y="375" fill="#6B7280">请求参数（JSON）</text>
+    
+    <text x="420" y="392" font-family="'Courier New',monospace">json_result</text>
+    <text x="540" y="392" fill="#6B7280">返回结果（JSON）</text>
+    
+    <text x="420" y="409" font-family="'Courier New',monospace">status</text>
+    <text x="540" y="409" fill="#6B7280">操作状态（0成功 1失败）</text>
+    
+    <text x="420" y="426" font-family="'Courier New',monospace">error_msg</text>
+    <text x="540" y="426" fill="#6B7280">异常信息（失败时记录）</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜@Log 注解通过 AOP 拦截方法，异步记录操作日志到数据库</text>
+</svg>

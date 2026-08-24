@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">RBAC 权限模型（用户-角色-菜单-部门）</text>
+
+  <!-- 四个核心实体 -->
+  <g fill-opacity="0.12" stroke-width="2">
+    <!-- 用户 -->
+    <rect x="60" y="80" width="160" height="140" rx="10" fill="#3C5488" stroke="#3C5488"/>
+    <!-- 角色 -->
+    <rect x="330" y="80" width="160" height="140" rx="10" fill="#4DBBD5" stroke="#4DBBD5"/>
+    <!-- 菜单权限 -->
+    <rect x="600" y="80" width="160" height="140" rx="10" fill="#00A087" stroke="#00A087"/>
+    <!-- 部门 -->
+    <rect x="60" y="280" width="160" height="140" rx="10" fill="#F39B7F" stroke="#F39B7F"/>
+  </g>
+
+  <!-- 实体标题 -->
+  <g font-size="15" font-weight="600" fill="#252A33">
+    <text x="140" y="108" text-anchor="middle">用户（User）</text>
+    <text x="410" y="108" text-anchor="middle">角色（Role）</text>
+    <text x="680" y="108" text-anchor="middle">菜单权限（Menu）</text>
+    <text x="140" y="308" text-anchor="middle">部门（Dept）</text>
+  </g>
+
+  <!-- 实体字段 -->
+  <g font-size="11" fill="#6B7280">
+    <!-- 用户字段 -->
+    <text x="75" y="132">user_id</text>
+    <text x="75" y="147">user_name</text>
+    <text x="75" y="162">nick_name</text>
+    <text x="75" y="177">email</text>
+    <text x="75" y="192">phonenumber</text>
+    <text x="75" y="207">dept_id (FK)</text>
+    
+    <!-- 角色字段 -->
+    <text x="345" y="132">role_id</text>
+    <text x="345" y="147">role_name</text>
+    <text x="345" y="162">role_key</text>
+    <text x="345" y="177">role_sort</text>
+    <text x="345" y="192">data_scope</text>
+    <text x="345" y="207">status</text>
+    
+    <!-- 菜单字段 -->
+    <text x="615" y="132">menu_id</text>
+    <text x="615" y="147">menu_name</text>
+    <text x="615" y="162">parent_id</text>
+    <text x="615" y="177">menu_type (M/C/F)</text>
+    <text x="615" y="192">perms</text>
+    <text x="615" y="207">path / component</text>
+    
+    <!-- 部门字段 -->
+    <text x="75" y="332">dept_id</text>
+    <text x="75" y="347">dept_name</text>
+    <text x="75" y="362">parent_id</text>
+    <text x="75" y="377">ancestors</text>
+    <text x="75" y="392">order_num</text>
+    <text x="75" y="407">leader</text>
+  </g>
+
+  <!-- 关系连线 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <!-- 用户 → 角色 -->
+    <line x1="225" y1="150" x2="325" y2="150" marker-end="url(#arrow)"/>
+    <!-- 角色 → 菜单 -->
+    <line x1="495" y1="150" x2="595" y2="150" marker-end="url(#arrow)"/>
+    <!-- 用户 → 部门 -->
+    <line x1="140" y1="225" x2="140" y2="275" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 关系标注 -->
+  <g font-size="12" fill="#252A33" font-weight="500">
+    <text x="275" y="142" text-anchor="middle">N : M</text>
+    <text x="545" y="142" text-anchor="middle">N : M</text>
+    <text x="175" y="252" text-anchor="middle">N : 1</text>
+  </g>
+
+  <!-- 中间表说明 -->
+  <g font-size="10" fill="#6B7280">
+    <text x="275" y="168" text-anchor="middle">sys_user_role</text>
+    <text x="545" y="168" text-anchor="middle">sys_role_menu</text>
+    <text x="275" y="180" text-anchor="middle">(user_id, role_id)</text>
+    <text x="545" y="180" text-anchor="middle">(role_id, menu_id)</text>
+  </g>
+
+  <!-- 数据权限说明框 -->
+  <rect x="330" y="280" width="430" height="140" rx="8" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="545" y="305" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">数据权限（Data Scope）</text>
+  
+  <g font-size="11" fill="#6B7280">
+    <text x="345" y="330">1 = 全部数据权限（不限制）</text>
+    <text x="345" y="348">2 = 自定义数据权限（sys_role_dept 关联表）</text>
+    <text x="345" y="366">3 = 本部门数据权限（dept_id = 当前用户部门）</text>
+    <text x="345" y="384">4 = 本部门及以下数据权限（ancestors LIKE 当前部门%）</text>
+    <text x="345" y="402">5 = 仅本人数据权限（create_by = 当前用户名）</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜RuoYi RBAC 权限模型四层关系与数据权限范围</text>
+</svg>

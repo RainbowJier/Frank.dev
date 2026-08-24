@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 五个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="40" width="740" height="76" rx="10"/>
+    <rect x="40" y="130" width="740" height="76" rx="10"/>
+    <rect x="40" y="220" width="740" height="76" rx="10"/>
+    <rect x="40" y="310" width="740" height="76" rx="10"/>
+    <rect x="40" y="400" width="740" height="36" rx="10"/>
+  </g>
+
+  <!-- 层名：小方块 + 深蓝粗体 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="73" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="83">Security 安全配置</text>
+    <rect x="64" y="163" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="173">Redis 缓存配置</text>
+    <rect x="64" y="253" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="263">MyBatis 拦截器</text>
+    <rect x="64" y="343" width="10" height="10" fill="#F39B7F"/>
+    <text x="82" y="353">全局处理器</text>
+    <rect x="64" y="415" width="10" height="10" fill="#8491B4"/>
+    <text x="82" y="425">其他配置</text>
+  </g>
+
+  <!-- 层内元件：白底 + 彩描边 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <!-- Security 层 -->
+    <g stroke="#4DBBD5">
+      <rect x="280" y="54" width="150" height="48" rx="6"/>
+      <rect x="445" y="54" width="150" height="48" rx="6"/>
+      <rect x="610" y="54" width="150" height="48" rx="6"/>
+    </g>
+    <!-- Redis 层 -->
+    <g stroke="#00A087">
+      <rect x="280" y="144" width="150" height="48" rx="6"/>
+      <rect x="445" y="144" width="150" height="48" rx="6"/>
+      <rect x="610" y="144" width="150" height="48" rx="6"/>
+    </g>
+    <!-- MyBatis 层 -->
+    <g stroke="#3C5488">
+      <rect x="280" y="234" width="150" height="48" rx="6"/>
+      <rect x="445" y="234" width="150" height="48" rx="6"/>
+      <rect x="610" y="234" width="150" height="48" rx="6"/>
+    </g>
+    <!-- 全局处理器层 -->
+    <g stroke="#F39B7F">
+      <rect x="280" y="324" width="150" height="48" rx="6"/>
+      <rect x="445" y="324" width="150" height="48" rx="6"/>
+      <rect x="610" y="324" width="150" height="48" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 文字标注 -->
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- Security 层 -->
+    <text x="355" y="78">SecurityConfig</text>
+    <text x="520" y="78">JwtFilter</text>
+    <text x="685" y="78">LogoutHandler</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="355" y="93">过滤器链配置</text>
+    <text x="520" y="93">Token 验证</text>
+    <text x="685" y="93">登出处理</text>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- Redis 层 -->
+    <text x="355" y="168">RedisConfig</text>
+    <text x="520" y="168">RedisCache</text>
+    <text x="685" y="168">CacheService</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="355" y="183">连接配置</text>
+    <text x="520" y="183">缓存工具类</text>
+    <text x="685" y="183">缓存业务</text>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- MyBatis 层 -->
+    <text x="355" y="258">MybatisConfig</text>
+    <text x="520" y="258">DataScopeInterceptor</text>
+    <text x="685" y="258">PageHelper</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="355" y="273">MyBatis 配置</text>
+    <text x="520" y="273">数据权限拦截</text>
+    <text x="685" y="273">分页插件</text>
+  </g>
+
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <!-- 全局处理器层 -->
+    <text x="355" y="348">GlobalException</text>
+    <text x="520" y="348">RepeatSubmit</text>
+    <text x="685" y="348">DataScopeAspect</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="355" y="363">异常处理器</text>
+    <text x="520" y="363">防重复提交</text>
+    <text x="685" y="363">数据权限切面</text>
+  </g>
+
+  <!-- 其他配置文字 -->
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="200" y="422">CorsConfig</text>
+    <text x="310" y="422">SwaggerConfig</text>
+    <text x="440" y="422">ThreadPoolConfig</text>
+    <text x="580" y="422">AsyncConfig</text>
+    <text x="700" y="422">I18nConfig</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜framework 模块核心组件架构</text>
+</svg>

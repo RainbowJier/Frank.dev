@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">文件上传流程（前端 → 后端 → 存储）</text>
+
+  <!-- 前端上传 -->
+  <rect x="40" y="70" width="200" height="120" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="140" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">1. 前端选择文件</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="125" font-weight="500">el-upload 组件：</text>
+    <rect x="60" y="132" width="160" height="45" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+      <text x="70" y="148">&lt;el-upload</text>
+      <text x="70" y="161">  :action="uploadUrl"</text>
+      <text x="70" y="174">  :on-success="handleSuccess"</text>
+    </g>
+  </g>
+
+  <!-- 后端接收 -->
+  <rect x="280" y="70" width="220" height="120" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="390" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#4DBBD5">2. 后端接收文件</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="300" y="125" font-weight="500">Controller 处理：</text>
+    <rect x="300" y="132" width="180" height="45" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+      <text x="310" y="148">@PostMapping("/upload")</text>
+      <text x="310" y="161">upload(MultipartFile file)</text>
+      <text x="310" y="174">  → 校验文件类型/大小</text>
+    </g>
+  </g>
+
+  <!-- 文件存储 -->
+  <rect x="540" y="70" width="240" height="120" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="660" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#00A087">3. 文件存储</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="560" y="125" font-weight="500">两种方式：</text>
+    <text x="560" y="143" fill="#6B7280">A. 本地存储（profile 目录）</text>
+    <text x="570" y="158" fill="#9AA4B2" font-size="9">→ /profile/upload/2024/08/24/</text>
+    
+    <text x="560" y="176" fill="#6B7280">B. 对象存储（OSS/MinIO）</text>
+    <text x="570" y="191" fill="#9AA4B2" font-size="9">→ bucket/2024/08/24/uuid.jpg</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="245" y1="130" x2="275" y2="130" marker-end="url(#arrow)"/>
+    <line x1="505" y1="130" x2="535" y2="130" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 返回路径 -->
+  <rect x="40" y="220" width="740" height="80" rx="10" fill="#F39B7F" fill-opacity="0.08" stroke="#F39B7F" stroke-width="2"/>
+  <text x="410" y="250" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">4. 返回访问路径</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="272" font-weight="500">本地存储：</text>
+    <text x="60" y="287" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">/profile/upload/2024/08/24/abc123.jpg</text>
+    
+    <text x="420" y="272" font-weight="500">对象存储：</text>
+    <text x="420" y="287" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">https://bucket.oss.aliyuncs.com/2024/08/24/abc123.jpg</text>
+  </g>
+
+  <!-- 配置参数 -->
+  <rect x="40" y="330" width="360" height="120" rx="10" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="2"/>
+  <text x="220" y="360" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">上传配置（application.yml）</text>
+  
+  <rect x="60" y="372" width="320" height="60" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+  <g font-family="'Courier New',monospace" font-size="9" fill="#252A33">
+    <text x="70" y="388">ruoyi:</text>
+    <text x="80" y="401">  profile: D:/ruoyi/uploadPath</text>
+    <text x="80" y="414">  maxSize: 10  # 单位 MB</text>
+    <text x="80" y="427">  avatarMaxSize: 2  # 头像限制</text>
+  </g>
+
+  <!-- 文件校验 -->
+  <rect x="420" y="330" width="360" height="120" rx="10" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="2"/>
+  <text x="600" y="360" text-anchor="middle" font-size="14" font-weight="600" fill="#E64B35">文件校验规则</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="440" y="382" font-weight="500">✓ 文件大小限制：</text>
+    <text x="450" y="397" fill="#6B7280">默认 10MB（可配置）</text>
+    
+    <text x="440" y="417" font-weight="500">✓ 文件类型限制：</text>
+    <text x="450" y="432" fill="#6B7280">图片：jpg/jpeg/png/gif</text>
+    <text x="450" y="445" fill="#6B7280">文档：doc/docx/xls/xlsx/pdf</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜文件上传：前端选择 → 后端校验 → 存储（本地/OSS）→ 返回访问路径</text>
+</svg>

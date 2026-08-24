@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">Velocity 模板引擎核心语法</text>
+
+  <!-- 变量引用 -->
+  <rect x="40" y="70" width="360" height="90" rx="8" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">变量引用</text>
+  <g font-size="10" font-family="'Courier New',monospace" fill="#252A33">
+    <text x="60" y="118">$变量名           → 直接输出</text>
+    <text x="60" y="135">${变量名}         → 静默引用（不存在不报错）</text>
+    <text x="60" y="152">$!{变量名}        → 静默引用（null 输出空字符串）</text>
+  </g>
+
+  <!-- 条件判断 -->
+  <rect x="420" y="70" width="360" height="90" rx="8" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="600" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">条件判断</text>
+  <g font-size="10" font-family="'Courier New',monospace" fill="#252A33">
+    <text x="440" y="118">#if($condition)</text>
+    <text x="455" y="133">  执行代码</text>
+    <text x="440" y="148">#elseif($other)</text>
+    <text x="455" y="163">  其他代码</text>
+    <text x="440" y="178">#end</text>
+  </g>
+
+  <!-- 循环遍历 -->
+  <rect x="40" y="180" width="360" height="90" rx="8" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="1.5"/>
+  <text x="220" y="205" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">循环遍历</text>
+  <g font-size="10" font-family="'Courier New',monospace" fill="#252A33">
+    <text x="60" y="228">#foreach($item in $list)</text>
+    <text x="75" y="243">  $item.name</text>
+    <text x="75" y="258">  $foreach.index  （索引，从0开始）</text>
+    <text x="75" y="273">  $foreach.count  （计数，从1开始）</text>
+    <text x="60" y="288">#end</text>
+  </g>
+
+  <!-- 方法调用 -->
+  <rect x="420" y="180" width="360" height="90" rx="8" fill="#F39B7F" fill-opacity="0.08" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="600" y="205" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">方法调用</text>
+  <g font-size="10" font-family="'Courier New',monospace" fill="#252A33">
+    <text x="440" y="228">$table.getTableName()    → 调用 Java 方法</text>
+    <text x="440" y="243">$table.tableName         → 直接访问属性</text>
+    <text x="440" y="258">$column.javaType         → 链式调用</text>
+    <text x="440" y="273">$StringUtils.capitalize($name)  → 工具类</text>
+  </g>
+
+  <!-- RuoYi 常用变量 -->
+  <rect x="40" y="290" width="740" height="150" rx="8" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="410" y="315" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">RuoYi 代码生成常用变量</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="60" y="340" font-weight="500">表信息：</text>
+    <text x="60" y="358" font-family="'Courier New',monospace" font-size="10">$table.tableName</text>
+    <text x="200" y="358" font-size="10" fill="#6B7280">数据库表名（如 sys_user）</text>
+    
+    <text x="60" y="375" font-family="'Courier New',monospace" font-size="10">$table.className</text>
+    <text x="200" y="375" font-size="10" fill="#6B7280">Java 类名（如 SysUser）</text>
+    
+    <text x="60" y="392" font-family="'Courier New',monospace" font-size="10">$table.businessName</text>
+    <text x="200" y="392" font-size="10" fill="#6B7280">业务名（如 user，用于路由）</text>
+    
+    <text x="60" y="409" font-family="'Courier New',monospace" font-size="10">$table.functionName</text>
+    <text x="200" y="409" font-size="10" fill="#6B7280">功能名（如"用户"，用于注释）</text>
+    
+    <text x="420" y="340" font-weight="500">字段信息：</text>
+    <text x="420" y="358" font-family="'Courier New',monospace" font-size="10">$columns</text>
+    <text x="520" y="358" font-size="10" fill="#6B7280">字段列表</text>
+    
+    <text x="420" y="375" font-family="'Courier New',monospace" font-size="10">$column.columnName</text>
+    <text x="560" y="375" font-size="10" fill="#6B7280">数据库字段名</text>
+    
+    <text x="420" y="392" font-family="'Courier New',monospace" font-size="10">$column.javaField</text>
+    <text x="560" y="392" font-size="10" fill="#6B7280">Java 属性名（驼峰）</text>
+    
+    <text x="420" y="409" font-family="'Courier New',monospace" font-size="10">$column.javaType</text>
+    <text x="560" y="409" font-size="10" fill="#6B7280">Java 类型（String/Long）</text>
+    
+    <text x="420" y="426" font-family="'Courier New',monospace" font-size="10">$column.columnComment</text>
+    <text x="560" y="426" font-size="10" fill="#6B7280">字段注释</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Velocity 模板通过 $ 引用变量、# 控制逻辑，渲染成最终代码</text>
+</svg>

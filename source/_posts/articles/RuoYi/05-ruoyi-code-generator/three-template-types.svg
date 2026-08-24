@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="520" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="519" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">三种生成模板类型对比</text>
+
+  <!-- 单表 CRUD -->
+  <rect x="40" y="70" width="230" height="400" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="155" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">单表 CRUD</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="60" y="125" font-weight="500">适用场景：</text>
+    <text x="60" y="143" font-size="10" fill="#6B7280">最常见的业务表</text>
+    
+    <text x="60" y="168" font-weight="500">表结构示例：</text>
+    <rect x="60" y="175" width="190" height="90" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <text x="70" y="192" font-family="'Courier New',monospace" font-size="9">sys_user</text>
+    <text x="70" y="207" font-size="9" fill="#6B7280">├─ user_id (PK)</text>
+    <text x="70" y="222" font-size="9" fill="#6B7280">├─ user_name</text>
+    <text x="70" y="237" font-size="9" fill="#6B7280">├─ nick_name</text>
+    <text x="70" y="252" font-size="9" fill="#6B7280">├─ email</text>
+    <text x="70" y="267" font-size="9" fill="#6B7280">└─ status</text>
+    
+    <text x="60" y="290" font-weight="500">生成功能：</text>
+    <text x="70" y="308" font-size="10" fill="#6B7280">✓ 列表查询 + 分页</text>
+    <text x="70" y="323" font-size="10" fill="#6B7280">✓ 新增</text>
+    <text x="70" y="338" font-size="10" fill="#6B7280">✓ 修改</text>
+    <text x="70" y="353" font-size="10" fill="#6B7280">✓ 删除（单个/批量）</text>
+    <text x="70" y="368" font-size="10" fill="#6B7280">✓ 导出 Excel</text>
+    
+    <text x="60" y="393" font-weight="500">模板文件：</text>
+    <text x="60" y="411" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">vm/java/domain.java.vm</text>
+    <text x="60" y="426" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">vm/java/mapper.java.vm</text>
+    <text x="60" y="441" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">vm/java/service.java.vm</text>
+    <text x="60" y="456" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">vm/java/controller.java.vm</text>
+  </g>
+
+  <!-- 树形表 -->
+  <rect x="295" y="70" width="230" height="400" rx="10" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="2"/>
+  <text x="410" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#00A087">树形表</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="315" y="125" font-weight="500">适用场景：</text>
+    <text x="315" y="143" font-size="10" fill="#6B7280">部门、菜单、分类等树形结构</text>
+    
+    <text x="315" y="168" font-weight="500">表结构示例：</text>
+    <rect x="315" y="175" width="190" height="105" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <text x="325" y="192" font-family="'Courier New',monospace" font-size="9">sys_dept</text>
+    <text x="325" y="207" font-size="9" fill="#6B7280">├─ dept_id (PK)</text>
+    <text x="325" y="222" font-size="9" fill="#00A087" font-weight="600">├─ parent_id ⭐</text>
+    <text x="325" y="237" font-size="9" fill="#00A087" font-weight="600">├─ ancestors ⭐</text>
+    <text x="325" y="252" font-size="9" fill="#6B7280">├─ dept_name</text>
+    <text x="325" y="267" font-size="9" fill="#6B7280">├─ order_num</text>
+    <text x="325" y="282" font-size="9" fill="#6B7280">└─ status</text>
+    
+    <text x="315" y="305" font-weight="500">核心字段：</text>
+    <text x="325" y="323" font-size="10" fill="#6B7280">• parent_id: 父节点 ID</text>
+    <text x="325" y="338" font-size="10" fill="#6B7280">• ancestors: 祖级列表</text>
+    
+    <text x="315" y="363" font-weight="500">生成功能：</text>
+    <text x="325" y="381" font-size="10" fill="#6B7280">✓ 树形列表（递归）</text>
+    <text x="325" y="396" font-size="10" fill="#6B7280">✓ 新增子节点</text>
+    <text x="325" y="411" font-size="10" fill="#6B7280">✓ 修改/删除校验</text>
+    <text x="325" y="426" font-size="10" fill="#6B7280">✓ 展开/折叠树节点</text>
+    
+    <text x="315" y="451" font-family="'Courier New',monospace" font-size="9" fill="#6B7280">vm/java/sub-domain.java.vm</text>
+  </g>
+
+  <!-- 主子表 -->
+  <rect x="550" y="70" width="230" height="400" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="665" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#4DBBD5">主子表（一对多）</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="570" y="125" font-weight="500">适用场景：</text>
+    <text x="570" y="143" font-size="10" fill="#6B7280">订单-订单明细、合同-合同项</text>
+    
+    <text x="570" y="168" font-weight="500">表结构示例：</text>
+    <rect x="570" y="175" width="190" height="65" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <text x="580" y="192" font-family="'Courier New',monospace" font-size="9">t_order (主表)</text>
+    <text x="580" y="207" font-size="9" fill="#6B7280">├─ order_id (PK)</text>
+    <text x="580" y="222" font-size="9" fill="#6B7280">├─ order_no</text>
+    <text x="580" y="237" font-size="9" fill="#6B7280">└─ total_amount</text>
+    
+    <line x1="665" y1="245" x2="665" y2="255" stroke="#9AA4B2" stroke-width="1"/>
+    <text x="665" y="270" text-anchor="middle" font-size="9" fill="#4DBBD5" font-weight="600">1 : N</text>
+    <line x1="665" y1="275" x2="665" y2="285" stroke="#9AA4B2" stroke-width="1" marker-end="url(#arrow)"/>
+    
+    <rect x="570" y="290" width="190" height="65" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <text x="580" y="307" font-family="'Courier New',monospace" font-size="9">t_order_item (子表)</text>
+    <text x="580" y="322" font-size="9" fill="#6B7280">├─ item_id (PK)</text>
+    <text x="580" y="337" font-size="9" fill="#4DBBD5" font-weight="600">├─ order_id (FK) ⭐</text>
+    <text x="580" y="352" font-size="9" fill="#6B7280">└─ product_name</text>
+    
+    <text x="570" y="377" font-weight="500">生成功能：</text>
+    <text x="580" y="395" font-size="10" fill="#6B7280">✓ 主表 CRUD</text>
+    <text x="580" y="410" font-size="10" fill="#6B7280">✓ 子表关联查询</text>
+    <text x="580" y="425" font-size="10" fill="#6B7280">✓ 新增时批量插入子表</text>
+    <text x="580" y="440" font-size="10" fill="#6B7280">✓ 修改时先删后插子表</text>
+    <text x="580" y="455" font-size="10" fill="#6B7280">✓ 删除时级联删除子表</text>
+  </g>
+
+  <text x="410" y="504" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜三种模板类型：单表最常用，树形表需 parent_id，主子表需外键关联</text>
+</svg>

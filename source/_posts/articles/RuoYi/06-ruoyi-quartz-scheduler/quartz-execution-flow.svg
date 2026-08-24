@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">Quartz 定时任务执行流程</text>
+
+  <!-- 步骤 1：配置任务 -->
+  <rect x="40" y="70" width="180" height="100" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="130" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">1. 配置定时任务</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="60" y="118">• 任务名称</text>
+    <text x="60" y="133">• 调用目标（类名.方法名）</text>
+    <text x="60" y="148">• Cron 表达式</text>
+    <text x="60" y="163">• 状态（启用/暂停）</text>
+  </g>
+
+  <!-- 步骤 2：Quartz 调度器 -->
+  <rect x="260" y="70" width="180" height="100" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="350" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">2. Quartz 调度器</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="280" y="118">• Scheduler 解析 Cron</text>
+    <text x="280" y="133">• 计算下次执行时间</text>
+    <text x="280" y="148">• Trigger 触发器触发</text>
+    <text x="280" y="163">• 提交到线程池</text>
+  </g>
+
+  <!-- 步骤 3：任务执行 -->
+  <rect x="480" y="70" width="180" height="100" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="570" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">3. 执行 Job</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="500" y="118">• 反射调用目标方法</text>
+    <text x="500" y="133">• 捕获异常</text>
+    <text x="500" y="148">• 记录执行日志</text>
+    <text x="500" y="163">• 返回执行结果</text>
+  </g>
+
+  <!-- 步骤 4：记录日志 -->
+  <rect x="700" y="70" width="80" height="100" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="2"/>
+  <text x="740" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">4. 日志</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="710" y="118">执行时间</text>
+    <text x="710" y="133">执行状态</text>
+    <text x="710" y="148">异常信息</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="225" y1="120" x2="255" y2="120" marker-end="url(#arrow)"/>
+    <line x1="445" y1="120" x2="475" y2="120" marker-end="url(#arrow)"/>
+    <line x1="665" y1="120" x2="695" y2="120" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 数据库表结构 -->
+  <rect x="40" y="200" width="740" height="240" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="230" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">核心数据表</text>
+
+  <!-- sys_job -->
+  <rect x="60" y="250" width="230" height="170" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1"/>
+  <text x="175" y="273" text-anchor="middle" font-size="12" font-weight="600" fill="#3C5488">sys_job（任务配置表）</text>
+  <g font-size="10" fill="#252A33" font-family="'Courier New',monospace">
+    <text x="75" y="293">job_id</text>
+    <text x="180" y="293" fill="#6B7280">任务ID</text>
+    <text x="75" y="308">job_name</text>
+    <text x="180" y="308" fill="#6B7280">任务名称</text>
+    <text x="75" y="323">job_group</text>
+    <text x="180" y="323" fill="#6B7280">任务组名</text>
+    <text x="75" y="338">invoke_target</text>
+    <text x="180" y="338" fill="#6B7280">调用目标</text>
+    <text x="75" y="353">cron_expression</text>
+    <text x="180" y="353" fill="#6B7280">Cron表达式</text>
+    <text x="75" y="368">misfire_policy</text>
+    <text x="180" y="368" fill="#6B7280">执行策略</text>
+    <text x="75" y="383">concurrent</text>
+    <text x="180" y="383" fill="#6B7280">并发执行</text>
+    <text x="75" y="398">status</text>
+    <text x="180" y="398" fill="#6B7280">状态</text>
+  </g>
+
+  <!-- sys_job_log -->
+  <rect x="310" y="250" width="230" height="170" rx="6" fill="#FFFFFF" stroke="#00A087" stroke-width="1"/>
+  <text x="425" y="273" text-anchor="middle" font-size="12" font-weight="600" fill="#00A087">sys_job_log（执行日志表）</text>
+  <g font-size="10" fill="#252A33" font-family="'Courier New',monospace">
+    <text x="325" y="293">job_log_id</text>
+    <text x="430" y="293" fill="#6B7280">日志ID</text>
+    <text x="325" y="308">job_name</text>
+    <text x="430" y="308" fill="#6B7280">任务名称</text>
+    <text x="325" y="323">job_group</text>
+    <text x="430" y="323" fill="#6B7280">任务组名</text>
+    <text x="325" y="338">invoke_target</text>
+    <text x="430" y="338" fill="#6B7280">调用目标</text>
+    <text x="325" y="353">job_message</text>
+    <text x="430" y="353" fill="#6B7280">日志信息</text>
+    <text x="325" y="368">status</text>
+    <text x="430" y="368" fill="#6B7280">执行状态</text>
+    <text x="325" y="383">exception_info</text>
+    <text x="430" y="383" fill="#6B7280">异常信息</text>
+    <text x="325" y="398">create_time</text>
+    <text x="430" y="398" fill="#6B7280">创建时间</text>
+  </g>
+
+  <!-- Cron 表达式示例 -->
+  <rect x="560" y="250" width="200" height="170" rx="6" fill="#FFF8E1" stroke="#F39B7F" stroke-width="1"/>
+  <text x="660" y="273" text-anchor="middle" font-size="12" font-weight="600" fill="#F39B7F">Cron 表达式示例</text>
+  <g font-size="9" fill="#252A33" font-family="'Courier New',monospace">
+    <text x="575" y="293">0 0/5 * * * ?</text>
+    <text x="575" y="305" fill="#6B7280">每5分钟执行</text>
+    
+    <text x="575" y="323">0 0 2 * * ?</text>
+    <text x="575" y="335" fill="#6B7280">每天凌晨2点</text>
+    
+    <text x="575" y="353">0 0 9-18 * * ?</text>
+    <text x="575" y="365" fill="#6B7280">9点到18点每小时</text>
+    
+    <text x="575" y="383">0 0 0 1 * ?</text>
+    <text x="575" y="395" fill="#6B7280">每月1号凌晨</text>
+    
+    <text x="575" y="413">0 0 0 ? * MON</text>
+    <text x="575" y="425" fill="#6B7280">每周一凌晨</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Quartz 从配置任务到执行记录的完整流程与核心数据表</text>
+</svg>

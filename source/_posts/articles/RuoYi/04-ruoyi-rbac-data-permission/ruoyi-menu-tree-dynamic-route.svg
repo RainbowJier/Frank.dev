@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="520" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="519" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">菜单树结构与动态路由生成流程</text>
+
+  <!-- 左侧：数据库树形结构 -->
+  <rect x="40" y="70" width="340" height="380" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="210" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">A</text>
+  <text x="240" y="95" font-size="14" font-weight="600" fill="#252A33">数据库菜单表</text>
+
+  <!-- 菜单树示例 -->
+  <g font-size="11" font-family="'Courier New',monospace">
+    <!-- 根节点 -->
+    <rect x="60" y="110" width="280" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1"/>
+    <text x="70" y="130" fill="#252A33">系统管理 (menu_id=1, parent_id=0)</text>
+    
+    <!-- 二级节点 -->
+    <line x1="90" y1="140" x2="90" y2="155" stroke="#9AA4B2" stroke-width="1"/>
+    <rect x="100" y="150" width="230" height="30" rx="4" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1"/>
+    <text x="110" y="170" fill="#252A33">用户管理 (id=100, parent_id=1)</text>
+    
+    <line x1="90" y1="180" x2="90" y2="195" stroke="#9AA4B2" stroke-width="1"/>
+    <rect x="100" y="190" width="230" height="30" rx="4" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1"/>
+    <text x="110" y="210" fill="#252A33">角色管理 (id=101, parent_id=1)</text>
+    
+    <!-- 三级节点（按钮权限） -->
+    <line x1="130" y1="180" x2="130" y2="235" stroke="#9AA4B2" stroke-width="1"/>
+    <rect x="140" y="230" width="180" height="25" rx="4" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1"/>
+    <text x="150" y="247" fill="#252A33" font-size="10">新增 (id=1001, type=F)</text>
+    
+    <line x1="130" y1="255" x2="130" y2="270" stroke="#9AA4B2" stroke-width="1"/>
+    <rect x="140" y="265" width="180" height="25" rx="4" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1"/>
+    <text x="150" y="282" fill="#252A33" font-size="10">修改 (id=1002, type=F)</text>
+    
+    <line x1="130" y1="290" x2="130" y2="305" stroke="#9AA4B2" stroke-width="1"/>
+    <rect x="140" y="300" width="180" height="25" rx="4" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1"/>
+    <text x="150" y="317" fill="#252A33" font-size="10">删除 (id=1003, type=F)</text>
+  </g>
+
+  <!-- 核心字段说明 -->
+  <rect x="60" y="350" width="280" height="85" rx="6" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1"/>
+  <text x="200" y="370" text-anchor="middle" font-size="11" font-weight="500" fill="#252A33">核心字段</text>
+  <g font-size="10" fill="#6B7280">
+    <text x="70" y="388">• parent_id: 父菜单ID（0=根节点）</text>
+    <text x="70" y="403">• menu_type: M=目录 C=菜单 F=按钮</text>
+    <text x="70" y="418">• perms: 权限标识（system:user:add）</text>
+    <text x="70" y="433">• path: 前端路由路径（/system/user）</text>
+  </g>
+
+  <!-- 右侧：动态路由生成 -->
+  <rect x="440" y="70" width="340" height="380" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="610" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">B</text>
+  <text x="640" y="95" font-size="14" font-weight="600" fill="#252A33">前端动态路由</text>
+
+  <!-- 路由结构 -->
+  <g font-size="10" font-family="'Courier New',monospace" fill="#252A33">
+    <text x="460" y="120">{</text>
+    <text x="470" y="138">path: '/system',</text>
+    <text x="470" y="154">component: Layout,</text>
+    <text x="470" y="170">hidden: false,</text>
+    <text x="470" y="186">children: [</text>
+    
+    <!-- 子路由 1 -->
+    <text x="490" y="204">{</text>
+    <text x="500" y="220">path: 'user',</text>
+    <text x="500" y="236">component: 'system/user/index',</text>
+    <text x="500" y="252">name: 'User',</text>
+    <text x="500" y="268">meta: {</text>
+    <text x="510" y="284">title: '用户管理',</text>
+    <text x="510" y="300">icon: 'user',</text>
+    <text x="510" y="316">perms: ['system:user:list']</text>
+    <text x="500" y="332">}</text>
+    <text x="490" y="348">},</text>
+    
+    <!-- 子路由 2 -->
+    <text x="490" y="366">{</text>
+    <text x="500" y="382">path: 'role',</text>
+    <text x="500" y="398">component: 'system/role/index',</text>
+    <text x="500" y="414">name: 'Role',</text>
+    <text x="500" y="430">...</text>
+    <text x="490" y="446">}</text>
+    
+    <text x="470" y="462">]</text>
+    <text x="460" y="478">}</text>
+  </g>
+
+  <!-- 转换流程箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="385" y1="240" x2="435" y2="240" marker-end="url(#arrow)"/>
+  </g>
+  <text x="410" y="235" text-anchor="middle" font-size="11" font-weight="500" fill="#E64B35">递归构建树</text>
+
+  <text x="410" y="504" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜菜单树通过 parent_id 递归构建，前端根据树结构动态生成路由</text>
+</svg>

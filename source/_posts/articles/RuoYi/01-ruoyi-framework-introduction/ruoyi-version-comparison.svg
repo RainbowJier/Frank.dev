@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" width="820" height="520"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="520" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="519" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：单体版 -->
+  <rect x="40" y="40" width="360" height="200" rx="10" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1.5"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="15" font-weight="600" fill="#252A33">单体版 RuoYi</text>
+  
+  <text x="64" y="100" font-size="12" font-weight="600" fill="#6B7280">技术栈</text>
+  <text x="64" y="118" font-size="12" fill="#252A33">Spring Boot + Shiro + jQuery</text>
+  
+  <text x="64" y="144" font-size="12" font-weight="600" fill="#6B7280">适用场景</text>
+  <circle cx="72" cy="164" r="2.5" fill="#4DBBD5"/>
+  <text x="82" y="168" font-size="11" fill="#252A33">传统企业内部系统</text>
+  <circle cx="72" cy="182" r="2.5" fill="#4DBBD5"/>
+  <text x="82" y="186" font-size="11" fill="#252A33">快速原型开发</text>
+  
+  <text x="230" y="144" font-size="12" font-weight="600" fill="#6B7280">特点</text>
+  <circle cx="238" cy="164" r="2.5" fill="#00A087"/>
+  <text x="248" y="168" font-size="11" fill="#252A33">部署简单</text>
+  <circle cx="238" cy="182" r="2.5" fill="#E64B35"/>
+  <text x="248" y="186" font-size="11" fill="#252A33">前后端耦合</text>
+
+  <!-- 面板 B：前后端分离版 -->
+  <rect x="420" y="40" width="360" height="200" rx="10" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1.5"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="15" font-weight="600" fill="#252A33">前后端分离版 RuoYi-Vue</text>
+  
+  <text x="444" y="100" font-size="12" font-weight="600" fill="#6B7280">技术栈</text>
+  <text x="444" y="118" font-size="12" fill="#252A33">Spring Boot + Security + Vue 3</text>
+  
+  <text x="444" y="144" font-size="12" font-weight="600" fill="#6B7280">适用场景</text>
+  <circle cx="452" cy="164" r="2.5" fill="#3C5488"/>
+  <text x="462" y="168" font-size="11" fill="#252A33">中大型企业应用</text>
+  <circle cx="452" cy="182" r="2.5" fill="#3C5488"/>
+  <text x="462" y="186" font-size="11" fill="#252A33">多终端适配需求</text>
+  
+  <text x="610" y="144" font-size="12" font-weight="600" fill="#6B7280">特点</text>
+  <circle cx="618" cy="164" r="2.5" fill="#00A087"/>
+  <text x="628" y="168" font-size="11" fill="#252A33">现代化技术栈</text>
+  <circle cx="618" cy="182" r="2.5" fill="#00A087"/>
+  <text x="628" y="186" font-size="11" fill="#252A33">开发效率高</text>
+
+  <!-- 面板 C：微服务版 -->
+  <rect x="40" y="260" width="360" height="200" rx="10" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="1.5"/>
+  <text x="64" y="292" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="86" y="291" font-size="15" font-weight="600" fill="#252A33">微服务版 RuoYi-Cloud</text>
+  
+  <text x="64" y="320" font-size="12" font-weight="600" fill="#6B7280">技术栈</text>
+  <text x="64" y="338" font-size="12" fill="#252A33">Spring Cloud + Nacos + Gateway</text>
+  
+  <text x="64" y="364" font-size="12" font-weight="600" fill="#6B7280">适用场景</text>
+  <circle cx="72" cy="384" r="2.5" fill="#8491B4"/>
+  <text x="82" y="388" font-size="11" fill="#252A33">大型分布式系统</text>
+  <circle cx="72" cy="402" r="2.5" fill="#8491B4"/>
+  <text x="82" y="406" font-size="11" fill="#252A33">高并发业务场景</text>
+  
+  <text x="230" y="364" font-size="12" font-weight="600" fill="#6B7280">特点</text>
+  <circle cx="238" cy="384" r="2.5" fill="#00A087"/>
+  <text x="248" y="388" font-size="11" fill="#252A33">服务独立扩展</text>
+  <circle cx="238" cy="402" r="2.5" fill="#F39B7F"/>
+  <text x="248" y="406" font-size="11" fill="#252A33">运维复杂度高</text>
+
+  <!-- 面板 D：选型建议 -->
+  <rect x="420" y="260" width="360" height="200" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1.5"/>
+  <text x="444" y="292" font-size="18" font-weight="700" fill="#3C5488">D</text>
+  <text x="466" y="291" font-size="15" font-weight="600" fill="#252A33">版本选型建议</text>
+  
+  <circle cx="452" cy="328" r="2.5" fill="#4DBBD5"/>
+  <text x="462" y="332" font-size="12" fill="#252A33">小型项目 → 单体版</text>
+  
+  <circle cx="452" cy="356" r="2.5" fill="#3C5488"/>
+  <text x="462" y="360" font-size="12" fill="#252A33">中型应用 → 前后端分离版（推荐）</text>
+  
+  <circle cx="452" cy="384" r="2.5" fill="#8491B4"/>
+  <text x="462" y="388" font-size="12" fill="#252A33">大型系统 → 微服务版</text>
+  
+  <text x="462" y="420" font-size="11" fill="#6B7280">80% 的企业应用场景适合选择前后端分离版，</text>
+  <text x="462" y="436" font-size="11" fill="#6B7280">它在功能完整性和技术复杂度之间取得平衡。</text>
+
+  <text x="410" y="498" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜RuoYi 四大版本对比与选型建议</text>
+</svg>

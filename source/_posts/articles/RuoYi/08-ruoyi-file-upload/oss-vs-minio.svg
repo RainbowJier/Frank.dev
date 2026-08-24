@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">对象存储方案对比（阿里云 OSS vs MinIO）</text>
+
+  <!-- 阿里云 OSS -->
+  <rect x="40" y="70" width="360" height="360" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="220" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">阿里云 OSS</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="60" y="130" font-weight="600" fill="#00A087">优势：</text>
+    <text x="60" y="150" fill="#6B7280">✓ 开箱即用，无需部署</text>
+    <text x="60" y="168" fill="#6B7280">✓ 稳定可靠（99.9999999%）</text>
+    <text x="60" y="186" fill="#6B7280">✓ 全球 CDN 加速</text>
+    <text x="60" y="204" fill="#6B7280">✓ 图片处理（缩略图/水印/裁剪）</text>
+    <text x="60" y="222" fill="#6B7280">✓ 自动备份与容灾</text>
+    
+    <text x="60" y="250" font-weight="600" fill="#E64B35">劣势：</text>
+    <text x="60" y="270" fill="#6B7280">✗ 按量付费（流量/存储/请求）</text>
+    <text x="60" y="288" fill="#6B7280">✗ 访问需公网（内网需配置 VPC）</text>
+    <text x="60" y="306" fill="#6B7280">✗ 受限于云厂商生态</text>
+    
+    <text x="60" y="334" font-weight="600" fill="#4DBBD5">适用场景：</text>
+    <text x="60" y="354" fill="#6B7280">• 互联网应用（高并发访问）</text>
+    <text x="60" y="372" fill="#6B7280">• 图片/视频网站（需要 CDN）</text>
+    <text x="60" y="390" fill="#6B7280">• 文件量大但访问不频繁</text>
+    <text x="60" y="408" fill="#6B7280">• 预算充足，追求稳定性</text>
+  </g>
+
+  <!-- MinIO -->
+  <rect x="420" y="70" width="360" height="360" rx="10" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="2"/>
+  <text x="600" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#00A087">MinIO（自建对象存储）</text>
+  
+  <g font-size="11" fill="#252A33">
+    <text x="440" y="130" font-weight="600" fill="#00A087">优势：</text>
+    <text x="440" y="150" fill="#6B7280">✓ 完全免费（开源 Apache 2.0）</text>
+    <text x="440" y="168" fill="#6B7280">✓ 私有部署，数据自主可控</text>
+    <text x="440" y="186" fill="#6B7280">✓ 兼容 AWS S3 API（通用性强）</text>
+    <text x="440" y="204" fill="#6B7280">✓ 轻量级（单机/集群均可）</text>
+    <text x="440" y="222" fill="#6B7280">✓ 支持分布式存储（纠删码）</text>
+    
+    <text x="440" y="250" font-weight="600" fill="#E64B35">劣势：</text>
+    <text x="440" y="270" fill="#6B7280">✗ 需自行部署、运维、升级</text>
+    <text x="440" y="288" fill="#6B7280">✗ 无全球 CDN（需自建 Nginx）</text>
+    <text x="440" y="306" fill="#6B7280">✗ 稳定性取决于硬件/网络</text>
+    <text x="440" y="324" fill="#6B7280">✗ 图片处理需额外集成</text>
+    
+    <text x="440" y="352" font-weight="600" fill="#4DBBD5">适用场景：</text>
+    <text x="440" y="372" fill="#6B7280">• 企业内部系统（内网访问）</text>
+    <text x="440" y="390" fill="#6B7280">• 对数据隐私要求高</text>
+    <text x="440" y="408" fill="#6B7280">• 文件量大，需长期存储</text>
+    <text x="440" y="426" fill="#6B7280" font-weight="500">• 预算有限，有运维能力</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜阿里云 OSS：稳定便捷但付费；MinIO：免费可控但需运维</text>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 流程节点 -->
+  <g fill-opacity="0.12" stroke-width="1.5">
+    <rect x="40" y="80" width="100" height="60" rx="8" fill="#3C5488" stroke="#3C5488"/>
+    <rect x="180" y="80" width="100" height="60" rx="8" fill="#3C5488" stroke="#3C5488"/>
+    <rect x="320" y="80" width="100" height="60" rx="8" fill="#4DBBD5" stroke="#4DBBD5"/>
+    <rect x="460" y="80" width="100" height="60" rx="8" fill="#4DBBD5" stroke="#4DBBD5"/>
+    <rect x="600" y="80" width="100" height="60" rx="8" fill="#00A087" stroke="#00A087"/>
+  </g>
+
+  <!-- 节点文字 -->
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="90" y="105">用户输入</text>
+    <text x="90" y="122">账号密码</text>
+    <text x="230" y="105">LoginController</text>
+    <text x="230" y="122">接收请求</text>
+    <text x="370" y="105">Security</text>
+    <text x="370" y="122">密码验证</text>
+    <text x="510" y="105">生成 JWT</text>
+    <text x="510" y="122">Token</text>
+    <text x="650" y="105">返回前端</text>
+    <text x="650" y="122">Token</text>
+  </g>
+
+  <!-- 流程箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="145" y1="110" x2="175" y2="110" marker-end="url(#arrow)"/>
+    <line x1="285" y1="110" x2="315" y2="110" marker-end="url(#arrow)"/>
+    <line x1="425" y1="110" x2="455" y2="110" marker-end="url(#arrow)"/>
+    <line x1="565" y1="110" x2="595" y2="110" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- Redis 存储（下层） -->
+  <rect x="300" y="200" width="220" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="410" y="225" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">Redis 缓存</text>
+  <text x="410" y="245" text-anchor="middle" font-size="11" fill="#6B7280">key: login_tokens:{uuid}</text>
+  <text x="410" y="260" text-anchor="middle" font-size="11" fill="#6B7280">value: LoginUser + permissions</text>
+
+  <!-- Token 存储到 Redis -->
+  <line x1="510" y1="145" x2="450" y2="195" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="485" y="175" font-size="10" fill="#6B7280">存储</text>
+
+  <!-- 前端存储 -->
+  <rect x="600" y="200" width="140" height="50" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="670" y="223" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">localStorage</text>
+  <text x="670" y="240" text-anchor="middle" font-size="11" fill="#6B7280">存储 Token</text>
+
+  <line x1="650" y1="145" x2="670" y2="195" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 标注说明 -->
+  <g font-size="11" fill="#6B7280">
+    <text x="230" y="165">UserDetailsService</text>
+    <text x="230" y="178">加载用户信息</text>
+    <text x="370" y="165">BCrypt 加密</text>
+    <text x="370" y="178">密码校验</text>
+  </g>
+
+  <text x="410" y="344" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜RuoYi 用户登录认证流程</text>
+</svg>

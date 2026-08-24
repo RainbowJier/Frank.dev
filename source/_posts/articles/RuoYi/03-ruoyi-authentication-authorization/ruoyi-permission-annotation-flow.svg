@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 中央主体：Controller 方法 -->
+  <rect x="200" y="60" width="420" height="80" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="88" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">Controller 方法</text>
+  <text x="410" y="110" text-anchor="middle" font-size="12" fill="#6B7280" font-family="'Courier New',monospace">@PreAuthorize("@ss.hasPermi('system:user:add')")</text>
+  <text x="410" y="128" text-anchor="middle" font-size="12" fill="#6B7280" font-family="'Courier New',monospace">public AjaxResult add(@RequestBody SysUser user)</text>
+
+  <!-- 步骤 1：拦截 -->
+  <rect x="80" y="190" width="180" height="70" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="170" y="218" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">1. 拦截器触发</text>
+  <text x="170" y="236" text-anchor="middle" font-size="11" fill="#6B7280">MethodSecurity</text>
+  <text x="170" y="250" text-anchor="middle" font-size="11" fill="#6B7280">Interceptor</text>
+
+  <!-- 步骤 2：解析注解 -->
+  <rect x="320" y="190" width="180" height="70" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="410" y="218" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">2. 解析注解</text>
+  <text x="410" y="236" text-anchor="middle" font-size="11" fill="#6B7280">提取权限标识</text>
+  <text x="410" y="250" text-anchor="middle" font-size="11" fill="#6B7280">"system:user:add"</text>
+
+  <!-- 步骤 3：权限判断 -->
+  <rect x="560" y="190" width="180" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="650" y="218" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">3. 权限服务</text>
+  <text x="650" y="236" text-anchor="middle" font-size="11" fill="#6B7280">PermissionService</text>
+  <text x="650" y="250" text-anchor="middle" font-size="11" fill="#6B7280">hasPermi() 判断</text>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="410" y1="145" x2="170" y2="185" marker-end="url(#arrow)"/>
+    <line x1="265" y1="225" x2="315" y2="225" marker-end="url(#arrow)"/>
+    <line x1="505" y1="225" x2="555" y2="225" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- LoginUser 数据结构 -->
+  <rect x="560" y="300" width="220" height="90" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="670" y="323" text-anchor="middle" font-size="12" font-weight="500" fill="#252A33">LoginUser 数据</text>
+  <g font-size="11" fill="#6B7280">
+    <text x="575" y="343">permissions: Set&lt;String&gt; {</text>
+    <text x="590" y="358">"system:user:add",</text>
+    <text x="590" y="373">"system:user:edit",</text>
+    <text x="590" y="388">...</text>
+  </g>
+
+  <line x1="650" y1="265" x2="670" y2="295" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="700" y="285" font-size="10" fill="#6B7280">查询</text>
+
+  <!-- 判断结果分支 -->
+  <g fill-opacity="0.12" stroke-width="1.5">
+    <rect x="80" y="320" width="180" height="60" rx="8" fill="#00A087" stroke="#00A087"/>
+    <rect x="320" y="320" width="180" height="60" rx="8" fill="#E64B35" stroke="#E64B35"/>
+  </g>
+
+  <text x="170" y="345" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">✓ 有权限</text>
+  <text x="170" y="365" text-anchor="middle" font-size="11" fill="#6B7280">放行，执行方法</text>
+
+  <text x="410" y="345" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">✗ 无权限</text>
+  <text x="410" y="365" text-anchor="middle" font-size="11" fill="#6B7280">抛出 AccessDenied</text>
+
+  <!-- 从权限判断到结果 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="600" y1="265" x2="200" y2="315" marker-end="url(#arrow)"/>
+    <line x1="640" y1="265" x2="380" y2="315" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="404" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜@PreAuthorize 权限注解验证流程</text>
+</svg>

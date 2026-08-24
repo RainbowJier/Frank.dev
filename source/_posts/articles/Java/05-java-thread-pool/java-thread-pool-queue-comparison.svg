@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+
+  <rect x="40" y="42" width="360" height="284" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="74" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="88" y="73" font-size="14" font-weight="600" fill="#252A33">无界 LinkedBlockingQueue</text>
+  <rect x="70" y="100" width="122" height="44" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="131" y="127" text-anchor="middle" font-size="13" fill="#252A33">核心线程</text>
+  <line x1="198" y1="122" x2="226" y2="122" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="230" y="94" width="132" height="56" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="296" y="118" text-anchor="middle" font-size="13" fill="#252A33">任务持续入队</text>
+  <text x="296" y="137" text-anchor="middle" font-size="11" fill="#6B7280">近似无容量上限</text>
+  <circle cx="78" cy="190" r="3" fill="#8491B4"/>
+  <text x="92" y="194" font-size="13" fill="#252A33">任务通常总能入队</text>
+  <circle cx="78" cy="230" r="3" fill="#8491B4"/>
+  <text x="92" y="234" font-size="13" fill="#252A33">maximumPoolSize 很难参与扩容</text>
+  <circle cx="78" cy="270" r="3" fill="#E64B35"/>
+  <text x="92" y="274" font-size="13" fill="#252A33">积压扩大，延迟和 OOM 风险上升</text>
+
+  <rect x="420" y="42" width="360" height="284" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="74" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="468" y="73" font-size="14" font-weight="600" fill="#252A33">有界队列 + 最大线程数</text>
+  <rect x="448" y="100" width="88" height="44" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="492" y="127" text-anchor="middle" font-size="13" fill="#252A33">核心</text>
+  <line x1="541" y1="122" x2="556" y2="122" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="560" y="100" width="88" height="44" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="604" y="127" text-anchor="middle" font-size="13" fill="#252A33">有界队列</text>
+  <line x1="653" y1="122" x2="668" y2="122" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="672" y="100" width="76" height="44" rx="6" fill="#F39B7F" fill-opacity="0.13" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="710" y="127" text-anchor="middle" font-size="13" fill="#252A33">扩容</text>
+  <circle cx="458" cy="190" r="3" fill="#00A087"/>
+  <text x="472" y="194" font-size="13" fill="#252A33">队列容量明确限制积压</text>
+  <circle cx="458" cy="230" r="3" fill="#4DBBD5"/>
+  <text x="472" y="234" font-size="13" fill="#252A33">队列满后才扩至 maximum</text>
+  <circle cx="458" cy="270" r="3" fill="#F39B7F"/>
+  <text x="472" y="274" font-size="13" fill="#252A33">最终拒绝，向上游传递过载信号</text>
+
+  <text x="410" y="368" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜有界队列使线程扩容与拒绝策略成为可用的资源保护机制</text>
+</svg>

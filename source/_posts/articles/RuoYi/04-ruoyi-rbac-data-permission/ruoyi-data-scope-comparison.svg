@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">数据权限 5 种范围对比</text>
+
+  <!-- 范围 1：全部数据 -->
+  <rect x="40" y="70" width="140" height="100" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="110" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">全部数据</text>
+  <text x="110" y="115" text-anchor="middle" font-size="11" fill="#6B7280">dataScope = 1</text>
+  <circle cx="110" cy="140" r="20" fill="#3C5488" fill-opacity="0.2" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="110" y="145" text-anchor="middle" font-size="10" fill="#252A33">不限制</text>
+  <text x="110" y="165" text-anchor="middle" font-size="9" fill="#6B7280">SQL 无条件</text>
+
+  <!-- 范围 2：自定义数据 -->
+  <rect x="200" y="70" width="140" height="100" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="270" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">自定义数据</text>
+  <text x="270" y="115" text-anchor="middle" font-size="11" fill="#6B7280">dataScope = 2</text>
+  <g>
+    <circle cx="260" cy="138" r="12" fill="#4DBBD5" fill-opacity="0.2" stroke="#4DBBD5" stroke-width="1.5"/>
+    <circle cx="280" cy="138" r="12" fill="#4DBBD5" fill-opacity="0.2" stroke="#4DBBD5" stroke-width="1.5"/>
+    <circle cx="270" cy="152" r="12" fill="#4DBBD5" fill-opacity="0.2" stroke="#4DBBD5" stroke-width="1.5"/>
+  </g>
+  <text x="270" y="165" text-anchor="middle" font-size="9" fill="#6B7280">sys_role_dept 表</text>
+
+  <!-- 范围 3：本部门数据 -->
+  <rect x="360" y="70" width="140" height="100" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="430" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">本部门数据</text>
+  <text x="430" y="115" text-anchor="middle" font-size="11" fill="#6B7280">dataScope = 3</text>
+  <circle cx="430" cy="140" r="16" fill="#00A087" fill-opacity="0.2" stroke="#00A087" stroke-width="1.5"/>
+  <text x="430" y="145" text-anchor="middle" font-size="10" fill="#252A33">103</text>
+  <text x="430" y="165" text-anchor="middle" font-size="9" fill="#6B7280">dept_id = 103</text>
+
+  <!-- 范围 4：本部门及以下 -->
+  <rect x="520" y="70" width="140" height="100" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="590" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">本部门及以下</text>
+  <text x="590" y="115" text-anchor="middle" font-size="11" fill="#6B7280">dataScope = 4</text>
+  <g>
+    <circle cx="590" cy="135" r="12" fill="#F39B7F" fill-opacity="0.3" stroke="#F39B7F" stroke-width="1.5"/>
+    <circle cx="575" cy="152" r="9" fill="#F39B7F" fill-opacity="0.2" stroke="#F39B7F" stroke-width="1"/>
+    <circle cx="590" cy="152" r="9" fill="#F39B7F" fill-opacity="0.2" stroke="#F39B7F" stroke-width="1"/>
+    <circle cx="605" cy="152" r="9" fill="#F39B7F" fill-opacity="0.2" stroke="#F39B7F" stroke-width="1"/>
+  </g>
+  <text x="590" y="165" text-anchor="middle" font-size="9" fill="#6B7280">ancestors LIKE</text>
+
+  <!-- 范围 5：仅本人数据 -->
+  <rect x="680" y="70" width="100" height="100" rx="8" fill="#E64B35" fill-opacity="0.12" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="730" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">仅本人</text>
+  <text x="730" y="115" text-anchor="middle" font-size="11" fill="#6B7280">dataScope = 5</text>
+  <circle cx="730" cy="140" r="12" fill="#E64B35" fill-opacity="0.2" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="730" y="145" text-anchor="middle" font-size="10" fill="#252A33">ME</text>
+  <text x="730" y="165" text-anchor="middle" font-size="9" fill="#6B7280">create_by</text>
+
+  <!-- SQL 示例对比 -->
+  <rect x="40" y="200" width="740" height="180" rx="8" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">对应 SQL 条件示例</text>
+
+  <g font-size="10" fill="#6B7280" font-family="'Courier New',monospace">
+    <text x="60" y="250" font-weight="500" fill="#252A33">1. 全部数据：</text>
+    <text x="70" y="266">WHERE 1=1  -- 无额外条件</text>
+
+    <text x="60" y="290" font-weight="500" fill="#252A33">2. 自定义数据：</text>
+    <text x="70" y="306">WHERE d.dept_id IN (101, 102, 105)  -- 从 sys_role_dept 表查询</text>
+
+    <text x="60" y="330" font-weight="500" fill="#252A33">3. 本部门数据：</text>
+    <text x="70" y="346">WHERE d.dept_id = 103  -- 当前用户部门</text>
+
+    <text x="60" y="370" font-weight="500" fill="#252A33">4. 本部门及以下：</text>
+    <text x="70" y="386">WHERE d.dept_id IN (SELECT dept_id FROM sys_dept WHERE ancestors LIKE '0,100,103%')</text>
+
+    <text x="420" y="410" font-weight="500" fill="#252A33">5. 仅本人数据：</text>
+    <text x="430" y="426">WHERE u.create_by = 'admin'  -- 当前用户名</text>
+  </g>
+
+  <text x="410" y="404" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜数据权限 5 种范围从宽到严：全部 &gt; 自定义 &gt; 本部门 &gt; 本部门及以下 &gt; 仅本人</text>
+</svg>

@@ -1,12 +1,18 @@
 # Frank's Notes
 
-个人博客：**[https://frank-dev.site](https://frank-dev.site)**
+个人技术博客与项目作品集：**[https://frank-dev.site](https://frank-dev.site)**
 
-分享 Java 后端、全栈开发与 AI 工程化的技术笔记，也记录一些思考与生活。
+记录 Java 后端、全栈开发、AI 工程化和 GIS 服务开发中的实践，也整理可复用的工程技能与技术图解。
 
 ![Hexo](https://img.shields.io/badge/Hexo-8.1.2-0e83cd) ![Theme](https://img.shields.io/badge/主题-Oranges%20定制-fd8c2e) ![Deploy](https://img.shields.io/badge/部署-GitHub%20Actions-2088ff) ![License](https://img.shields.io/badge/License-MIT-green)
 
-## 网站截图
+## 在线预览
+
+- [首页](https://frank-dev.site/)
+- [文章归档](https://frank-dev.site/archives/)
+- [项目经历](https://frank-dev.site/projects/)
+- [Skill-Hub](https://frank-dev.site/skills/)
+- [关于我](https://frank-dev.site/about/)
 
 ### 首页 · 浅色模式
 
@@ -16,139 +22,205 @@
 
 ![首页（深色）](docs/screenshots/home-dark.png)
 
-*深浅双主题一键切换，新配色沿对角线从左下角扫入。*
-
-首页包含富简介区：姓名与职位、个人简介、技能标签、数据概览、工作与教育经历（自动按时间排序、机构 logo 展示）、项目经历（自动聚合）、常用链接。
+首页包含富简介区：姓名与职位、个人简介、技能标签、数据概览、教育与工作经历（按时间排序并展示机构 logo）、项目经历和常用链接。
 
 ### 项目经历页
 
 ![项目经历页](docs/screenshots/projects.png)
 
-每个项目是一篇 Markdown 文章，卡片展示期间、角色、简介与技术栈，点击进入项目详情。
+每个项目是一篇 Markdown 文章，卡片展示期间、角色、简介与技术栈，点击后进入项目详情。
 
 ### 文章阅读
 
 ![文章详情页](docs/screenshots/article.png)
 
-文章页带右侧目录（scrollspy 高亮）、代码高亮与一键复制、标签、上一篇/下一篇导航。
+文章页提供目录滚动高亮、代码高亮与复制、标签、上一篇/下一篇导航，以及可选的 AI 阅读助手。
 
 ### 头像查看器
 
 ![头像查看器](docs/screenshots/avatar-viewer.png)
 
-点击侧栏头像放大查看，支持导出图片，Esc / 点击背景关闭。
+点击侧栏头像可放大查看并导出图片，按 `Esc` 或点击背景关闭。
 
-## 功能特性
+## 核心能力
 
-- **内容体系**：博客文章与项目经历两类内容，各自独立目录与聚合页面，首页自动同步展示
-- **深浅双主题**：一键切换，对角线扫入过渡动画（View Transitions API）
-- **文章体验**：代码高亮 + 复制、目录导航与滚动高亮、锚点平滑滚动、上一篇/下一篇
-- **首页动效**：内容错落入场、悬停微交互、跨页过渡（`prefers-reduced-motion` 自动降级）
-- **本地搜索**：原生 `fetch` + `DOMParser` 实现的全文搜索
-- **AI 阅读助手**：文章页悬浮入口 + 侧边聊天面板，基于文章全文问答，支持 SSE 流式输出、推理思考流、多轮追问与代码块渲染
-- **RSS 订阅**：`hexo-generator-feed` 生成 `/atom.xml`
-- **自动部署**：推送 `main` 分支即通过 GitHub Actions 构建并发布
+- **内容与作品集**：博客文章与项目经历分开维护，首页和 `/projects/` 会自动聚合项目文章。
+- **专栏归档**：`/archives/` 支持按时间和按技术专栏分组两种视图；分组依据文章在 `source/_posts/articles/` 下的目录。
+- **本地全文搜索**：浏览器加载 Hexo 生成的 `search.xml`，支持多关键词、相关性排序、摘要、关键词高亮和键盘导航。
+- **阅读体验**：目录滚动高亮、代码复制、锚点平滑滚动、上一篇/下一篇、RSS 订阅和响应式布局。
+- **深浅主题**：支持浅色/深色切换与 View Transitions 动画；不支持该 API 或设置了 `prefers-reduced-motion` 时会降级。
+- **AI 阅读助手**：文章页基于当前文章全文问答，支持 SSE 流式输出、推理过程、多轮追问、停止生成、错误提示和代码块渲染。
+- **Skill-Hub**：扫描仓库中的可复用技能，生成 `/skills/` 目录和技能详情页；技能正文 `SKILL.md` 不会作为静态文件直接发布。
+- **自动部署**：推送 `main` 分支或手动运行 GitHub Actions，构建后发布到 GitHub Pages。
+
+## 内容地图
+
+当前内容主要分为以下专栏和连载系列：
+
+| 专栏/系列 | 内容 |
+| --- | --- |
+| Java | 多线程、限流、批量迁移等后端实践 |
+| Spring / Spring Boot | IoC、AOP、事务、网关与熔断 |
+| MySQL / Redis / RabbitMQ / Oracle | 数据库、中间件和高并发基础与实践 |
+| Vue 从零到一 | Vue 3 生命周期、模板指令、响应式、组件通信、Router、Pinia、Axios 联调、Vite 上线，共 8 篇 |
+| LangChain4j | Java 视角的对话、工具调用和 RAG，共 3 篇 |
+| AI / RESTful / MinIO / SSE | AI 应用、接口设计、对象存储和实时通信 |
+| 项目经历 | 数据中心、AI 智能客服助手、GDAL/GIS 服务等项目复盘 |
+
+成体系教程可以从[关于页的系列文章目录](https://frank-dev.site/about/)开始按顺序阅读。文章配图统一使用文章同名资源目录维护，当前包含大量科研论文风格 SVG 技术图解。
 
 ## 技术栈
 
 | 组件 | 说明 |
 | --- | --- |
-| [Hexo 8](https://hexo.io/) | 静态站点生成器 |
-| [Oranges 主题](https://github.com/zchengsite/hexo-theme-oranges) | 本地化深度定制（MIT） |
-| pnpm 11 | 包管理 |
-| GitHub Actions + Pages | 构建与部署 |
+| [Hexo 8](https://hexo.io/) | 静态站点生成器，版本锁定在 `8.1.2` |
+| [Oranges 主题](https://github.com/zchengsite/hexo-theme-oranges) | 本地化深度定制，主题许可证为 MIT |
+| EJS + 原生 JavaScript | 页面模板、交互和搜索实现 |
+| pnpm `11.17.0` | 依赖安装与脚本执行 |
+| GitHub Actions + GitHub Pages | 自动构建与部署 |
 
 ## 目录结构
 
-```
+```text
 Frank.dev/
-├── _config.yml               # 站点配置
-├── _config.oranges.yml       # 主题配置（首页简介/经历/导航等数据源）
-├── scaffolds/                # 写作脚手架：post / draft / project
-├── docs/screenshots/         # README 截图
+├── _config.yml               # Hexo 站点配置、文章资源和生成目录设置
+├── _config.oranges.yml       # 主题配置：首页资料、导航、搜索、AI 等
+├── package.json               # Hexo 版本与 pnpm 脚本
+├── pnpm-lock.yaml             # 锁定依赖版本
+├── scaffolds/                 # post / draft / project / page 写作脚手架
+├── scripts/skills.js          # 扫描技能并生成 /skills/ 页面
+├── docs/screenshots/          # README 截图
+├── .agents/skills/            # ZCode 工作区技能（优先级较高）
 ├── source/
-│   ├── _posts/
-│   │   ├── articles/         # 博客文章
-│   │   └── projects/         # 项目经历（categories: 项目经历）
-│   ├── about/                # 关于页
-│   ├── projects/             # 项目经历列表页
-│   ├── tags/                 # 标签页
-│   └── images/               # 全站图片（头像/favicon/机构 logo）
-├── themes/oranges/           # 定制主题
-│   ├── layout/               # EJS 模板
-│   ├── source/css|js|plugins # 样式、脚本、clipboard
-│   └── languages/            # i18n（zh-CN / default）
-└── .github/workflows/        # 自动部署
+│   ├── _posts/articles/       # 博客文章；子目录名即归档专栏
+│   ├── _posts/projects/       # 项目文章，需使用 categories: [项目经历]
+│   ├── about/                 # 关于页与系列文章入口
+│   ├── projects/              # 项目经历列表页
+│   ├── skills/                # 站点保存的技能副本与对外 README
+│   ├── images/                # 头像、favicon、机构 logo 和公共图片
+│   └── CNAME                  # GitHub Pages 自定义域名
+├── themes/oranges/
+│   ├── layout/                # EJS 页面与局部模板
+│   ├── source/css/            # 主题样式
+│   ├── source/js/             # 主题脚本
+│   ├── source/plugins/        # 第三方前端插件，如 clipboard
+│   └── languages/             # zh-CN / default 文案
+└── .github/workflows/deploy.yml # GitHub Pages 构建与部署
 ```
 
-## 快速开始
+`public/` 是 Hexo 生成的构建产物，`db.json` 是本地缓存，两者均被 `.gitignore` 排除，不应直接编辑或提交。
+
+## 本地开发
+
+### 环境要求
+
+- Node.js 22（与 CI 保持一致）
+- pnpm `11.17.0`
+
+确认 pnpm 版本后安装依赖：
 
 ```bash
+pnpm --version
 pnpm install
-pnpm server          # 本地预览 http://localhost:4000
-pnpm build           # 生成静态文件至 public/
 ```
+
+常用命令：
+
+```bash
+pnpm server          # 启动开发服务器：http://localhost:4000
+pnpm build           # 生成静态文件至 public/
+pnpm clean           # 清理 public/ 和 Hexo 缓存
+```
+
+CI 使用 `pnpm install --frozen-lockfile`，依赖锁文件发生变化时请一并提交 `pnpm-lock.yaml`。本仓库使用 pnpm，不需要通过 npm 执行这些命令。
 
 ## 写作指南
 
-**博客文章**：
+### 博客文章
+
+生成文章后，将文件放入 `source/_posts/articles/<专栏>/`：
 
 ```bash
 pnpm exec hexo new post "文章标题"
-# 把生成的文件移入 source/_posts/articles/
+# 例如：移入 source/_posts/articles/Redis/
 ```
 
 ```yaml
 ---
 title: 文章标题
-date: 2026-08-16 10:00:00
-categories: [教程]        # 随意
-tags: [Hexo]
+date: 2026-08-24 10:00:00
+categories: [教程]
+tags: [Redis]
 description: 一句话摘要
 ---
 ```
 
-**项目经历**：
+文章所在的二级目录会进入归档页的“按分组”视图。新增专栏时，若需要自定义中文展示名，请同步修改 `themes/oranges/layout/archive.ejs` 中的 `groupDisplayNames`。
+
+文章配图和其他资源放在与 Markdown 文件同名的目录中，并在正文使用相对路径：
+
+```text
+source/_posts/articles/Redis/
+├── 01-redis-intro-and-data-structures.md
+└── 01-redis-intro-and-data-structures/
+    └── redis-data-structure.svg
+```
+
+```markdown
+![Redis 数据结构](01-redis-intro-and-data-structures/redis-data-structure.svg)
+```
+
+站点启用了 `post_asset_folder` 和 `marked.postAsset`，构建后资源会跟随文章 URL 发布。
+
+### 项目经历
 
 ```bash
 pnpm exec hexo new project "项目名称"
-# 把生成的文件移入 source/_posts/projects/
+# 移入 source/_posts/projects/
 ```
 
 ```yaml
 ---
 title: 项目名称
-categories: [项目经历]     # 识别标记，勿改
-period: 2024.10 - 2025.02  # 展示期间
-role: 后端核心开发         # 担任角色
-stack: [Spring Boot, Redis] # 技术栈标签
+categories: [项目经历]     # 项目聚合的识别标记，勿改
+period: 2024.10 - 2025.02
+role: 后端核心开发
+stack: [Spring Boot, Redis] # YAML 列表
 description: 一句话项目简介
 ---
 ```
 
-正文为 Markdown，首页「项目经历」区块与 `/projects/` 页面会自动聚合更新，无需改任何配置。
+项目正文建议按“项目背景、职责、技术方案、难点与成果”组织。首页“项目经历”区块和 `/projects/` 页面会自动读取 `period`、`role`、`stack`、`description`，无需另外维护列表配置。
 
-## 主题定制要点
+### Skill-Hub 技能
 
-- 首页简介/经历/导航数据全部在 `_config.oranges.yml` 的 `intro` 与 `navbar` 块，改配置后需重启本地服务
-- 动画统一定义在 `themes/oranges/source/css/base.css` 末尾「动效与细节」段
-- 头像与 favicon 资源在 `source/images/favicon.png`，直接覆盖即换图
-- 文章目录 `catalog`、代码复制 `codeBlock`、搜索 `search` 等功能均有独立开关
+技能目录由 `scripts/skills.js` 在构建时扫描，来源按以下顺序处理：
 
-## AI 阅读助手配置
+1. `.agents/skills/<slug>/SKILL.md`
+2. `source/skills/<slug>/SKILL.md`
 
-文章页右下角工具栏的 AI 入口，点击后从右侧打开聊天面板。每次提问都会携带当前文章正文和最近几轮对话，回答支持流式输出与 Markdown 代码块。
+同名技能只保留优先级更高的第一份。`SKILL.md` 的 Front Matter 至少需要 `name` 和 `description`，用于生成 `/skills/` 索引；同目录的 `README.md` 会生成技能详情页。`source/skills/**` 在 `_config.yml` 中被排除，因此 `SKILL.md` 正文不会被原样发布。
 
-当前使用硅基流动官方 OpenAI 兼容接口，实测 `THUDM/GLM-4-9B-0414` 对博客文章问答响应较快：
+## 主题定制
+
+- 首页简介、个人资料、教育/工作经历、导航和链接：`_config.oranges.yml` 的 `intro`、`navbar`。
+- 目录、上一篇/下一篇、搜索、代码复制、深浅主题和 AI 阅读助手：同一文件中的对应开关。
+- 全局头像与 favicon 当前都指向 `source/images/favicon.png`；机构 logo 和其他公共图片也放在 `source/images/`。
+- 标签页和标签渲染仍然保留，但默认不显示在主导航；在 `_config.oranges.yml` 中将 `navbar` 的标签项设为 `enable: true` 即可启用入口。
+- 页面模板位于 `themes/oranges/layout/`，样式和脚本分别位于 `themes/oranges/source/css/`、`themes/oranges/source/js/`。
+
+## AI 阅读助手
+
+AI 助手只在文章页渲染，并且必须同时满足 `aiChat.enable`、接口地址和 API key 均有效。当前配置使用硅基流动的 OpenAI 兼容接口：
 
 ```yaml
 aiChat:
   enable: true
   endpoint: "https://api.siliconflow.cn/v1/chat/completions"
-  apiKey: ""                         # 不要提交 key，优先使用环境变量
+  apiKey: ""
   model: "THUDM/GLM-4-9B-0414"
-  stream: true                        # SSE 流式输出
-  maxContextTurns: 6                  # 每次请求携带的最近对话轮数
+  stream: true
+  maxContextTurns: 6
 ```
 
 ### 本地预览
@@ -159,33 +231,36 @@ Git Bash：
 AI_CHAT_KEY=sk-xxx pnpm server
 ```
 
-如果 4000 端口已被占用，可换端口：
+如果 4000 端口被占用：
 
 ```bash
 AI_CHAT_KEY=sk-xxx pnpm exec hexo server -p 4321
 ```
 
-### GitHub Pages 部署
+### GitHub Pages 部署配置
 
 1. 打开仓库 `Settings → Secrets and variables → Actions`。
-2. 新建 Secret，名称填写 `AI_CHAT_KEY`，值填写硅基流动 API key。
-3. 打开 `Actions → Deploy to GitHub Pages → Run workflow` 手动触发构建；之后推送 `main` 也会自动部署。
+2. 新建名为 `AI_CHAT_KEY` 的 Secret。
+3. 在 `Actions → Deploy to GitHub Pages → Run workflow` 手动触发一次；之后推送 `main` 会自动部署。
 
-`deploy.yml` 会在构建阶段把 `AI_CHAT_KEY` 注入 Hexo。配置或 key 缺失时，文章页不会渲染 AI 入口。
+工作流只在构建阶段读取 Secret，key 缺失时文章页不会显示 AI 入口。
 
-### 安全须知
+### 安全限制
 
-这是浏览器直连方案，API key 会出现在部署后的网页请求中，访客可能提取。建议使用单独的低额度 key，只启用免费或低成本模型，并在硅基流动控制台设置尽可能严格的额度与限流。不要使用与其它付费服务共用的 key。
+GitHub Secret 只能避免 key 明文提交到仓库，不能避免 key 被写入已部署的浏览器端配置或被访客从网络请求中获取。当前实现是浏览器直连第三方 API，生产环境更推荐使用自己的服务端代理或短期令牌。
+
+如果继续使用直连方案，请使用独立、低额度、严格限流的 key，不要与其他付费服务共用，也不要把真实生产密钥写入 `_config.oranges.yml`。
 
 ## 部署
 
-推送到 `main` 分支，GitHub Actions 自动构建并发布至 GitHub Pages（约 75 秒）：
+`.github/workflows/deploy.yml` 在以下情况下运行：
 
-```bash
-git push origin main
-```
+- 推送到 `main` 分支；
+- 在 GitHub Actions 页面手动触发 `workflow_dispatch`。
+
+CI 使用 Node.js 22、pnpm `11.17.0` 和 `pnpm install --frozen-lockfile`，执行 Hexo 构建后将 `public/` 上传到 GitHub Pages。自定义域名由 `source/CNAME` 提供。
 
 ## 许可
 
-- 站点内容版权归 [Frank](https://github.com/RainbowJier) 所有
-- 主题基于 [hexo-theme-oranges](https://github.com/zchengsite/hexo-theme-oranges)（MIT License）定制，见 `themes/oranges/LICENSE`
+- 站点文章、项目内容和原创配图版权归 [Frank](https://github.com/RainbowJier) 所有。
+- 主题基于 [hexo-theme-oranges](https://github.com/zchengsite/hexo-theme-oranges) 定制，遵循 MIT License，详见 `themes/oranges/LICENSE`。

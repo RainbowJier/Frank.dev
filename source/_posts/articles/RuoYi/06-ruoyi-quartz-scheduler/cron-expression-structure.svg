@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">Cron 表达式结构与通配符</text>
+
+  <!-- Cron 结构 -->
+  <rect x="40" y="70" width="740" height="140" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="100" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">Cron 表达式 7 个字段</text>
+  
+  <!-- 字段示例 -->
+  <g font-size="24" font-family="'Courier New',monospace" font-weight="600">
+    <text x="80" y="140" fill="#3C5488">0</text>
+    <text x="160" y="140" fill="#4DBBD5">15</text>
+    <text x="240" y="140" fill="#00A087">10</text>
+    <text x="320" y="140" fill="#F39B7F">*</text>
+    <text x="410" y="140" fill="#E64B35">*</text>
+    <text x="500" y="140" fill="#8491B4">?</text>
+    <text x="600" y="140" fill="#91D1C2">2024</text>
+  </g>
+  
+  <!-- 字段说明 -->
+  <g font-size="10" fill="#6B7280">
+    <text x="65" y="165" text-anchor="middle">秒</text>
+    <text x="65" y="178" text-anchor="middle">(0-59)</text>
+    
+    <text x="155" y="165" text-anchor="middle">分钟</text>
+    <text x="155" y="178" text-anchor="middle">(0-59)</text>
+    
+    <text x="240" y="165" text-anchor="middle">小时</text>
+    <text x="240" y="178" text-anchor="middle">(0-23)</text>
+    
+    <text x="325" y="165" text-anchor="middle">日期</text>
+    <text x="325" y="178" text-anchor="middle">(1-31)</text>
+    
+    <text x="410" y="165" text-anchor="middle">月份</text>
+    <text x="410" y="178" text-anchor="middle">(1-12)</text>
+    
+    <text x="500" y="165" text-anchor="middle">星期</text>
+    <text x="500" y="178" text-anchor="middle">(0-7)</text>
+    
+    <text x="605" y="165" text-anchor="middle">年份</text>
+    <text x="605" y="178" text-anchor="middle">(可选)</text>
+  </g>
+
+  <!-- 通配符说明 -->
+  <rect x="40" y="230" width="740" height="220" rx="10" fill="#F4F7FA" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="410" y="260" text-anchor="middle" font-size="15" font-weight="600" fill="#3C5488">通配符含义</text>
+
+  <!-- 通配符表格 -->
+  <g font-size="11" fill="#252A33">
+    <!-- 表头 -->
+    <rect x="60" y="275" width="80" height="30" fill="#3C5488" fill-opacity="0.12"/>
+    <rect x="140" y="275" width="260" height="30" fill="#3C5488" fill-opacity="0.12"/>
+    <rect x="400" y="275" width="360" height="30" fill="#3C5488" fill-opacity="0.12"/>
+    
+    <text x="100" y="295" text-anchor="middle" font-weight="600">通配符</text>
+    <text x="270" y="295" text-anchor="middle" font-weight="600">含义</text>
+    <text x="580" y="295" text-anchor="middle" font-weight="600">示例</text>
+
+    <!-- 第1行：* -->
+    <rect x="60" y="305" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="305" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="305" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="322" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#3C5488">*</text>
+    <text x="150" y="322" fill="#6B7280">所有值</text>
+    <text x="410" y="322" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0 * * * ?  →  每小时</text>
+
+    <!-- 第2行：? -->
+    <rect x="60" y="330" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="330" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="330" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="347" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#4DBBD5">?</text>
+    <text x="150" y="347" fill="#6B7280">不指定值（日期和星期互斥）</text>
+    <text x="410" y="347" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0 0 ? * MON  →  每周一</text>
+
+    <!-- 第3行：- -->
+    <rect x="60" y="355" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="355" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="355" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="372" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#00A087">-</text>
+    <text x="150" y="372" fill="#6B7280">范围</text>
+    <text x="410" y="372" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0 9-18 * * ?  →  9点到18点</text>
+
+    <!-- 第4行：, -->
+    <rect x="60" y="380" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="380" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="380" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="397" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#F39B7F">,</text>
+    <text x="150" y="397" fill="#6B7280">多个值（枚举）</text>
+    <text x="410" y="397" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0 0 1,15 * ?  →  每月1号和15号</text>
+
+    <!-- 第5行：/ -->
+    <rect x="60" y="405" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="405" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="405" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="422" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#E64B35">/</text>
+    <text x="150" y="422" fill="#6B7280">增量（步长）</text>
+    <text x="410" y="422" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0/5 * * * ?  →  每5分钟</text>
+
+    <!-- 第6行：L -->
+    <rect x="60" y="430" width="80" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="140" y="430" width="260" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <rect x="400" y="430" width="360" height="25" fill="#FFFFFF" stroke="#D9DFE8" stroke-width="0.5"/>
+    <text x="100" y="447" text-anchor="middle" font-family="'Courier New',monospace" font-size="14" fill="#8491B4">L</text>
+    <text x="150" y="447" fill="#6B7280">最后（Last）</text>
+    <text x="410" y="447" font-family="'Courier New',monospace" font-size="10" fill="#6B7280">0 0 0 L * ?  →  每月最后一天</text>
+  </g>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Cron 表达式：秒 分 时 日 月 周 年，通配符控制执行规则</text>
+</svg>

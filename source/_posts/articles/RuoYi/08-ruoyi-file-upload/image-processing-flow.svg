@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">图片处理流程（压缩 + 水印 + 缩略图）</text>
+
+  <!-- 原始图片 -->
+  <rect x="40" y="80" width="140" height="140" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="110" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">原始图片</text>
+  <rect x="60" y="125" width="100" height="75" rx="4" fill="#E8EBF0" stroke="#9AA4B2" stroke-width="1"/>
+  <text x="110" y="167" text-anchor="middle" font-size="10" fill="#6B7280">5MB</text>
+  <text x="110" y="180" text-anchor="middle" font-size="9" fill="#9AA4B2">4000 × 3000</text>
+  <text x="110" y="210" text-anchor="middle" font-size="10" fill="#3C5488" font-weight="600">用户上传</text>
+
+  <!-- 压缩处理 -->
+  <rect x="220" y="80" width="160" height="140" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="300" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">1. 图片压缩</text>
+  
+  <g font-size="9" fill="#252A33">
+    <text x="240" y="130" font-weight="500">Thumbnailator：</text>
+    <rect x="240" y="137" width="120" height="50" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="8" fill="#252A33">
+      <text x="248" y="151">scale(0.5)  // 50%</text>
+      <text x="248" y="163">outputQuality(0.8)</text>
+      <text x="248" y="175">  → 1.2MB</text>
+      <text x="248" y="187" fill="#4DBBD5" font-weight="600">  2000 × 1500</text>
+    </g>
+  </g>
+
+  <!-- 水印处理 -->
+  <rect x="420" y="80" width="160" height="140" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="500" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">2. 添加水印</text>
+  
+  <g font-size="9" fill="#252A33">
+    <text x="440" y="130" font-weight="500">Graphics2D：</text>
+    <rect x="440" y="137" width="120" height="50" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="8" fill="#252A33">
+      <text x="448" y="151">setComposite(0.5)</text>
+      <text x="448" y="163">drawString("若依")</text>
+      <text x="448" y="175">rotate(-Math.PI/6)</text>
+      <text x="448" y="187" fill="#00A087" font-weight="600">  右下角 45°</text>
+    </g>
+  </g>
+
+  <!-- 缩略图生成 -->
+  <rect x="620" y="80" width="160" height="140" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="2"/>
+  <text x="700" y="110" text-anchor="middle" font-size="13" font-weight="600" fill="#252A33">3. 生成缩略图</text>
+  
+  <g font-size="9" fill="#252A33">
+    <text x="640" y="130" font-weight="500">多尺寸：</text>
+    <rect x="640" y="137" width="120" height="50" rx="4" fill="#FFFFFF" stroke="#9AA4B2" stroke-width="1"/>
+    <g font-family="'Courier New',monospace" font-size="8" fill="#252A33">
+      <text x="648" y="151">size(200,150) // 列表</text>
+      <text x="648" y="163">size(100,100) // 头像</text>
+      <text x="648" y="175">  → 50KB</text>
+      <text x="648" y="187" fill="#F39B7F" font-weight="600">  快速加载</text>
+    </g>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="2">
+    <line x1="185" y1="150" x2="215" y2="150" marker-end="url(#arrow)"/>
+    <line x1="385" y1="150" x2="415" y2="150" marker-end="url(#arrow)"/>
+    <line x1="585" y1="150" x2="615" y2="150" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 存储结构 -->
+  <rect x="40" y="250" width="740" height="180" rx="10" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="2"/>
+  <text x="410" y="280" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">存储目录结构</text>
+
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="305" font-family="'Courier New',monospace" fill="#3C5488" font-weight="600">/profile/upload/2024/08/24/</text>
+    
+    <text x="80" y="330" font-family="'Courier New',monospace">├── abc123.jpg</text>
+    <text x="250" y="330" fill="#6B7280">（原图压缩后 1.2MB）</text>
+    
+    <text x="80" y="350" font-family="'Courier New',monospace">├── abc123_watermark.jpg</text>
+    <text x="250" y="350" fill="#6B7280">（带水印 1.3MB）</text>
+    
+    <text x="80" y="370" font-family="'Courier New',monospace">├── abc123_thumb_200x150.jpg</text>
+    <text x="250" y="370" fill="#6B7280">（列表缩略图 50KB）</text>
+    
+    <text x="80" y="390" font-family="'Courier New',monospace">└── abc123_thumb_100x100.jpg</text>
+    <text x="250" y="390" fill="#6B7280">（头像缩略图 20KB）</text>
+  </g>
+
+  <rect x="440" y="300" width="320" height="110" rx="6" fill="#FFF3E0" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="600" y="325" text-anchor="middle" font-size="12" font-weight="600" fill="#E64B35">性能优化效果</text>
+  <g font-size="10" fill="#252A33">
+    <text x="460" y="350">原图加载：5MB × 100 张 = 500MB</text>
+    <text x="460" y="368" fill="#00A087" font-weight="600">缩略图加载：50KB × 100 张 = 5MB</text>
+    <text x="460" y="386" fill="#E64B35" font-weight="600">⚡ 加载速度提升 100 倍</text>
+    <text x="460" y="404" fill="#6B7280" font-size="9">（列表页使用缩略图，详情页加载原图）</text>
+  </g>
+
+  <text x="410" y="464" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜图片处理三步骤：压缩减少体积 → 水印保护版权 → 缩略图加速加载</text>
+</svg>

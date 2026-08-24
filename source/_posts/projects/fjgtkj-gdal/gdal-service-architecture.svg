@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 620" width="820" height="620"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHe','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="620" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="619" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 上游调用方 -->
+  <rect x="260" y="40" width="300" height="60" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="65" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">上游业务服务</text>
+  <text x="410" y="86" text-anchor="middle" font-size="11" fill="#6B7280">resources 服务 · 数据下载异步链路（Feign）</text>
+  <line x1="410" y1="100" x2="410" y2="146" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 服务容器 -->
+  <rect x="40" y="150" width="740" height="340" rx="10" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="176" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">fjgtkj-2026-gdal 服务（Spring Boot · GDAL 3.7.2 JNI）</text>
+
+  <!-- 层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="64" y="192" width="692" height="60" rx="8"/>
+    <rect x="64" y="266" width="692" height="60" rx="8"/>
+    <rect x="64" y="340" width="692" height="60" rx="8"/>
+    <rect x="64" y="414" width="692" height="60" rx="8"/>
+  </g>
+
+  <!-- 层名 -->
+  <g font-size="13" font-weight="600" fill="#3C5488">
+    <rect x="78" y="217" width="10" height="10" fill="#4DBBD5"/>
+    <text x="96" y="227">adapter 适配层</text>
+    <rect x="78" y="291" width="10" height="10" fill="#3C5488"/>
+    <text x="96" y="301">application 应用层</text>
+    <rect x="78" y="365" width="10" height="10" fill="#8491B4"/>
+    <text x="96" y="375">domain 领域层</text>
+    <rect x="78" y="439" width="10" height="10" fill="#00A087"/>
+    <text x="96" y="449">infrastructure 基础设施层</text>
+  </g>
+
+  <!-- 层内元件 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#4DBBD5">
+      <rect x="200" y="200" width="262" height="44" rx="6"/>
+      <rect x="482" y="200" width="262" height="44" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="200" y="274" width="262" height="44" rx="6"/>
+      <rect x="482" y="274" width="262" height="44" rx="6"/>
+    </g>
+    <g stroke="#8491B4">
+      <rect x="200" y="348" width="544" height="44" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="200" y="422" width="170" height="44" rx="6"/>
+      <rect x="386" y="422" width="170" height="44" rx="6"/>
+      <rect x="572" y="422" width="170" height="44" rx="6"/>
+    </g>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="331" y="219">DataDownloadController</text>
+    <text x="613" y="219">DataResourceController</text>
+    <text x="331" y="293">DataDownloadServiceImpl</text>
+    <text x="613" y="293">DataResourceServiceImpl</text>
+    <text x="472" y="367">领域层 Gateway 接口（隔离原生 JNI 依赖）</text>
+    <text x="285" y="441">GDB 文件裁剪</text>
+    <text x="471" y="441">Oracle 批量导出</text>
+    <text x="657" y="441">PostGIS 级联导出</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="331" y="236">数据下载导出 · GDB 同步</text>
+    <text x="613" y="236">地理文件元数据读取</text>
+    <text x="331" y="310">链路编排 · 数据质检</text>
+    <text x="613" y="310">元数据并发读取</text>
+    <text x="285" y="458">GatewayImpl（JNI）</text>
+    <text x="471" y="458">GatewayImpl（JNI）</text>
+    <text x="657" y="458">GatewayImpl（JNI）</text>
+  </g>
+
+  <!-- 底部：数据源与归档 -->
+  <g stroke-width="1.5">
+    <rect x="40"  y="520" width="170" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="230" y="520" width="170" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="420" y="520" width="170" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="610" y="520" width="170" height="64" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="125" y="546">NAS · GDB 源数据</text>
+    <text x="315" y="546">Oracle 空间库</text>
+    <text x="505" y="546">PostGIS 库</text>
+    <text x="695" y="546">MinIO · OPS 归档</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="125" y="566">/mnt/nas/gdb 挂载</text>
+    <text x="315" y="566">详细规划数据</text>
+    <text x="505" y="566">临时用地数据</text>
+    <text x="695" y="566">加密 ZIP · file_info</text>
+  </g>
+
+  <!-- 数据源 → 服务（读）；服务 → 归档（写） -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="125" y1="518" x2="125" y2="496" marker-end="url(#arrow)"/>
+    <line x1="315" y1="518" x2="315" y2="496" marker-end="url(#arrow)"/>
+    <line x1="505" y1="518" x2="505" y2="496" marker-end="url(#arrow)"/>
+    <line x1="695" y1="492" x2="695" y2="514" marker-end="url(#arrow)"/>
+  </g>
+  <text x="140" y="510" font-size="11" fill="#6B7280">读</text>
+  <text x="710" y="510" font-size="11" fill="#6B7280">写</text>
+
+  <text x="410" y="606" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜GDAL 服务在平台中的位置与内部 DDD 分层</text>
+</svg>

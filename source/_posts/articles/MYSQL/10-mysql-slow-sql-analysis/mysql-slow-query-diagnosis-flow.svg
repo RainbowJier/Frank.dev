@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 680" width="820" height="680"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <!-- 白底 -->
+  <rect width="820" height="680" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="679" fill="none" stroke="#D9DFE8" stroke-width="0.5"/>
+  
+  <!-- 箭头定义 -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+  
+  <!-- 步骤1：开启慢查询日志 -->
+  <rect x="300" y="40" width="220" height="60" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="68" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">1. 开启慢查询日志</text>
+  <text x="410" y="88" text-anchor="middle" font-size="12" fill="#6B7280">SET GLOBAL slow_query_log=ON</text>
+  
+  <line x1="410" y1="102" x2="410" y2="125" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 步骤2：pt-query-digest 分析 -->
+  <rect x="300" y="130" width="220" height="60" rx="10" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="158" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">2. pt-query-digest 分析</text>
+  <text x="410" y="178" text-anchor="middle" font-size="12" fill="#6B7280">找出 Top N 慢查询</text>
+  
+  <line x1="410" y1="192" x2="410" y2="215" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 步骤3：EXPLAIN 查看执行计划 -->
+  <rect x="300" y="220" width="220" height="60" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="410" y="248" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">3. EXPLAIN 查看执行计划</text>
+  <text x="410" y="268" text-anchor="middle" font-size="12" fill="#6B7280">分析 type / key / rows / Extra</text>
+  
+  <line x1="410" y1="282" x2="410" y2="305" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 判断节点 -->
+  <path d="M 410 310 L 490 350 L 410 390 L 330 350 Z" fill="#F4F7FA" stroke="#8491B4" stroke-width="2"/>
+  <text x="410" y="355" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">问题诊断</text>
+  
+  <!-- 分支1：type=ALL -->
+  <line x1="330" y1="350" x2="180" y2="350" stroke="#E64B35" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  <text x="250" y="344" text-anchor="middle" font-size="11" fill="#E64B35" font-weight="500">type=ALL</text>
+  
+  <rect x="60" y="430" width="160" height="70" rx="8" fill="#E64B35" fill-opacity="0.12" stroke="#E64B35" stroke-width="1.8"/>
+  <text x="140" y="455" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">索引缺失</text>
+  <text x="140" y="475" text-anchor="middle" font-size="11" fill="#6B7280">
+    <tspan x="140">全表扫描</tspan>
+    <tspan x="140" dy="1.4em">→ 添加索引</tspan>
+  </text>
+  <line x1="140" y1="350" x2="140" y2="428" stroke="#E64B35" stroke-width="1.5" marker-end="url(#arrowRed)"/>
+  
+  <!-- 分支2：Extra=Using filesort -->
+  <line x1="360" y1="390" x2="280" y2="420" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="310" y="400" text-anchor="start" font-size="11" fill="#F39B7F" font-weight="500">Using filesort</text>
+  
+  <rect x="230" y="430" width="160" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.8"/>
+  <text x="310" y="455" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">排序未走索引</text>
+  <text x="310" y="475" text-anchor="middle" font-size="11" fill="#6B7280">
+    <tspan x="310">内存/磁盘排序</tspan>
+    <tspan x="310" dy="1.4em">→ 调整索引顺序</tspan>
+  </text>
+  
+  <!-- 分支3：key=NULL -->
+  <line x1="460" y1="390" x2="540" y2="420" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="510" y="400" text-anchor="end" font-size="11" fill="#F39B7F" font-weight="500">key=NULL</text>
+  
+  <rect x="430" y="430" width="160" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.8"/>
+  <text x="510" y="455" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">索引失效</text>
+  <text x="510" y="475" text-anchor="middle" font-size="11" fill="#6B7280">
+    <tspan x="510">检查 8 大场景</tspan>
+    <tspan x="510" dy="1.4em">函数/类型/LIKE等</tspan>
+  </text>
+  
+  <!-- 分支4：rows 过大 -->
+  <line x1="490" y1="350" x2="640" y2="350" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="570" y="344" text-anchor="middle" font-size="11" fill="#F39B7F" font-weight="500">rows 过大</text>
+  
+  <rect x="600" y="430" width="160" height="70" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.8"/>
+  <text x="680" y="455" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">扫描行数多</text>
+  <text x="680" y="475" text-anchor="middle" font-size="11" fill="#6B7280">
+    <tspan x="680">索引区分度低</tspan>
+    <tspan x="680" dy="1.4em">→ 优化索引设计</tspan>
+  </text>
+  <line x1="680" y1="350" x2="680" y2="428" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 汇总到优化步骤 -->
+  <line x1="140" y1="502" x2="140" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="310" y1="502" x2="310" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="510" y1="502" x2="510" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="680" y1="502" x2="680" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  
+  <line x1="140" y1="540" x2="410" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="310" y1="540" x2="410" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="510" y1="540" x2="410" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="680" y1="540" x2="410" y2="540" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="410" y1="540" x2="410" y2="558" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 步骤5：针对性优化 -->
+  <rect x="300" y="563" width="220" height="50" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="410" y="593" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">5. 针对性优化 SQL</text>
+  
+  <line x1="410" y1="615" x2="410" y2="633" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  
+  <!-- 步骤6：验证效果 -->
+  <rect x="300" y="638" width="220" height="50" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="410" y="668" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">6. EXPLAIN 验证 &amp; 灰度观察</text>
+  
+  <!-- 图注 -->
+  <text x="410" y="645" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜慢 SQL 完整诊断与优化流程</text>
+</svg>

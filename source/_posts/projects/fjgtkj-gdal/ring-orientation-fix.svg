@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 490" width="820" height="490"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="490" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="489" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="dir" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：OGC / GDAL -->
+  <rect x="40" y="40" width="360" height="260" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">OGC / GDAL 内部表示</text>
+  <text x="64" y="92" font-size="11" fill="#6B7280">外环逆时针 · 内环顺时针</text>
+
+  <!-- 外环（CCW）：顶点箭头示方向 -->
+  <path d="M 150 235 L 268 218 L 300 130 L 205 78 L 120 148 Z"
+        fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="2"
+        stroke-linejoin="round" marker-mid="url(#dir)"/>
+  <!-- 内环（CW）：挖洞 -->
+  <path d="M 235 195 L 178 202 L 172 168 L 205 148 L 238 160 Z"
+        fill="#FFFFFF" stroke="#3C5488" stroke-width="2"
+        stroke-linejoin="round" marker-mid="url(#dir)"/>
+
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="300" y1="130" x2="332" y2="102"/>
+    <line x1="206" y1="201" x2="206" y2="256"/>
+  </g>
+  <circle cx="300" cy="130" r="2.5" fill="#9AA4B2"/>
+  <circle cx="206" cy="201" r="2.5" fill="#9AA4B2"/>
+  <text x="338" y="100" font-size="11" fill="#6B7280">外环 CCW</text>
+  <text x="206" y="272" text-anchor="middle" font-size="11" fill="#6B7280">内环 CW</text>
+
+  <!-- 面板 B：ESRI FileGDB -->
+  <rect x="420" y="40" width="360" height="260" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">ESRI FileGDB 要求</text>
+  <text x="444" y="92" font-size="11" fill="#6B7280">外环顺时针 · 内环逆时针</text>
+
+  <!-- 外环（CW） -->
+  <path d="M 680 235 L 562 218 L 530 130 L 625 78 L 710 148 Z"
+        fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="2"
+        stroke-linejoin="round" marker-mid="url(#dir)"/>
+  <!-- 内环（CCW） -->
+  <path d="M 558 202 L 615 195 L 622 160 L 590 148 L 552 168 Z"
+        fill="#FFFFFF" stroke="#00A087" stroke-width="2"
+        stroke-linejoin="round" marker-mid="url(#dir)"/>
+
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="710" y1="148" x2="740" y2="175"/>
+    <line x1="590" y1="146" x2="590" y2="112"/>
+  </g>
+  <circle cx="710" cy="148" r="2.5" fill="#9AA4B2"/>
+  <circle cx="590" cy="146" r="2.5" fill="#9AA4B2"/>
+  <text x="744" y="192" text-anchor="end" font-size="11" fill="#6B7280">外环 CW</text>
+  <text x="590" y="106" text-anchor="middle" font-size="11" fill="#6B7280">内环 CCW</text>
+
+  <!-- 唯一红色强调：问题 -->
+  <rect x="100" y="318" width="620" height="30" rx="15" fill="#E64B35" fill-opacity="0.06" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="410" y="337" text-anchor="middle" font-size="12" fill="#E64B35">两套约定正好相反 —— ArcGIS 报 incorrect ring ordering、面要素渲染破损</text>
+
+  <!-- 修复流程 -->
+  <g stroke-width="1.5">
+    <rect x="42"  y="380" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="232" y="380" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="422" y="380" width="170" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="612" y="380" width="170" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="127" y="402">读取面要素几何</text>
+    <text x="317" y="402">鞋带公式判向</text>
+    <text x="507" y="402">纠正环方向</text>
+    <text x="697" y="402">写入目标 GDB</text>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="127" y="422">GetNextFeature</text>
+    <text x="317" y="422">有向面积正负</text>
+    <text x="507" y="422">反转顶点序 · 保留 Z</text>
+    <text x="697" y="422">ArcGIS 兼容</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="212" y1="408" x2="228" y2="408" marker-end="url(#arrow)"/>
+    <line x1="402" y1="408" x2="418" y2="408" marker-end="url(#arrow)"/>
+    <line x1="592" y1="408" x2="608" y2="408" marker-end="url(#arrow)"/>
+  </g>
+
+  <text x="410" y="470" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜OGC 与 ESRI 环方向约定差异及鞋带公式判向修复</text>
+</svg>

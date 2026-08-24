@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="410" y="38" text-anchor="middle" font-size="18" font-weight="600" fill="#3C5488">富文本编辑器功能对比</text>
+
+  <!-- Summernote -->
+  <rect x="40" y="70" width="360" height="180" rx="10" fill="#3C5488" fill-opacity="0.08" stroke="#3C5488" stroke-width="2"/>
+  <text x="220" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#3C5488">Summernote（RuoYi 默认）</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="125" font-weight="500">特点：</text>
+    <text x="60" y="143" fill="#6B7280">• 轻量级（JS + Bootstrap）</text>
+    <text x="60" y="158" fill="#6B7280">• 简单易用，开箱即用</text>
+    <text x="60" y="173" fill="#6B7280">• 支持图片上传、代码高亮</text>
+    <text x="60" y="188" fill="#6B7280">• 适合简单内容编辑</text>
+    
+    <text x="60" y="210" font-weight="500">功能：</text>
+    <text x="60" y="228" fill="#6B7280">✓ 粗体/斜体/下划线/删除线</text>
+    <text x="60" y="243" fill="#6B7280">✓ 字体/字号/颜色/背景色</text>
+  </g>
+
+  <!-- TinyMCE -->
+  <rect x="420" y="70" width="360" height="180" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="600" y="100" text-anchor="middle" font-size="14" font-weight="600" fill="#4DBBD5">TinyMCE</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="440" y="125" font-weight="500">特点：</text>
+    <text x="440" y="143" fill="#6B7280">• 功能强大，高度可定制</text>
+    <text x="440" y="158" fill="#6B7280">• 插件丰富（表格/图表/公式）</text>
+    <text x="440" y="173" fill="#6B7280">• 支持多语言、多主题</text>
+    <text x="440" y="188" fill="#6B7280">• 适合复杂文档编辑</text>
+    
+    <text x="440" y="210" font-weight="500">功能：</text>
+    <text x="440" y="228" fill="#6B7280">✓ Summernote 所有功能</text>
+    <text x="440" y="243" fill="#6B7280">✓ 表格编辑/合并单元格</text>
+  </g>
+
+  <!-- CKEditor -->
+  <rect x="40" y="270" width="360" height="180" rx="10" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="2"/>
+  <text x="220" y="300" text-anchor="middle" font-size="14" font-weight="600" fill="#00A087">CKEditor 5</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="60" y="325" font-weight="500">特点：</text>
+    <text x="60" y="343" fill="#6B7280">• 现代化 UI，体验流畅</text>
+    <text x="60" y="358" fill="#6B7280">• 实时协作编辑（付费版）</text>
+    <text x="60" y="373" fill="#6B7280">• Markdown 模式</text>
+    <text x="60" y="388" fill="#6B7280">• 适合企业级应用</text>
+    
+    <text x="60" y="410" font-weight="500">功能：</text>
+    <text x="60" y="428" fill="#6B7280">✓ TinyMCE 所有功能</text>
+    <text x="60" y="443" fill="#6B7280">✓ 所见即所得（WYSIWYG）</text>
+  </g>
+
+  <!-- Quill -->
+  <rect x="420" y="270" width="360" height="180" rx="10" fill="#F39B7F" fill-opacity="0.08" stroke="#F39B7F" stroke-width="2"/>
+  <text x="600" y="300" text-anchor="middle" font-size="14" font-weight="600" fill="#F39B7F">Quill（推荐）</text>
+  
+  <g font-size="10" fill="#252A33">
+    <text x="440" y="325" font-weight="500">特点：</text>
+    <text x="440" y="343" fill="#6B7280">• 轻量级（43KB gzip）</text>
+    <text x="440" y="358" fill="#6B7280">• 模块化设计，易扩展</text>
+    <text x="440" y="373" fill="#6B7280">• Vue/React 生态友好</text>
+    <text x="440" y="388" fill="#6B7280">• 移动端支持好</text>
+    
+    <text x="440" y="410" font-weight="500">功能：</text>
+    <text x="440" y="428" fill="#6B7280">✓ 核心编辑功能完善</text>
+    <text x="440" y="443" fill="#6B7280">✓ 自定义工具栏/格式</text>
+  </g>
+
+  <text x="410" y="484" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜富文本编辑器：Summernote 轻量、TinyMCE 强大、CKEditor 现代、Quill 灵活</text>
+</svg>
