@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <text x="40" y="44" font-size="18" font-weight="600" fill="#3C5488">B</text><text x="68" y="44" font-size="15" font-weight="600" fill="#252A33">blog_articles 字段设计</text>
+  <g fill="#F4F7FA" stroke="#D9DFE8"><rect x="42" y="76" width="736" height="52" rx="8"/><rect x="42" y="142" width="736" height="52" rx="8"/><rect x="42" y="208" width="736" height="52" rx="8"/></g>
+  <g font-size="14" font-weight="500" fill="#252A33"><text x="64" y="108">title / content</text><text x="252" y="108">text + analyzer</text><text x="470" y="108">全文召回、短语匹配、高亮</text><text x="64" y="174">category / tags</text><text x="252" y="174">keyword</text><text x="470" y="174">term 过滤、聚合、排序</text><text x="64" y="240">publishedAt / location</text><text x="252" y="240">date / geo_point</text><text x="470" y="240">范围筛选、时间线、距离查询</text></g>
+  <line x1="224" y1="76" x2="224" y2="260" stroke="#D9DFE8"/><line x1="430" y1="76" x2="430" y2="260" stroke="#D9DFE8"/>
+  <rect x="120" y="285" width="580" height="28" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/><text x="410" y="304" text-anchor="middle" font-size="12" fill="#252A33">同一业务值可以用 multi-fields 同时服务全文检索与精确条件</text>
+  <text x="410" y="344" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜中文文章索引的字段类型与查询职责分工</text>
+</svg>

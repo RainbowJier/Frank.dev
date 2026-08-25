@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <text x="40" y="46" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="70" y="45" font-size="14" font-weight="600" fill="#252A33">事实来源到可重建读模型</text>
+  <rect x="46" y="90" width="170" height="100" rx="10" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="265" y="90" width="170" height="100" rx="10" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="484" y="90" width="170" height="100" rx="10" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <rect x="690" y="90" width="90" height="100" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <g text-anchor="middle" fill="#252A33">
+    <text x="131" y="123" font-size="15" font-weight="600">MySQL</text><text x="131" y="148" font-size="12">article / tag</text><text x="131" y="168" font-size="11" fill="#6B7280">事务事实</text>
+    <text x="350" y="123" font-size="15" font-weight="600">Outbox / Binlog</text><text x="350" y="148" font-size="12">已提交变更</text><text x="350" y="168" font-size="11" fill="#6B7280">位点 / 事件</text>
+    <text x="569" y="123" font-size="15" font-weight="600">投影器</text><text x="569" y="148" font-size="12">组装与幂等</text><text x="569" y="168" font-size="11" fill="#6B7280">重试 / 对账</text>
+    <text x="735" y="123" font-size="14" font-weight="600">ES</text><text x="735" y="148" font-size="11">read</text><text x="735" y="168" font-size="11" fill="#6B7280">Alias</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="222" y1="140" x2="258" y2="140"/><line x1="441" y1="140" x2="477" y2="140"/><line x1="660" y1="140" x2="683" y2="140"/></g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280"><text x="240" y="126">commit</text><text x="459" y="126">consume</text><text x="672" y="126">bulk</text></g>
+  <line x1="131" y1="224" x2="735" y2="224" stroke="#E8EDF3"/>
+  <circle cx="175" cy="260" r="5" fill="#4DBBD5"/><circle cx="360" cy="260" r="5" fill="#3C5488"/><circle cx="545" cy="260" r="5" fill="#00A087"/><circle cx="700" cy="260" r="5" fill="#F39B7F"/>
+  <line x1="180" y1="260" x2="350" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/><line x1="365" y1="260" x2="535" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/><line x1="550" y1="260" x2="690" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <g text-anchor="middle" font-size="12" fill="#252A33"><text x="175" y="286">事务提交</text><text x="360" y="286">可靠投递</text><text x="545" y="286">版本投影</text><text x="700" y="286">搜索可见</text></g>
+  <text x="410" y="337" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜MySQL 事实来源、事件管道与 Elasticsearch 读模型</text>
+</svg>

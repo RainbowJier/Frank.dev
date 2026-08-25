@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="red-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#E64B35"/>
+    </marker>
+  </defs>
+
+  <g stroke-width="1.5">
+    <rect x="36" y="62" width="138" height="58" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="202" y="62" width="138" height="58" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="368" y="62" width="138" height="58" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="534" y="62" width="120" height="58" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="682" y="62" width="102" height="58" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="105" y="88">获取 Class</text>
+    <text x="105" y="106" font-size="11" fill="#6B7280">User.class / 类名</text>
+    <text x="271" y="88">定位成员</text>
+    <text x="271" y="106" font-size="11" fill="#6B7280" font-family="'Courier New',monospace">getDeclaredMethod</text>
+    <text x="437" y="88">确认访问</text>
+    <text x="437" y="106" font-size="11" fill="#6B7280" font-family="'Courier New',monospace">trySetAccessible()</text>
+    <text x="594" y="88">执行操作</text>
+    <text x="594" y="106" font-size="11" fill="#6B7280">调用 / 读写</text>
+    <text x="733" y="96">结果</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="178" y1="91" x2="196" y2="91" marker-end="url(#arrow)"/>
+    <line x1="344" y1="91" x2="362" y2="91" marker-end="url(#arrow)"/>
+    <line x1="510" y1="91" x2="528" y2="91" marker-end="url(#arrow)"/>
+    <line x1="658" y1="91" x2="676" y2="91" marker-end="url(#arrow)"/>
+  </g>
+
+  <line x1="437" y1="124" x2="437" y2="184" stroke="#E64B35" stroke-width="1.5" marker-end="url(#red-arrow)"/>
+  <rect x="336" y="190" width="202" height="58" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="437" y="215" text-anchor="middle" font-size="13" fill="#252A33">访问被拒绝</text>
+  <text x="437" y="234" text-anchor="middle" font-size="11" fill="#6B7280">IllegalAccessException</text>
+
+  <path d="M336 219 C274 219 258 175 271 128" fill="none" stroke="#E64B35" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#red-arrow)"/>
+  <text x="260" y="207" text-anchor="end" font-size="11" fill="#6B7280">修正签名或模块边界</text>
+
+  <rect x="112" y="284" width="596" height="74" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g text-anchor="middle" fill="#252A33">
+    <text x="410" y="311" font-size="14" font-weight="600">成员类型决定最后一步</text>
+    <text x="410" y="335" font-size="12" fill="#6B7280" font-family="'Courier New',monospace">Constructor.newInstance()  ·  Method.invoke(target, args)</text>
+    <text x="410" y="352" font-size="12" fill="#6B7280" font-family="'Courier New',monospace">Field.get(target)  ·  Field.set(target, value)</text>
+  </g>
+  <text x="410" y="410" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜反射调用先定位并检查成员，再在受控边界内执行</text>
+</svg>

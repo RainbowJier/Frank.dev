@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <rect x="40" y="38" width="230" height="285" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="62" y="70" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="91" y="69" font-size="14" font-weight="600" fill="#252A33">from + size</text>
+  <rect x="68" y="98" width="174" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  <text x="155" y="124" text-anchor="middle" font-size="13" fill="#252A33">跳到第 N 页</text>
+  <line x1="155" y1="145" x2="155" y2="174" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="68" y="181" width="174" height="50" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  <text x="155" y="204" text-anchor="middle" font-size="12" fill="#252A33">各分片准备 from + size</text>
+  <text x="155" y="221" text-anchor="middle" font-size="11" fill="#6B7280">浅分页 / 页码跳转</text>
+  <circle cx="70" cy="269" r="3" fill="#E64B35"/>
+  <text x="83" y="273" font-size="12" fill="#252A33">深页成本高</text>
+  <rect x="295" y="38" width="230" height="285" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="317" y="70" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="346" y="69" font-size="14" font-weight="600" fill="#252A33">search_after + PIT</text>
+  <rect x="323" y="98" width="174" height="42" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  <text x="410" y="124" text-anchor="middle" font-size="13" fill="#252A33">上一页最后 sort 值</text>
+  <line x1="410" y1="145" x2="410" y2="174" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="323" y="181" width="174" height="50" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  <text x="410" y="204" text-anchor="middle" font-size="12" fill="#252A33">固定视图继续向后读</text>
+  <text x="410" y="221" text-anchor="middle" font-size="11" fill="#6B7280">无限滚动 / 稳定游标</text>
+  <circle cx="325" cy="269" r="3" fill="#00A087"/>
+  <text x="338" y="273" font-size="12" fill="#252A33">交互深翻推荐</text>
+  <rect x="550" y="38" width="230" height="285" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="572" y="70" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="601" y="69" font-size="14" font-weight="600" fill="#252A33">Scroll</text>
+  <rect x="578" y="98" width="174" height="42" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  <text x="665" y="124" text-anchor="middle" font-size="13" fill="#252A33">批量遍历快照</text>
+  <line x1="665" y1="145" x2="665" y2="174" stroke="#5A6472" stroke-width="1.5"/>
+  <rect x="578" y="181" width="174" height="50" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+  <text x="665" y="204" text-anchor="middle" font-size="12" fill="#252A33">导出 / 迁移 / 批处理</text>
+  <text x="665" y="221" text-anchor="middle" font-size="11" fill="#6B7280">不用于用户翻页</text>
+  <circle cx="580" cy="269" r="3" fill="#F39B7F"/>
+  <text x="593" y="273" font-size="12" fill="#252A33">及时清理上下文</text>
+  <text x="410" y="362" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜三种分页方式的使用边界：页码、连续游标与离线遍历</text>
+</svg>

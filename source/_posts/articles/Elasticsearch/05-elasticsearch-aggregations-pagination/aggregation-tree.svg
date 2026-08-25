@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker>
+  </defs>
+  <text x="40" y="48" font-size="18" font-weight="600" fill="#252A33">A</text>
+  <text x="70" y="47" font-size="14" font-weight="600" fill="#252A33">一次搜索的聚合树</text>
+  <rect x="290" y="65" width="240" height="48" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.8"/>
+  <text x="410" y="95" text-anchor="middle" font-size="14" fill="#252A33">blog_articles 查询结果</text>
+  <line x1="410" y1="114" x2="410" y2="146" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="70" y="160" width="210" height="60" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="305" y="160" width="210" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <rect x="540" y="160" width="210" height="60" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <g text-anchor="middle" fill="#252A33" font-size="14">
+    <text x="175" y="188">terms 桶</text><text x="175" y="207" font-size="11" fill="#6B7280">分类 / 标签</text>
+    <text x="410" y="188">range 桶</text><text x="410" y="207" font-size="11" fill="#6B7280">阅读量 / 价格</text>
+    <text x="645" y="188">date_histogram 桶</text><text x="645" y="207" font-size="11" fill="#6B7280">日 / 月趋势</text>
+  </g>
+  <line x1="410" y1="114" x2="175" y2="154" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="410" y1="114" x2="645" y2="154" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="175" y1="226" x2="175" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="410" y1="226" x2="410" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="645" y1="226" x2="645" y2="260" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="58" y="273" width="234" height="60" rx="8" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="293" y="273" width="234" height="60" rx="8" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-width="1.5"/>
+  <rect x="528" y="273" width="234" height="60" rx="8" fill="#8491B4" fill-opacity="0.08" stroke="#8491B4" stroke-width="1.5"/>
+  <g text-anchor="middle" fill="#252A33" font-size="13">
+    <text x="175" y="298">doc_count</text><text x="175" y="317" font-size="11" fill="#6B7280">每个桶的命中文档数</text>
+    <text x="410" y="298">avg / sum / min / max</text><text x="410" y="317" font-size="11" fill="#6B7280">桶内数值指标</text>
+    <text x="645" y="298">cardinality</text><text x="645" y="317" font-size="11" fill="#6B7280">去重数（近似）</text>
+  </g>
+  <text x="410" y="365" text-anchor="middle" font-size="12" fill="#6B7280">过滤条件先缩小集合，桶负责分组，指标负责计算</text>
+  <text x="410" y="405" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜blog_articles 查询结果中的桶聚合与指标聚合层级</text>
+</svg>

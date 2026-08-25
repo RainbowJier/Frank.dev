@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <rect x="40" y="42" width="740" height="76" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="40" y="132" width="740" height="76" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="40" y="222" width="740" height="76" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="40" y="312" width="740" height="52" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <text x="64" y="84">接入层</text><text x="64" y="174">服务层</text><text x="64" y="264">客户端层</text><text x="64" y="344">集群层</text>
+  </g>
+  <g fill="#FFFFFF" stroke-width="1.5" font-size="13" text-anchor="middle">
+    <rect x="190" y="57" width="180" height="46" rx="6" stroke="#4DBBD5"/><rect x="390" y="57" width="180" height="46" rx="6" stroke="#4DBBD5"/><rect x="590" y="57" width="170" height="46" rx="6" stroke="#4DBBD5"/>
+    <rect x="190" y="147" width="180" height="46" rx="6" stroke="#3C5488"/><rect x="390" y="147" width="180" height="46" rx="6" stroke="#3C5488"/><rect x="590" y="147" width="170" height="46" rx="6" stroke="#3C5488"/>
+    <rect x="190" y="237" width="180" height="46" rx="6" stroke="#00A087"/><rect x="390" y="237" width="180" height="46" rx="6" stroke="#00A087"/><rect x="590" y="237" width="170" height="46" rx="6" stroke="#00A087"/>
+    <rect x="190" y="324" width="570" height="28" rx="6" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="280" y="86">搜索 Controller</text><text x="480" y="86">请求 DTO / 校验</text><text x="675" y="86">统一异常处理</text>
+    <text x="280" y="176">ArticleSearchService</text><text x="480" y="176">Query / Response 映射</text><text x="675" y="176">PIT 与 cursor</text>
+    <text x="280" y="266">ElasticsearchClient</text><text x="480" y="266">RestClientTransport</text><text x="675" y="266">TLS / Basic Auth</text>
+    <text x="475" y="344">HTTPS 9200 → Elasticsearch 8.x 集群</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="475" y1="108" x2="475" y2="142"/><line x1="475" y1="198" x2="475" y2="232"/><line x1="475" y1="288" x2="475" y2="318"/></g>
+  <text x="410" y="407" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Spring Boot 请求经过 Service 与官方 Java API Client 进入 ES</text>
+</svg>

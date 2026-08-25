@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <rect x="40" y="40" width="355" height="292" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="73" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="87" y="72" font-size="14" font-weight="600" fill="#252A33">MySQL 前导通配匹配</text>
+  <rect x="66" y="94" width="302" height="38" rx="6" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="217" y="118" text-anchor="middle" font-size="13" fill="#252A33">title LIKE '%事务%'</text>
+  <line x1="217" y1="137" x2="217" y2="158" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="66" y="166" width="302" height="92" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <g font-size="12" fill="#252A33">
+    <text x="84" y="191">文档 1：Spring Boot 事务管理</text>
+    <text x="84" y="216">文档 2：Java 并发控制</text>
+    <text x="84" y="241">文档 3：事务代理实践</text>
+  </g>
+  <g fill="#E64B35">
+    <circle cx="342" cy="187" r="4"/>
+    <circle cx="342" cy="237" r="4"/>
+  </g>
+  <line x1="217" y1="263" x2="217" y2="282" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="217" y="310" text-anchor="middle" font-size="12" fill="#6B7280">逐条判断候选文本是否包含关键词</text>
+
+  <rect x="425" y="40" width="355" height="292" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="449" y="73" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="472" y="72" font-size="14" font-weight="600" fill="#252A33">Elasticsearch 倒排检索</text>
+  <rect x="451" y="94" width="302" height="38" rx="6" fill="#4DBBD5" fill-opacity="0.13" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="602" y="118" text-anchor="middle" font-size="13" fill="#252A33">查询词：事务</text>
+  <line x1="602" y1="137" x2="602" y2="158" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="451" y="166" width="302" height="92" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="476" y="191" font-size="13" font-weight="600" fill="#252A33">词项</text>
+  <text x="568" y="191" font-size="13" font-weight="600" fill="#252A33">文档列表</text>
+  <line x1="469" y1="202" x2="735" y2="202" stroke="#D9DFE8" stroke-width="1"/>
+  <text x="476" y="226" font-size="13" fill="#252A33">事务</text>
+  <text x="568" y="226" font-size="13" fill="#252A33">[1, 3]</text>
+  <text x="476" y="248" font-size="11" fill="#6B7280">词项 → 候选文档</text>
+  <line x1="602" y1="263" x2="602" y2="282" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="602" y="310" text-anchor="middle" font-size="12" fill="#6B7280">按词项直接定位候选文档</text>
+
+  <text x="410" y="370" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜前导通配文本匹配与倒排索引检索路径对比</text>
+</svg>

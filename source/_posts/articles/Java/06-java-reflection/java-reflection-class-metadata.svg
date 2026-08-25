@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+
+  <rect x="260" y="42" width="300" height="332" rx="12" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="72" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Class&lt;?&gt; · 运行时元数据</text>
+  <text x="410" y="91" text-anchor="middle" font-size="11" fill="#6B7280" font-family="'Courier New',monospace">User.class</text>
+
+  <g stroke-width="1.5">
+    <rect x="284" y="108" width="252" height="42" rx="7" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="284" y="160" width="252" height="42" rx="7" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="284" y="212" width="252" height="42" rx="7" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="284" y="264" width="252" height="42" rx="7" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="284" y="316" width="252" height="42" rx="7" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="410" y="134">构造器 Constructor</text>
+    <text x="410" y="186">字段 Field</text>
+    <text x="410" y="238">方法 Method</text>
+    <text x="410" y="290">注解 Annotation</text>
+    <text x="410" y="342">修饰符 · 父类 · 接口</text>
+  </g>
+
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="232" y1="129" x2="276" y2="129"/>
+    <line x1="232" y1="181" x2="276" y2="181"/>
+    <line x1="544" y1="233" x2="588" y2="233"/>
+    <line x1="544" y1="285" x2="588" y2="285"/>
+    <line x1="232" y1="337" x2="276" y2="337"/>
+  </g>
+  <g fill="#9AA4B2">
+    <circle cx="280" cy="129" r="2.5"/><circle cx="280" cy="181" r="2.5"/>
+    <circle cx="540" cy="233" r="2.5"/><circle cx="540" cy="285" r="2.5"/>
+    <circle cx="280" cy="337" r="2.5"/>
+  </g>
+  <g font-size="12" fill="#6B7280">
+    <text x="220" y="124" text-anchor="end" font-family="'Courier New',monospace">getDeclaredConstructor()</text>
+    <text x="220" y="176" text-anchor="end" font-family="'Courier New',monospace">getDeclaredFields()</text>
+    <text x="600" y="228" font-family="'Courier New',monospace">getDeclaredMethods()</text>
+    <text x="600" y="280" font-family="'Courier New',monospace">getAnnotations()</text>
+    <text x="240" y="328" text-anchor="end" font-family="'Courier New',monospace">getSuperclass()</text>
+    <text x="240" y="346" text-anchor="end" font-family="'Courier New',monospace">getInterfaces()</text>
+  </g>
+  <text x="410" y="410" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Class 对象把类的运行时描述组织成可查询的元数据</text>
+</svg>

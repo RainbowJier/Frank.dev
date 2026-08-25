@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <text x="40" y="46" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="70" y="45" font-size="14" font-weight="600" fill="#252A33">同步失败后的有限状态闭环</text>
+  <rect x="70" y="95" width="150" height="54" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="335" y="95" width="150" height="54" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="600" y="95" width="150" height="54" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="14" fill="#252A33"><text x="145" y="128">消费事件</text><text x="410" y="128">Bulk 投影</text><text x="675" y="128">索引成功</text></g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="225" y1="122" x2="329" y2="122"/><line x1="490" y1="122" x2="594" y2="122"/></g>
+  <path d="M410 151 C410 205 300 205 300 242" fill="none" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <rect x="225" y="246" width="150" height="54" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <rect x="450" y="246" width="150" height="54" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <g text-anchor="middle" font-size="14" fill="#252A33"><text x="300" y="279">延迟重试</text><text x="525" y="279">死信队列</text></g>
+  <line x1="375" y1="273" x2="444" y2="273" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M525 305 C525 345 145 345 145 157" fill="none" stroke="#00A087" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="650" y="327" font-size="11" fill="#6B7280">人工修复 / 重放</text>
+  <circle cx="505" cy="174" r="3" fill="#E64B35"/>
+  <text x="517" y="178" font-size="12" fill="#252A33">永久错误不应无限重试</text>
+  <text x="410" y="370" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜可重试失败、死信与对账重放构成补偿闭环</text>
+</svg>

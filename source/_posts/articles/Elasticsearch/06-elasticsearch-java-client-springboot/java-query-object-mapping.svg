@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <text x="40" y="47" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="69" y="46" font-size="14" font-weight="600" fill="#252A33">Java 查询对象到搜索响应</text>
+  <rect x="40" y="76" width="190" height="170" rx="10" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="315" y="76" width="190" height="170" rx="10" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="590" y="76" width="190" height="170" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <g text-anchor="middle" fill="#252A33">
+    <text x="135" y="108" font-size="14" font-weight="600">ArticleSearchCriteria</text>
+    <text x="135" y="140" font-size="12">keyword</text><text x="135" y="160" font-size="12">category / tags</text><text x="135" y="180" font-size="12">time range</text><text x="135" y="200" font-size="12">sort / cursor</text>
+    <text x="410" y="108" font-size="14" font-weight="600">SearchRequest</text>
+    <text x="410" y="140" font-size="12">BoolQuery</text><text x="410" y="160" font-size="12">SortOptions</text><text x="410" y="180" font-size="12">Highlight</text><text x="410" y="200" font-size="12">Aggregations</text>
+    <text x="685" y="108" font-size="14" font-weight="600">SearchResponse</text>
+    <text x="685" y="140" font-size="12">Hit&lt;Document&gt;</text><text x="685" y="160" font-size="12">highlight fragments</text><text x="685" y="180" font-size="12">buckets / total</text><text x="685" y="200" font-size="12">ArticleSearchResponse</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="240" y1="160" x2="305" y2="160"/><line x1="515" y1="160" x2="580" y2="160"/></g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280"><text x="272" y="148">build Query</text><text x="548" y="148">map DTO</text></g>
+  <line x1="135" y1="265" x2="685" y2="265" stroke="#F39B7F" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="410" y="288" text-anchor="middle" font-size="12" fill="#6B7280">cursor 只由服务端签发，避免暴露 ES 内部状态</text>
+  <text x="410" y="337" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜请求条件、类型化请求与业务响应的边界</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <text x="40" y="38" font-size="18" font-weight="700" fill="#3C5488">B</text><text x="66" y="38" font-size="15" font-weight="600" fill="#252A33">一次商品搜索请求的时序</text>
+  <g font-size="13" font-weight="600" fill="#252A33" text-anchor="middle"><text x="124" y="75">浏览器</text><text x="310" y="75">Spring Boot</text><text x="496" y="75">ES Alias</text><text x="682" y="75">MySQL（按需）</text></g>
+  <g stroke="#D9DFE8" stroke-width="1" stroke-dasharray="4 4"><line x1="124" y1="88" x2="124" y2="360"/><line x1="310" y1="88" x2="310" y2="360"/><line x1="496" y1="88" x2="496" y2="360"/><line x1="682" y1="88" x2="682" y2="360"/></g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="124" y1="112" x2="302" y2="112"/><line x1="318" y1="154" x2="488" y2="154"/><line x1="504" y1="198" x2="674" y2="198"/><line x1="674" y1="236" x2="504" y2="236"/><line x1="488" y1="282" x2="318" y2="282"/><line x1="302" y1="326" x2="124" y2="326"/></g>
+  <g font-size="11" fill="#6B7280" text-anchor="middle"><text x="213" y="104">q + filters + cursor</text><text x="403" y="146">鉴权、校验、构建 bool</text><text x="589" y="190">search / PIT / aggs</text><text x="589" y="228">补充强一致展示字段（可选）</text><text x="403" y="274">hits、聚合、highlight、next sort</text><text x="213" y="318">JSON 响应 / 释放 PIT</text></g>
+  <rect x="72" y="370" width="704" height="30" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/><text x="410" y="390" text-anchor="middle" font-size="12" fill="#252A33">全文 must 参与评分；状态、价格、库存放 filter；排序含唯一 id tie-breaker</text>
+  <text x="410" y="414" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜Spring Boot 商品搜索请求的校验、查询与结果返回时序</text>
+</svg>

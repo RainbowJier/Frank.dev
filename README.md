@@ -61,7 +61,7 @@
 | --- | --- |
 | Java | 多线程、限流、批量迁移等后端实践 |
 | Spring / Spring Boot | IoC、AOP、事务、网关与熔断 |
-| MySQL / Redis / RabbitMQ / Oracle | 数据库、中间件和高并发基础与实践 |
+| MySQL / Redis / RabbitMQ / Oracle / Elasticsearch | 数据库、中间件、搜索引擎和高并发基础与实践 |
 | Vue 从零到一 | Vue 3 生命周期、模板指令、响应式、组件通信、Router、Pinia、Axios 联调、Vite 上线，共 8 篇 |
 | LangChain4j | Java 视角的对话、工具调用和 RAG，共 3 篇 |
 | AI / RESTful / MinIO / SSE | AI 应用、接口设计、对象存储和实时通信 |

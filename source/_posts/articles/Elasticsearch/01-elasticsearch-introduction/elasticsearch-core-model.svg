@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" width="820" height="500"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="500" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="499" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <rect x="40" y="36" width="740" height="378" rx="12" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <rect x="64" y="59" width="11" height="11" fill="#3C5488"/>
+  <text x="84" y="70" font-size="15" font-weight="600" fill="#252A33">Cluster：blog-search-prod</text>
+  <text x="756" y="70" text-anchor="end" font-size="11" fill="#6B7280">多个节点共同提供搜索服务</text>
+
+  <rect x="70" y="97" width="322" height="286" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="88" y="117" width="10" height="10" fill="#4DBBD5"/>
+  <text x="107" y="127" font-size="14" font-weight="600" fill="#252A33">Node A</text>
+  <text x="370" y="127" text-anchor="end" font-size="11" fill="#6B7280">实例 / 机器</text>
+
+  <rect x="105" y="151" width="252" height="76" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="125" y="177" font-size="13" font-weight="600" fill="#252A33">Index：blog_articles</text>
+  <text x="125" y="201" font-size="11" fill="#6B7280">索引设置 + Mapping + 文档集合</text>
+  <rect x="105" y="249" width="112" height="92" rx="7" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="161" y="279" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Primary</text>
+  <text x="161" y="302" text-anchor="middle" font-size="12" fill="#252A33">Shard 0</text>
+  <text x="161" y="324" text-anchor="middle" font-size="11" fill="#6B7280">主分片</text>
+  <rect x="245" y="249" width="112" height="92" rx="7" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="301" y="279" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Replica</text>
+  <text x="301" y="302" text-anchor="middle" font-size="12" fill="#252A33">Shard 1</text>
+  <text x="301" y="324" text-anchor="middle" font-size="11" fill="#6B7280">副本分片</text>
+
+  <rect x="428" y="97" width="322" height="286" rx="10" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5" stroke-width="1.5"/>
+  <rect x="446" y="117" width="10" height="10" fill="#4DBBD5"/>
+  <text x="465" y="127" font-size="14" font-weight="600" fill="#252A33">Node B</text>
+  <text x="728" y="127" text-anchor="end" font-size="11" fill="#6B7280">实例 / 机器</text>
+  <rect x="463" y="151" width="252" height="76" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="483" y="177" font-size="13" font-weight="600" fill="#252A33">Index：blog_articles</text>
+  <text x="483" y="201" font-size="11" fill="#6B7280">同一索引的数据分布在多个分片</text>
+  <rect x="463" y="249" width="112" height="92" rx="7" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="519" y="279" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Primary</text>
+  <text x="519" y="302" text-anchor="middle" font-size="12" fill="#252A33">Shard 1</text>
+  <text x="519" y="324" text-anchor="middle" font-size="11" fill="#6B7280">主分片</text>
+  <rect x="603" y="249" width="112" height="92" rx="7" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="659" y="279" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Replica</text>
+  <text x="659" y="302" text-anchor="middle" font-size="12" fill="#252A33">Shard 0</text>
+  <text x="659" y="324" text-anchor="middle" font-size="11" fill="#6B7280">副本分片</text>
+
+  <line x1="357" y1="295" x2="456" y2="295" stroke="#5A6472" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="406" y="281" text-anchor="middle" font-size="11" fill="#6B7280">跨节点副本</text>
+
+  <line x1="410" y1="414" x2="410" y2="438" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="264" y="444" width="292" height="32" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="410" y="465" text-anchor="middle" font-size="12" fill="#252A33">Document：一条 JSON 业务记录，由 Field 组成</text>
+
+  <text x="410" y="490" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Elasticsearch 的集群、索引、分片副本与文档层级</text>
+</svg>

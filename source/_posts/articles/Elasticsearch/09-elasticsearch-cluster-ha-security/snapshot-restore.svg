@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" width="820" height="370" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="370" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="369" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+  <text x="40" y="38" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="66" y="38" font-size="15" font-weight="600" fill="#252A33">Snapshot Repository 与恢复演练</text>
+  <g stroke-width="1.5">
+    <rect x="48" y="86" width="162" height="72" rx="9" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="252" y="86" width="162" height="72" rx="9" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="456" y="86" width="162" height="72" rx="9" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+    <rect x="660" y="86" width="112" height="72" rx="9" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" fill="#252A33">
+    <text x="129" y="116" font-size="14" font-weight="500">ES 集群</text>
+    <text x="129" y="139" font-size="11" fill="#6B7280">定时创建快照</text>
+    <text x="333" y="116" font-size="14" font-weight="500">Repository</text>
+    <text x="333" y="139" font-size="11" fill="#6B7280">对象存储 / FS</text>
+    <text x="537" y="116" font-size="14" font-weight="500">隔离集群</text>
+    <text x="537" y="139" font-size="11" fill="#6B7280">rename restore</text>
+    <text x="716" y="116" font-size="14" font-weight="500">验收</text>
+    <text x="716" y="139" font-size="11" fill="#6B7280">RTO/RPO</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)">
+    <line x1="216" y1="122" x2="246" y2="122"/>
+    <line x1="420" y1="122" x2="450" y2="122"/>
+    <line x1="624" y1="122" x2="654" y2="122"/>
+  </g>
+  <path d="M537 176 C537 236 129 236 129 176" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="333" y="230" text-anchor="middle" font-size="11" fill="#6B7280">校验通过后才考虑 Alias 切换；失败则保留现网</text>
+  <rect x="48" y="266" width="724" height="38" rx="7" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="70" y="290" font-size="12" fill="#252A33">快照不等于副本：覆盖误删、逻辑错误、整站故障；权限、保留期、加密与到期告警必须独立管理</text>
+  <text x="410" y="354" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜快照备份、隔离恢复与业务校验组成可证明的灾备流程</text>
+</svg>

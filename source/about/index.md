@@ -26,6 +26,19 @@ type: about
 7. [Axios 封装与 Spring Boot 联调](/2026/08/21/articles/Vue/07-vue-axios-springboot/)
 8. [Vite 工程化与上线](/2026/08/21/articles/Vue/08-vue-vite-deploy/)
 
+**Elasticsearch 从零到一**（10 篇，面向 Java 开发者）
+
+1. [全文检索与核心概念](/2026/08/24/articles/Elasticsearch/01-elasticsearch-introduction/)
+2. [Docker 启动、Kibana 与 CRUD 调试](/2026/08/24/articles/Elasticsearch/02-elasticsearch-docker-kibana-crud/)
+3. [Mapping、分词与中文搜索设计](/2026/08/24/articles/Elasticsearch/03-elasticsearch-mapping-analysis-chinese/)
+4. [Query DSL、相关性、高亮与组合检索](/2026/08/24/articles/Elasticsearch/04-elasticsearch-query-dsl/)
+5. [聚合、筛选面板与深分页方案](/2026/08/25/articles/Elasticsearch/05-elasticsearch-aggregations-pagination/)
+6. [Spring Boot 整合与 Java API Client 实战](/2026/08/25/articles/Elasticsearch/06-elasticsearch-java-client-springboot/)
+7. [MySQL 数据同步、幂等与一致性设计](/2026/08/25/articles/Elasticsearch/07-elasticsearch-mysql-sync/)
+8. [Bulk 写入、Reindex 与查询性能优化](/2026/08/26/articles/Elasticsearch/08-elasticsearch-bulk-reindex-performance/)
+9. [集群高可用、快照恢复与安全运维](/2026/08/26/articles/Elasticsearch/09-elasticsearch-cluster-ha-security/)
+10. [商品搜索综合实战](/2026/08/26/articles/Elasticsearch/10-elasticsearch-comprehensive-practice/)
+
 **Java 多线程从零到一**（5 篇）
 
 1. [基础与核心概念](/2026/08/17/articles/Java/01-java-multithreading-fundamentals/)

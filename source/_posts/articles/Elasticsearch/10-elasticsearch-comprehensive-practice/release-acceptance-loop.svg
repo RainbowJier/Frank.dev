@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/></marker></defs>
+  <text x="40" y="38" font-size="18" font-weight="700" fill="#3C5488">C</text><text x="66" y="38" font-size="15" font-weight="600" fill="#252A33">索引版本发布验收循环</text>
+  <g stroke-width="1.5"><rect x="50" y="88" width="150" height="66" rx="9" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/><rect x="250" y="88" width="150" height="66" rx="9" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/><rect x="450" y="88" width="150" height="66" rx="9" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/><rect x="650" y="88" width="120" height="66" rx="9" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/></g>
+  <g text-anchor="middle" fill="#252A33"><text x="125" y="117" font-size="14" font-weight="500">建 next</text><text x="125" y="139" font-size="11" fill="#6B7280">Mapping / 分片</text><text x="325" y="117" font-size="14" font-weight="500">同步追平</text><text x="325" y="139" font-size="11" fill="#6B7280">全量 + 事件</text><text x="525" y="117" font-size="14" font-weight="500">质量验收</text><text x="525" y="139" font-size="11" fill="#6B7280">功能 / 数据 / 性能</text><text x="710" y="117" font-size="14" font-weight="500">切 Alias</text><text x="710" y="139" font-size="11" fill="#6B7280">可回滚</text></g>
+  <g stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"><line x1="208" y1="121" x2="244" y2="121"/><line x1="408" y1="121" x2="444" y2="121"/><line x1="608" y1="121" x2="644" y2="121"/></g>
+  <path d="M710 172 C710 245 125 245 125 172" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="418" y="238" text-anchor="middle" font-size="11" fill="#6B7280">指标异常 / 零结果上升 → 反向 Alias 回滚 → 定位后再发布</text>
+  <rect x="50" y="280" width="720" height="40" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/><text x="70" y="305" font-size="12" fill="#252A33">门禁：RPO/RTO · 同步延迟 · P99 · 错误率 · 聚合差异 · 权限 · 快照</text>
+  <text x="410" y="374" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜商品搜索索引发布以多维验收和可逆 Alias 切换形成闭环</text>
+</svg>

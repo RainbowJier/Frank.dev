@@ -21,7 +21,7 @@ lang: zh-CN
 
 RuoYi 提供了完整的文件上传解决方案，支持 **本地存储** 和 **对象存储（OSS/MinIO）**。
 
-![图1：文件上传：前端选择 → 后端校验 → 存储（本地/OSS）→ 返回访问路径](08-ruoyi-file-upload/file-upload-flow.svg)
+![图1：文件上传：前端选择 → 后端校验 → 存储（本地/OSS）→ 返回访问路径](file-upload-flow.svg)
 
 ### 1.1 上传流程
 
@@ -374,7 +374,7 @@ public void resourceDownload(String resource, HttpServletRequest request, HttpSe
 
 ### 3.1 阿里云 OSS vs MinIO
 
-![图2：阿里云 OSS：稳定便捷但付费；MinIO：免费可控但需运维](08-ruoyi-file-upload/oss-vs-minio.svg)
+![图2：阿里云 OSS：稳定便捷但付费；MinIO：免费可控但需运维](oss-vs-minio.svg)
 
 ### 3.2 集成阿里云 OSS
 
@@ -611,7 +611,7 @@ public class MinioUtils {
 
 ### 4.1 富文本编辑器对比
 
-![图3：富文本编辑器：Summernote 轻量、TinyMCE 强大、CKEditor 现代、Quill 灵活](08-ruoyi-file-upload/rich-text-editor-comparison.svg)
+![图3：富文本编辑器：Summernote 轻量、TinyMCE 强大、CKEditor 现代、Quill 灵活](rich-text-editor-comparison.svg)
 
 ### 4.2 Summernote（RuoYi 默认）
 
@@ -877,7 +877,7 @@ export default {
 
 ### 5.1 图片处理流程
 
-![图4：图片处理三步骤：压缩减少体积 → 水印保护版权 → 缩略图加速加载](08-ruoyi-file-upload/image-processing-flow.svg)
+![图4：图片处理三步骤：压缩减少体积 → 水印保护版权 → 缩略图加速加载](image-processing-flow.svg)
 
 ### 5.2 集成 Thumbnailator
 

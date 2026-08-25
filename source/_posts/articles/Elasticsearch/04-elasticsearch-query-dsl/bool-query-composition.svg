@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 390" width="820" height="390" font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="390" fill="#FFFFFF"/><rect x="0.5" y="0.5" width="819" height="389" fill="none" stroke="#D9DFE8"/>
+  <text x="40" y="44" font-size="18" font-weight="600" fill="#252A33">A</text><text x="68" y="44" font-size="15" font-weight="600" fill="#252A33">bool 查询的职责分层</text>
+  <rect x="264" y="72" width="292" height="250" rx="12" fill="#3C5488" fill-opacity="0.06" stroke="#3C5488" stroke-width="2"/><text x="410" y="101" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">bool</text>
+  <g stroke-width="1.5"><rect x="290" y="119" width="240" height="38" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/><rect x="290" y="170" width="240" height="38" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/><rect x="290" y="221" width="240" height="38" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/><rect x="290" y="272" width="240" height="38" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/></g>
+  <g text-anchor="middle" font-size="13" fill="#252A33"><text x="410" y="144">must：匹配并计分</text><text x="410" y="195">filter：过滤不计分</text><text x="410" y="246">should：可选加分</text><text x="410" y="297">must_not：排除</text></g>
+  <g font-size="12" fill="#6B7280"><text x="72" y="139">match / multi_match</text><text x="72" y="190">term / range / exists</text><text x="590" y="241">boost、业务信号</text><text x="590" y="292">黑名单、状态</text></g>
+  <line x1="194" y1="135" x2="282" y2="135" stroke="#9AA4B2"/><line x1="194" y1="186" x2="282" y2="186" stroke="#9AA4B2"/><line x1="538" y1="237" x2="626" y2="237" stroke="#9AA4B2"/><line x1="538" y1="288" x2="626" y2="288" stroke="#9AA4B2"/>
+  <text x="410" y="368" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜将召回、过滤、加分和排除拆进 bool 的四个槽位</text>
+</svg>

@@ -21,7 +21,7 @@ lang: zh-CN
 
 RuoYi 提供了 **4 大监控模块**，帮助运维人员实时掌握系统状态。
 
-![图1：系统监控：在线用户/服务器/缓存/数据源 + 操作日志/登录日志](07-ruoyi-system-monitor/system-monitor-modules.svg)
+![图1：系统监控：在线用户/服务器/缓存/数据源 + 操作日志/登录日志](system-monitor-modules.svg)
 
 ### 1.1 四大监控模块
 
@@ -142,7 +142,7 @@ public void forceLogout(String tokenId) {
 
 **服务器监控** 实时展示服务器的 CPU、内存、JVM、磁盘使用情况。
 
-![图3：实时监控 CPU/内存/磁盘使用率 + 服务器基本信息与 JVM 状态](07-ruoyi-system-monitor/server-performance-metrics.svg)
+![图3：实时监控 CPU/内存/磁盘使用率 + 服务器基本信息与 JVM 状态](server-performance-metrics.svg)
 
 **核心指标**：
 
@@ -321,7 +321,7 @@ export default {
 
 **操作日志** 记录用户的 **增删改** 操作，用于审计和回溯。
 
-![图2：@Log 注解通过 AOP 拦截方法，异步记录操作日志到数据库](07-ruoyi-system-monitor/log-annotation-flow.svg)
+![图2：@Log 注解通过 AOP 拦截方法，异步记录操作日志到数据库](log-annotation-flow.svg)
 
 **核心功能**：
 
@@ -585,7 +585,7 @@ public void validate(SysUser user, String password) {
 
 RuoYi 集成了 **Druid** 数据源，提供强大的 **SQL 监控** 和 **慢查询检测**。
 
-![图4：Druid 监控：SQL 执行/防火墙/连接池/Web 应用/URL 统计/慢 SQL 检测](07-ruoyi-system-monitor/druid-monitor-features.svg)
+![图4：Druid 监控：SQL 执行/防火墙/连接池/Web 应用/URL 统计/慢 SQL 检测](druid-monitor-features.svg)
 
 **核心功能**：
 
