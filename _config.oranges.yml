@@ -162,10 +162,10 @@ search:
   enable: true
   placeholder:
 
-# 文章页 AI 阅读助手：提问时把文章全文发给模型，基于本文内容回答
+# AI 助手：全站右下角可见；文章页基于本文内容回答，其余页面做通用站点问答
 aiChat:
   enable: true
-  # OpenAI 兼容接口完整地址，留空则文章页不显示 AI 助手
+  # OpenAI 兼容接口完整地址，留空则全站不显示 AI 助手
   endpoint: "https://api.siliconflow.cn/v1/chat/completions"
   # API Key：优先读环境变量 AI_CHAT_KEY（线上由 GitHub Secrets 注入，避免入公开仓库）
   apiKey: ""
