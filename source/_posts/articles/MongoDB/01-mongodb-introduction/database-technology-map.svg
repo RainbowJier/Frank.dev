@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow2w" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 左面板：关系型 SQL -->
+  <rect x="40" y="48" width="360" height="224" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="64" y="71" width="11" height="11" fill="#3C5488"/>
+  <text x="84" y="81" font-size="15" font-weight="600" fill="#252A33">关系型 · SQL</text>
+  <text x="384" y="80" text-anchor="end" font-size="11" fill="#6B7280">行式存储 · Schema 先行 · 强事务</text>
+
+  <g fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5">
+    <rect x="60" y="108" width="152" height="52" rx="6"/>
+    <rect x="228" y="108" width="152" height="52" rx="6"/>
+    <rect x="60" y="172" width="152" height="52" rx="6"/>
+    <rect x="228" y="172" width="152" height="52" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="136" y="140">MySQL</text>
+    <text x="304" y="140">PostgreSQL</text>
+    <text x="136" y="204">Oracle</text>
+    <text x="304" y="204">SQL Server</text>
+  </g>
+
+  <!-- 右面板：NoSQL -->
+  <rect x="420" y="48" width="360" height="224" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="444" y="71" width="11" height="11" fill="#4DBBD5"/>
+  <text x="464" y="81" font-size="15" font-weight="600" fill="#252A33">非关系型 · NoSQL</text>
+  <text x="764" y="80" text-anchor="end" font-size="11" fill="#6B7280">各专一种数据形态</text>
+
+  <g stroke-width="1.5">
+    <rect x="444" y="102" width="148" height="72" rx="6" fill="#FFFFFF" stroke="#8491B4"/>
+    <rect x="608" y="102" width="148" height="72" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="2"/>
+    <rect x="444" y="186" width="148" height="72" rx="6" fill="#FFFFFF" stroke="#8491B4"/>
+    <rect x="608" y="186" width="148" height="72" rx="6" fill="#FFFFFF" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="518" y="124" font-size="13" font-weight="600" fill="#252A33">键值型 KV</text>
+    <text x="518" y="143" font-size="11" fill="#6B7280">Redis</text>
+    <text x="518" y="161" font-size="11" fill="#6B7280">缓存 · 计数器 · 锁</text>
+
+    <text x="682" y="120" font-size="13" font-weight="600" fill="#252A33">文档型 Document</text>
+    <text x="682" y="139" font-size="11" fill="#6B7280">MongoDB</text>
+    <text x="682" y="158" font-size="12" font-weight="600" fill="#252A33">★ 本系列主角</text>
+
+    <text x="518" y="208" font-size="13" font-weight="600" fill="#252A33">宽列型 Wide-column</text>
+    <text x="518" y="227" font-size="11" fill="#6B7280">Cassandra · HBase</text>
+    <text x="518" y="245" font-size="11" fill="#6B7280">海量写入 · 时序</text>
+
+    <text x="682" y="208" font-size="13" font-weight="600" fill="#252A33">图型 Graph</text>
+    <text x="682" y="227" font-size="11" fill="#6B7280">Neo4j</text>
+    <text x="682" y="245" font-size="11" fill="#6B7280">社交 · 关联网络</text>
+  </g>
+
+  <!-- 下半：三种角色如何协同 -->
+  <g stroke-width="1.5">
+    <line x1="270" y1="328" x2="294" y2="328" stroke="#5A6472" marker-start="url(#arrow2w)" marker-end="url(#arrow2w)"/>
+    <line x1="528" y1="328" x2="552" y2="328" stroke="#5A6472" marker-start="url(#arrow2w)" marker-end="url(#arrow2w)"/>
+  </g>
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="40" y="300" width="224" height="56" rx="8" fill-opacity="1" stroke="#3C5488"/>
+    <rect x="300" y="300" width="224" height="56" rx="8" fill="#00A087" fill-opacity="0.08" stroke="#00A087"/>
+    <rect x="560" y="300" width="224" height="56" rx="8" fill-opacity="1" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="152" y="323" font-size="14" font-weight="600" fill="#252A33">MySQL</text>
+    <text x="152" y="343" font-size="11" fill="#6B7280">事务事实来源</text>
+    <text x="412" y="323" font-size="14" font-weight="600" fill="#252A33">MongoDB</text>
+    <text x="412" y="343" font-size="11" fill="#6B7280">灵活业务主存储</text>
+    <text x="672" y="323" font-size="14" font-weight="600" fill="#252A33">Elasticsearch</text>
+    <text x="672" y="343" font-size="11" fill="#6B7280">搜索分析读模型</text>
+  </g>
+
+  <text x="410" y="398" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜数据库技术版图中 MongoDB 的定位</text>
+</svg>

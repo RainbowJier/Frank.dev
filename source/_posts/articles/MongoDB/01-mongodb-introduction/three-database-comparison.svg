@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 372" width="820" height="372"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="372" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="371" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：MySQL -->
+  <rect x="40" y="40" width="236" height="268" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="58" y="66" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">MySQL</text>
+  <g>
+    <circle cx="62" cy="92" r="3" fill="#3C5488"/>
+    <text x="76" y="96" font-size="13" fill="#252A33">行式表，Schema 先行固定</text>
+    <circle cx="62" cy="125" r="3" fill="#8491B4"/>
+    <text x="76" y="129" font-size="13" fill="#252A33">多语句事务是基本盘</text>
+    <circle cx="62" cy="158" r="3" fill="#4DBBD5"/>
+    <text x="76" y="162" font-size="13" fill="#252A33">JOIN 与 GROUP BY 成熟</text>
+    <circle cx="62" cy="191" r="3" fill="#F39B7F"/>
+    <text x="76" y="195" font-size="13" fill="#252A33">水平扩展依赖外挂方案</text>
+    <circle cx="62" cy="224" r="3" fill="#8491B4"/>
+    <text x="76" y="228" font-size="13" fill="#252A33">生态与运维经验最深</text>
+  </g>
+  <rect x="56" y="248" width="204" height="34" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="158" y="270" text-anchor="middle" font-size="12" fill="#252A33">角色：业务事实来源</text>
+
+  <!-- 面板 B：MongoDB -->
+  <rect x="292" y="40" width="236" height="268" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="310" y="66" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="334" y="65" font-size="14" font-weight="600" fill="#252A33">MongoDB</text>
+  <g>
+    <circle cx="314" cy="92" r="3" fill="#3C5488"/>
+    <text x="328" y="96" font-size="13" fill="#252A33">BSON 文档，集合内可异构</text>
+    <circle cx="314" cy="125" r="3" fill="#8491B4"/>
+    <text x="328" y="129" font-size="13" fill="#252A33">单文档原子性天然保证</text>
+    <circle cx="314" cy="158" r="3" fill="#4DBBD5"/>
+    <text x="328" y="162" font-size="13" fill="#252A33">嵌套建模优先，事务兜底</text>
+    <circle cx="314" cy="191" r="3" fill="#F39B7F"/>
+    <text x="328" y="195" font-size="13" fill="#252A33">原生分片支持水平扩展</text>
+    <circle cx="314" cy="224" r="3" fill="#8491B4"/>
+    <text x="328" y="228" font-size="13" fill="#252A33">高吞吐写入与快速迭代</text>
+  </g>
+  <rect x="308" y="248" width="204" height="34" rx="6" fill="#00A087" fill-opacity="0.08" stroke="#00A087"/>
+  <text x="410" y="270" text-anchor="middle" font-size="12" fill="#252A33">角色：现代业务主存储</text>
+
+  <!-- 面板 C：Elasticsearch -->
+  <rect x="544" y="40" width="236" height="268" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="562" y="66" font-size="18" font-weight="700" fill="#3C5488">C</text>
+  <text x="586" y="65" font-size="14" font-weight="600" fill="#252A33">Elasticsearch</text>
+  <g>
+    <circle cx="566" cy="92" r="3" fill="#3C5488"/>
+    <text x="580" y="96" font-size="13" fill="#252A33">倒排索引面向全文检索</text>
+    <circle cx="566" cy="125" r="3" fill="#E64B35"/>
+    <text x="580" y="129" font-size="13" fill="#252A33">无事务，定位为读模型</text>
+    <circle cx="566" cy="158" r="3" fill="#4DBBD5"/>
+    <text x="580" y="162" font-size="13" fill="#252A33">相关度评分、高亮、聚合</text>
+    <circle cx="566" cy="191" r="3" fill="#F39B7F"/>
+    <text x="580" y="195" font-size="13" fill="#252A33">近实时：写入后约 1s 可查</text>
+    <circle cx="566" cy="224" r="3" fill="#8491B4"/>
+    <text x="580" y="228" font-size="13" fill="#252A33">依赖同步链路维持一致</text>
+  </g>
+  <rect x="560" y="248" width="204" height="34" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="662" y="270" text-anchor="middle" font-size="12" fill="#252A33">角色：搜索与分析引擎</text>
+
+  <text x="410" y="348" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜MySQL、MongoDB 与 Elasticsearch 的能力维度对比</text>
+</svg>

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 445" width="820" height="445"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="445" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="444" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 中央主体：一份商品文档 -->
+  <rect x="270" y="50" width="280" height="334" rx="12" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="82" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Document：商品文档</text>
+
+  <g stroke-width="1.5">
+    <rect x="290" y="98"  width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="136" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="174" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="212" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="250" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="288" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="290" y="326" width="240" height="30" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g font-size="13" font-weight="600" fill="#252A33">
+    <text x="304" y="118">_id</text>
+    <text x="304" y="156">name</text>
+    <text x="304" y="194">price</text>
+    <text x="304" y="232">stock</text>
+    <text x="304" y="270">tags</text>
+    <text x="304" y="308">spec</text>
+    <text x="304" y="346">createdAt</text>
+  </g>
+  <g font-size="11" fill="#6B7280" text-anchor="end">
+    <text x="516" y="118">ObjectId（12 字节）</text>
+    <text x="516" y="156">String</text>
+    <text x="516" y="194">Decimal128</text>
+    <text x="516" y="232">Int32</text>
+    <text x="516" y="270">Array&lt;String&gt;</text>
+    <text x="516" y="308">Document 嵌套</text>
+    <text x="516" y="346">Date（UTC 毫秒）</text>
+  </g>
+
+  <!-- 左侧引线标注 -->
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="246" y1="113" x2="284" y2="113"/>
+    <line x1="246" y1="189" x2="284" y2="189"/>
+    <line x1="246" y1="303" x2="284" y2="303"/>
+  </g>
+  <circle cx="286" cy="113" r="2.5" fill="#9AA4B2"/>
+  <circle cx="286" cy="189" r="2.5" fill="#9AA4B2"/>
+  <circle cx="286" cy="303" r="2.5" fill="#9AA4B2"/>
+  <g font-size="12" fill="#6B7280" text-anchor="end">
+    <text x="240" y="110">文档主键</text>
+    <text x="240" y="128">缺省时自动生成</text>
+    <text x="240" y="182">金额专用类型</text>
+    <text x="240" y="200">避免浮点精度误差</text>
+    <text x="240" y="296">描述自由组合</text>
+    <text x="240" y="314">属性因品类而异</text>
+  </g>
+
+  <!-- 右侧引线标注 -->
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="536" y1="265" x2="574" y2="265"/>
+    <line x1="536" y1="341" x2="574" y2="341"/>
+  </g>
+  <circle cx="534" cy="265" r="2.5" fill="#9AA4B2"/>
+  <circle cx="534" cy="341" r="2.5" fill="#9AA4B2"/>
+  <g font-size="12" fill="#6B7280">
+    <text x="580" y="262">数组是一等公民</text>
+    <text x="580" y="280">可整体建立索引</text>
+    <text x="580" y="338">存 UTC 毫秒数</text>
+    <text x="580" y="356">免受时区干扰</text>
+  </g>
+
+  <rect x="256" y="402" width="308" height="0" fill="none"/>
+  <text x="410" y="414" text-anchor="middle" font-size="12" fill="#6B7280">单文档上限 16 MB；超大二进制由 GridFS 分块存储</text>
+  <text x="410" y="434" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜一份商品文档的字段构成与 BSON 类型</text>
+</svg>
