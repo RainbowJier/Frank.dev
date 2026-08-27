@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  # 允许在 Actions 页面手动重跑（如新增 AI_CHAT_KEY Secret 后无需改代码重新触发）
+  # 允许在 Actions 页面手动重跑
   workflow_dispatch:
 
 permissions:
@@ -34,10 +34,6 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm exec hexo generate
-        env:
-          # 文章页 AI 阅读助手的 API Key，在仓库 Settings → Secrets 配置；
-          # 未配置时回落到主题配置文件里的 aiChat.apiKey
-          AI_CHAT_KEY: ${{ secrets.AI_CHAT_KEY }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

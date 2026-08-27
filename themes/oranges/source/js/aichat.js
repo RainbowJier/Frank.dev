@@ -1,7 +1,6 @@
-// AI 助手：每次提问都把上下文连同最近几轮对话发给 OpenAI 兼容接口（中转站），
-// SSE 流式渲染回答；支持多轮追问、停止生成，配置由 aichat.ejs 以 JSON script 标签注入。
-// 文章页（articleMode）将文章正文全文放入 system prompt 作阅读助手；
-// 其余页面为站点助手，仅附带当前页面信息做通用问答。
+// 文章页 AI 阅读助手：每次提问都把文章正文全文放入 system prompt，
+// 连同最近几轮对话发给 OpenAI 兼容接口（中转站），SSE 流式渲染回答；
+// 支持多轮追问、停止生成，配置由 aichat.ejs 以 JSON script 标签注入。
 (() => {
   const configElement = document.getElementById('ai-chat-config')
   if (!configElement) return
@@ -27,34 +26,23 @@
   let controller = null
   let generating = false
 
-  const commonRules = '用中文回答，使用 Markdown，代码放在代码块中，保持简洁。'
-
   const articleBody = document.querySelector('#post-details .markdown-body')
   const articleText = ((articleBody && articleBody.innerText) || '')
     .replace(/\n{3,}/g, '\n\n')
     .trim()
     .slice(0, ARTICLE_MAX_CHARS)
 
-  const systemPrompt = config.articleMode
-    ? [
-        '你是博客文章的 AI 阅读助手。请优先依据下面提供的文章全文回答读者提问；',
-        '文章未涉及的内容可以结合通用知识简要回答，但需说明文章中没有相关内容。',
-        commonRules,
-        '',
-        '# 文章标题',
-        config.articleTitle || '',
-        '',
-        '# 文章全文',
-        articleText || '（未能提取到正文）'
-      ].join('\n')
-    : [
-        '你是个人技术博客 Frank\'s Notes 的 AI 助手（博主刘起杰 Frank，关注 Java 后端、全栈开发与 AI 工程化）。读者正在浏览博客页面，请就技术问题或博客内容提供简洁准确的回答；',
-        '读者问到某篇文章的内容时，可提示他打开对应文章页，文章页内有基于全文的阅读助手。',
-        commonRules,
-        '',
-        '# 当前页面',
-        document.title || ''
-      ].join('\n')
+  const systemPrompt = [
+    '你是博客文章的 AI 阅读助手。请优先依据下面提供的文章全文回答读者提问；',
+    '文章未涉及的内容可以结合通用知识简要回答，但需说明文章中没有相关内容。',
+    '用中文回答，使用 Markdown，代码放在代码块中，保持简洁。',
+    '',
+    '# 文章标题',
+    config.articleTitle || '',
+    '',
+    '# 文章全文',
+    articleText || '（未能提取到正文）'
+  ].join('\n')
 
   const openPanel = () => {
     panel.classList.add('open')
@@ -148,6 +136,12 @@
     generating = state
     sendButton.classList.toggle('is-generating', state)
     sendButton.setAttribute('aria-label', state ? config.i18n.stop : config.i18n.send)
+    syncSendIdle()
+  }
+
+  // 空输入且未在生成时弱化发送按钮（样式见 .ai-chat-send.is-idle）
+  const syncSendIdle = () => {
+    sendButton.classList.toggle('is-idle', !generating && !input.value.trim())
   }
 
   const errorMessage = error => {
@@ -162,6 +156,7 @@
   const growInput = () => {
     input.style.height = 'auto'
     input.style.height = Math.min(input.scrollHeight, 120) + 'px'
+    syncSendIdle()
   }
 
   const submit = () => {
@@ -300,6 +295,7 @@
   }
 
   input.addEventListener('input', growInput)
+  syncSendIdle()
 
   input.addEventListener('keydown', event => {
     if (event.isComposing) return

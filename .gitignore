@@ -17,6 +17,3 @@ _multiconfig.yml
 
 # 隐私：简历含手机号等个人信息，不入公开仓库
 Java开发工程师.pdf
-
-# 本地密钥（AI_CHAT_KEY 等），由 scripts/load-env.js 在本地读取
-.env

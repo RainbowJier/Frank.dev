@@ -1765,6 +1765,28 @@ button:focus-visible {
     transition-duration: 0.35s !important;
   }
 
+  /* AI 阅读助手面板滑入滑出为用户明确要求，不降级（完整覆盖上面的 * 规则） */
+  .ai-chat-panel {
+    transition: transform 0.24s cubic-bezier(0.55, 0, 0.85, 0.4), visibility 0s linear 0.24s !important;
+  }
+
+  .ai-chat-panel.open {
+    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+
+  .ai-chat-backdrop {
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s !important;
+  }
+
+  .ai-chat-backdrop.open {
+    transition: opacity 0.3s ease !important;
+  }
+
+  /* 输入框多行长高同理保留平滑过渡 */
+  .ai-chat-input {
+    transition: height 0.15s ease !important;
+  }
+
   @view-transition {
     navigation: none;
   }
@@ -1788,13 +1810,13 @@ button:focus-visible {
   background-color: rgba(0, 0, 0, 0.3);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 
 .ai-chat-backdrop.open {
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 }
 
 .ai-chat-panel {
@@ -1812,13 +1834,15 @@ button:focus-visible {
   box-shadow: -8px 0 24px -8px rgba(0, 0, 0, 0.15);
   visibility: hidden;
   transform: translateX(calc(100% + 40px));
-  transition: transform 0.28s ease, visibility 0s linear 0.28s;
+  /* 关闭时加速滑出，短促利落 */
+  transition: transform 0.24s cubic-bezier(0.55, 0, 0.85, 0.4), visibility 0s linear 0.24s;
 }
 
 .ai-chat-panel.open {
   visibility: visible;
   transform: translateX(0);
-  transition: transform 0.28s ease;
+  /* 打开时大幅减速滑入，到位即停不回弹 */
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ai-chat-header {
@@ -2039,7 +2063,7 @@ button:focus-visible {
 }
 
 .ai-chat-inputbar {
-  padding: 10px 14px 8px;
+  padding: 12px 14px 8px;
   border-top: 1px solid var(--border-ai-panel);
 }
 
@@ -2047,12 +2071,12 @@ button:focus-visible {
 .ai-chat-composer {
   display: flex;
   align-items: flex-end;
-  gap: 6px;
-  padding: 6px;
+  gap: 8px;
+  padding: 7px;
   border: 1px solid var(--color-divider-md-border);
-  border-radius: 14px;
+  border-radius: 16px;
   background-color: transparent;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.2s ease;
 }
 
 .ai-chat-composer:focus-within {
@@ -2066,12 +2090,15 @@ button:focus-visible {
   resize: none;
   border: 0;
   outline: 0;
-  padding: 8px 2px 8px 8px;
+  padding: 8px 2px 8px 10px;
   background-color: transparent;
   color: var(--color-text-a);
+  caret-color: var(--color-text-a-hover);
   font-family: inherit;
   font-size: 1.4rem;
-  line-height: 1.6;
+  line-height: 1.65;
+  /* 多行长高时平滑过渡（配合 JS 的 growInput） */
+  transition: height 0.15s ease;
 }
 
 .ai-chat-input::placeholder {
@@ -2083,15 +2110,15 @@ button:focus-visible {
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border: 0;
   border-radius: 50%;
   background-color: var(--color-text-a-hover);
   color: var(--bg-body);
   cursor: pointer;
   line-height: 0;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.2s ease, transform 0.15s ease;
 }
 
 .ai-chat-send:hover {
@@ -2099,7 +2126,16 @@ button:focus-visible {
 }
 
 .ai-chat-send:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
+}
+
+/* 输入为空且未在生成时弱化发送按钮，给出「暂无可发送」的 affordance */
+.ai-chat-send.is-idle {
+  opacity: 0.35;
+}
+
+.ai-chat-send.is-idle:hover {
+  opacity: 0.65;
 }
 
 .ai-chat-send svg {

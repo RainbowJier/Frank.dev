@@ -61,7 +61,7 @@
 | --- | --- |
 | Java | 多线程、限流、批量迁移等后端实践 |
 | Spring / Spring Boot | IoC、AOP、事务、网关与熔断 |
-| MySQL / Redis / RabbitMQ / Oracle / Elasticsearch | 数据库、中间件、搜索引擎和高并发基础与实践 |
+| MySQL / Redis / MongoDB / RabbitMQ / Oracle / Elasticsearch | 数据库、中间件、搜索引擎和高并发基础与实践 |
 | Vue 从零到一 | Vue 3 生命周期、模板指令、响应式、组件通信、Router、Pinia、Axios 联调、Vite 上线，共 8 篇 |
 | LangChain4j | Java 视角的对话、工具调用和 RAG，共 3 篇 |
 | AI / RESTful / MinIO / SSE | AI 应用、接口设计、对象存储和实时通信 |
@@ -211,45 +211,35 @@ description: 一句话项目简介
 
 ## AI 阅读助手
 
-AI 助手只在文章页渲染，并且必须同时满足 `aiChat.enable`、接口地址和 API key 均有效。当前配置使用硅基流动的 OpenAI 兼容接口：
+AI 助手只在文章详情页渲染，并且必须同时满足 `aiChat.enable`、接口地址和 API key 均有效。当前配置使用硅基流动的 OpenAI 兼容接口，API key 直接写在 `_config.oranges.yml` 中：
 
 ```yaml
 aiChat:
   enable: true
   endpoint: "https://api.siliconflow.cn/v1/chat/completions"
-  apiKey: ""
+  apiKey: "sk-xxxx"       # 直接填写硅基流动 API Key
   model: "THUDM/GLM-4-9B-0414"
   stream: true
   maxContextTurns: 6
 ```
 
+不再使用 `AI_CHAT_KEY` 环境变量或 GitHub Secrets 注入；修改配置后重启 `pnpm server` 生效。
+
 ### 本地预览
 
-Git Bash：
-
 ```bash
-AI_CHAT_KEY=sk-xxx pnpm server
+pnpm server
 ```
 
 如果 4000 端口被占用：
 
 ```bash
-AI_CHAT_KEY=sk-xxx pnpm exec hexo server -p 4321
+pnpm exec hexo server -p 4321
 ```
 
-### GitHub Pages 部署配置
+### 安全说明
 
-1. 打开仓库 `Settings → Secrets and variables → Actions`。
-2. 新建名为 `AI_CHAT_KEY` 的 Secret。
-3. 在 `Actions → Deploy to GitHub Pages → Run workflow` 手动触发一次；之后推送 `main` 会自动部署。
-
-工作流只在构建阶段读取 Secret，key 缺失时文章页不会显示 AI 入口。
-
-### 安全限制
-
-GitHub Secret 只能避免 key 明文提交到仓库，不能避免 key 被写入已部署的浏览器端配置或被访客从网络请求中获取。当前实现是浏览器直连第三方 API，生产环境更推荐使用自己的服务端代理或短期令牌。
-
-如果继续使用直连方案，请使用独立、低额度、严格限流的 key，不要与其他付费服务共用，也不要把真实生产密钥写入 `_config.oranges.yml`。
+静态博客没有后端，API key 会随页面源码公开，也会随仓库公开——这是当前方案明确接受的取舍。请使用独立、低额度、严格限流的 key，不要与其他付费服务共用。若要彻底避免 key 暴露，应改为服务端代理转发模型请求。
 
 ## 部署
 
