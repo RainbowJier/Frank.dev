@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 四个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="40"  width="740" height="76" rx="10"/>
+    <rect x="40" y="130" width="740" height="76" rx="10"/>
+    <rect x="40" y="220" width="740" height="76" rx="10"/>
+    <rect x="40" y="310" width="740" height="76" rx="10"/>
+  </g>
+
+  <!-- 层名：小方块 + 粗体 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="73" width="10" height="10" fill="#4DBBD5"/>
+    <text x="82" y="83">脚手架层</text>
+    <rect x="64" y="163" width="10" height="10" fill="#3C5488"/>
+    <text x="82" y="173">打包内核层</text>
+    <rect x="64" y="253" width="10" height="10" fill="#00A087"/>
+    <text x="82" y="263">编译转换层</text>
+    <rect x="64" y="343" width="10" height="10" fill="#8491B4"/>
+    <text x="82" y="353">产物交付层</text>
+  </g>
+
+  <!-- 层内元件：白底 + 彩描边 -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#4DBBD5">
+      <rect x="184" y="54"  width="140" height="48" rx="6"/>
+      <rect x="330" y="54"  width="140" height="48" rx="6"/>
+      <rect x="476" y="54"  width="140" height="48" rx="6"/>
+      <rect x="622" y="54"  width="140" height="48" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="178" y="144" width="94" height="48" rx="6"/>
+      <rect x="277" y="144" width="94" height="48" rx="6"/>
+      <rect x="376" y="144" width="94" height="48" rx="6"/>
+      <rect x="475" y="144" width="94" height="48" rx="6"/>
+      <rect x="574" y="144" width="94" height="48" rx="6"/>
+      <rect x="673" y="144" width="94" height="48" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="180" y="234" width="112" height="48" rx="6"/>
+      <rect x="298" y="234" width="112" height="48" rx="6"/>
+      <rect x="416" y="234" width="112" height="48" rx="6"/>
+      <rect x="534" y="234" width="112" height="48" rx="6"/>
+      <rect x="652" y="234" width="112" height="48" rx="6"/>
+    </g>
+    <g stroke="#8491B4">
+      <rect x="184" y="324" width="140" height="48" rx="6"/>
+      <rect x="330" y="324" width="140" height="48" rx="6"/>
+      <rect x="476" y="324" width="140" height="48" rx="6"/>
+      <rect x="622" y="324" width="140" height="48" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 元件标签 -->
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="254" y="83">create-vite</text>
+    <text x="400" y="83">Vue CLI（退役）</text>
+    <text x="546" y="83">Rsbuild</text>
+    <text x="692" y="83">Next.js 全家桶</text>
+
+    <text x="225" y="173">Webpack</text>
+    <text x="324" y="173">Rollup</text>
+    <text x="423" y="173">esbuild</text>
+    <text x="522" y="173">Rspack</text>
+    <text x="621" y="173">Turbopack</text>
+    <text x="720" y="173">Rolldown</text>
+
+    <text x="236" y="263">Babel</text>
+    <text x="354" y="263">SWC</text>
+    <text x="472" y="263">TypeScript</text>
+    <text x="590" y="263">Sass · Less</text>
+    <text x="708" y="263">PostCSS</text>
+
+    <text x="254" y="353">Terser 压缩</text>
+    <text x="400" y="353">esbuild 压缩</text>
+    <text x="546" y="353">代码分包 chunk</text>
+    <text x="692" y="353">polyfill 降级</text>
+  </g>
+
+  <text x="410" y="414" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜前端工具链全景：打包内核居中，其余零件挂在上下游各司其职</text>
+</svg>

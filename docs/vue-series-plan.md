@@ -77,6 +77,14 @@
 
 配图：①Vite 开发/生产双流程 ②环境变量注入链路 ③生产部署拓扑（nginx + API 反代）
 
+### 番外 构建工具全景 —— ✅ 已写完（2026-08-27）
+
+`09-vue-build-tools-ecosystem.md`《Vue 从零到一（番外）：前端构建工具全景——Vite、Webpack 与背后的"零件"》
+
+要点：构建五段流水线（转译→打包→优化→产物）；Webpack 四大件 entry/loader/plugin/chunk 与 Tapable 钩子（类比 Filter 链 / Maven 插件）；Vite 组合拳 dev server + esbuild 预构建 + Rollup 生产打包，@vitejs/plugin-vue 接替 vue-loader；开发期全量打包 vs 按需服务对比与选型表（Rspack/Turbopack/Rolldown 点名）；Babel/SWC/tsc、Sass/PostCSS、Terser 职责钉位；坑：loader 从右往左、插件生态错配、sideEffects 误伤、Babel 只转语法不补 API、缓存双面性。
+
+配图：①五段流水线总览 ②Webpack 内核四大件剖析 ③Webpack vs Vite 开发模式对比 ④工具链全景分层地图（本篇 4 张）
+
 ## 收官联动
 
 ✅ 已完成（2026-08-21，待推送）：采用关于页方案——`source/about/index.md` 新增"系列文章"区块，挂全站三条系列共 15 篇（Vue 从零到一 8 篇、Java 多线程 4 篇、LangChain4j 3 篇），15 个链接已逐一验证可达。Skill-Hub 方案经评估放弃（其定位是技能目录，放教程系列语义不贴）。

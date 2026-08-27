@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 中央主体：Webpack 构建内核 -->
+  <rect x="270" y="50" width="280" height="300" rx="12" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="82" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">Webpack 构建内核</text>
+
+  <!-- 内部四大件 -->
+  <g stroke-width="1.5">
+    <rect x="294" y="100" width="232" height="48" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="294" y="164" width="232" height="48" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="294" y="228" width="232" height="48" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+    <rect x="294" y="292" width="232" height="48" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="410" y="129">Loader 转换管道</text>
+    <text x="410" y="193">Module 依赖图</text>
+    <text x="410" y="257">Chunk → Bundle</text>
+    <text x="410" y="321">Tapable 生命周期钩子</text>
+  </g>
+
+  <!-- 左侧引线标注 -->
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="246" y1="124" x2="286" y2="124"/>
+    <line x1="246" y1="188" x2="286" y2="188"/>
+  </g>
+  <circle cx="290" cy="124" r="2.5" fill="#9AA4B2"/>
+  <circle cx="290" cy="188" r="2.5" fill="#9AA4B2"/>
+  <g font-size="12" fill="#6B7280" text-anchor="end">
+    <text x="238" y="128">模块级 · 类比 Filter 链</text>
+    <text x="238" y="192">收集 import/export 关系网</text>
+  </g>
+
+  <!-- 右侧引线标注 -->
+  <g stroke="#9AA4B2" stroke-width="1">
+    <line x1="534" y1="252" x2="574" y2="252"/>
+    <line x1="534" y1="316" x2="574" y2="316"/>
+  </g>
+  <circle cx="530" cy="252" r="2.5" fill="#9AA4B2"/>
+  <circle cx="530" cy="316" r="2.5" fill="#9AA4B2"/>
+  <g font-size="12" fill="#6B7280">
+    <text x="580" y="256">产物成型 · 可部署的静态文件</text>
+    <text x="580" y="320">全局级 · 类比 Maven 插件</text>
+  </g>
+
+  <text x="410" y="382" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜Webpack 内核与扩展机制：loader 单点转换，plugin 全程插手</text>
+</svg>
