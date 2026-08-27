@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9AA4B2"/>
+    </marker>
+  </defs>
+
+  <!-- 左面板：组织结构 -->
+  <rect x="40" y="44" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="62" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">employees：reportsTo 自引用</text>
+
+  <g stroke-width="1.5">
+    <rect x="155" y="94"  width="130" height="42" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="75"  y="176" width="130" height="42" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5"/>
+    <rect x="235" y="176" width="130" height="42" rx="6" fill="#4DBBD5" fill-opacity="0.10" stroke="#4DBBD5"/>
+    <rect x="235" y="256" width="130" height="42" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="220" y="116" font-size="13" font-weight="500" fill="#252A33">老王 · CEO</text>
+    <text x="140" y="198" font-size="13" font-weight="500" fill="#252A33">张总监</text>
+    <text x="300" y="198" font-size="13" font-weight="500" fill="#252A33">李总监</text>
+    <text x="300" y="278" font-size="13" font-weight="600" fill="#252A33">小花</text>
+  </g>
+  <g stroke="#9AA4B2" stroke-width="1" fill="none" stroke-dasharray="4 4">
+    <path d="M300 256 V 232 H 300 V 218" marker-end="url(#arrowG)"/>
+    <path d="M260 176 Q 260 150 225 137" marker-end="url(#arrowG)"/>
+    <path d="M185 176 Q 190 154 205 137" marker-end="url(#arrowG)"/>
+  </g>
+  <text x="100" y="308" font-size="11" fill="#6B7280">虚线箭头 = 上报关系 reportsTo</text>
+
+  <!-- 右面板：递归展开过程 -->
+  <rect x="420" y="44" width="360" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="442" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="466" y="71" font-size="14" font-weight="600" fill="#252A33">$graphLookup 自底向上展开</text>
+
+  <g stroke-width="1.5">
+    <rect x="452" y="96"  width="296" height="44" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+    <rect x="452" y="152" width="296" height="44" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+    <rect x="452" y="208" width="296" height="44" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  </g>
+  <g font-size="12" fill="#252A33">
+    <text x="470" y="114">起点：startWith "$reportsTo"</text>
+    <text x="470" y="131" font-size="11" fill="#6B7280">候选 = 小花的上级</text>
+    <text x="470" y="170">第 1 层命中：李总监　<tspan fill="#6B7280">depthField level: 0</tspan></text>
+    <text x="470" y="187" font-size="11" fill="#6B7280">继续拿李总监的 reportsTo 上溯</text>
+    <text x="470" y="226">第 2 层起：张总监(level 1) → 老王(level 2)</text>
+    <text x="470" y="243" font-size="11" fill="#6B7280">connectFromField 与 connectToField 对接</text>
+  </g>
+  <circle cx="596" cy="266" r="3" fill="#E64B35"/>
+  <text x="608" y="270" font-size="11" fill="#6B7280">环引用靠 maxDepth 兜底刹车</text>
+
+  <text x="410" y="360" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜$graphLookup 沿报告线递归展开组织架构</text>
+</svg>

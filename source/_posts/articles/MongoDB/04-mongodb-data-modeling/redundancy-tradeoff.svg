@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowR" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：冗余买到的读路径 -->
+  <rect x="40" y="40" width="360" height="256" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="70" font-size="18" font-weight="700" fill="#00A087">A</text>
+  <text x="88" y="69" font-size="14" font-weight="600" fill="#252A33">有冗余计数：读零成本</text>
+  <rect x="64" y="90" width="136" height="40" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="132" y="115" text-anchor="middle" font-size="12" fill="#252A33">posts 列表页</text>
+  <line x1="204" y1="110" x2="252" y2="110" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <rect x="258" y="90" width="120" height="40" rx="6" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="318" y="109" text-anchor="middle" font-size="12" fill="#252A33">commentCount</text>
+  <text x="318" y="124" text-anchor="middle" font-size="10" fill="#6B7280">字段直出 128</text>
+  <rect x="64" y="152" width="314" height="40" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="221" y="177" text-anchor="middle" font-size="12" fill="#252A33">无冗余的对照组：50 篇文章 = 50 次 $lookup / count</text>
+  <text x="221" y="226" text-anchor="middle" font-size="12" fill="#252A33">代价：新增评论要同步 $inc 计数</text>
+  <text x="221" y="250" text-anchor="middle" font-size="11" fill="#6B7280">列表页吞吐换取写入端的一步额外操作</text>
+
+  <!-- 面板 B：一致性窗口 -->
+  <rect x="420" y="40" width="360" height="256" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="70" font-size="18" font-weight="700" fill="#E64B35">B</text>
+  <text x="468" y="69" font-size="14" font-weight="600" fill="#252A33">两步写入不是原子的</text>
+  <rect x="444" y="90" width="140" height="40" rx="6" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="514" y="107" text-anchor="middle" font-size="12" fill="#252A33">① insert 评论</text>
+  <text x="514" y="123" text-anchor="middle" font-size="10" fill="#6B7280">comments 集合</text>
+  <rect x="620" y="90" width="140" height="40" rx="6" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="690" y="107" text-anchor="middle" font-size="12" fill="#252A33">② $inc 计数</text>
+  <text x="690" y="123" text-anchor="middle" font-size="10" fill="#6B7280">posts 集合</text>
+  <line x1="584" y1="110" x2="616" y2="110" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowR)"/>
+  <circle cx="600" cy="148" r="3" fill="#E64B35"/>
+  <text x="612" y="152" font-size="12" fill="#252A33">应用恰好在两步间崩溃</text>
+  <text x="612" y="170" font-size="12" fill="#E64B35" font-weight="600">→ 计数与事实出现永久偏差</text>
+  <text x="600" y="204" text-anchor="middle" font-size="12" fill="#252A33">修法三选一：定期对账修复 / 同文档内嵌解决 / 跨文档事务兜底</text>
+  <text x="600" y="228" text-anchor="middle" font-size="11" fill="#6B7280">第 08 篇的事务能力正是为这类残留需求准备的</text>
+
+  <!-- 底部准则带 -->
+  <rect x="40" y="312" width="740" height="36" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="410" y="335" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">冗余准入学测试：显示错几分钟有人提工单吗？——没有就放心用；库存这类必须靠同文档原子性或强事务</text>
+
+  <text x="410" y="368" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜反范式冗余：读到快与写一致性的交换合同</text>
+</svg>

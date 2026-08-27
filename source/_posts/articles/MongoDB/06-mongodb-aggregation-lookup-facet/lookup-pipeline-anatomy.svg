@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 372" width="820" height="372"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="372" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="371" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4DBBD5"/>
+    </marker>
+  </defs>
+
+  <!-- 左集合：orders -->
+  <rect x="56" y="56" width="230" height="168" rx="10" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="78" y="82" font-size="14" font-weight="600" fill="#252A33">orders</text>
+  <text x="264" y="81" text-anchor="end" font-size="11" fill="#6B7280">localField</text>
+  <rect x="76" y="98" width="190" height="46" rx="6" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="92" y="118" font-size="12" fill="#252A33">{ _id: "o7",</text>
+  <text x="92" y="136" font-size="12" font-weight="600" fill="#252A33">  productId: <tspan fill="#E64B35">"p9"</tspan> }</text>
+  <text x="92" y="166" font-size="11" fill="#6B7280">{ _id: "o8", productId: "p3" }</text>
+  <text x="92" y="188" font-size="11" fill="#6B7280">… 更多订单</text>
+
+  <!-- 右集合：products -->
+  <rect x="534" y="56" width="230" height="186" rx="10" fill="#4DBBD5" fill-opacity="0.06" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="556" y="82" font-size="14" font-weight="600" fill="#252A33">from: products</text>
+  <text x="742" y="81" text-anchor="end" font-size="11" fill="#6B7280">foreignField</text>
+  <rect x="554" y="98" width="190" height="30" rx="6" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="570" y="118" font-size="12" fill="#252A33">{ _id: "p3", name: "纯棉 T 恤" }</text>
+  <rect x="554" y="136" width="190" height="30" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="570" y="156" font-size="12" font-weight="600" fill="#252A33">{ _id: "p9", name: "手机 X" }</text>
+  <rect x="554" y="174" width="190" height="30" rx="6" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="570" y="194" font-size="12" fill="#252A33">{ _id: "p12", name: "显示器 U27" }</text>
+
+  <!-- 关联连线 -->
+  <path d="M286 122 C 380 122, 420 151, 550 151" fill="none" stroke="#4DBBD5"
+        stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowL)"/>
+  <text x="410" y="112" text-anchor="middle" font-size="12" fill="#4DBBD5" font-weight="600">键值相等即关联</text>
+
+  <!-- 输出文档 -->
+  <rect x="200" y="262" width="420" height="62" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="222" y="287" font-size="12" fill="#252A33">{ _id: "o7", amount: 4999,</text>
+  <text x="222" y="306" font-size="12" fill="#252A33">  product: <tspan fill="#F39B7F" font-weight="600">[</tspan> { name: "手机 X", … } <tspan fill="#F39B7F" font-weight="600">]</tspan> }　<tspan font-size="11" fill="#F39B7F" font-weight="600">← as 恒为数组</tspan></text>
+
+  <text x="410" y="354" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜$lookup 的关联方向与数组结果语义（一对一场景常再补 $unwind）</text>
+</svg>

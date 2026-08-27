@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 表头 -->
+  <rect x="40" y="36" width="740" height="40" rx="8" fill="#3C5488" fill-opacity="0.10"/>
+  <g font-size="13" font-weight="600" fill="#252A33">
+    <text x="80" y="62">SQL 子句</text>
+    <text x="290" y="62">Aggregation 阶段</text>
+    <text x="560" y="62">备注</text>
+  </g>
+
+  <rect x="40" y="76"  width="740" height="42" fill="#FFFFFF"/>
+  <rect x="40" y="118" width="740" height="42" fill="#F4F7FA"/>
+  <rect x="40" y="160" width="740" height="42" fill="#FFFFFF"/>
+  <rect x="40" y="202" width="740" height="42" fill="#F4F7FA"/>
+  <rect x="40" y="244" width="740" height="42" fill="#FFFFFF"/>
+  <rect x="40" y="286" width="740" height="42" fill="#F4F7FA"/>
+  <rect x="40" y="36" width="740" height="292" rx="8" fill="none" stroke="#D9DFE8"/>
+  <g stroke="#E8EDF3">
+    <line x1="272" y1="37" x2="272" y2="327"/>
+    <line x1="548" y1="37" x2="548" y2="327"/>
+    <line x1="41" y1="119" x2="779" y2="119"/>
+    <line x1="41" y1="161" x2="779" y2="161"/>
+    <line x1="41" y1="203" x2="779" y2="203"/>
+    <line x1="41" y1="245" x2="779" y2="245"/>
+    <line x1="41" y1="287" x2="779" y2="287"/>
+  </g>
+
+  <g font-size="13" font-weight="500" fill="#252A33">
+    <text x="62" y="102">WHERE</text>
+    <text x="292" y="102">{ $match: … }</text>
+    <text x="566" y="102" font-size="12">尽量放管道最前面</text>
+
+    <text x="62" y="144">GROUP BY</text>
+    <text x="292" y="144">{ $group: { _id: 键 } }</text>
+    <text x="566" y="144" font-size="12">_id 即分组键，可为表达式</text>
+
+    <text x="62" y="186">SUM / AVG / COUNT</text>
+    <text x="292" y="186">accumulator</text>
+    <text x="566" y="186" font-size="12">$sum·$avg·$count…写在 $group 内</text>
+
+    <text x="62" y="228">HAVING</text>
+    <text x="292" y="228">{ $match: … }（再次）</text>
+    <text x="566" y="228" font-size="12">同一操作符在 $group 之后复用</text>
+
+    <text x="62" y="270">ORDER BY / LIMIT OFFSET</text>
+    <text x="292" y="270">$sort / $skip + $limit</text>
+    <text x="566" y="270" font-size="12">复合排序按键的书写顺序生效</text>
+
+    <text x="62" y="312">SELECT 列</text>
+    <text x="292" y="312">{ $project: … }</text>
+    <text x="566" y="312" font-size="12">裁剪＋重命名＋计算列</text>
+  </g>
+
+  <text x="410" y="358" text-anchor="middle" font-size="12" font-weight="600" fill="#3C5488">$match 越早执行越好：既少计算又吃得下索引——全文最重要的性能习惯</text>
+  <text x="410" y="392" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜SQL 子句与聚合阶段的映射速查</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" width="820" height="300"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="300" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="299" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowP" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 左侧原始文档堆 -->
+  <rect x="52" y="96" width="86" height="100" rx="6" fill="#F4F7FA" stroke="#D9DFE8" transform="translate(-10 -6) rotate(-4 95 146)"/>
+  <rect x="52" y="98" width="86" height="100" rx="6" fill="#FFFFFF" stroke="#D9DFE8" transform="translate(4 -2) rotate(3 95 148)"/>
+  <rect x="48" y="102" width="86" height="98" rx="6" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="91" y="132" text-anchor="middle" font-size="11" fill="#6B7280">orders</text>
+  <text x="91" y="150" text-anchor="middle" font-size="11" fill="#6B7280">500 条</text>
+  <text x="91" y="168" text-anchor="middle" font-size="11" fill="#6B7280">原始文档</text>
+
+  <!-- 四个阶段 -->
+  <g stroke-width="1.5">
+    <rect x="170" y="108" width="122" height="88" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+    <rect x="332" y="108" width="122" height="88" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+    <rect x="494" y="108" width="122" height="88" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+    <rect x="656" y="108" width="118" height="88" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="231" y="138" font-size="14" font-weight="600" fill="#252A33">$match</text>
+    <text x="231" y="160" font-size="11" fill="#6B7280">status = PAID</text>
+    <text x="231" y="180" font-size="11" fill="#6B7280">粗筛掉作废单</text>
+
+    <text x="393" y="138" font-size="14" font-weight="600" fill="#252A33">$group</text>
+    <text x="393" y="160" font-size="11" fill="#6B7280">渠道 × 月份</text>
+    <text x="393" y="180" font-size="11" fill="#6B7280">$sum 汇总 GMV</text>
+
+    <text x="555" y="138" font-size="14" font-weight="600" fill="#252A33">$sort + $limit</text>
+    <text x="555" y="160" font-size="11" fill="#6B7280">GMV 降序</text>
+    <text x="555" y="180" font-size="11" fill="#6B7280">只取前几名</text>
+
+    <text x="715" y="142" font-size="13" font-weight="600" fill="#252A33">经营报表</text>
+    <text x="715" y="164" font-size="11" fill="#6B7280">一组汇总</text>
+    <text x="715" y="182" font-size="11" fill="#6B7280">文档</text>
+  </g>
+
+  <!-- 连接箭头 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="136" y1="152" x2="166" y2="152" marker-end="url(#arrowP)"/>
+    <line x1="292" y1="152" x2="328" y2="152" marker-end="url(#arrowP)"/>
+    <line x1="454" y1="152" x2="490" y2="152" marker-end="url(#arrowP)"/>
+    <line x1="616" y1="152" x2="652" y2="152" marker-end="url(#arrowP)"/>
+  </g>
+  <text x="410" y="92" text-anchor="middle" font-size="11" fill="#6B7280">每个阶段的输出，就是下一个阶段的输入</text>
+
+  <text x="410" y="240" text-anchor="middle" font-size="12" fill="#6B7280">500 条流水进去、十几组统计出来——数据形状随阶段持续变化</text>
+  <text x="410" y="272" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜聚合管道：文档依次流过各加工阶段</text>
+</svg>

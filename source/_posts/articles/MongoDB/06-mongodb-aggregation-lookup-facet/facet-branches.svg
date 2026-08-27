@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowF" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 上游共享筛选 -->
+  <rect x="48" y="126" width="208" height="86" rx="10" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="152" y="158" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">$match 价格区间</text>
+  <text x="152" y="182" text-anchor="middle" font-size="11" fill="#6B7280">三条支路只扫一遍数据</text>
+
+  <!-- 分叉 -->
+  <circle cx="296" cy="169" r="4" fill="#3C5488"/>
+  <line x1="256" y1="169" x2="290" y2="169" stroke="#5A6472" stroke-width="1.5"/>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="296" y1="169" x2="296" y2="88"  marker-end="url(#arrowF)"/>
+    <line x1="296" y1="169" x2="356" y2="176" marker-end="url(#arrowF)"/>
+    <line x1="296" y1="169" x2="296" y2="264" marker-end="url(#arrowF)"/>
+  </g>
+
+  <!-- 三条支流 -->
+  <g stroke-width="1.5">
+    <rect x="384" y="58"  width="248" height="72" rx="8" fill="#00A087" fill-opacity="0.08" stroke="#00A087"/>
+    <rect x="384" y="142" width="248" height="68" rx="8" fill="#4DBBD5" fill-opacity="0.08" stroke="#4DBBD5"/>
+    <rect x="384" y="228" width="248" height="72" rx="8" fill="#F39B7F" fill-opacity="0.14" stroke="#F39B7F"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="508" y="84" font-size="13" font-weight="600" fill="#252A33">pageItems</text>
+    <text x="508" y="106" font-size="11" fill="#6B7280">$sort → $skip 20 → $limit 10　当前页数据</text>
+
+    <text x="508" y="168" font-size="13" font-weight="600" fill="#252A33">totalCount</text>
+    <text x="508" y="190" font-size="11" fill="#6B7280">$count　页脚总数</text>
+
+    <text x="508" y="254" font-size="13" font-weight="600" fill="#252A33">byTag</text>
+    <text x="508" y="276" font-size="11" fill="#6B7280">$unwind + $sortByCount($limit 5)　标签分布</text>
+  </g>
+
+  <!-- 合并输出 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="632" y1="94"  x2="674" y2="150" marker-end="url(#arrowF)"/>
+    <line x1="632" y1="176" x2="668" y2="176" marker-end="url(#arrowF)"/>
+    <line x1="632" y1="264" x2="674" y2="202" marker-end="url(#arrowF)"/>
+  </g>
+  <rect x="682" y="128" width="102" height="96" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="733" y="164" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">一个响应</text>
+  <text x="733" y="184" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">文档</text>
+  <text x="733" y="206" text-anchor="middle" font-size="10" fill="#6B7280">同刻快照</text>
+
+  <text x="410" y="320" text-anchor="middle" font-size="12" fill="#6B7280">列表请求 3 次 → 1 次：数据页、总数、分布统计出自同一趟扫描的同一时刻</text>
+  <text x="410" y="328" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜$facet 共享上游，三条支流并行加工</text>
+</svg>

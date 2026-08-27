@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowM" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 阶段横排 -->
+  <g stroke-width="1.5">
+    <rect x="44"  y="52" width="156" height="58" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+    <rect x="232" y="52" width="156" height="58" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+    <rect x="420" y="52" width="156" height="58" rx="8" fill="#F39B7F" fill-opacity="0.14" stroke="#F39B7F"/>
+    <rect x="608" y="52" width="168" height="58" rx="8" fill="#3C5488" fill-opacity="0.10" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="122" y="76" font-size="13" font-weight="600" fill="#252A33">$match</text>
+    <text x="122" y="97" font-size="11" fill="#6B7280">WHERE status = PAID</text>
+    <text x="310" y="76" font-size="13" font-weight="600" fill="#252A33">$group</text>
+    <text x="310" y="97" font-size="11" fill="#6B7280">渠道 × 月，$sum GMV</text>
+    <text x="498" y="76" font-size="13" font-weight="600" fill="#252A33">$match（HAVING）</text>
+    <text x="498" y="97" font-size="11" fill="#6B7280">滤掉 gmv &lt; 1000 的组</text>
+    <text x="692" y="76" font-size="13" font-weight="600" fill="#252A33">$sort + $project</text>
+    <text x="692" y="97" font-size="11" fill="#6B7280">整形输出报表列</text>
+  </g>
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="200" y1="81" x2="228" y2="81" marker-end="url(#arrowM)"/>
+    <line x1="388" y1="81" x2="416" y2="81" marker-end="url(#arrowM)"/>
+    <line x1="576" y1="81" x2="604" y2="81" marker-end="url(#arrowM)"/>
+  </g>
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="122" y="134">5 条订单</text>
+    <text x="310" y="134">3 组</text>
+    <text x="498" y="134">剩 2 组</text>
+    <text x="692" y="134">报表行 × N</text>
+  </g>
+
+  <!-- 结果示意表 -->
+  <rect x="200" y="166" width="420" height="112" rx="8" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="220" y="192" font-size="12" font-weight="600" fill="#252A33">channel</text>
+  <text x="330" y="192" font-size="12" font-weight="600" fill="#252A33">month</text>
+  <text x="430" y="192" font-size="12" font-weight="600" fill="#252A33">gmv</text>
+  <text x="540" y="192" font-size="12" font-weight="600" fill="#252A33">orderNo</text>
+  <line x1="216" y1="200" x2="604" y2="200" stroke="#D9DFE8"/>
+  <g font-size="12" fill="#252A33">
+    <text x="220" y="224">H5</text><text x="330" y="224">2026-07</text>
+    <text x="430" y="224">7098.00</text><text x="540" y="224">2</text>
+    <text x="220" y="252">APP</text><text x="330" y="252">2026-06</text>
+    <text x="430" y="252">5128.00</text><text x="540" y="252">2</text>
+  </g>
+  <text x="410" y="304" text-anchor="middle" font-size="11" fill="#6B7280">表中数值为演示用示意数据</text>
+
+  <text x="410" y="332" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜月度经营报表管道全景（数据形状逐站收缩）</text>
+</svg>

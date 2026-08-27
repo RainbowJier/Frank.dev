@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" width="820" height="470"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="470" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="469" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 根节点 -->
+  <rect x="330" y="36" width="160" height="44" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="64" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">一条关联数据</text>
+  <line x1="410" y1="80" x2="410" y2="114" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+
+  <!-- 问题 1 -->
+  <rect x="285" y="118" width="250" height="46" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="410" y="147" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">① 总是随父一起读写？</text>
+  <line x1="332" y1="164" x2="178" y2="212" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="238" y="182" font-size="12" font-weight="600" fill="#00A087">是</text>
+  <line x1="492" y1="164" x2="646" y2="212" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="586" y="182" font-size="12" font-weight="600" fill="#E64B35">否</text>
+
+  <!-- 问题 2 -->
+  <rect x="60" y="216" width="230" height="46" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="175" y="245" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">② 数量有界（数百内）？</text>
+  <line x1="116" y1="262" x2="104" y2="348" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="94" y="306" font-size="12" font-weight="600" fill="#00A087">是</text>
+  <line x1="235" y1="262" x2="276" y2="348" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="272" y="306" font-size="12" font-weight="600" fill="#E64B35">否</text>
+
+  <!-- 问题 3 -->
+  <rect x="530" y="216" width="240" height="46" rx="8" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="650" y="245" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">③ 偏向哪种关系形态？</text>
+  <line x1="574" y1="262" x2="576" y2="348" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="556" y="306" font-size="12" font-weight="600" fill="#252A33">一对多</text>
+  <line x1="727" y1="262" x2="729" y2="348" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowT)"/>
+  <text x="706" y="306" font-size="12" font-weight="600" fill="#252A33">多对多</text>
+
+  <!-- 叶子结论 -->
+  <g stroke-width="2">
+    <rect x="28" y="352" width="152" height="88" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+    <rect x="202" y="352" width="152" height="88" rx="10" fill="#F39B7F" fill-opacity="0.15" stroke="#F39B7F"/>
+    <rect x="500" y="352" width="146" height="88" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="666" y="352" width="124" height="88" rx="10" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="104" y="384" font-size="15" font-weight="600" fill="#252A33">嵌入</text>
+    <text x="104" y="406" font-size="11" fill="#6B7280">高频头部数据</text>
+    <text x="104" y="424" font-size="11" fill="#6B7280">一次 find 取全</text>
+
+    <text x="278" y="384" font-size="15" font-weight="600" fill="#252A33">子集模式</text>
+    <text x="278" y="406" font-size="11" fill="#6B7280">巨型长尾关联</text>
+    <text x="278" y="424" font-size="11" fill="#6B7280">只嵌最近 N 条</text>
+
+    <text x="573" y="384" font-size="15" font-weight="600" fill="#252A33">父引用</text>
+    <text x="573" y="406" font-size="11" fill="#6B7280">海量独立子项</text>
+    <text x="573" y="424" font-size="11" fill="#6B7280">$lookup 取回</text>
+
+    <text x="728" y="384" font-size="15" font-weight="600" fill="#252A33">双向引用</text>
+    <text x="728" y="406" font-size="11" fill="#6B7280">互查的两端</text>
+    <text x="728" y="424" font-size="11" fill="#6B7280">各存 _id 数组</text>
+  </g>
+
+  <text x="410" y="462" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜嵌入与引用的决策树</text>
+</svg>
