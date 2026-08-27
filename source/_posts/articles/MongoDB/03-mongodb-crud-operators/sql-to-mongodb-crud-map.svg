@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 表头 -->
+  <rect x="40" y="36" width="740" height="40" rx="8" fill="#3C5488" fill-opacity="0.10"/>
+  <g font-size="13" font-weight="600" fill="#252A33">
+    <text x="72" y="62">操作</text>
+    <text x="216" y="62">MySQL</text>
+    <text x="428" y="62">MongoDB · 单条</text>
+    <text x="618" y="62">MongoDB · 多条</text>
+  </g>
+
+  <!-- 行背景交替与边框 -->
+  <rect x="40" y="78"  width="740" height="48" rx="0" fill="#FFFFFF"/>
+  <rect x="40" y="126" width="740" height="48" rx="0" fill="#F4F7FA"/>
+  <rect x="40" y="174" width="740" height="48" rx="0" fill="#FFFFFF"/>
+  <rect x="40" y="222" width="740" height="48" rx="0" fill="#F4F7FA"/>
+  <rect x="40" y="36" width="740" height="234" rx="8" fill="none" stroke="#D9DFE8"/>
+  <g stroke="#E8EDF3">
+    <line x1="196" y1="37" x2="196" y2="269"/>
+    <line x1="412" y1="37" x2="412" y2="269"/>
+    <line x1="596" y1="37" x2="596" y2="269"/>
+    <line x1="41" y1="127" x2="779" y2="127"/>
+    <line x1="41" y1="175" x2="779" y2="175"/>
+    <line x1="41" y1="223" x2="779" y2="223"/>
+  </g>
+
+  <!-- 行标签色点 -->
+  <circle cx="66" cy="102" r="4" fill="#00A087"/>
+  <circle cx="66" cy="150" r="4" fill="#4DBBD5"/>
+  <circle cx="66" cy="198" r="4" fill="#F39B7F"/>
+  <circle cx="66" cy="246" r="4" fill="#8491B4"/>
+
+  <g font-size="13" font-weight="500" fill="#252A33">
+    <text x="82" y="107">插入</text>
+    <text x="216" y="107">INSERT INTO … VALUES</text>
+    <text x="432" y="107">insertOne(doc)</text>
+    <text x="616" y="107">insertMany([docs])</text>
+
+    <text x="82" y="155">查询</text>
+    <text x="216" y="150">SELECT … WHERE</text>
+    <text x="224" y="168" font-size="11" fill="#6B7280">(ORDER BY / LIMIT)</text>
+    <text x="432" y="150">find(filter, projection)</text>
+    <text x="440" y="168" font-size="11" fill="#6B7280">投影＝第二个参数</text>
+    <text x="616" y="150">find 天然返回多条</text>
+    <text x="624" y="168" font-size="11" fill="#6B7280">无独立"多条方法"</text>
+
+    <text x="82" y="203">更新</text>
+    <text x="216" y="198">UPDATE … SET</text>
+    <text x="224" y="216" font-size="11" fill="#6B7280">WHERE 决定范围</text>
+    <text x="432" y="198">updateOne(filter, update)</text>
+    <text x="440" y="216" font-size="11" fill="#6B7280">最多改一条</text>
+    <text x="616" y="198">updateMany(filter, update)</text>
+
+    <text x="82" y="251">删除</text>
+    <text x="216" y="251">DELETE FROM …</text>
+    <text x="432" y="251">deleteOne(filter)</text>
+    <text x="616" y="251">deleteMany(filter)</text>
+  </g>
+
+  <text x="410" y="298" text-anchor="middle" font-size="12" font-weight="600" fill="#E64B35">更新方法的第二参数若无任何 $ 操作符，即整文档替换——不是报错，而是静默覆盖</text>
+  <text x="410" y="334" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜SQL 子句与 MongoDB CRUD 方法的对应关系</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" width="820" height="380"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="380" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="379" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowU" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：整文档替换 -->
+  <rect x="40" y="40" width="360" height="292" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="70" font-size="18" font-weight="700" fill="#E64B35">A</text>
+  <text x="88" y="69" font-size="14" font-weight="600" fill="#252A33">整文档替换（忘写 $）</text>
+
+  <rect x="64" y="86" width="312" height="66" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="80" y="108" font-size="12" fill="#252A33">{ name: "图书", price: 129,</text>
+  <text x="80" y="128" font-size="12" fill="#252A33">  stock: 30, author: "周志明" }</text>
+  <text x="220" y="172" text-anchor="middle" font-size="11" fill="#6B7280">updateOne(filter, 第二参数没有 $)</text>
+  <line x1="220" y1="156" x2="220" y2="184" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowU)"/>
+
+  <rect x="64" y="192" width="312" height="52" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="80" y="214" font-size="12" fill="#252A33">{ name: "图书", price: 99 }</text>
+  <text x="80" y="234" font-size="11" fill="#6B7280">只剩两个写入的字段</text>
+
+  <text x="220" y="282" text-anchor="middle" font-size="12" font-weight="600" fill="#E64B35">stock 与 author 被无声删除</text>
+  <text x="220" y="306" text-anchor="middle" font-size="11" fill="#6B7280">不报错、不回滚、无审计痕迹</text>
+
+  <!-- 面板 B：操作符更新 -->
+  <rect x="420" y="40" width="360" height="292" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="70" font-size="18" font-weight="700" fill="#00A087">B</text>
+  <text x="468" y="69" font-size="14" font-weight="600" fill="#252A33">操作符更新（局部生效）</text>
+
+  <rect x="444" y="86" width="312" height="66" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="460" y="108" font-size="12" fill="#252A33">{ name: "图书", price: 129,</text>
+  <text x="460" y="128" font-size="12" fill="#252A33">  stock: 30, author: "周志明" }</text>
+  <text x="600" y="172" text-anchor="middle" font-size="11" fill="#6B7280">updateOne(filter, { $set: { price: 99 } })</text>
+  <line x1="600" y1="156" x2="600" y2="184" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrowU)"/>
+
+  <rect x="444" y="192" width="312" height="52" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="460" y="214" font-size="12" fill="#252A33">{ name: "图书", price: 99,</text>
+  <text x="460" y="232" font-size="12" fill="#252A33">  stock: 30, author: "周志明" }</text>
+
+  <text x="600" y="282" text-anchor="middle" font-size="12" font-weight="600" fill="#00A087">只动 price，其余字段原样保留</text>
+  <text x="600" y="306" text-anchor="middle" font-size="11" fill="#6B7280">$inc / $push / $addToSet 同属此形态</text>
+
+  <text x="410" y="360" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜整文档替换与操作符更新的差异</text>
+</svg>

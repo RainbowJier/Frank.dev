@@ -226,7 +226,7 @@ db.products.deleteOne({ name: "不存在的商品" })   // deletedCount: 0，删
 - 库与集合惰性创建：第一个文档落地时结构才诞生，代价是拼写错误无人拦；
 - `shop.products` 四条异构文档已就位，它是整个系列的教学数据集。
 
-**下一篇**：《MongoDB 从零到一（03）：CRUD 全解》——系统展开 find 的操作符体系、更新的六种姿势与 bulkWrite 批量写，把今天"尝鲜清单"里的每条命令讲透。
+**下一篇**：《MongoDB 从零到一（03）：CRUD 全解，find 操作符与更新表达式》——系统展开 find 的操作符体系、更新的六种姿势与 bulkWrite 批量写，把今天"尝鲜清单"里的每条命令讲透。详见 {% post_link articles/MongoDB/03-mongodb-crud-operators 'MongoDB 从零到一（03）：CRUD 全解' %}。
 
 > **思考与练习**
 >
