@@ -85,6 +85,14 @@
 
 配图：①五段流水线总览 ②Webpack 内核四大件剖析 ③Webpack vs Vite 开发模式对比 ④工具链全景分层地图（本篇 4 张）
 
+### 番外二 前端包管理器 —— ✅ 已写完（2026-08-27）
+
+`10-package-managers-npm-pnpm.md`《Vue 从零到一（番外）：npm、Yarn 与 pnpm，前端包管理器一次讲透》
+
+要点：Maven 类比对号入座（package.json/registry/lockfile、node_modules 与 ~/.m2 的集中 vs 复制差异、overrides 对应 dependencyManagement）；semver ^/~ 浮动；npm 两次自救（v2 嵌套地狱 → v3 扁平提升与幽灵依赖 → npm 5 lockfile/npx）；Yarn 四件武器与 Yarn Classic 维护现状；pnpm 三段式结构（Store 内容寻址 + .pnpm 硬链接 + 顶层符号链接）省/快/严三卖点；三家对比表 + npm→pnpm 命令速查表；Corepack 与 packageManager 字段统一团队口径；monorepo workspaces 与 --filter 过滤调度；选型决策图（跟仓库走/新项目 pnpm/老项目别动/frozen-lockfile 纪律）；坑：迁 pnpm 幽灵依赖暴雷、peerDeps 双实例、store prune、npx 投毒。与番外一组成"加工车间 + 原料仓库"上下篇。
+
+配图：①包管理器十年演进时间线 ②嵌套 vs 扁平提升与幽灵依赖双面板 ③pnpm 三段式布局原理 ④选型决策流程（本篇 4 张）
+
 ## 收官联动
 
 ✅ 已完成（2026-08-21，待推送）：采用关于页方案——`source/about/index.md` 新增"系列文章"区块，挂全站三条系列共 15 篇（Vue 从零到一 8 篇、Java 多线程 4 篇、LangChain4j 3 篇），15 个链接已逐一验证可达。Skill-Hub 方案经评估放弃（其定位是技能目录，放教程系列语义不贴）。

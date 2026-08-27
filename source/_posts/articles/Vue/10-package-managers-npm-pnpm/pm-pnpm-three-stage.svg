@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrowHL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="arrowSY" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+  </defs>
+
+  <!-- 左：Store 硬链接标注（顶部走廊） -->
+  <g text-anchor="middle">
+    <text x="280" y="86" font-size="12" font-weight="500" fill="#252A33">硬链接 hard link</text>
+    <text x="280" y="103" font-size="11" fill="#6B7280">指向同一物理文件 · 零拷贝</text>
+  </g>
+  <line x1="264" y1="212" x2="294" y2="212" stroke="#5A6472" stroke-width="2" marker-end="url(#arrowHL)"/>
+  <path d="M280 108 V198" fill="none" stroke="#9AA4B2" stroke-width="1" stroke-dasharray="2 4"/>
+
+  <!-- 右：符号链接标注（底部走廊） -->
+  <text x="540" y="352" text-anchor="middle" font-size="12" font-weight="500" fill="#00A087">虚线＝符号链接 symlink</text>
+  <path d="M540 342 V290" fill="none" stroke="#9AA4B2" stroke-width="1" stroke-dasharray="2 4"/>
+
+  <!-- ① 全局内容寻址存储 -->
+  <rect x="40" y="110" width="220" height="220" rx="12" fill="#4DBBD5" fill-opacity="0.06" stroke="#4DBBD5" stroke-width="2"/>
+  <text x="150" y="140" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">① 全局内容寻址存储</text>
+  <text x="150" y="160" text-anchor="middle" font-size="11" fill="#6B7280">~/.pnpm/store（按文件指纹）</text>
+  <g stroke-width="1.5">
+    <rect x="62" y="178" width="176" height="32" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="62" y="220" width="176" height="32" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="62" y="262" width="176" height="32" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="150" y="198">vue@3.5.13</text>
+    <text x="150" y="240">axios@1.7.9</text>
+    <text x="150" y="282">vitest@3.0.2</text>
+  </g>
+  <text x="150" y="312" text-anchor="middle" font-size="11" fill="#6B7280">每份文件磁盘上只存一份</text>
+
+  <!-- ② 项目内 .pnpm 目录 -->
+  <rect x="300" y="110" width="220" height="220" rx="12" fill="#8491B4" fill-opacity="0.06" stroke="#8491B4" stroke-width="2"/>
+  <text x="410" y="140" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">② 项目内 .pnpm 目录</text>
+  <text x="410" y="160" text-anchor="middle" font-size="11" fill="#6B7280">各依赖按 包名@版本 就位</text>
+  <g stroke-width="1.5">
+    <rect x="322" y="178" width="176" height="32" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+    <rect x="322" y="220" width="176" height="32" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+    <rect x="322" y="262" width="176" height="32" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="410" y="198">vue@3.5.13/</text>
+    <text x="410" y="240">axios@1.7.9/</text>
+    <text x="410" y="282">vitest@3.0.2/</text>
+  </g>
+  <text x="410" y="312" text-anchor="middle" font-size="11" fill="#6B7280">内部自带完整 node_modules</text>
+
+  <!-- 符号链接虚线（右向左解析） -->
+  <g stroke="#00A087" stroke-width="1.5" stroke-dasharray="5 4">
+    <line x1="558" y1="194" x2="526" y2="194" marker-end="url(#arrowSY)"/>
+    <line x1="558" y1="236" x2="526" y2="236" marker-end="url(#arrowSY)"/>
+    <line x1="558" y1="278" x2="526" y2="278" marker-end="url(#arrowSY)"/>
+  </g>
+
+  <!-- ③ 顶层 node_modules -->
+  <rect x="560" y="110" width="220" height="220" rx="12" fill="#00A087" fill-opacity="0.06" stroke="#00A087" stroke-width="2"/>
+  <text x="670" y="140" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">③ 顶层 node_modules</text>
+  <text x="670" y="160" text-anchor="middle" font-size="11" fill="#6B7280">只有 package.json 声明过的</text>
+  <g stroke-width="1.5">
+    <rect x="582" y="178" width="176" height="32" rx="6" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-dasharray="5 4"/>
+    <rect x="582" y="220" width="176" height="32" rx="6" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-dasharray="5 4"/>
+    <rect x="582" y="262" width="176" height="32" rx="6" fill="#00A087" fill-opacity="0.08" stroke="#00A087" stroke-dasharray="5 4"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="670" y="198">vue</text>
+    <text x="670" y="240">axios</text>
+    <text x="670" y="282">vitest</text>
+  </g>
+
+  <!-- 底部说明 -->
+  <text x="410" y="382" text-anchor="middle" font-size="12" fill="#6B7280">虚线芯片就是符号链接入口；顶层只暴露声明的直接依赖，幽灵依赖无处藏身</text>
+  <text x="410" y="410" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜pnpm 三段式布局：Store 全局去重 → .pnpm 硬链接就位 → 顶层符号链接按需暴露</text>
+</svg>

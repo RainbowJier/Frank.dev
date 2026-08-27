@@ -15,7 +15,7 @@ type: about
 
 博客的成体系教程都从这里开始，按顺序读即可：
 
-**Vue 从零到一**（8 篇，Vue 3，面向 Java 后端同学）
+**Vue 从零到一**（10 篇 = 主线 8 篇 + 番外 2 篇，Vue 3，面向 Java 后端同学）
 
 1. [组件生命周期与八个钩子的正确用法](/2026/08/18/articles/Vue/01-vue-component-lifecycle/)
 2. [模板语法与常用指令](/2026/08/21/articles/Vue/02-vue-template-directives/)
@@ -25,6 +25,8 @@ type: about
 6. [Pinia：什么时候才真的需要全局状态](/2026/08/21/articles/Vue/06-vue-pinia/)
 7. [Axios 封装与 Spring Boot 联调](/2026/08/21/articles/Vue/07-vue-axios-springboot/)
 8. [Vite 工程化与上线](/2026/08/21/articles/Vue/08-vue-vite-deploy/)
+9. 番外一：[前端构建工具全景——Vite、Webpack 与背后的"零件"](/2026/08/27/articles/Vue/09-vue-build-tools-ecosystem/)
+10. 番外二：[npm、Yarn 与 pnpm，前端包管理器一次讲透](/2026/08/27/articles/Vue/10-package-managers-npm-pnpm/)
 
 **Elasticsearch 从零到一**（10 篇，面向 Java 开发者）
 

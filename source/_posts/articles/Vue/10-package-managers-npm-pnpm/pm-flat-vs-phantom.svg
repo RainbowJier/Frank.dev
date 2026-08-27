@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 420" width="820" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="419" fill="none" stroke="#D9DFE8"/>
+
+  <!-- ===================== 面板 A：递归嵌套 ===================== -->
+  <rect x="40" y="40" width="370" height="320" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="86" y="71" font-size="14" font-weight="600" fill="#252A33">npm v2｜递归嵌套安装</text>
+
+  <rect x="64" y="92" width="322" height="166" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="76" y="110" font-size="11" fill="#6B7280">my-app/node_modules/</text>
+
+  <!-- 楼梯式嵌套 -->
+  <g stroke-width="1.5">
+    <rect x="82" y="120" width="140" height="26" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="106" y="152" width="160" height="26" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="130" y="184" width="180" height="26" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="130" y="218" width="180" height="26" rx="4" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-dasharray="4 3"/>
+  </g>
+  <path d="M96 146 V152 H106" fill="none" stroke="#9AA4B2" stroke-width="1"/>
+  <path d="M120 178 V184 H130" fill="none" stroke="#9AA4B2" stroke-width="1"/>
+  <g font-size="12" fill="#252A33">
+    <text x="90" y="137">express@4.18</text>
+    <text x="114" y="169">accepts@1.3</text>
+    <text x="138" y="201">negotiator@0.6</text>
+    <text x="138" y="235">negotiator@0.6（另一份）</text>
+  </g>
+
+  <g font-size="13" fill="#252A33">
+    <circle cx="72" cy="278" r="3" fill="#3C5488"/>
+    <text x="86" y="282">同一依赖树装出成百上千份副本</text>
+    <circle cx="72" cy="304" r="3" fill="#8491B4"/>
+    <text x="86" y="308">目录层套层，Windows 路径超长报错</text>
+    <circle cx="72" cy="330" r="3" fill="#F39B7F"/>
+    <text x="86" y="334">连同版本库也被整树反复复制</text>
+  </g>
+
+  <!-- ===================== 面板 B：扁平提升 ===================== -->
+  <rect x="410" y="40" width="370" height="320" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="434" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="456" y="71" font-size="14" font-weight="600" fill="#252A33">npm v3+｜扁平提升 Hoisting</text>
+
+  <rect x="434" y="92" width="322" height="166" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="446" y="110" font-size="11" fill="#6B7280">my-app/node_modules/</text>
+
+  <g stroke-width="1.5">
+    <rect x="450" y="122" width="148" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="606" y="122" width="148" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="450" y="158" width="148" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="606" y="158" width="148" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="450" y="194" width="148" height="30" rx="4" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="606" y="194" width="148" height="30" rx="4" fill="#FFFFFF" stroke="#E64B35" stroke-dasharray="4 3"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="524" y="141">vue@3.5.13</text>
+    <text x="680" y="141">axios@1.7.9</text>
+    <text x="524" y="177">echarts@5.5.0</text>
+    <text x="680" y="177">sass@1.77.0</text>
+    <text x="524" y="213">dayjs@1.11.0</text>
+    <text x="680" y="213">lodash@4.17.21</text>
+  </g>
+  <text x="680" y="245" text-anchor="middle" font-size="11" fill="#E64B35">它是被 echarts 提升上来的</text>
+
+  <g font-size="13" fill="#252A33">
+    <circle cx="442" cy="278" r="3" fill="#00A087"/>
+    <text x="456" y="282">树变浅了，重复包大幅减少</text>
+    <circle cx="442" cy="304" r="3" fill="#E64B35"/>
+    <text x="456" y="308">幽灵依赖：没声明的包也能 import</text>
+    <circle cx="442" cy="330" r="3" fill="#8491B4"/>
+    <text x="456" y="334">提升顺序曾不稳定，靠 lockfile 补课</text>
+  </g>
+
+  <text x="410" y="398" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜依赖安放方式之争：从嵌套地狱到扁平提升</text>
+</svg>

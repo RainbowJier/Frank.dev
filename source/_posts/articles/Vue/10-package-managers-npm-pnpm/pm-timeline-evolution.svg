@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 270" width="820" height="270"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="270" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="269" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 主轴 -->
+  <line x1="60" y1="145" x2="770" y2="145" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 里程碑圆点 -->
+  <circle cx="110" cy="145" r="5" fill="#4DBBD5"/>
+  <circle cx="240" cy="145" r="5" fill="#3C5488"/>
+  <circle cx="365" cy="145" r="5" fill="#00A087"/>
+  <circle cx="490" cy="145" r="5" fill="#F39B7F"/>
+  <circle cx="615" cy="145" r="5" fill="#8491B4"/>
+  <circle cx="735" cy="145" r="5" fill="#3C5488"/>
+
+  <!-- 上方标注 -->
+  <g text-anchor="middle">
+    <text x="110" y="109" font-size="13" font-weight="600" fill="#252A33">2010 · npm 登场</text>
+    <text x="110" y="125" font-size="11" fill="#6B7280">随 Node 自带的默认项</text>
+    <text x="365" y="109" font-size="13" font-weight="600" fill="#252A33">2016 · Yarn 发布</text>
+    <text x="365" y="125" font-size="11" fill="#6B7280">lockfile · 并行 · 离线缓存</text>
+    <text x="615" y="109" font-size="13" font-weight="600" fill="#252A33">2021 · Corepack 内置</text>
+    <text x="615" y="125" font-size="11" fill="#6B7280">Node 16.10+ 自带切换器</text>
+  </g>
+
+  <!-- 下方标注 -->
+  <g text-anchor="middle">
+    <text x="240" y="177" font-size="13" font-weight="600" fill="#252A33">2013 · 国内镜像</text>
+    <text x="240" y="193" font-size="11" fill="#6B7280">cnpm 与淘宝源提速</text>
+    <text x="490" y="177" font-size="13" font-weight="600" fill="#252A33">2017 · pnpm 成型</text>
+    <text x="490" y="193" font-size="11" fill="#6B7280">符号链接 + 全局存储复用</text>
+    <text x="735" y="177" font-size="13" font-weight="600" fill="#252A33">2022 · Bun 来袭</text>
+    <text x="735" y="193" font-size="11" fill="#6B7280">运行时与打包器合一</text>
+  </g>
+
+  <text x="410" y="245" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜前端包管理器的十年演进</text>
+</svg>

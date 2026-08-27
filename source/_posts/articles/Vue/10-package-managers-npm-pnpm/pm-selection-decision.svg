@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 544" width="820" height="544"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="544" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="543" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 起点 -->
+  <rect x="230" y="46" width="240" height="44" rx="22" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="350" y="73" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">接到一个前端项目</text>
+  <line x1="350" y1="90" x2="350" y2="110" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 判断 1 -->
+  <polygon points="225,150 350,114 475,150 350,186" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="350" y="155" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">仓库已指定包管理器？</text>
+  <line x1="478" y1="150" x2="534" y2="150" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="506" y="141" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <line x1="350" y1="186" x2="350" y2="230" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="364" y="212" font-size="11" fill="#6B7280">否</text>
+
+  <rect x="540" y="118" width="250" height="64" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="665" y="143" text-anchor="middle" font-size="12" fill="#252A33">跟仓库统一口径：Corepack 就位</text>
+  <text x="665" y="163" text-anchor="middle" font-size="12" fill="#252A33">按 packageManager 字段切版本</text>
+
+  <!-- 判断 2 -->
+  <polygon points="225,270 350,234 475,270 350,306" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="350" y="275" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">个人新项目或 monorepo？</text>
+  <line x1="478" y1="270" x2="534" y2="270" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="506" y="261" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <line x1="350" y1="306" x2="350" y2="350" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="364" y="332" font-size="11" fill="#6B7280">否</text>
+
+  <rect x="540" y="238" width="250" height="64" rx="10" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="665" y="263" text-anchor="middle" font-size="12" fill="#252A33">选 pnpm：更快、更省、更严格</text>
+  <text x="665" y="283" text-anchor="middle" font-size="12" fill="#252A33">workspaces 开箱即用留后路</text>
+
+  <!-- 判断 3 -->
+  <polygon points="225,390 350,354 475,390 350,426" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="350" y="395" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">老项目各方跑得都稳？</text>
+  <line x1="478" y1="390" x2="534" y2="390" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="506" y="381" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <line x1="350" y1="426" x2="350" y2="448" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="364" y="441" font-size="11" fill="#6B7280">否</text>
+
+  <rect x="540" y="358" width="250" height="64" rx="10" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="665" y="383" text-anchor="middle" font-size="12" fill="#252A33">保持现状别折腾</text>
+  <text x="665" y="403" text-anchor="middle" font-size="12" fill="#252A33">CI 用 frozen-lockfile 锁稳</text>
+
+  <!-- 迁移路径 -->
+  <rect x="160" y="452" width="480" height="48" rx="10" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="400" y="481" text-anchor="middle" font-size="13" fill="#252A33">标准化迁移：备份锁文件 → pnpm import → 全量回归后再切换</text>
+
+  <text x="410" y="524" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜包管理器选型决策流程</text>
+</svg>
