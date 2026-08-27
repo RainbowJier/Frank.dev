@@ -59,12 +59,14 @@
 
 | 专栏/系列 | 内容 |
 | --- | --- |
-| Java | 多线程、限流、批量迁移等后端实践 |
-| Spring / Spring Boot | IoC、AOP、事务、网关与熔断 |
-| MySQL / Redis / MongoDB / RabbitMQ / Oracle / Elasticsearch | 数据库、中间件、搜索引擎和高并发基础与实践 |
+| Java | 多线程从零到一、接口限流、千万级大表迁移等后端实践 |
+| Spring / Spring Boot | IoC+AOP 双支柱、事务失效全解、网关限流熔断 |
+| RuoYi 从零到一 | 若依框架从环境搭建到模块二开的学习实践，共 12 篇 |
+| MongoDB 从零到一 | 规划 12 篇，已发布 6 篇：选型定位、Docker 与 mongosh、CRUD 操作符、数据建模、聚合管道（上/下） |
+| MySQL / Redis / RabbitMQ / Oracle / Elasticsearch | 数据库、中间件、搜索引擎和高并发基础与实践（MySQL 9 篇、Redis 6 篇、RabbitMQ 4 篇、ES 10 篇） |
 | Vue 从零到一 | Vue 3 生命周期、模板指令、响应式、组件通信、Router、Pinia、Axios 联调、Vite 上线，共 8 篇 |
 | LangChain4j | Java 视角的对话、工具调用和 RAG，共 3 篇 |
-| AI / RESTful / MinIO / SSE | AI 应用、接口设计、对象存储和实时通信 |
+| AI / RESTful / MinIO / SSE / 数据库选型 | AI 应用、接口设计、对象存储、实时通信与三大关系库选型对比 |
 | 项目经历 | 数据中心、AI 智能客服助手、GDAL/GIS 服务等项目复盘 |
 
 成体系教程可以从[关于页的系列文章目录](https://frank-dev.site/about/)开始按顺序阅读。文章配图统一使用文章同名资源目录维护，当前包含大量科研论文风格 SVG 技术图解。
