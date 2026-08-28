@@ -77,6 +77,16 @@
 
 配图：①Vite 开发/生产双流程 ②环境变量注入链路 ③生产部署拓扑（nginx + API 反代）
 
+### 插读番外 项目结构与配置 —— ✅ 已写完（2026-08-27）
+
+`07b-vue-scaffold-project-structure.md`《Vue 从零到一（插读番外）：脚手架生成了什么——前端项目结构与配置逐个讲清》
+
+定位：按要求补在主线 07 与 08 之间阅读——文件名 `07b-*` 排序落位，日期回填 2026-08-21 10:50（早于 08 的 11:00），归档顺序自然正确。
+
+要点：create-vue ≈ Spring Initializr（交互选型→模板渲染→依赖安装）；标准目录树逐项职责；public vs assets 双静态通道；views/components 按复用性分界；index.html→main.ts→App.vue 启动接力赛；package.json 双依赖清单对照 compile/provided scope、锁文件入库纪律；vite.config.ts 三大职责（插件/alias/代理）；tsconfig 族与 alias 成对出现；ESLint/Prettier 分工；.d.ts 声明位；api/composables 扩展位；坑：图进 public 不优化、大小写跨平台、alias 单边配置、lockfile 出库、components 变垃圾场。
+
+配图：①脚手架生成五步流程 ②目录职责五层地图 ③启动接力赛流水线 ④配置文件三阶段分工 A/B/C（本篇 4 张）
+
 ### 番外 构建工具全景 —— ✅ 已写完（2026-08-27）
 
 `09-vue-build-tools-ecosystem.md`《Vue 从零到一（番外）：前端构建工具全景——Vite、Webpack 与背后的"零件"》

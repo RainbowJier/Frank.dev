@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 240" width="820" height="240"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="240" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="239" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <g stroke-width="1.5">
+    <rect x="40"  y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="195" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="350" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="505" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="660" y="64" width="120" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="100" y="97">创建命令</text>
+    <text x="255" y="97">交互式选型</text>
+    <text x="410" y="97">模板渲染</text>
+    <text x="565" y="97">安装依赖</text>
+    <text x="720" y="97">开发就绪</text>
+  </g>
+
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="100" y="143">pnpm create vue@latest</text>
+    <text x="255" y="143">TS·Router·Pinia·ESLint</text>
+    <text x="410" y="143">生成目录与依赖清单</text>
+    <text x="565" y="143">pnpm install</text>
+    <text x="720" y="143">npm run dev 即刻见效</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="163" y1="92" x2="189" y2="92" marker-end="url(#arrow)"/>
+    <line x1="318" y1="92" x2="344" y2="92" marker-end="url(#arrow)"/>
+    <line x1="473" y1="92" x2="499" y2="92" marker-end="url(#arrow)"/>
+    <line x1="628" y1="92" x2="654" y2="92" marker-end="url(#arrow)"/>
+  </g>
+
+  <rect x="150" y="164" width="520" height="34" rx="8" fill="#F4F7FA" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="410" y="186" text-anchor="middle" font-size="12" fill="#6B7280">与后端的 Spring Initializr 同构：勾选即骨架，业务仍需自己填</text>
+
+  <text x="410" y="224" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜脚手架 = 模板仓库 + 渲染器：一次选型换来整个工程骨架</text>
+</svg>

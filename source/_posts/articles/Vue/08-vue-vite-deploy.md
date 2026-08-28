@@ -198,4 +198,4 @@ server {
 
 系列完结。接下来想继续深入的话，三个自然的方向：TypeScript 全覆盖（后端同学的上风位）、Nuxt/SSR（SEO 场景）、或者干脆回头把这八篇的知识落到一个真实项目上——比如给这个博客做一个 Vue 版的管理后台。
 
-> 系列目录：1. [组件生命周期](/2026/08/18/articles/Vue/01-vue-component-lifecycle/) → 2. [模板语法与常用指令](/2026/08/21/articles/Vue/02-vue-template-directives/) → 3. [响应式系统](/2026/08/21/articles/Vue/03-vue-reactivity/) → 4. [组件通信](/2026/08/21/articles/Vue/04-vue-component-communication/) → 5. [Vue Router](/2026/08/21/articles/Vue/05-vue-router/) → 6. [Pinia](/2026/08/21/articles/Vue/06-vue-pinia/) → 7. [Axios 联调](/2026/08/21/articles/Vue/07-vue-axios-springboot/) → 8. Vite 工程化与上线（本篇·完结）
+> 系列目录：1. [组件生命周期](/2026/08/18/articles/Vue/01-vue-component-lifecycle/) → 2. [模板语法与常用指令](/2026/08/21/articles/Vue/02-vue-template-directives/) → 3. [响应式系统](/2026/08/21/articles/Vue/03-vue-reactivity/) → 4. [组件通信](/2026/08/21/articles/Vue/04-vue-component-communication/) → 5. [Vue Router](/2026/08/21/articles/Vue/05-vue-router/) → 6. [Pinia](/2026/08/21/articles/Vue/06-vue-pinia/) → 7. [Axios 联调](/2026/08/21/articles/Vue/07-vue-axios-springboot/) → 插读·[脚手架生成的项目结构与配置](/2026/08/21/articles/Vue/07b-vue-scaffold-project-structure/) → 8. Vite 工程化与上线（本篇·完结）

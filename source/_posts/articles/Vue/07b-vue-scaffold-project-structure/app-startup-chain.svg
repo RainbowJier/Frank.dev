@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 240" width="820" height="240"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="240" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="239" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <g stroke-width="1.5">
+    <rect x="40"  y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="195" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="350" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="505" y="64" width="120" height="56" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="660" y="64" width="120" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="100" y="97">浏览器请求</text>
+    <text x="255" y="97">index.html</text>
+    <text x="410" y="97">main.ts</text>
+    <text x="565" y="97">装配并挂载</text>
+    <text x="720" y="97">App.vue</text>
+  </g>
+
+  <g text-anchor="middle" font-size="11" fill="#6B7280">
+    <text x="100" y="143">打开 localhost:5173</text>
+    <text x="255" y="143">声明 module 入口脚本</text>
+    <text x="410" y="143">createApp(App) 出发</text>
+    <text x="565" y="143">use(router)、use(pinia)</text>
+    <text x="720" y="143">递归渲染整棵组件树</text>
+  </g>
+
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="163" y1="92" x2="189" y2="92" marker-end="url(#arrow)"/>
+    <line x1="318" y1="92" x2="344" y2="92" marker-end="url(#arrow)"/>
+    <line x1="473" y1="92" x2="499" y2="92" marker-end="url(#arrow)"/>
+    <line x1="628" y1="92" x2="654" y2="92" marker-end="url(#arrow)"/>
+  </g>
+
+  <rect x="130" y="164" width="560" height="34" rx="8" fill="#F4F7FA" stroke="#8491B4" stroke-width="1" stroke-dasharray="5 4"/>
+  <text x="410" y="186" text-anchor="middle" font-size="12" fill="#6B7280">期间浏览器要哪个模块，Vite 才即时转哪个——首屏只编译当前页所需</text>
+
+  <text x="410" y="224" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜从输入网址到首屏渲染：入口三文件的接力赛</text>
+</svg>

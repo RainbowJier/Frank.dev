@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 460" width="820" height="460"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="460" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="459" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 五个层带 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="30"  width="740" height="64" rx="10"/>
+    <rect x="40" y="104" width="740" height="64" rx="10"/>
+    <rect x="40" y="178" width="740" height="64" rx="10"/>
+    <rect x="40" y="252" width="740" height="64" rx="10"/>
+    <rect x="40" y="326" width="740" height="64" rx="10"/>
+  </g>
+
+  <!-- 层名 -->
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="57"  width="10" height="10" fill="#8491B4"/><text x="82" y="67">根目录层</text>
+    <rect x="64" y="131" width="10" height="10" fill="#4DBBD5"/><text x="82" y="141">应用入口层</text>
+    <rect x="64" y="205" width="10" height="10" fill="#3C5488"/><text x="82" y="215">页面路由层</text>
+    <rect x="64" y="279" width="10" height="10" fill="#00A087"/><text x="82" y="289">复用逻辑层</text>
+    <rect x="64" y="353" width="10" height="10" fill="#F39B7F"/><text x="82" y="363">静态资源层</text>
+  </g>
+
+  <!-- 元件（白底 + 彩描边，两行文字） -->
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <g stroke="#8491B4">
+      <rect x="186" y="40"  width="140" height="44" rx="6"/>
+      <rect x="334" y="40"  width="140" height="44" rx="6"/>
+      <rect x="482" y="40"  width="140" height="44" rx="6"/>
+      <rect x="630" y="40"  width="140" height="44" rx="6"/>
+    </g>
+    <g stroke="#4DBBD5">
+      <rect x="190" y="114" width="176" height="44" rx="6"/>
+      <rect x="378" y="114" width="176" height="44" rx="6"/>
+      <rect x="566" y="114" width="176" height="44" rx="6"/>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="196" y="188" width="272" height="44" rx="6"/>
+      <rect x="484" y="188" width="272" height="44" rx="6"/>
+    </g>
+    <g stroke="#00A087">
+      <rect x="188" y="262" width="138" height="44" rx="6"/>
+      <rect x="334" y="262" width="138" height="44" rx="6"/>
+      <rect x="480" y="262" width="138" height="44" rx="6"/>
+      <rect x="626" y="262" width="138" height="44" rx="6"/>
+    </g>
+    <g stroke="#F39B7F">
+      <rect x="196" y="336" width="272" height="44" rx="6"/>
+      <rect x="484" y="336" width="272" height="44" rx="6"/>
+    </g>
+  </g>
+
+  <!-- 主标签 + 灰色说明 -->
+  <g text-anchor="middle">
+    <g font-size="13" font-weight="500" fill="#252A33">
+      <text x="256" y="59">index.html</text>
+      <text x="404" y="59">vite.config.ts</text>
+      <text x="552" y="59">package.json</text>
+      <text x="700" y="59">.env 系列</text>
+
+      <text x="278" y="133">main.ts</text>
+      <text x="466" y="133">App.vue</text>
+      <text x="654" y="133">#app</text>
+
+      <text x="332" y="207">views/</text>
+      <text x="620" y="207">router/index.ts</text>
+
+      <text x="257" y="281">components/</text>
+      <text x="403" y="281">composables/</text>
+      <text x="549" y="281">stores/</text>
+      <text x="695" y="281">api · utils</text>
+
+      <text x="332" y="355">public/</text>
+      <text x="620" y="355">src/assets/</text>
+    </g>
+    <g font-size="11" fill="#6B7280">
+      <text x="256" y="76">唯一的 HTML 门面</text>
+      <text x="404" y="76">构建插件·代理·分包</text>
+      <text x="552" y="76">依赖清单与 scripts</text>
+      <text x="700" y="76">环境变量文件族</text>
+
+      <text x="278" y="150">createApp 装配并 mount</text>
+      <text x="466" y="150">整棵组件树之根</text>
+      <text x="654" y="150">index.html 里的挂载点</text>
+
+      <text x="332" y="225">一个路由对应一个页面</text>
+      <text x="620" y="225">路由表 · 懒加载 · 守卫</text>
+
+      <text x="257" y="298">可复用 UI 单元</text>
+      <text x="403" y="298">useXxx 逻辑复用</text>
+      <text x="549" y="298">Pinia 全局状态</text>
+      <text x="695" y="298">接口与工具的约定位</text>
+
+      <text x="332" y="373">原样拷贝，URL 固定</text>
+      <text x="620" y="373">构建管线 hash 压缩</text>
+    </g>
+  </g>
+
+  <text x="410" y="428" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜create-vue 生成的标准目录职责图——自上而下正是启动与组织的层次</text>
+</svg>
