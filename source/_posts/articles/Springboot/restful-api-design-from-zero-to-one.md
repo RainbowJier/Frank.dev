@@ -6,7 +6,6 @@ categories:
 tags:
   - RESTful
   - HTTP
-  - Spring Boot
   - API 设计
 description: 从一份"动词满天飞"的接口事故现场讲起，用大白话讲透 REST 的资源建模、HTTP 方法幂等性、URI 设计规范与状态码家族，并给出一套可以直接抄走的 Spring Boot 用户管理 CRUD 与全局异常处理代码。
 keywords:
