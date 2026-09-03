@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="430" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="429" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 面板 A：LangChain4j -->
+  <rect x="40" y="40" width="360" height="330" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="64" y="72" font-size="18" font-weight="700" fill="#3C5488">A</text>
+  <text x="88" y="71" font-size="14" font-weight="600" fill="#252A33">LangChain4j：积木式构建块</text>
+
+  <rect x="70" y="92" width="280" height="48" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="112" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">AiServices 声明式接口</text>
+  <text x="210" y="129" text-anchor="middle" font-size="11" fill="#6B7280">动态代理驱动整条管道</text>
+
+  <line x1="210" y1="142" x2="210" y2="152" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <g fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5">
+    <rect x="70"  y="156" width="90" height="40" rx="6"/>
+    <rect x="165" y="156" width="90" height="40" rx="6"/>
+    <rect x="260" y="156" width="90" height="40" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="115" y="180">ChatMemory</text>
+    <text x="210" y="180">Tools</text>
+    <text x="305" y="180">RAG 检索</text>
+  </g>
+
+  <line x1="210" y1="198" x2="210" y2="208" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="212" width="280" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="210" y="236" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">ChatModel / StreamingChatModel</text>
+
+  <line x1="210" y1="254" x2="210" y2="264" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="268" width="280" height="48" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="210" y="288" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">模型供应商</text>
+  <text x="210" y="305" text-anchor="middle" font-size="11" fill="#6B7280">几十家现成集成，换模型 = 换坐标</text>
+
+  <circle cx="78" cy="348" r="2.5" fill="#9AA4B2"/>
+  <text x="88" y="352" font-size="11" fill="#6B7280">框架无关：Spring / Quarkus / Micronaut 通吃</text>
+
+  <!-- 面板 B：Spring AI -->
+  <rect x="420" y="40" width="360" height="330" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="444" y="72" font-size="18" font-weight="700" fill="#3C5488">B</text>
+  <text x="468" y="71" font-size="14" font-weight="600" fill="#252A33">Spring AI：约定式管道</text>
+
+  <rect x="450" y="92" width="280" height="48" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="590" y="112" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">ChatClient 流式 DSL</text>
+  <text x="590" y="129" text-anchor="middle" font-size="11" fill="#6B7280">builder 注入默认行为</text>
+
+  <line x1="590" y1="142" x2="590" y2="148" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="450" y="150" width="280" height="64" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="590" y="172" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Advisor 管道（类比 Filter 链）</text>
+  <g fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5">
+    <rect x="478" y="180" width="64" height="24" rx="4"/>
+    <rect x="558" y="180" width="64" height="24" rx="4"/>
+    <rect x="638" y="180" width="64" height="24" rx="4"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="510" y="196">记忆</text>
+    <text x="590" y="196">检索增强</text>
+    <text x="670" y="196">观测</text>
+  </g>
+
+  <line x1="590" y1="216" x2="590" y2="226" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="450" y="230" width="280" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="590" y="254" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">ChatModel（starter 自动装配）</text>
+
+  <line x1="590" y1="272" x2="590" y2="282" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="450" y="286" width="280" height="48" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="590" y="306" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">模型供应商</text>
+  <text x="590" y="323" text-anchor="middle" font-size="11" fill="#6B7280">配置文件即切换</text>
+
+  <circle cx="458" cy="348" r="2.5" fill="#9AA4B2"/>
+  <text x="468" y="352" font-size="11" fill="#6B7280">强绑定 Spring Boot：自动装配 + Micrometer</text>
+
+  <text x="410" y="412" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜两大主流框架的核心抽象对照：自由拼装 vs 约定式管道</text>
+</svg>

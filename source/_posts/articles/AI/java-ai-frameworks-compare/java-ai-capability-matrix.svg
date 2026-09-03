@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 480" width="820" height="480"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="480" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="479" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 表头 -->
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="304" y="84">模型接入广度</text>
+    <text x="392" y="84">会话记忆</text>
+    <text x="480" y="84">工具调用</text>
+    <text x="568" y="84">RAG 管道</text>
+    <text x="656" y="84">多智能体编排</text>
+    <text x="744" y="84">生态耦合度</text>
+  </g>
+  <text x="48" y="84" font-size="12" fill="#6B7280">框架</text>
+  <line x1="260" y1="94" x2="788" y2="94" stroke="#D9DFE8" stroke-width="1"/>
+
+  <!-- 斑马纹 -->
+  <g fill="#F4F7FA">
+    <rect x="40" y="96"  width="748" height="40"/>
+    <rect x="40" y="176" width="748" height="40"/>
+    <rect x="40" y="256" width="748" height="40"/>
+    <rect x="40" y="336" width="748" height="40"/>
+  </g>
+
+  <!-- 列分隔线 -->
+  <g stroke="#E8EDF3" stroke-width="1">
+    <line x1="348" y1="96" x2="348" y2="376"/>
+    <line x1="436" y1="96" x2="436" y2="376"/>
+    <line x1="524" y1="96" x2="524" y2="376"/>
+    <line x1="612" y1="96" x2="612" y2="376"/>
+    <line x1="700" y1="96" x2="700" y2="376"/>
+  </g>
+  <line x1="260" y1="96" x2="260" y2="376" stroke="#D9DFE8" stroke-width="1"/>
+
+  <!-- 行标签 -->
+  <g font-size="13" fill="#252A33">
+    <text x="48" y="120">LangChain4j</text>
+    <text x="48" y="160">Spring AI</text>
+    <text x="48" y="200">Spring AI Alibaba</text>
+    <text x="48" y="240">Semantic Kernel Java</text>
+    <text x="48" y="280">Agents-Flex / Solon AI</text>
+    <text x="48" y="320">JetBrains Koog</text>
+    <text x="48" y="360">Google ADK</text>
+  </g>
+
+  <!-- 维护模式警示标（全图唯一红色） -->
+  <rect x="192" y="227" width="56" height="18" rx="9" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1"/>
+  <text x="220" y="240" text-anchor="middle" font-size="11" font-weight="600" fill="#E64B35">维护模式</text>
+
+  <!-- 单元格：强 = 实色 0.85；中 = 实色 0.30；弱 = 空心描边 -->
+  <!-- LangChain4j：强 强 强 强 中 弱 -->
+  <g fill="#3C5488">
+    <rect x="294" y="106" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="382" y="106" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="470" y="106" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="558" y="106" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="646" y="106" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="734" y="106" width="20" height="20" rx="4" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+  </g>
+  <!-- Spring AI：中 强 强 强 中 强 -->
+  <g fill="#3C5488">
+    <rect x="294" y="146" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="146" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="470" y="146" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="558" y="146" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="646" y="146" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="734" y="146" width="20" height="20" rx="4" fill-opacity="0.85"/>
+  </g>
+  <!-- Spring AI Alibaba：中 强 强 中 强 强 -->
+  <g fill="#3C5488">
+    <rect x="294" y="186" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="186" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="470" y="186" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="558" y="186" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="646" y="186" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="734" y="186" width="20" height="20" rx="4" fill-opacity="0.85"/>
+  </g>
+  <!-- Semantic Kernel Java：中 中 中 弱 弱 中 -->
+  <g fill="#3C5488">
+    <rect x="294" y="226" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="226" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="470" y="226" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="558" y="226" width="20" height="20" rx="4" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+    <rect x="646" y="226" width="20" height="20" rx="4" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+    <rect x="734" y="226" width="20" height="20" rx="4" fill-opacity="0.30"/>
+  </g>
+  <!-- Agents-Flex / Solon AI：中 中 中 中 弱 弱 -->
+  <g fill="#3C5488">
+    <rect x="294" y="266" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="266" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="470" y="266" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="558" y="266" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="646" y="266" width="20" height="20" rx="4" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+    <rect x="734" y="266" width="20" height="20" rx="4" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+  </g>
+  <!-- JetBrains Koog：中 强 强 中 强 中 -->
+  <g fill="#3C5488">
+    <rect x="294" y="306" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="306" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="470" y="306" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="558" y="306" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="646" y="306" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="734" y="306" width="20" height="20" rx="4" fill-opacity="0.30"/>
+  </g>
+  <!-- Google ADK：中 强 强 中 强 强 -->
+  <g fill="#3C5488">
+    <rect x="294" y="346" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="382" y="346" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="470" y="346" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="558" y="346" width="20" height="20" rx="4" fill-opacity="0.30"/>
+    <rect x="646" y="346" width="20" height="20" rx="4" fill-opacity="0.85"/>
+    <rect x="734" y="346" width="20" height="20" rx="4" fill-opacity="0.85"/>
+  </g>
+
+  <!-- 图例 -->
+  <g>
+    <rect x="250" y="390" width="14" height="14" rx="3" fill="#3C5488" fill-opacity="0.85"/>
+    <text x="272" y="402" font-size="12" fill="#252A33">完整成熟</text>
+    <rect x="360" y="390" width="14" height="14" rx="3" fill="#3C5488" fill-opacity="0.30"/>
+    <text x="382" y="402" font-size="12" fill="#252A33">可用 / 成长中</text>
+    <rect x="505" y="390" width="14" height="14" rx="3" fill="none" stroke="#8491B4" stroke-width="1.5"/>
+    <text x="527" y="402" font-size="12" fill="#252A33">薄弱或缺失</text>
+  </g>
+  <text x="410" y="428" text-anchor="middle" font-size="11" fill="#6B7280">注：生态耦合度为中性描述——耦合深意味着开箱即用，也意味着难以移植</text>
+
+  <text x="410" y="460" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜主流 Java AI 框架能力矩阵（2026-09，定性评估）</text>
+</svg>

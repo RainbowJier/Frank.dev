@@ -56,6 +56,8 @@ type: about
 2. [工具调用 Function Calling](/2026/08/17/articles/AI/02-langchain4j-tool-calling/)
 3. [从零构建 RAG](/2026/08/17/articles/AI/03-langchain4j-rag/)
 
+选型总览：[Java AI 框架全景对比——LangChain4j、Spring AI 与各路新势力怎么选](/2026/09/03/articles/AI/java-ai-frameworks-compare/)
+
 ## 个人信息
 
 - 姓名：刘起杰

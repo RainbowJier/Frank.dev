@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" width="820" height="350"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="350" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="349" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 主轴 -->
+  <line x1="45" y1="170" x2="785" y2="170" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 里程碑圆点 -->
+  <circle cx="115" cy="170" r="5" fill="#3C5488"/>
+  <circle cx="250" cy="170" r="5" fill="#3C5488"/>
+  <circle cx="395" cy="170" r="6" fill="#00A087"/>
+  <circle cx="540" cy="170" r="6" fill="#E64B35"/>
+  <circle cx="670" cy="170" r="5" fill="#4DBBD5"/>
+  <circle cx="725" cy="170" r="5" fill="#4DBBD5"/>
+
+  <!-- 标注上下交错 -->
+  <g text-anchor="middle">
+    <text x="115" y="128" font-size="13" font-weight="600" fill="#252A33">2023｜LangChain4j 开源</text>
+    <text x="115" y="144" font-size="11" fill="#6B7280">对标 LangChain 的构建块</text>
+    <text x="250" y="196" font-size="13" font-weight="600" fill="#252A33">2023｜Spring AI 立项</text>
+    <text x="250" y="212" font-size="11" fill="#6B7280">给约定，不给积木</text>
+    <text x="395" y="128" font-size="13" font-weight="600" fill="#252A33">2025.05｜双雄同月 1.0 GA</text>
+    <text x="395" y="144" font-size="11" fill="#6B7280">生态转正的分水岭</text>
+    <text x="540" y="196" font-size="13" font-weight="600" fill="#252A33">2025.07｜SK 进入维护模式</text>
+    <text x="540" y="212" font-size="11" fill="#6B7280">继任 Agent Framework 无 Java 版</text>
+    <text x="670" y="128" font-size="13" font-weight="600" fill="#252A33">2025｜AI Alibaba 1.0</text>
+    <text x="670" y="144" font-size="11" fill="#6B7280">Graph 编排 + 通义生态</text>
+    <text x="725" y="196" font-size="13" font-weight="600" fill="#252A33">2026｜Koog / ADK</text>
+    <text x="725" y="212" font-size="11" fill="#6B7280">Agent 编排新势力登场</text>
+  </g>
+
+  <!-- 时代分段 -->
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="220" y="252">应用框架启蒙期</text>
+    <text x="532" y="252">1.0 转正与生态洗牌</text>
+    <text x="727" y="252">Agent 编排时代</text>
+  </g>
+  <text x="410" y="326" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜Java AI 框架演进时间线（2023–2026）</text>
+</svg>

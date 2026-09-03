@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 540" width="820" height="540"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="540" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="539" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- D1：原型判断 -->
+  <rect x="335" y="48" width="180" height="46" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="425" y="76" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">原型 / 一次性调用？</text>
+
+  <line x1="519" y1="71" x2="596" y2="71" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="557" y="62" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+
+  <rect x="600" y="48" width="180" height="52" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="690" y="70" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">裸调 SDK · HTTP 直连</text>
+  <text x="690" y="87" text-anchor="middle" font-size="11" fill="#6B7280">零依赖，最快拿到结果</text>
+
+  <line x1="425" y1="94" x2="425" y2="136" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="433" y="120" font-size="11" fill="#6B7280">否</text>
+
+  <!-- D2：技术栈判断 -->
+  <rect x="335" y="140" width="180" height="46" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="425" y="168" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">宿主是 Spring Boot？</text>
+
+  <g stroke="#5A6472" stroke-width="1.5" fill="none">
+    <path d="M 425 186 L 425 212 L 170 212 L 170 236" marker-end="url(#arrow)"/>
+    <path d="M 425 186 L 425 212 L 660 212 L 660 236" marker-end="url(#arrow)"/>
+  </g>
+  <text x="300" y="204" text-anchor="middle" font-size="11" fill="#6B7280">是</text>
+  <text x="548" y="204" text-anchor="middle" font-size="11" fill="#6B7280">否</text>
+
+  <!-- D3：阿里云生态（Spring 分支） -->
+  <rect x="70" y="240" width="200" height="46" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="170" y="268" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">阿里云 + 通义深度使用？</text>
+
+  <g stroke="#5A6472" stroke-width="1.5" fill="none">
+    <path d="M 170 286 L 170 311 L 145 311 L 145 332" marker-end="url(#arrow)"/>
+    <path d="M 170 286 L 170 311 L 345 311 L 345 332" marker-end="url(#arrow)"/>
+  </g>
+  <text x="153" y="326" font-size="11" fill="#6B7280">是</text>
+  <text x="353" y="326" font-size="11" fill="#6B7280">否</text>
+
+  <rect x="40" y="336" width="210" height="52" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="145" y="358" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Spring AI Alibaba：Graph 编排</text>
+  <text x="145" y="375" text-anchor="middle" font-size="11" fill="#6B7280">通义 / 百炼一等公民</text>
+
+  <rect x="270" y="336" width="150" height="52" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="345" y="358" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Spring AI</text>
+  <text x="345" y="375" text-anchor="middle" font-size="11" fill="#6B7280">Spring 团队的主答案</text>
+
+  <!-- D4：应用主体判断（非 Spring 分支） -->
+  <rect x="550" y="240" width="220" height="46" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="660" y="268" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">主体是多智能体工作流？</text>
+
+  <g stroke="#5A6472" stroke-width="1.5" fill="none">
+    <path d="M 660 286 L 660 311 L 545 311 L 545 332" marker-end="url(#arrow)"/>
+    <path d="M 660 286 L 660 311 L 725 311 L 725 332" marker-end="url(#arrow)"/>
+  </g>
+  <text x="553" y="326" font-size="11" fill="#6B7280">是</text>
+  <text x="733" y="326" font-size="11" fill="#6B7280">否</text>
+
+  <rect x="450" y="336" width="190" height="52" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="545" y="358" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Koog / Google ADK</text>
+  <text x="545" y="375" text-anchor="middle" font-size="11" fill="#6B7280">Agent 图编排新势力</text>
+
+  <rect x="660" y="336" width="130" height="52" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="725" y="358" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">LangChain4j</text>
+  <text x="725" y="375" text-anchor="middle" font-size="11" fill="#6B7280">可移植 · 集成最广</text>
+
+  <!-- 硬约束补充 -->
+  <rect x="150" y="416" width="520" height="76" rx="10" fill="#F4F7FA" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="410" y="440" text-anchor="middle" font-size="12" font-weight="600" fill="#252A33">硬约束分支（补充选项）</text>
+  <text x="410" y="460" text-anchor="middle" font-size="11" fill="#6B7280">信创 / 极致轻量 → Agents-Flex、Solon AI</text>
+  <text x="410" y="478" text-anchor="middle" font-size="11" fill="#6B7280">深度绑定 Gemini / Vertex → Google ADK</text>
+
+  <text x="410" y="524" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜Java AI 框架选型决策树：四问定位</text>
+</svg>
