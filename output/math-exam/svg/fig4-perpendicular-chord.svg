@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 360" width="440" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="440" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="439" height="359" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 圆 O：半径 10 -->
+  <circle cx="220" cy="160" r="120" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+
+  <!-- 弦 AB -->
+  <line x1="124" y1="232" x2="316" y2="232" stroke="#3C5488" stroke-width="2"/>
+  <!-- 半径 OB -->
+  <line x1="220" y1="160" x2="316" y2="232" stroke="#F39B7F" stroke-width="1.8"/>
+  <!-- 弦心距 OC -->
+  <line x1="220" y1="160" x2="220" y2="232" stroke="#E64B35" stroke-width="2"/>
+  <!-- 直角记号 -->
+  <path d="M212 232 L212 224 L220 224" fill="none" stroke="#252A33" stroke-width="1.2"/>
+
+  <!-- 标注 -->
+  <text x="272" y="186" font-size="12" fill="#252A33">10</text>
+  <text x="228" y="200" font-size="13" font-weight="700" fill="#E64B35">?</text>
+  <text x="220" y="262" font-size="12" fill="#252A33" text-anchor="middle">16</text>
+
+  <!-- 顶点 -->
+  <g fill="#252A33">
+    <circle cx="124" cy="232" r="3.2"/>
+    <circle cx="316" cy="232" r="3.2"/>
+    <circle cx="220" cy="232" r="3.2"/>
+    <circle cx="220" cy="160" r="3.2"/>
+  </g>
+  <g font-size="15" font-weight="600" font-style="italic" fill="#252A33">
+    <text x="114" y="238" text-anchor="end">A</text>
+    <text x="326" y="238">B</text>
+    <text x="228" y="250">C</text>
+    <text x="212" y="156" text-anchor="end">O</text>
+  </g>
+</svg>

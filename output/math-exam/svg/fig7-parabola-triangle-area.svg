@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 460" width="440" height="460"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="440" height="460" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="439" height="459" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 单位网格 -->
+  <g stroke="#E8EDF3" stroke-width="1">
+    <line x1="30"  y1="100" x2="330" y2="100"/>
+    <line x1="30"  y1="150" x2="330" y2="150"/>
+    <line x1="30"  y1="250" x2="330" y2="250"/>
+    <line x1="30"  y1="300" x2="330" y2="300"/>
+    <line x1="30"  y1="350" x2="330" y2="350"/>
+    <line x1="30"  y1="400" x2="330" y2="400"/>
+    <line x1="80"  y1="90"  x2="80"  y2="410"/>
+    <line x1="180" y1="90"  x2="180" y2="410"/>
+    <line x1="230" y1="90"  x2="230" y2="410"/>
+    <line x1="280" y1="90"  x2="280" y2="410"/>
+  </g>
+
+  <!-- 坐标轴 -->
+  <g stroke="#5A6472" stroke-width="1.5">
+    <line x1="30" y1="200" x2="336" y2="200" marker-end="url(#arrow)"/>
+    <line x1="130" y1="410" x2="130" y2="94" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="13" font-style="italic" fill="#252A33">
+    <text x="344" y="205">x</text>
+    <text x="123" y="90">y</text>
+    <text x="122" y="216" text-anchor="end">O</text>
+  </g>
+  <!-- 刻度 -->
+  <g stroke="#5A6472" stroke-width="1">
+    <line x1="80"  y1="200" x2="80"  y2="205"/>
+    <line x1="180" y1="200" x2="180" y2="205"/>
+    <line x1="230" y1="200" x2="230" y2="205"/>
+    <line x1="280" y1="200" x2="280" y2="205"/>
+    <line x1="130" y1="150" x2="125" y2="150"/>
+    <line x1="130" y1="100" x2="125" y2="100"/>
+    <line x1="130" y1="250" x2="125" y2="250"/>
+    <line x1="130" y1="300" x2="125" y2="300"/>
+    <line x1="130" y1="350" x2="125" y2="350"/>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="80"  y="218" text-anchor="middle">−1</text>
+    <text x="180" y="218" text-anchor="middle">1</text>
+    <text x="230" y="218" text-anchor="middle">2</text>
+    <text x="280" y="218" text-anchor="middle">3</text>
+    <text x="122" y="154" text-anchor="end">1</text>
+    <text x="122" y="104" text-anchor="end">2</text>
+    <text x="122" y="254" text-anchor="end">−1</text>
+    <text x="122" y="304" text-anchor="end">−2</text>
+  </g>
+
+  <!-- 抛物线 y = x^2 - 2x - 3 -->
+  <polyline fill="none" stroke="#3C5488" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+    points="80,200 92.5,246.9 105,287.5 117.5,321.9 130,350 142.5,371.9 155,387.5 167.5,396.9 180,400 192.5,396.9 205,387.5 217.5,371.9 230,350 242.5,321.9 255,287.5 267.5,246.9 280,200"/>
+
+  <!-- 直线 BC（虚线） -->
+  <line x1="130" y1="350" x2="280" y2="200" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- 关键点 -->
+  <g fill="#252A33">
+    <circle cx="80"  cy="200" r="3.2"/>
+    <circle cx="280" cy="200" r="3.2"/>
+    <circle cx="130" cy="350" r="3.2"/>
+  </g>
+  <circle cx="205" cy="387.5" r="4" fill="#E64B35"/>
+  <g font-size="14" font-weight="600" font-style="italic" fill="#252A33">
+    <text x="72"  y="192" text-anchor="middle">A</text>
+    <text x="290" y="192">B</text>
+    <text x="138" y="366">C</text>
+  </g>
+  <text x="215" y="400" font-size="14" font-weight="700" font-style="italic" fill="#E64B35">P</text>
+</svg>

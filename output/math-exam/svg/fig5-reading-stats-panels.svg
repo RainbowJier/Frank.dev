@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：条形图 -->
+  <rect x="40" y="36" width="340" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="56" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="76" y="65" font-size="13" font-weight="600" fill="#252A33">各小组人数（人）</text>
+
+  <g stroke="#E8EDF3" stroke-width="1">
+    <line x1="100" y1="220" x2="352" y2="220"/>
+    <line x1="100" y1="170" x2="352" y2="170"/>
+    <line x1="100" y1="120" x2="352" y2="120"/>
+    <line x1="100" y1="70"  x2="352" y2="70"/>
+  </g>
+  <line x1="100" y1="270" x2="352" y2="270" stroke="#5A6472" stroke-width="1.5"/>
+  <g font-size="11" fill="#6B7280" text-anchor="end">
+    <text x="92" y="274">0</text>
+    <text x="92" y="224">20</text>
+    <text x="92" y="174">40</text>
+    <text x="92" y="124">60</text>
+    <text x="92" y="74">80</text>
+  </g>
+
+  <rect x="118" y="170" width="44" height="100" fill="#3C5488" fill-opacity="0.85"/>
+  <rect x="178" y="120" width="44" height="150" fill="#4DBBD5" fill-opacity="0.85"/>
+  <rect x="298" y="195" width="44" height="75"  fill="#00A087" fill-opacity="0.85"/>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="140" y="162">40</text>
+    <text x="200" y="112">60</text>
+    <text x="260" y="252" fill="#8491B4" font-weight="700">?</text>
+    <text x="320" y="187">30</text>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="140" y="292">A组</text>
+    <text x="200" y="292">B组</text>
+    <text x="260" y="292">C组</text>
+    <text x="320" y="292">D组</text>
+  </g>
+
+  <!-- 面板 B：扇形图 -->
+  <rect x="420" y="36" width="340" height="280" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="436" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="456" y="65" font-size="13" font-weight="600" fill="#252A33">各小组人数占总数的百分比</text>
+
+  <path d="M590 185 L590 97 A88 88 0 0 1 673.7 157.8 Z" fill="#3C5488" fill-opacity="0.85"/>
+  <path d="M590 185 L673.7 157.8 A88 88 0 0 1 590 273 Z" fill="#4DBBD5" fill-opacity="0.85"/>
+  <path d="M590 185 L590 273 A88 88 0 0 1 518.9 133.3 Z" fill="#00A087" fill-opacity="0.85"/>
+  <path d="M590 185 L518.9 133.3 A88 88 0 0 1 590 97 Z" fill="#F39B7F" fill-opacity="0.85"/>
+  <g font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">
+    <text x="625" y="143">A 20%</text>
+    <text x="641" y="224">B</text>
+    <text x="541" y="216">C m%</text>
+    <text x="567" y="135">D 15%</text>
+  </g>
+</svg>

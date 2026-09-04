@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 420" width="480" height="420"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="480" height="420" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="479" height="419" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 圆 O -->
+  <circle cx="240" cy="210" r="110" fill="#3C5488" fill-opacity="0.04" stroke="#3C5488" stroke-width="2"/>
+
+  <!-- 半径 OA、OB -->
+  <g stroke="#8491B4" stroke-width="1.8">
+    <line x1="240" y1="210" x2="295" y2="115"/>
+    <line x1="240" y1="210" x2="137" y2="172"/>
+  </g>
+  <!-- 弦 CA、CB -->
+  <g stroke="#4DBBD5" stroke-width="2">
+    <line x1="295" y1="305" x2="295" y2="115"/>
+    <line x1="295" y1="305" x2="137" y2="172"/>
+  </g>
+
+  <!-- 圆心角弧与标注 -->
+  <path d="M255 184 A30 30 0 0 0 211.8 199.7" fill="none" stroke="#E64B35" stroke-width="1.8"/>
+  <text x="225" y="168" font-size="13" fill="#E64B35" text-anchor="middle">100°</text>
+  <!-- 圆周角弧与标注 -->
+  <path d="M295 275 A30 30 0 0 0 272.1 285.7" fill="none" stroke="#00A087" stroke-width="1.8"/>
+  <text x="275" y="262" font-size="14" font-weight="700" fill="#00A087">?</text>
+
+  <!-- 顶点 -->
+  <g fill="#252A33">
+    <circle cx="295" cy="115" r="3.2"/>
+    <circle cx="137" cy="172" r="3.2"/>
+    <circle cx="295" cy="305" r="3.2"/>
+    <circle cx="240" cy="210" r="3.2"/>
+  </g>
+  <g font-size="15" font-weight="600" font-style="italic" fill="#252A33">
+    <text x="305" y="106">A</text>
+    <text x="121" y="167" text-anchor="end">B</text>
+    <text x="307" y="318">C</text>
+    <text x="230" y="232" text-anchor="end">O</text>
+  </g>
+</svg>
