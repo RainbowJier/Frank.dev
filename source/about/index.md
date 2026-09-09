@@ -50,6 +50,14 @@ type: about
 4. [ConcurrentHashMap 为什么又快又安全](/2026/08/17/articles/Java/04-java-concurrent-hashmap/)
 5. [线程池：核心线程、队列与拒绝策略](/2026/08/24/articles/Java/05-java-thread-pool/)
 
+**手写 MyBatis 系列**（5 篇，从 JDBC 到 XML、动态 SQL、缓存、插件、嵌套映射与事务生态）
+
+1. [从 JDBC 到 Mapper 代理，搭建迷你持久层框架](/2026/09/09/articles/Mybatis/01-mybatis-mini-framework/)
+2. [XML、注解与 Statement ID，统一配置模型](/2026/09/10/articles/Mybatis/02-mybatis-xml-and-statement-id/)
+3. [动态 SQL、${} 与丰富参数处理](/2026/09/11/articles/Mybatis/03-mybatis-dynamic-sql-and-parameters/)
+4. [缓存、插件与嵌套映射](/2026/09/12/articles/Mybatis/04-mybatis-cache-plugin-and-nested-mapping/)
+5. [类型系统、事务抽象与生态接入](/2026/09/13/articles/Mybatis/05-mybatis-types-transactions-and-ecosystem/)
+
 **LangChain4j 系列**（3 篇，Java 视角的 LLM 应用开发）
 
 1. [对话的底层执行](/2026/08/17/articles/AI/01-langchain4j-chat-internals/)

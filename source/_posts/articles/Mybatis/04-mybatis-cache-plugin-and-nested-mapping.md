@@ -1,10 +1,14 @@
 ---
-title: 手写 MyBatis 04：缓存、插件与嵌套映射
-date: 2026-09-09 14:00:00
-categories:
-  - Mybatis
-tags: [Java, MyBatis, 缓存, 插件, ResultMap]
-description: 承接第03篇，使用Java17、H2、Maven逐步实现缓存、插件与嵌套映射。
+title: "手写 MyBatis 04：缓存、插件与嵌套映射"
+date: 2026-09-12 10:00:00
+categories: [Mybatis]
+tags:
+  - Java
+  - MyBatis
+  - 缓存
+  - 插件
+description: 承接第03篇动态 SQL 与参数处理，使用 Java 17、H2 和 Maven 实现 PerpetualCache、CacheKey、一级缓存、事务边界、插件代理链、ResultMap 与嵌套映射。
+
 lang: zh-CN
 ---
 

@@ -60,7 +60,7 @@
 | 专栏/系列 | 内容 |
 | --- | --- |
 | Java | 多线程从零到一、接口限流、千万级大表迁移等后端实践 |
-| Mybatis | 手写迷你持久层框架：JDBC、Mapper 代理、参数绑定、结果映射与事务 |
+| Mybatis | 手写 MyBatis 系列（5 篇）：JDBC、XML、Statement ID、动态 SQL、缓存、插件、嵌套映射与事务生态 |
 | Spring / Spring Boot | IoC+AOP 双支柱、事务失效全解、网关限流熔断 |
 | RuoYi 从零到一 | 若依框架从环境搭建到模块二开的学习实践，共 12 篇 |
 | MongoDB 从零到一 | 规划 12 篇，已发布 6 篇：选型定位、Docker 与 mongosh、CRUD 操作符、数据建模、聚合管道（上/下） |
