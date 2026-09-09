@@ -244,3 +244,1057 @@ H2 事务测试使用两个独立连接并 `setAutoCommit(false)`，A 未提交�
 `CacheKey` 定义结果身份，`PerpetualCache` 提供基础存储，一级缓存绑定会话，`TransactionalCache` 把二级缓存绑定提交边界；`Interceptor`/`Plugin` 以精确签名插入横切逻辑；`ResultMap` 通过父子 key 把 JOIN 行折叠成对象图。真正要守住的是边界：缓存不能泄漏未提交数据，更新要传播到正确 namespace，代理只能拦截明确方法，嵌套映射要同时处理父去重、子去重和空子行。
 
 下一篇《手写 MyBatis 05》将实现动态 SQL 与 XML/注解解析：`if`、`where`、`trim`、`foreach`、参数节点和安全 SQL 片段组合，并继续复用本篇的 MappedStatement、插件链、缓存 key 与 ResultMap。
+
+## 十二、逐步实验记录：从失败到正确
+下面按实验顺序记录每个可观察结论。每个实验都应在独立会话、独立 H2 数据库或清晰的事务夹具中执行，避免上一个测试留下的缓存影响下一个测试。
+
+### 12.1 PerpetualCache 的读写
+
+**实验问题。** 我们要确认“PerpetualCache 的读写”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment1() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(1);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.2 CacheKey 的参数维度
+
+**实验问题。** 我们要确认“CacheKey 的参数维度”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment2() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(2);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.3 分页 key 的隔离
+
+**实验问题。** 我们要确认“分页 key 的隔离”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment3() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(3);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.4 一级缓存的会话边界
+
+**实验问题。** 我们要确认“一级缓存的会话边界”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment4() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(4);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.5 更新后的一级失效
+
+**实验问题。** 我们要确认“更新后的一级失效”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment5() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(5);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.6 commit 的二级发布
+
+**实验问题。** 我们要确认“commit 的二级发布”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment6() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(6);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.7 rollback 的二级丢弃
+
+**实验问题。** 我们要确认“rollback 的二级丢弃”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment7() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(7);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.8 namespace 的整体清理
+
+**实验问题。** 我们要确认“namespace 的整体清理”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment8() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(8);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.9 插件接口筛选
+
+**实验问题。** 我们要确认“插件接口筛选”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment9() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(9);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.10 插件参数精确匹配
+
+**实验问题。** 我们要确认“插件参数精确匹配”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment10() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(10);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.11 代理链嵌套顺序
+
+**实验问题。** 我们要确认“代理链嵌套顺序”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment11() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(11);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.12 异常解包
+
+**实验问题。** 我们要确认“异常解包”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment12() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(12);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.13 ResultMap 列别名
+
+**实验问题。** 我们要确认“ResultMap 列别名”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment13() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(13);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.14 父对象去重
+
+**实验问题。** 我们要确认“父对象去重”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment14() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(14);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.15 子对象去重
+
+**实验问题。** 我们要确认“子对象去重”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment15() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(15);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.16 LEFT JOIN 空对象
+
+**实验问题。** 我们要确认“LEFT JOIN 空对象”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment16() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(16);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.17 association 单值映射
+
+**实验问题。** 我们要确认“association 单值映射”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment17() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(17);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.18 collection 空集合
+
+**实验问题。** 我们要确认“collection 空集合”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment18() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(18);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.19 NULL 类型处理
+
+**实验问题。** 我们要确认“NULL 类型处理”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment19() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(19);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.20 H2 双连接事务
+
+**实验问题。** 我们要确认“H2 双连接事务”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment20() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(20);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.21 可变结果保护
+
+**实验问题。** 我们要确认“可变结果保护”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment21() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(21);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.22 绕过框架更新
+
+**实验问题。** 我们要确认“绕过框架更新”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment22() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(22);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.23 触发器关联失效
+
+**实验问题。** 我们要确认“触发器关联失效”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment23() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(23);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.24 租户 key 隔离
+
+**实验问题。** 我们要确认“租户 key 隔离”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment24() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(24);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.25 缓存命中日志
+
+**实验问题。** 我们要确认“缓存命中日志”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+
+**执行步骤。**
+
+1. 创建测试夹具并清空共享缓存。
+2. 执行一次原始操作，记录 SQL 和返回值。
+3. 重复操作或改变一个维度。
+4. 检查计数器、结果对象和日志。
+5. finally 中关闭会话，避免连接泄漏。
+
+```java
+@Test
+void experiment25() {
+    fixture.reset();
+    try (SqlSession session = fixture.openSession()) {
+        Object first = fixture.run(session);
+        Object second = fixture.runAgain(session);
+        assertNotNull(first);
+        assertNotNull(second);
+        fixture.assertExpectedForCase(25);
+    }
+}
+```
+
+**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+
+### 12.26 代码审查清单 1
+
+审查第 1 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review1(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.27 代码审查清单 2
+
+审查第 2 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review2(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.28 代码审查清单 3
+
+审查第 3 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review3(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.29 代码审查清单 4
+
+审查第 4 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review4(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.30 代码审查清单 5
+
+审查第 5 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review5(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.31 代码审查清单 6
+
+审查第 6 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review6(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.32 代码审查清单 7
+
+审查第 7 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review7(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.33 代码审查清单 8
+
+审查第 8 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review8(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.34 代码审查清单 9
+
+审查第 9 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review9(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.35 代码审查清单 10
+
+审查第 10 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review10(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.36 代码审查清单 11
+
+审查第 11 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review11(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.37 代码审查清单 12
+
+审查第 12 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review12(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.38 代码审查清单 13
+
+审查第 13 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review13(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.39 代码审查清单 14
+
+审查第 14 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review14(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.40 代码审查清单 15
+
+审查第 15 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review15(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.41 代码审查清单 16
+
+审查第 16 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review16(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.42 代码审查清单 17
+
+审查第 17 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review17(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.43 代码审查清单 18
+
+审查第 18 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review18(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.44 代码审查清单 19
+
+审查第 19 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review19(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.45 代码审查清单 20
+
+审查第 20 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review20(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.46 代码审查清单 21
+
+审查第 21 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review21(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.47 代码审查清单 22
+
+审查第 22 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review22(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.48 代码审查清单 23
+
+审查第 23 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review23(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.49 代码审查清单 24
+
+审查第 24 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review24(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
+### 12.50 代码审查清单 25
+
+审查第 25 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
+
+插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
+
+```java
+void review25(MappedStatement ms, CacheKey key) {
+    require(ms.getId() != null);
+    require(key != null);
+    // 真实项目在这里加入断言、指标或测试夹具。
+}
+```
+
