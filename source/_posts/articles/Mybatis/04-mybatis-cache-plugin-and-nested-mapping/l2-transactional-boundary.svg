@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 370" width="820" height="370"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="370" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="369" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="d5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 顶部：delegate 与 wrapper -->
+  <rect x="40" y="36" width="740" height="86" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="64" y="60" width="10" height="10" fill="#8491B4"/>
+  <text x="82" y="70" font-size="14" font-weight="600" fill="#3C5488">namespace delegate（跨 session 共享）</text>
+  <rect x="520" y="56" width="236" height="48" rx="6" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="638" y="77" text-anchor="middle" font-size="12" fill="#252A33">其他事务可读到的只有它</text>
+  <text x="638" y="95" text-anchor="middle" font-size="11" fill="#6B7280">只有已提交的结果才会进入</text>
+
+  <!-- 会话 A 的 wrapper -->
+  <rect x="40" y="146" width="360" height="150" rx="10" fill="#3C5488" fill-opacity="0.05" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="60" y="174" font-size="14" font-weight="600" fill="#3C5488">会话 A 的 TransactionalCache</text>
+  <rect x="60" y="188" width="320" height="36" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="220" y="211" text-anchor="middle" font-size="12" fill="#252A33">查询结果先进 pending（暂存）</text>
+  <rect x="60" y="234" width="152" height="42" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="136" y="253" text-anchor="middle" font-size="12" fill="#252A33">commit()</text>
+  <text x="136" y="269" text-anchor="middle" font-size="11" fill="#6B7280">发布进 delegate</text>
+  <rect x="228" y="234" width="152" height="42" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="304" y="253" text-anchor="middle" font-size="12" fill="#252A33">rollback()</text>
+  <text x="304" y="269" text-anchor="middle" font-size="11" fill="#6B7280">丢弃 pending</text>
+  <line x1="136" y1="230" x2="136" y2="232" stroke="none"/>
+  <path d="M 100 130 L 100 182" stroke="#5A6472" stroke-width="1.5" marker-end="url(#d5)"/>
+  <path d="M 136 280 C 136 320, 560 320, 600 110" fill="none" stroke="#00A087" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#d5)"/>
+
+  <!-- 右侧说明 -->
+  <text x="560" y="180" font-size="12" fill="#6B7280">clear() 只做标记（延迟失效）：</text>
+  <text x="560" y="198" font-size="12" fill="#6B7280">A 更新后回滚，不能误删 B 已提交的</text>
+  <text x="560" y="216" font-size="12" fill="#6B7280">缓存；真正的清空发生在 commit。</text>
+  <text x="560" y="244" font-size="12" fill="#6B7280">update → 标记 namespace 延迟清空；</text>
+  <text x="560" y="262" font-size="12" fill="#6B7280">commit 先数据库后缓存；</text>
+  <text x="560" y="280" font-size="12" fill="#6B7280">rollback 只重置 wrapper</text>
+
+  <text x="410" y="352" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜二级缓存的事务边界：未提交结果绝不发布，回滚即丢弃</text>
+</svg>

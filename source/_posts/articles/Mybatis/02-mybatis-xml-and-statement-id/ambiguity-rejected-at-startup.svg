@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 三类歧义 -->
+  <g stroke-width="1.5">
+    <rect x="40" y="40" width="236" height="98" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="292" y="40" width="236" height="98" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+    <rect x="544" y="40" width="236" height="98" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488"/>
+  </g>
+  <g text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">
+    <text x="158" y="78">重复 namespace</text>
+    <text x="410" y="78">重复 statement id</text>
+    <text x="662" y="78">方法重载</text>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="158" y="104">两个 mapper.xml 撞名</text>
+    <text x="410" y="104">id 不含参数签名，</text>
+    <text x="410" y="122">find(Long) / find(String) 无法区分</text>
+    <text x="662" y="104">同一接口两个同名</text>
+    <text x="662" y="122">方法映射到同一 id</text>
+  </g>
+
+  <!-- 拒绝位置 -->
+  <rect x="190" y="176" width="440" height="58" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="2"/>
+  <text x="410" y="200" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">Configuration 注册期立即抛出</text>
+  <text x="410" y="222" text-anchor="middle" font-size="12" fill="#6B7280">Duplicate namespace / id · Overloaded methods</text>
+
+  <line x1="158" y1="142" x2="250" y2="172" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="410" y1="142" x2="410" y2="172" stroke="#5A6472" stroke-width="1.5"/>
+  <line x1="662" y1="142" x2="570" y2="172" stroke="#5A6472" stroke-width="1.5"/>
+
+  <text x="410" y="272" text-anchor="middle" font-size="12" fill="#6B7280">运行期才发现"查错语句"：栈里只有字符串 id 与一串参数，比启动失败难排查一个量级</text>
+
+  <text x="410" y="310" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜三类身份歧义在注册期被拒绝，不给运行期留机会</text>
+</svg>

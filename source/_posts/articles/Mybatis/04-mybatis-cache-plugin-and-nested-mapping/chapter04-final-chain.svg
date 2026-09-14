@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 六层链 -->
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="32"  width="740" height="50" rx="10"/>
+    <rect x="40" y="94"  width="740" height="50" rx="10"/>
+    <rect x="40" y="156" width="740" height="50" rx="10"/>
+    <rect x="40" y="218" width="740" height="50" rx="10"/>
+    <rect x="40" y="280" width="740" height="50" rx="10"/>
+    <rect x="40" y="342" width="740" height="46" rx="10"/>
+  </g>
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="52"  width="10" height="10" fill="#3C5488"/><text x="82" y="62">MapperProxy</text>
+    <rect x="64" y="114" width="10" height="10" fill="#4DBBD5"/><text x="82" y="124">SqlSession</text>
+    <rect x="64" y="176" width="10" height="10" fill="#F39B7F"/><text x="82" y="186">Executor（一级缓存 · session 私有）</text>
+    <rect x="64" y="238" width="10" height="10" fill="#8491B4"/><text x="82" y="248">namespace TransactionalCache（二级缓存）</text>
+    <rect x="64" y="300" width="10" height="10" fill="#8491B4"/><text x="82" y="310">JDBC Statement</text>
+    <rect x="64" y="358" width="10" height="10" fill="#00A087"/><text x="82" y="368">ResultSetHandler → ResultMap → association / collection</text>
+  </g>
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="430" y="42"  width="330" height="30" rx="6" stroke="#3C5488"/>
+    <rect x="430" y="104" width="330" height="30" rx="6" stroke="#4DBBD5"/>
+    <rect x="430" y="166" width="330" height="30" rx="6" stroke="#F39B7F"/>
+    <rect x="430" y="228" width="330" height="30" rx="6" stroke="#8491B4"/>
+    <rect x="430" y="290" width="330" height="30" rx="6" stroke="#8491B4"/>
+    <rect x="430" y="350" width="330" height="30" rx="6" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#252A33">
+    <text x="595" y="62">按字符串 id 调 Session</text>
+    <text x="595" y="124">事务边界在这里收敛</text>
+    <text x="595" y="186">miss 才下探，update 清两侧</text>
+    <text x="595" y="248">commit 发布，rollback 丢弃</text>
+    <text x="595" y="310">真正的 SQL 执行</text>
+    <text x="595" y="370">JOIN 行折叠为对象图</text>
+  </g>
+
+  <text x="410" y="394" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜本篇的最终查询链：缓存两级、插件在链外、映射在链尾</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="c6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 输入：两个 if -->
+  <rect x="40" y="44" width="200" height="88" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="140" y="74" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">&lt;if name != null&gt;</text>
+  <text x="140" y="96" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">AND name = #{name}</text>
+  <text x="140" y="118" text-anchor="middle" font-size="12" fill="#6B7280">命中才输出</text>
+
+  <rect x="40" y="156" width="200" height="60" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="140" y="182" text-anchor="middle" font-size="13" fill="#252A33">&lt;if minAge != null&gt;</text>
+  <text x="140" y="202" text-anchor="middle" font-size="12" fill="#6B7280">条件为 null：零输出</text>
+
+  <!-- 子上下文缓冲 -->
+  <rect x="300" y="100" width="200" height="72" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="400" y="130" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">子上下文缓冲</text>
+  <text x="400" y="154" text-anchor="middle" font-size="12" fill="#6B7280">先攒完整内容再裁剪</text>
+  <line x1="244" y1="88" x2="294" y2="118" stroke="#5A6472" stroke-width="1.5" marker-end="url(#c6)"/>
+  <line x1="244" y1="186" x2="294" y2="158" stroke="#5A6472" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- 两个出口 -->
+  <rect x="560" y="40" width="220" height="64" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="670" y="66" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">缓冲为空 → 不输出 WHERE</text>
+  <text x="670" y="88" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">select id from t_user</text>
+
+  <rect x="560" y="160" width="220" height="82" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="670" y="186" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">有内容 → 裁掉首个 AND</text>
+  <text x="670" y="210" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">WHERE name = ?</text>
+  <text x="670" y="230" text-anchor="middle" font-size="12" fill="#6B7280">单词边界裁剪，order_no 安全</text>
+
+  <path d="M 504 122 C 540 96, 530 76, 554 70" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#c6)"/>
+
+  <!-- 反例 -->
+  <rect x="40" y="262" width="740" height="44" rx="8" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="410" y="289" text-anchor="middle" font-size="13" fill="#252A33">若直接边拼边改：子节点全不命中时留下空 WHERE；replace("AND","") 会误伤 order_no</text>
+
+  <text x="410" y="340" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜where/trim 先缓冲再裁剪：空条件不输出，首连接词按单词边界移除</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" width="820" height="350"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="350" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="349" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="c4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- #{} -->
+  <rect x="40" y="40" width="360" height="266" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="70" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="69" font-size="14" font-weight="600" fill="#252A33">#{}：数据槽位</text>
+  <rect x="60" y="86" width="320" height="40" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="220" y="111" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">where name = #{name}</text>
+  <text x="220" y="152" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">输入 "x' OR 1=1 --"</text>
+  <line x1="220" y1="162" x2="220" y2="186" stroke="#5A6472" stroke-width="1.5" marker-end="url(#c4)"/>
+  <rect x="60" y="192" width="320" height="46" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="220" y="212" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">SQL: where name = ?</text>
+  <text x="220" y="230" text-anchor="middle" font-size="12" fill="#6B7280">恶意串只是一个绑定值</text>
+  <text x="220" y="272" text-anchor="middle" font-size="12" fill="#6B7280">永远走 PreparedStatement，</text>
+  <text x="220" y="290" text-anchor="middle" font-size="12" fill="#6B7280">结构永不被输入改变</text>
+
+  <!-- ${} -->
+  <rect x="420" y="40" width="360" height="266" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="70" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="69" font-size="14" font-weight="600" fill="#252A33">${}：结构替换</text>
+  <rect x="440" y="86" width="320" height="40" rx="6" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="600" y="111" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">order by ${sort} ${direction}</text>
+  <text x="600" y="152" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">sort = "name" → 查白名单 → user_name</text>
+  <line x1="600" y1="162" x2="600" y2="186" stroke="#5A6472" stroke-width="1.5" marker-end="url(#c4)"/>
+  <rect x="440" y="192" width="320" height="46" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="600" y="212" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">order by user_name ASC</text>
+  <text x="600" y="230" text-anchor="middle" font-size="12" fill="#6B7280">片段来自服务端注册的固定映射</text>
+  <rect x="440" y="252" width="320" height="36" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="600" y="275" text-anchor="middle" font-size="12" fill="#252A33">未登记的 key 一律拒绝，绝不透传</text>
+
+  <text x="410" y="332" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜两种占位符的本质区别：#{} 换值不换形，${} 换形必须过白名单</text>
+</svg>

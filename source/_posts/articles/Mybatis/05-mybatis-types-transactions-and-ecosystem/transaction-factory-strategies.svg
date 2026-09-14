@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="e3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 接口 -->
+  <rect x="270" y="40" width="280" height="64" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <text x="410" y="68" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">TransactionFactory</text>
+  <text x="410" y="90" text-anchor="middle" font-size="12" fill="#6B7280">newTransaction(DataSource, level, autoCommit)</text>
+
+  <!-- 三实现 -->
+  <g stroke-width="1.5">
+    <rect x="46"  y="150" width="230" height="130" rx="8" fill="#00A087" fill-opacity="0.10" stroke="#00A087"/>
+    <rect x="296" y="150" width="230" height="130" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5"/>
+    <rect x="546" y="150" width="230" height="130" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="161" y="180">JdbcTransaction</text>
+    <text x="411" y="180">连接池（HikariCP）</text>
+    <text x="661" y="180">SpringManaged</text>
+  </g>
+  <g text-anchor="middle" font-size="12" fill="#6B7280">
+    <text x="161" y="208">借出即自有</text>
+    <text x="161" y="230">close = 物理关闭</text>
+    <text x="161" y="252">ownsConnection = true</text>
+    <text x="411" y="208">close = 归还池</text>
+    <text x="411" y="230">池负责复位 autoCommit 等状态</text>
+    <text x="411" y="252">框架不写复位逻辑</text>
+    <text x="661" y="208">连接线程绑定</text>
+    <text x="661" y="230">绝不擅自 commit / rollback</text>
+    <text x="661" y="252">提交权归 Spring 事务</text>
+  </g>
+
+  <line x1="330" y1="106" x2="200" y2="144" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e3)"/>
+  <line x1="410" y1="108" x2="410" y2="144" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e3)"/>
+  <line x1="490" y1="106" x2="620" y2="144" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e3)"/>
+
+  <text x="410" y="316" text-anchor="middle" font-size="12" fill="#6B7280">close 的真实含义由实现决定：关闭 / 归还 / 释放——Executor 只依赖接口语义</text>
+
+  <text x="410" y="348" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜事务工厂：连接从哪来、归谁管，只是三种可替换的策略</text>
+</svg>

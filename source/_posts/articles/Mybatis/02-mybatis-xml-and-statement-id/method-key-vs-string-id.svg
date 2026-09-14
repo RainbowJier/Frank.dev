@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：Method 作 key -->
+  <rect x="40" y="36" width="360" height="252" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">Method 对象作身份</text>
+  <circle cx="74" cy="104" r="3" fill="#8491B4"/>
+  <text x="88" y="108" font-size="13" fill="#252A33">运行期才有：代理调用时才取得</text>
+  <circle cx="74" cy="144" r="3" fill="#8491B4"/>
+  <text x="88" y="148" font-size="13" fill="#252A33">携带反射句柄，无法写进 XML</text>
+  <circle cx="74" cy="184" r="3" fill="#E64B35"/>
+  <text x="88" y="188" font-size="13" fill="#252A33">启动期 XML 解析拿不到它</text>
+  <text x="88" y="230" font-size="12" fill="#6B7280">两个世界没有共同语言，</text>
+  <text x="88" y="248" font-size="12" fill="#6B7280">注册表只能各自为政</text>
+
+  <!-- 面板 B：字符串 id -->
+  <rect x="420" y="36" width="360" height="252" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="65" font-size="14" font-weight="600" fill="#252A33">字符串 statement id</text>
+  <circle cx="454" cy="104" r="3" fill="#00A087"/>
+  <text x="468" y="108" font-size="13" fill="#252A33">启动期可写：namespace + "." + id</text>
+  <circle cx="454" cy="144" r="3" fill="#4DBBD5"/>
+  <text x="468" y="148" font-size="13" fill="#252A33">运行期可拼：接口全限定名 + 方法名</text>
+  <circle cx="454" cy="184" r="3" fill="#4DBBD5"/>
+  <text x="468" y="188" font-size="13" fill="#252A33">可打印、可比较、可调试</text>
+  <rect x="448" y="212" width="310" height="46" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="603" y="240" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">com.frank…UserMapper.findById</text>
+
+  <text x="410" y="312" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜为什么用字符串 id：让 XML 世界与代理世界共享同一身份</text>
+</svg>

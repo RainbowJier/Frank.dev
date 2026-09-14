@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A -->
+  <rect x="40" y="36" width="360" height="246" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">本地事务：close(true)</text>
+  <circle cx="74" cy="104" r="3" fill="#00A087"/>
+  <text x="88" y="108" font-size="13" fill="#252A33">未提交的工作按回滚收尾</text>
+  <circle cx="74" cy="144" r="3" fill="#4DBBD5"/>
+  <text x="88" y="148" font-size="13" fill="#252A33">清理一级缓存、关闭 batch 语句</text>
+  <circle cx="74" cy="184" r="3" fill="#4DBBD5"/>
+  <text x="88" y="188" font-size="13" fill="#252A33">归还/关闭连接（按工厂语义）</text>
+  <text x="88" y="232" font-size="12" fill="#6B7280">忘 commit 不会脏写库——</text>
+  <text x="88" y="250" font-size="12" fill="#6B7280">与第 01 篇 Session 行为一致</text>
+
+  <!-- 面板 B -->
+  <rect x="420" y="36" width="360" height="246" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="65" font-size="14" font-weight="600" fill="#252A33">Spring 托管：close(false)</text>
+  <circle cx="454" cy="104" r="3" fill="#E64B35"/>
+  <text x="468" y="108" font-size="13" fill="#252A33">框架绝不擅自 rollback</text>
+  <circle cx="454" cy="144" r="3" fill="#4DBBD5"/>
+  <text x="468" y="148" font-size="13" fill="#252A33">释放 batch 语句、清理缓存</text>
+  <circle cx="454" cy="184" r="3" fill="#4DBBD5"/>
+  <text x="468" y="188" font-size="13" fill="#252A33">releaseConnection 归还线程绑定连接</text>
+  <text x="468" y="232" font-size="12" fill="#6B7280">提交/回滚由 @Transactional 决定，</text>
+  <text x="468" y="250" font-size="12" fill="#6B7280">beforeCommit 前先 flush batch</text>
+
+  <text x="410" y="312" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜close 的两种语义由 externallyManagedTransaction 区分，提交权归属不同</text>
+</svg>

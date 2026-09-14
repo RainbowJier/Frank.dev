@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：完整 OGNL -->
+  <rect x="40" y="36" width="360" height="252" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">完整 OGNL 的代价</text>
+  <circle cx="74" cy="104" r="3" fill="#E64B35"/>
+  <text x="88" y="108" font-size="13" fill="#252A33" font-family="Consolas,monospace">name.toString() != null</text>
+  <circle cx="74" cy="144" r="3" fill="#E64B35"/>
+  <text x="88" y="148" font-size="13" fill="#252A33" font-family="Consolas,monospace">@System@exit(1)</text>
+  <circle cx="74" cy="184" r="3" fill="#8491B4"/>
+  <text x="88" y="188" font-size="13" fill="#252A33">模板即代码：可调用任意方法</text>
+  <text x="88" y="232" font-size="12" fill="#6B7280">「支持动态条件」退化成</text>
+  <text x="88" y="250" font-size="12" fill="#6B7280">「允许模板执行 Java」</text>
+
+  <!-- 面板 B：受限子集 -->
+  <rect x="420" y="36" width="360" height="252" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="65" font-size="14" font-weight="600" fill="#252A33">本篇的受限子集</text>
+  <circle cx="454" cy="104" r="3" fill="#00A087"/>
+  <text x="468" y="108" font-size="13" fill="#252A33" font-family="Consolas,monospace">name != null and age &gt;= 18</text>
+  <circle cx="454" cy="144" r="3" fill="#4DBBD5"/>
+  <text x="468" y="148" font-size="13" fill="#252A33">比较 + and/or，and 优先、短路</text>
+  <circle cx="454" cy="184" r="3" fill="#4DBBD5"/>
+  <text x="468" y="188" font-size="13" fill="#252A33">语法注册期校验，超集即拒</text>
+  <text x="468" y="232" font-size="12" fill="#6B7280">方法调用、括号、字符串字面量</text>
+  <text x="468" y="250" font-size="12" fill="#6B7280">一律 IllegalArgumentException</text>
+
+  <text x="410" y="312" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜表达式子集：能力不够时明确报错，而不是静默放宽安全边界</text>
+</svg>

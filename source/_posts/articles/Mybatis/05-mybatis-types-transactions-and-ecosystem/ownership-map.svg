@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 400" width="820" height="400"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="400" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="399" fill="none" stroke="#D9DFE8"/>
+
+  <g fill="#F4F7FA" stroke="#D9DFE8">
+    <rect x="40" y="32"  width="740" height="78" rx="10"/>
+    <rect x="40" y="122" width="740" height="78" rx="10"/>
+    <rect x="40" y="212" width="740" height="78" rx="10"/>
+    <rect x="40" y="302" width="740" height="60" rx="10"/>
+  </g>
+  <g font-size="14" font-weight="600" fill="#3C5488">
+    <rect x="64" y="52"  width="10" height="10" fill="#4DBBD5"/><text x="82" y="62">TypeHandlerRegistry 拥有：类型选择规则</text>
+    <rect x="64" y="142" width="10" height="10" fill="#3C5488"/><text x="82" y="152">TransactionFactory 拥有：连接来源决策</text>
+    <rect x="64" y="232" width="10" height="10" fill="#F39B7F"/><text x="82" y="242">BatchExecutor 拥有：本 session 待执行语句</text>
+    <rect x="64" y="320" width="10" height="10" fill="#00A087"/><text x="82" y="330">连接池 / Spring 各自拥有：物理连接与最终提交权</text>
+  </g>
+  <g fill="#FFFFFF" stroke-width="1.5" font-size="12" fill-opacity="1">
+    <g stroke="#4DBBD5">
+      <rect x="430" y="44" width="150" height="26" rx="6"/><text x="505" y="61" text-anchor="middle" fill="#252A33">参数侧编码</text>
+      <rect x="596" y="44" width="150" height="26" rx="6"/><text x="671" y="61" text-anchor="middle" fill="#252A33">结果侧解码</text>
+    </g>
+    <g stroke="#3C5488">
+      <rect x="430" y="134" width="150" height="26" rx="6"/><text x="505" y="151" text-anchor="middle" fill="#252A33">裸 JDBC</text>
+      <rect x="596" y="134" width="150" height="26" rx="6"/><text x="671" y="151" text-anchor="middle" fill="#252A33">连接池 / Spring</text>
+    </g>
+    <g stroke="#F39B7F">
+      <rect x="430" y="224" width="150" height="26" rx="6"/><text x="505" y="241" text-anchor="middle" fill="#252A33">addBatch 队列</text>
+      <rect x="596" y="224" width="150" height="26" rx="6"/><text x="671" y="241" text-anchor="middle" fill="#252A33">flush 边界</text>
+    </g>
+    <g stroke="#00A087">
+      <rect x="430" y="314" width="316" height="26" rx="6"/><text x="588" y="331" text-anchor="middle" fill="#252A33">Session 归还连接，不关闭 DataSource</text>
+    </g>
+  </g>
+  <text x="220" y="86" font-size="12" fill="#6B7280">同一套规则服务写入与读取，</text>
+  <text x="220" y="104" font-size="12" fill="#6B7280">Executor 不再散落 setObject</text>
+  <text x="220" y="176" font-size="12" fill="#6B7280">换实现只换工厂配置，</text>
+  <text x="220" y="194" font-size="12" fill="#6B7280">Executor 与 Session 零改动</text>
+  <text x="220" y="266" font-size="12" fill="#6B7280">查询与 commit 前必须 flush，</text>
+  <text x="220" y="284" font-size="12" fill="#6B7280">update 返回哨兵值</text>
+  <text x="220" y="346" font-size="12" fill="#6B7280">外部事务最终提交权在 Spring</text>
+
+  <text x="410" y="388" text-anchor="middle" font-size="12" fill="#6B7280">图 1｜本篇的所有权地图：每类资源只有一个明确的拥有者</text>
+</svg>

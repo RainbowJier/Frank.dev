@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 上层：Executor（使用方） -->
+  <rect x="40" y="36" width="300" height="76" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="64" y="60" width="10" height="10" fill="#4DBBD5"/>
+  <text x="82" y="70" font-size="14" font-weight="600" fill="#3C5488">Executor（使用方）</text>
+  <rect x="72" y="80" width="240" height="24" rx="6" fill="#FFFFFF" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="192" y="97" text-anchor="middle" font-size="12" fill="#252A33">getConnection() 用完即还语句</text>
+
+  <!-- 下层：Transaction（拥有方） -->
+  <rect x="40" y="136" width="740" height="110" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="64" y="160" width="10" height="10" fill="#3C5488"/>
+  <text x="82" y="170" font-size="14" font-weight="600" fill="#3C5488">Transaction（拥有方）</text>
+  <g fill="#FFFFFF" stroke-width="1.5">
+    <rect x="72" y="186" width="160" height="42" rx="6" stroke="#3C5488"/>
+    <rect x="252" y="186" width="160" height="42" rx="6" stroke="#3C5488"/>
+    <rect x="432" y="186" width="160" height="42" rx="6" stroke="#3C5488"/>
+    <rect x="612" y="186" width="144" height="42" rx="6" stroke="#00A087"/>
+  </g>
+  <g text-anchor="middle" font-size="13" fill="#252A33">
+    <text x="152" y="212">borrow 借连接</text>
+    <text x="332" y="212">commit / rollback</text>
+    <text x="512" y="212">close 幂等</text>
+    <text x="684" y="212">关闭后拒绝访问</text>
+  </g>
+
+  <!-- 使用关系箭头 -->
+  <line x1="190" y1="116" x2="190" y2="132" stroke="#5A6472" stroke-width="1.5" marker-end="url(#a4)"/>
+  <text x="206" y="128" font-size="11" fill="#6B7280">只使用，绝不 commit / close</text>
+
+  <!-- 底部：第 05 篇替换实现 -->
+  <g stroke-dasharray="5 4" stroke="#F39B7F" stroke-width="1.5" fill="none">
+    <path d="M 700 250 C 700 288, 400 292, 220 288"/>
+  </g>
+  <text x="410" y="278" text-anchor="middle" font-size="12" fill="#6B7280">第 05 篇：换成 连接池 / TransactionFactory / Spring 实现，Executor 零改动</text>
+
+  <text x="410" y="322" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜连接生命周期归 Transaction 所有，Executor 只使用不拥有</text>
+</svg>

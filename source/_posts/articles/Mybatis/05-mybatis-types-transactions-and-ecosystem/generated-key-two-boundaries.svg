@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="e4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 主轴 -->
+  <line x1="60" y1="150" x2="770" y2="150" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e4)"/>
+
+  <!-- 里程碑 -->
+  <circle cx="150" cy="150" r="5" fill="#3C5488"/>
+  <circle cx="370" cy="150" r="5" fill="#4DBBD5"/>
+  <circle cx="590" cy="150" r="5" fill="#E64B35"/>
+  <circle cx="720" cy="150" r="5" fill="#00A087"/>
+
+  <g text-anchor="middle">
+    <text x="150" y="114" font-size="13" font-weight="600" fill="#252A33">executeUpdate</text>
+    <text x="150" y="132" font-size="11" fill="#6B7280">RETURN_GENERATED_KEYS</text>
+    <text x="150" y="178" font-size="11" fill="#6B7280">语句需显式开启</text>
+    <text x="370" y="114" font-size="13" font-weight="600" fill="#252A33">getGeneratedKeys</text>
+    <text x="370" y="132" font-size="11" fill="#6B7280">键数 = 参数数，逐一回填实体</text>
+    <text x="370" y="178" font-size="11" fill="#6B7280">键此刻只对本事务可见</text>
+    <text x="590" y="114" font-size="13" font-weight="600" fill="#252A33">rollback 边界</text>
+    <text x="590" y="132" font-size="11" fill="#6B7280">拿到键 ≠ 已提交</text>
+    <text x="590" y="178" font-size="11" fill="#6B7280">回滚后其他连接 count = 0</text>
+    <text x="720" y="114" font-size="13" font-weight="600" fill="#252A33">commit</text>
+    <text x="720" y="178" font-size="11" fill="#6B7280">此后全局可见</text>
+  </g>
+
+  <rect x="120" y="228" width="580" height="40" rx="6" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <text x="410" y="253" text-anchor="middle" font-size="12" fill="#6B7280">keyProperty 在语句上声明（可信 mapper 定义）；猜"第一列就是 id"在复合主键/sequence 下全错</text>
+
+  <text x="410" y="310" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜生成键回填：拿键与提交是两个独立边界</text>
+</svg>

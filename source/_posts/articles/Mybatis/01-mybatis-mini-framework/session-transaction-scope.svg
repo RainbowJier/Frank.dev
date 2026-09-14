@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" width="820" height="310"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="310" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="309" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="g5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#00A087"/>
+    </marker>
+    <marker id="o5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#F39B7F"/>
+    </marker>
+  </defs>
+
+  <!-- 打开 -->
+  <rect x="40" y="90" width="150" height="66" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="115" y="118" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">openSession()</text>
+  <text x="115" y="140" text-anchor="middle" font-size="12" fill="#6B7280">借连接 + 开事务</text>
+
+  <!-- 会话内多语句 -->
+  <rect x="250" y="90" width="200" height="66" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="350" y="118" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">语句 1 … 语句 N</text>
+  <text x="350" y="140" text-anchor="middle" font-size="12" fill="#6B7280">同一连接、同一事务</text>
+
+  <!-- 两条出口 -->
+  <rect x="540" y="36" width="240" height="62" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="660" y="62" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">commit() → 已提交持久化</text>
+  <text x="660" y="84" text-anchor="middle" font-size="12" fill="#6B7280">其他连接此后可见</text>
+
+  <rect x="540" y="148" width="240" height="62" rx="8" fill="#F39B7F" fill-opacity="0.12" stroke="#F39B7F" stroke-width="1.5"/>
+  <text x="660" y="174" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">close() → 回滚未提交</text>
+  <text x="660" y="196" text-anchor="middle" font-size="12" fill="#6B7280">忘 commit 不会脏写库</text>
+
+  <line x1="192" y1="123" x2="244" y2="123" stroke="#5A6472" stroke-width="1.5" marker-end="url(#a5)"/>
+  <path d="M 452 110 C 500 100, 500 67, 534 66" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#g5)"/>
+  <path d="M 452 138 C 500 148, 500 178, 534 179" fill="none" stroke="#F39B7F" stroke-width="1.5" marker-end="url(#o5)"/>
+
+  <!-- 底注：配置共享 -->
+  <text x="410" y="248" text-anchor="middle" font-size="12" fill="#6B7280">Configuration 全局唯一：数据源与语句元数据注册一次、只读共享；</text>
+  <text x="410" y="266" text-anchor="middle" font-size="12" fill="#6B7280">Session 用完即弃——两种生命周期不互相纠缠</text>
+
+  <text x="410" y="298" text-anchor="middle" font-size="12" fill="#6B7280">图 7｜一次业务会话的边界：打开即事务，两条出口语义固定</text>
+</svg>

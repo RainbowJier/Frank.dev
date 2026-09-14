@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" width="820" height="350"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="350" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="349" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="e5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 队列区 -->
+  <rect x="40" y="46" width="470" height="118" rx="10" fill="#3C5488" fill-opacity="0.06" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="275" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">BatchExecutor 内部队列</text>
+  <g font-family="Consolas,monospace" font-size="12" fill="#252A33" text-anchor="middle">
+    <rect x="64"  y="92" width="120" height="46" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+    <text x="124" y="112">addBatch #1</text><text x="124" y="130" fill="#6B7280" font-size="11">返回哨兵值</text>
+    <rect x="200" y="92" width="120" height="46" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+    <text x="260" y="112">addBatch #2</text><text x="260" y="130" fill="#6B7280" font-size="11">同 SQL 复用条目</text>
+    <rect x="336" y="92" width="150" height="46" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+    <text x="411" y="112">SQL 变化</text><text x="411" y="130" fill="#6B7280" font-size="11">新开一个 batch</text>
+  </g>
+  <text x="275" y="188" text-anchor="middle" font-size="12" fill="#6B7280">影响行数此刻不存在——update() 不能当行数用</text>
+
+  <!-- flush -->
+  <rect x="550" y="46" width="230" height="118" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="2"/>
+  <text x="665" y="76" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">flushStatements()</text>
+  <text x="665" y="100" text-anchor="middle" font-size="12" fill="#6B7280">executeBatch → counts[]</text>
+  <text x="665" y="122" text-anchor="middle" font-size="12" fill="#6B7280">逐实体回填生成键</text>
+  <text x="665" y="144" text-anchor="middle" font-size="12" fill="#6B7280">关闭并清空全部语句</text>
+  <line x1="516" y1="105" x2="544" y2="105" stroke="#5A6472" stroke-width="2" marker-end="url(#e5)"/>
+
+  <!-- 触发时机 -->
+  <g font-size="12" fill="#252A33">
+    <rect x="64" y="232" width="200" height="34" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="164" y="254" text-anchor="middle">batch 后查询：先 flush</text>
+    <rect x="284" y="232" width="200" height="34" rx="6" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+    <text x="384" y="254" text-anchor="middle">commit：先 flush 再提交</text>
+    <rect x="504" y="232" width="200" height="34" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+    <text x="604" y="254" text-anchor="middle">flush 失败：绝不 commit</text>
+  </g>
+  <line x1="665" y1="170" x2="604" y2="228" stroke="#5A6472" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#e5)"/>
+  <text x="410" y="302" text-anchor="middle" font-size="12" fill="#6B7280">Spring 外部事务不调 commit：beforeCommit 回调里 flush（第十一节）</text>
+
+  <text x="410" y="334" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜批处理协议：入队零网络往返，flush 是唯一真实的执行边界</text>
+</svg>

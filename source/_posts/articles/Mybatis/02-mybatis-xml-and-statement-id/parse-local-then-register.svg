@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" width="820" height="330"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="330" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="b5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 输入 -->
+  <rect x="40" y="60" width="180" height="76" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="130" y="92" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">一份 mapper XML</text>
+  <text x="130" y="116" text-anchor="middle" font-size="12" fill="#6B7280">语句 1 … 语句 N</text>
+
+  <!-- 局部解析 -->
+  <rect x="270" y="52" width="200" height="92" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="370" y="82" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">局部 Map 解析</text>
+  <text x="370" y="106" text-anchor="middle" font-size="12" fill="#6B7280">namespace、id、SQL、返回形状</text>
+  <text x="370" y="126" text-anchor="middle" font-size="12" fill="#6B7280">逐条校验，先不注册</text>
+
+  <line x1="224" y1="98" x2="264" y2="98" stroke="#5A6472" stroke-width="1.5" marker-end="url(#b5)"/>
+
+  <!-- 全部成功 → 注册 -->
+  <rect x="530" y="40" width="250" height="60" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="655" y="65" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">全部成功 → 统一注册</text>
+  <text x="655" y="87" text-anchor="middle" font-size="12" fill="#6B7280">namespace + N 条语句一次入库</text>
+  <path d="M 474 88 C 500 78, 504 68, 524 68" fill="none" stroke="#00A087" stroke-width="1.5" marker-end="url(#b5)"/>
+  <text x="500" y="56" font-size="11" fill="#6B7280">通过</text>
+
+  <!-- 任一失败 → 丢弃 -->
+  <rect x="530" y="140" width="250" height="60" rx="8" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="655" y="165" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">任一失败 → 整体不注册</text>
+  <text x="655" y="187" text-anchor="middle" font-size="12" fill="#6B7280">Configuration 里一条都不留</text>
+  <path d="M 474 116 C 500 130, 504 148, 524 156" fill="none" stroke="#E64B35" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#b5)"/>
+  <text x="500" y="146" font-size="11" fill="#6B7280">失败</text>
+
+  <!-- 底部解释 -->
+  <text x="410" y="248" text-anchor="middle" font-size="12" fill="#6B7280">否则：坏文件的半份语句已注册，</text>
+  <text x="410" y="266" text-anchor="middle" font-size="12" fill="#6B7280">运行期一半语句能用、一半抛 Unknown id——最难排查的状态</text>
+
+  <text x="410" y="310" text-anchor="middle" font-size="12" fill="#6B7280">图 5｜先局部完整解析、后统一注册：半份坏文件不会污染 Configuration</text>
+</svg>

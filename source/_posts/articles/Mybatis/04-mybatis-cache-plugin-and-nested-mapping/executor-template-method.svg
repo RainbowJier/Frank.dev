@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：重构前 -->
+  <rect x="40" y="36" width="360" height="276" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">第 03 篇：单方法执行器</text>
+  <rect x="64" y="88" width="312" height="120" rx="8" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="220" y="116" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">execute(ms, parameter)</text>
+  <text x="220" y="142" text-anchor="middle" font-size="12" fill="#6B7280">JDBC 准备 + 绑定 + 结果形状 + 关闭</text>
+  <text x="220" y="162" text-anchor="middle" font-size="12" fill="#6B7280">全部挤在一个方法里</text>
+  <circle cx="86" cy="196" r="3" fill="#E64B35"/>
+  <text x="100" y="200" font-size="12" fill="#252A33">没有挂缓存检查的位置</text>
+  <circle cx="86" cy="228" r="3" fill="#E64B35"/>
+  <text x="100" y="232" font-size="12" fill="#252A33">没有 commit/rollback/close 生命周期</text>
+  <circle cx="86" cy="260" r="3" fill="#E64B35"/>
+  <text x="100" y="264" font-size="12" fill="#252A33">插件无稳定入口可代理</text>
+
+  <!-- 面板 B：重构后 -->
+  <rect x="420" y="36" width="360" height="276" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="65" font-size="14" font-weight="600" fill="#252A33">重构后：模板方法</text>
+  <rect x="444" y="84" width="312" height="70" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="600" y="110" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">BaseExecutor（稳定入口）</text>
+  <text x="600" y="134" text-anchor="middle" font-size="12" fill="#6B7280">query / update / commit / rollback / close</text>
+  <rect x="444" y="170" width="312" height="56" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="600" y="194" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">SimpleExecutor（JDBC 子类）</text>
+  <text x="600" y="214" text-anchor="middle" font-size="12" fill="#6B7280">只实现 doQuery / doUpdate</text>
+  <text x="600" y="252" text-anchor="middle" font-size="12" fill="#6B7280">缓存检查插在 query 入口，插件包在链外，</text>
+  <text x="600" y="270" text-anchor="middle" font-size="12" fill="#6B7280">历史测试原样通过——行为不变的硬验收</text>
+
+  <text x="410" y="340" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜先做行为不变的重构，缓存与插件才有挂载点</text>
+</svg>

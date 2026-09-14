@@ -1,1304 +1,2239 @@
 ---
-title: "手写 MyBatis 04：缓存、插件与嵌套映射"
+title: '手写 MyBatis 04：缓存、插件与嵌套映射（项目增量）'
 date: 2026-09-12 10:00:00
-categories: [Mybatis]
+categories:
+  - Mybatis
 tags:
   - Java
   - MyBatis
   - 缓存
   - 插件
-description: 承接第03篇动态 SQL 与参数处理，使用 Java 17、H2 和 Maven 实现 PerpetualCache、CacheKey、一级缓存、事务边界、插件代理链、ResultMap 与嵌套映射。
-
+  - ResultMap
+description: 承接第 03 篇的 com.frank.mybatis 项目，逐文件实现一级和二级缓存、插件签名链、ResultMap 嵌套映射与 chapter04 集成测试。
 lang: zh-CN
 ---
 
-> 本篇承接《手写 MyBatis 03：执行器与事务边界》，继续把一次 JDBC 查询扩展成可复用的执行链。我们逐步实现 PerpetualCache、一级缓存、TransactionalCache、CacheKey、更新清理、Interceptor/Plugin 代理链、签名校验，以及 ResultMap 的 association、collection、多表结果和去重。
+> 本篇承接第 03 篇，不创建独立工程、不增加独立 `pom.xml`、不套单文件外壳。所有生产代码都位于真实 `com.frank.mybatis` 包；所有示例都是对既有工程的逐文件增量。
+>
+> 第 03 篇已经完成 `MappedStatement -> BoundSql -> 参数绑定 -> JDBC -> ResultSetHandler`。本篇在这条链上加入缓存、插件与对象图映射；动态 SQL、参数解析、会话和连接生命周期继续复用原实现。
 
-## 一、目标与实验环境
+## 一、范围、边界与最终调用链
 
-最终链路：`Mapper -> SqlSession -> CachingExecutor -> CacheKey -> PerpetualCache -> StatementHandler -> JDBC -> ResultSetHandler -> ResultMap`。缓存不放在 Mapper 代理，而放在执行器模板；这样 XML、注解和测试调用共享同一语义。环境固定为 Java 17、Maven、H2 2.3.232、JUnit 5，不依赖真实 MyBatis。
+**为什么需要这一步：** 缓存、插件、嵌套映射是三件互相纠缠的事——缓存要定义「什么算同一次查询」，插件要挂进执行链，嵌套映射要改写结果处理。先把最终调用链和「不做清单」画出来，后面每一节才知道自己在链上的位置。
 
-```xml
-<properties><maven.compiler.release>17</maven.compiler.release></properties>
-<dependency><groupId>com.h2database</groupId><artifactId>h2</artifactId><version>2.3.232</version><scope>test</scope></dependency>
+![图 1：本篇的最终查询链](chapter04-final-chain.svg)
+
+本篇完成四件事：
+
+1. 用 `Cache`、`PerpetualCache` 和 `CacheKey` 实现会话级一级缓存。
+2. 用 `TransactionalCache` 实现 namespace 级二级缓存的 commit/rollback 边界。
+3. 用 `Interceptor`、`Invocation`、`Plugin`、`Signature` 实现精确签名的 JDK 代理链。
+4. 用 `ResultMapping`、`ResultMap` 和改造后的 `ResultSetHandler` 完成 association、collection、JOIN 去重与 LEFT JOIN 空子项处理。
+
+最终查询链如下：
+
+```text
+MapperProxy
+  -> SqlSession
+    -> Executor（一级缓存）
+      -> namespace TransactionalCache（二级缓存）
+        -> JDBC Statement
+          -> ResultSetHandler
+            -> ResultMap
+              -> association / collection
 ```
 
-测试表包含用户、订单、明细：
+本篇不实现分布式缓存、跨 JVM 序列化、懒加载、多层递归对象图或全功能 XML ResultMap 解析。先将最容易出错的运行时边界做正确：结果身份、事务可见性、代理签名和 JOIN 折叠。
 
-```sql
-create table t_user(id bigint primary key,user_name varchar(100) not null,age integer);
-create table t_order(id bigint primary key,user_id bigint not null,order_no varchar(64));
-create table t_order_item(id bigint primary key,order_id bigint not null,sku varchar(64),quantity integer not null);
-insert into t_user values(1,'Frank',30),(2,'Ada',null);
-insert into t_order values(10,1,'O-001'),(11,1,'O-002');
-insert into t_order_item values(100,10,'JAVA-17',2),(101,10,'H2',1);
+### 1.1 当前 schema 的硬边界
+
+当前项目的通用 schema **只有 `t_user`**。不要为了本篇把订单表加入第 03 篇的 schema，也不要在生产资源中声明 `t_order`、`t_order_item`。
+
+嵌套映射实验专用表只新增到：
+
+```text
+src/test/resources/schema-ch04.sql
 ```
 
-`age` 的 NULL、订单 10 的重复父行、订单 11 的空集合分别覆盖三个关键边界。
+chapter04 测试夹具在 H2 测试库中加载它。这样第 03 篇的用户测试仍是最小基线，订单数据也不会误被业务代码当作当前主模型。
 
-## 二、Cache 与 PerpetualCache
+### 1.2 文件增量清单
 
-缓存需要稳定 id、读写、删除、清空和大小，不是 Map 的随意包装。
+新增的核心文件必须是以下路径：
+
+```text
+src/main/java/com/frank/mybatis/cache/Cache.java
+src/main/java/com/frank/mybatis/cache/PerpetualCache.java
+src/main/java/com/frank/mybatis/cache/CacheKey.java
+src/main/java/com/frank/mybatis/cache/TransactionalCache.java
+
+src/main/java/com/frank/mybatis/plugin/Interceptor.java
+src/main/java/com/frank/mybatis/plugin/Invocation.java
+src/main/java/com/frank/mybatis/plugin/Plugin.java
+src/main/java/com/frank/mybatis/plugin/Signature.java
+
+src/main/java/com/frank/mybatis/mapping/ResultMapping.java
+src/main/java/com/frank/mybatis/mapping/ResultMap.java
+
+src/test/resources/schema-ch04.sql
+src/test/java/com/frank/mybatis/chapter04/Chapter04Fixture.java
+src/test/java/com/frank/mybatis/chapter04/CacheChapter04Test.java
+src/test/java/com/frank/mybatis/chapter04/PluginChapter04Test.java
+src/test/java/com/frank/mybatis/chapter04/NestedMappingChapter04Test.java
+```
+
+修改既有文件：
+
+```text
+src/main/java/com/frank/mybatis/executor/Executor.java
+src/main/java/com/frank/mybatis/executor/SimpleExecutor.java
+src/main/java/com/frank/mybatis/executor/ResultSetHandler.java
+src/main/java/com/frank/mybatis/session/DefaultSqlSession.java
+src/main/java/com/frank/mybatis/session/DefaultSqlSessionFactory.java
+src/main/java/com/frank/mybatis/session/Configuration.java
+src/main/java/com/frank/mybatis/mapping/MappedStatement.java
+```
+
+新增的执行器骨架文件：
+
+```text
+src/main/java/com/frank/mybatis/executor/BaseExecutor.java
+src/main/java/com/frank/mybatis/session/RowBounds.java
+src/main/java/com/frank/mybatis/session/ResultHandler.java
+src/main/java/com/frank/mybatis/exceptions/PersistenceException.java
+```
+
+执行器重构（第二节）是本篇其余章节的地基：`BaseExecutor` 提供缓存检查的挂载点与事务生命周期，`SimpleExecutor` 退化为纯 JDBC 子类。
+
+### 1.3 代码块阅读规则
+
+每个 Java 块均标明文件、package 和前置依赖；第 03 篇已有的 `Configuration`、`MappedStatement`、`BoundSql`、`SqlSession`、`Transaction` 直接复用，本文不重定义它们；`RowBounds`、`ResultHandler`、`PersistenceException` 与 `BaseExecutor` 在第二节引入。
+
+文件：命令行｜package：无｜前置依赖：第 03 篇项目已可编译
+
+```bash
+mvn -q test
+```
+
+基线不通过时先修第 03 篇，避免缓存、代理和结果形状的变化掩盖原始错误。
+
+## 二、先重构执行器：模板方法与生命周期
+
+**为什么需要这一步：** 缓存和插件都要挂在执行器上，而第 03 篇的 `SimpleExecutor` 是一个单方法类：JDBC 准备、参数绑定、结果形状判断和资源关闭全部挤在 `execute` 里，既没有放缓存检查的位置，也没有 commit/rollback/close 生命周期。本节先做一次**不改行为**的结构重构，为后续章节腾出挂载点；重构完成后第 01～03 篇的全部测试必须原样通过，这是硬验收。
+
+![图 2：单方法执行器到模板方法的重构](executor-template-method.svg)
+
+重构后的分工：
+
+| 组件 | 职责 |
+| --- | --- |
+| `session/RowBounds`（新增） | 逻辑分页参数，参与 CacheKey |
+| `session/ResultHandler`（新增） | 逐批接收查询结果的回调接口 |
+| `exceptions/PersistenceException`（新增） | 统一包装 SQLException 的运行时异常 |
+| `Executor`（改写） | query/update/commit/rollback/close 五个生命周期方法 |
+| `BaseExecutor`（新增） | 持有 Configuration 与 Transaction 的模板方法基类 |
+| `SimpleExecutor`（改写） | 只做 JDBC 的 `doQuery`/`doUpdate` 实现 |
+| `DefaultSqlSession`、`DefaultSqlSessionFactory`（改写） | Session 委托执行器生命周期；工厂预留插件包装点 |
+
+### 2.1 RowBounds 与 ResultHandler
+
+文件：`src/main/java/com/frank/mybatis/session/RowBounds.java`｜package：`com.frank.mybatis.session`｜前置依赖：无
 
 ```java
+package com.frank.mybatis.session;
+
+public final class RowBounds {
+
+    public static final RowBounds DEFAULT = new RowBounds(0, Integer.MAX_VALUE);
+
+    private final int offset;
+    private final int limit;
+
+    public RowBounds(int offset, int limit) {
+        if (offset < 0 || limit < 1) {
+            throw new IllegalArgumentException(
+                    "invalid row bounds: " + offset + ", " + limit);
+        }
+        this.offset = offset;
+        this.limit = limit;
+    }
+
+    public int getOffset() { return offset; }
+    public int getLimit() { return limit; }
+}
+```
+
+本篇不实现物理分页（把 offset/limit 翻译成 `LIMIT` 子句需要数据库方言），但 CacheKey 从现在起必须包含它们，否则第 1 页和第 2 页会互相命中。
+
+文件：`src/main/java/com/frank/mybatis/session/ResultHandler.java`｜package：`com.frank.mybatis.session`｜前置依赖：无
+
+```java
+package com.frank.mybatis.session;
+
+import java.util.List;
+
+public interface ResultHandler<E> {
+    void handleResult(List<E> results);
+}
+```
+
+### 2.2 统一异常 PersistenceException
+
+文件：`src/main/java/com/frank/mybatis/exceptions/PersistenceException.java`｜package：`com.frank.mybatis.exceptions`｜前置依赖：无
+
+```java
+package com.frank.mybatis.exceptions;
+
+public class PersistenceException extends RuntimeException {
+
+    public PersistenceException(String message) { super(message); }
+
+    public PersistenceException(String message, Throwable cause) { super(message, cause); }
+}
+```
+
+第 01～03 篇用 `IllegalStateException` 包装 JDBC 失败。本篇起统一换成 `PersistenceException`：它是"持久层失败"的语义类型，第五节的 `close()` 与第八节的插件解包都依赖能识别它。把执行器与 Session 里的旧包装点全局替换即可，异常语义不变。
+
+### 2.3 MappedStatement 增量：resultMap 与 useCache 两个可选字段
+
+第十章的嵌套映射与第七节的二级缓存都需要在语句元数据上挂可选配置。给第 03 篇的 `MappedStatement` 增加两个默认关闭/为空的字段，旧构造器与 `fromMapperMethod` 工厂不受影响：
+
+文件：`src/main/java/com/frank/mybatis/mapping/MappedStatement.java`（增量）｜package：`com.frank.mybatis.mapping`｜前置依赖：本篇 `ResultMap`（第十章创建，字段先声明为可空引用）
+
+```java
+private final ResultMap resultMap;
+private final boolean useCache;
+
+public MappedStatement(String id, String namespace, SqlSource sqlSource,
+                       SqlCommandType commandType, Class<?> parameterType,
+                       Class<?> resultType, boolean returnsMany, Method method) {
+    this(id, namespace, sqlSource, commandType, parameterType,
+            resultType, returnsMany, method, null, true);
+}
+
+public MappedStatement(String id, String namespace, SqlSource sqlSource,
+                       SqlCommandType commandType, Class<?> parameterType,
+                       Class<?> resultType, boolean returnsMany, Method method,
+                       ResultMap resultMap, boolean useCache) {
+    // ……原有字段赋值保持不变，追加：
+    this.resultMap = resultMap;
+    this.useCache = useCache;
+}
+
+public ResultMap getResultMap() { return resultMap; }
+public boolean isUseCache() { return useCache; }
+```
+
+`resultMap` 默认 `null` 表示沿用 `resultType` 简单映射，第 03 篇所有语句行为不变。
+
+### 2.4 Executor 接口与 BaseExecutor
+
+文件：`src/main/java/com/frank/mybatis/executor/Executor.java`（整体替换）｜package：`com.frank.mybatis.executor`｜前置依赖：`MappedStatement`、`RowBounds`、`ResultHandler`
+
+```java
+package com.frank.mybatis.executor;
+
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.session.ResultHandler;
+import com.frank.mybatis.session.RowBounds;
+import java.sql.SQLException;
+import java.util.List;
+
+public interface Executor {
+
+    <E> List<E> query(MappedStatement ms, Object parameter,
+                      RowBounds bounds, ResultHandler<E> handler) throws SQLException;
+
+    int update(MappedStatement ms, Object parameter) throws SQLException;
+
+    void commit(boolean required) throws SQLException;
+
+    void rollback(boolean required) throws SQLException;
+
+    void close(boolean forceRollback);
+}
+```
+
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（新增）｜package：`com.frank.mybatis.executor`｜前置依赖：`Executor`、`Configuration`、`Transaction`、`PersistenceException`
+
+```java
+package com.frank.mybatis.executor;
+
+import com.frank.mybatis.exceptions.PersistenceException;
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.session.Configuration;
+import com.frank.mybatis.session.ResultHandler;
+import com.frank.mybatis.session.RowBounds;
+import com.frank.mybatis.transaction.Transaction;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Objects;
+
+public abstract class BaseExecutor implements Executor {
+
+    protected final Configuration configuration;
+    protected final Transaction transaction;
+
+    protected BaseExecutor(Configuration configuration, Transaction transaction) {
+        this.configuration = Objects.requireNonNull(configuration, "configuration");
+        this.transaction = Objects.requireNonNull(transaction, "transaction");
+    }
+
+    @Override
+    public <E> List<E> query(MappedStatement ms, Object parameter,
+                             RowBounds bounds, ResultHandler<E> handler)
+            throws SQLException {
+        return doQuery(ms, parameter, bounds, handler);
+    }
+
+    @Override
+    public int update(MappedStatement ms, Object parameter) throws SQLException {
+        return doUpdate(ms, parameter);
+    }
+
+    @Override
+    public void commit(boolean required) throws SQLException {
+        if (required) {
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void rollback(boolean required) throws SQLException {
+        if (required) {
+            transaction.rollback();
+        }
+    }
+
+    @Override
+    public void close(boolean forceRollback) {
+        try {
+            if (forceRollback) {
+                transaction.rollback();
+            }
+        } catch (SQLException failure) {
+            throw new PersistenceException("close executor failed", failure);
+        } finally {
+            transaction.close();
+        }
+    }
+
+    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter,
+            RowBounds bounds, ResultHandler<E> handler) throws SQLException;
+
+    protected abstract int doUpdate(MappedStatement ms, Object parameter)
+            throws SQLException;
+}
+```
+
+`query`/`update` 是稳定入口，`doQuery`/`doUpdate` 是子类扩展点；第六节会直接在 `query` 入口插入一级缓存检查，而不动 JDBC 代码。`close(true)` 的语义是"未显式提交的会话按回滚收尾"，与第 01 篇 Session 的关闭行为一致。
+
+### 2.5 SimpleExecutor 改写为 JDBC 子类
+
+文件：`src/main/java/com/frank/mybatis/executor/SimpleExecutor.java`（整体替换）｜package：`com.frank.mybatis.executor`｜前置依赖：`BaseExecutor`、`ParameterHandler`、`ResultSetHandler`、`BoundSql`
+
+```java
+package com.frank.mybatis.executor;
+
+import com.frank.mybatis.mapping.BoundSql;
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.mapping.SqlCommandType;
+import com.frank.mybatis.session.ResultHandler;
+import com.frank.mybatis.session.RowBounds;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SimpleExecutor extends BaseExecutor {
+
+    private final ResultSetHandler resultHandler = new ResultSetHandler();
+
+    public SimpleExecutor(com.frank.mybatis.session.Configuration configuration,
+                          com.frank.mybatis.transaction.Transaction transaction) {
+        super(configuration, transaction);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <E> List<E> doQuery(MappedStatement ms, Object parameter,
+                                  RowBounds bounds, ResultHandler<E> handler)
+            throws SQLException {
+        if (ms.getCommandType() != SqlCommandType.SELECT) {
+            throw new IllegalArgumentException("query on a DML statement: " + ms.getId());
+        }
+        BoundSql boundSql = ms.getSqlSource().getBoundSql(parameter);
+        try (PreparedStatement statement = transaction.getConnection()
+                .prepareStatement(boundSql.getSql())) {
+            new ParameterHandler(configuration.getTypeHandlerRegistry())
+                    .setParameters(statement, boundSql);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                List<?> rows = resultHandler.handle(resultSet, ms.getResultType());
+                List<E> result = (List<E>) trimToBounds(rows, bounds);
+                if (handler != null) {
+                    handler.handleResult(result);
+                }
+                return result;
+            }
+        }
+    }
+
+    @Override
+    protected int doUpdate(MappedStatement ms, Object parameter) throws SQLException {
+        if (ms.getCommandType() == SqlCommandType.SELECT) {
+            throw new IllegalArgumentException("update on a SELECT statement: " + ms.getId());
+        }
+        BoundSql boundSql = ms.getSqlSource().getBoundSql(parameter);
+        try (PreparedStatement statement = transaction.getConnection()
+                .prepareStatement(boundSql.getSql())) {
+            new ParameterHandler(configuration.getTypeHandlerRegistry())
+                    .setParameters(statement, boundSql);
+            return statement.executeUpdate();
+        }
+    }
+
+    private static List<?> trimToBounds(List<?> rows, RowBounds bounds) {
+        int fromIndex = Math.min(bounds.getOffset(), rows.size());
+        int toIndex = Math.min(bounds.getOffset() + bounds.getLimit(), rows.size());
+        return new ArrayList<>(rows.subList(fromIndex, toIndex));
+    }
+}
+```
+
+第 03 篇 `execute` 里的 JDBC 逻辑原样搬进 `doQuery`/`doUpdate`；"单查返回多行即失败"的形状检查上移到 Session（见下一小节），执行器从此只返回列表。连接改从 `transaction.getConnection()` 取，与第 03 篇语义一致。
+
+### 2.6 Session 与工厂的对应改写
+
+文件：`src/main/java/com/frank/mybatis/session/DefaultSqlSession.java`（整体替换）｜package：`com.frank.mybatis.session`｜前置依赖：本篇 `Executor`
+
+```java
+package com.frank.mybatis.session;
+
+import com.frank.mybatis.exceptions.PersistenceException;
+import com.frank.mybatis.executor.Executor;
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.mapping.SqlCommandType;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.List;
+
+public final class DefaultSqlSession implements SqlSession {
+
+    private final Configuration configuration;
+    private final Executor executor;
+    private boolean closed;
+
+    public DefaultSqlSession(Configuration configuration, Executor executor) {
+        this.configuration = configuration;
+        this.executor = executor;
+    }
+
+    @Override
+    public <T> T selectOne(String id, Object parameter, Class<T> type) {
+        MappedStatement statement = statement(id, SqlCommandType.SELECT);
+        if (statement.returnsMany()) {
+            throw new IllegalArgumentException("selectOne on a list statement: " + id);
+        }
+        List<T> rows = query(statement, parameter);
+        if (rows.isEmpty()) {
+            return null;
+        }
+        if (rows.size() > 1) {
+            throw new PersistenceException("selectOne returned multiple rows: " + id);
+        }
+        return type.cast(rows.get(0));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> List<T> selectList(String id, Object parameter, Class<T> type) {
+        MappedStatement statement = statement(id, SqlCommandType.SELECT);
+        if (!statement.returnsMany()) {
+            throw new IllegalArgumentException("selectList on a single-row statement: " + id);
+        }
+        return (List<T>) query(statement, parameter);
+    }
+
+    @Override
+    public int insert(String id, Object parameter) {
+        return updateStatement(id, parameter, SqlCommandType.INSERT);
+    }
+
+    @Override
+    public int update(String id, Object parameter) {
+        return updateStatement(id, parameter, SqlCommandType.UPDATE);
+    }
+
+    @Override
+    public int delete(String id, Object parameter) {
+        return updateStatement(id, parameter, SqlCommandType.DELETE);
+    }
+
+    @Override
+    public <T> T getMapper(Class<T> type) {
+        requireOpen();
+        return configuration.getMapperRegistry().getMapper(type, this);
+    }
+
+    @Override
+    public void commit() {
+        requireOpen();
+        try {
+            executor.commit(true);
+        } catch (SQLException failure) {
+            throw new PersistenceException("commit failed", failure);
+        }
+    }
+
+    @Override
+    public void rollback() {
+        requireOpen();
+        try {
+            executor.rollback(true);
+        } catch (SQLException failure) {
+            throw new PersistenceException("rollback failed", failure);
+        }
+    }
+
+    @Override
+    public void close() {
+        if (!closed) {
+            closed = true;
+            executor.close(true);
+        }
+    }
+
+    private <T> List<T> query(MappedStatement statement, Object parameter) {
+        requireOpen();
+        try {
+            return executor.query(statement, parameter, RowBounds.DEFAULT, null);
+        } catch (SQLException failure) {
+            throw new PersistenceException("query failed: " + statement.getId(), failure);
+        }
+    }
+
+    private int updateStatement(String id, Object parameter, SqlCommandType commandType) {
+        requireOpen();
+        try {
+            return executor.update(statement(id, commandType), parameter);
+        } catch (SQLException failure) {
+            throw new PersistenceException("update failed: " + id, failure);
+        }
+    }
+
+    private MappedStatement statement(String id, SqlCommandType command) {
+        requireOpen();
+        MappedStatement statement = configuration.getMappedStatement(id);
+        if (statement.getCommandType() != command) {
+            throw new IllegalArgumentException("command type mismatch: " + id);
+        }
+        return statement;
+    }
+
+    private void requireOpen() {
+        if (closed) {
+            throw new IllegalStateException("SqlSession is closed");
+        }
+    }
+}
+```
+
+`SqlSession` 接口签名与第 03 篇完全一致，Mapper 代理和第 01～03 篇的所有测试不需要任何修改。
+
+文件：`src/main/java/com/frank/mybatis/session/DefaultSqlSessionFactory.java`（整体替换）｜package：`com.frank.mybatis.session`｜前置依赖：本篇 `Executor`、`BaseExecutor`
+
+```java
+package com.frank.mybatis.session;
+
+import com.frank.mybatis.executor.Executor;
+import com.frank.mybatis.executor.SimpleExecutor;
+import com.frank.mybatis.transaction.JdbcTransaction;
+import com.frank.mybatis.transaction.Transaction;
+
+public class DefaultSqlSessionFactory implements SqlSessionFactory {
+
+    private final Configuration configuration;
+
+    public DefaultSqlSessionFactory(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    @Override
+    public SqlSession openSession() {
+        Transaction transaction = new JdbcTransaction(configuration.getDataSource());
+        return new DefaultSqlSession(configuration, newExecutor(transaction));
+    }
+
+    protected Executor newExecutor(Transaction transaction) {
+        return new SimpleExecutor(configuration, transaction);
+    }
+
+    protected Configuration getConfiguration() {
+        return configuration;
+    }
+}
+```
+
+`newExecutor` 是第八节插件链的包装点；现在它只返回裸执行器。工厂从 `final class` 改为可继承的普通类，第三节测试夹具会覆写 `newExecutor` 注入计数器。
+
+### 2.7 Configuration 增量：environmentId
+
+CacheKey 需要区分环境（同一语句在测试库与生产库的结果不同）。给 `Configuration` 加一个环境标识：
+
+文件：`src/main/java/com/frank/mybatis/session/Configuration.java`（增量）｜package：`com.frank.mybatis.session`｜前置依赖：无
+
+```java
+private final String environmentId;
+
+public Configuration(DataSource dataSource) {
+    this(dataSource, "default");
+}
+
+public Configuration(DataSource dataSource, String environmentId) {
+    this.dataSource = Objects.requireNonNull(dataSource, "dataSource");
+    if (environmentId == null || environmentId.isBlank()) {
+        throw new IllegalArgumentException("environmentId is blank");
+    }
+    this.environmentId = environmentId;
+}
+
+public String getEnvironmentId() { return environmentId; }
+```
+
+原有 `Configuration(DataSource)` 构造器继续可用，第 01～03 篇的测试代码不需要改。**验收**：重构完成后先跑 `mvn -q test`，全部历史测试通过再进入第三节；任何行为变化都说明重构引入了缺陷，先修复再继续。
+
+## 三、测试数据与 chapter04 夹具
+
+**为什么需要这一步：** 嵌套映射需要「用户-订单-明细」三层数据，而主 schema 只有 `t_user`。为实验扩主表会污染前面所有篇章的基线；把专用 schema 和夹具隔离在 chapter04 测试资源里，实验数据与主模型互不干扰。
+
+### 3.1 嵌套实验专用 schema
+
+文件：`src/test/resources/schema-ch04.sql`｜package：无｜前置依赖：H2、测试资源加载方式
+
+```sql
+DROP TABLE IF EXISTS t_order_item; DROP TABLE IF EXISTS t_order; DROP TABLE IF EXISTS t_user;
+CREATE TABLE t_user (id BIGINT PRIMARY KEY, user_name VARCHAR(100) NOT NULL, age INTEGER);
+CREATE TABLE t_order (
+  id BIGINT PRIMARY KEY, user_id BIGINT NOT NULL, order_no VARCHAR(64) NOT NULL,
+  CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES t_user(id));
+CREATE TABLE t_order_item (
+  id BIGINT PRIMARY KEY, order_id BIGINT NOT NULL, sku VARCHAR(64) NOT NULL, quantity INTEGER NOT NULL,
+  CONSTRAINT fk_item_order FOREIGN KEY (order_id) REFERENCES t_order(id));
+INSERT INTO t_user(id,user_name,age) VALUES (1,'Frank',30),(2,'Ada',NULL);
+INSERT INTO t_order(id,user_id,order_no) VALUES (10,1,'O-001'),(11,1,'O-002'),(12,2,'O-003');
+INSERT INTO t_order_item(id,order_id,sku,quantity) VALUES (100,10,'JAVA-17',2),(101,10,'H2',1);
+```
+
+该数据故意包含四个边界：用户 2 的 `age` 为 NULL；订单 10 产生两条 JOIN 行；订单 11 没有明细；用户 1 有两个订单。后面的测试分别验证 null、父去重、子集合和空子项。
+
+### 3.2 夹具只负责数据库和会话
+
+文件：`src/test/java/com/frank/mybatis/chapter04/Chapter04Fixture.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：第 03 篇 `Configuration`、`SqlSessionFactory`、H2
+
+```java
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.chapter01.UserMapper;
+import com.frank.mybatis.executor.Executor;
+import com.frank.mybatis.executor.SimpleExecutor;
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.session.Configuration;
+import com.frank.mybatis.session.DefaultSqlSessionFactory;
+import com.frank.mybatis.session.ResultHandler;
+import com.frank.mybatis.session.RowBounds;
+import com.frank.mybatis.session.SqlSession;
+import com.frank.mybatis.session.SqlSessionFactory;
+import com.frank.mybatis.transaction.Transaction;
+import org.h2.jdbcx.JdbcDataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+public final class Chapter04Fixture implements AutoCloseable {
+
+    private final JdbcDataSource dataSource = new JdbcDataSource();
+    private final CountingExecutorFactory factory;
+
+    public Chapter04Fixture() {
+        String db = "ch04_" + UUID.randomUUID().toString().replace('-', '_');
+        dataSource.setURL("jdbc:h2:mem:" + db + ";DB_CLOSE_DELAY=-1");
+        dataSource.setUser("sa");
+        dataSource.setPassword("");
+        Configuration configuration = new Configuration(dataSource, "ch04");
+        configuration.addMapper(UserMapper.class);
+        factory = new CountingExecutorFactory(configuration);
+    }
+
+    public Configuration configuration() {
+        return factory.getConfiguration();
+    }
+
+    public SqlSession openSession() {
+        return factory.openSession();
+    }
+
+    public void reset() throws SQLException {
+        try (Connection c = dataSource.getConnection(); Statement s = c.createStatement()) {
+            s.execute("RUNSCRIPT FROM 'classpath:schema-ch04.sql'");
+        }
+    }
+
+    /** 统计真正落到 JDBC 的查询次数：在 doQuery 层计数，缓存命中不会计入。 */
+    public int selectCount(String methodName) {
+        return factory.queryCounts.getOrDefault(methodName, 0);
+    }
+
+    @Override
+    public void close() {
+        // H2 内存库随连接池孤岛回收，无需显式删除。
+    }
+
+    /**
+     * 覆写第 2.6 节工厂的 newExecutor，换成带计数器的 SimpleExecutor；
+     * 第十一.4 节会在这里再串上 pluginAll。
+     */
+    static final class CountingExecutorFactory extends DefaultSqlSessionFactory {
+
+        final Map<String, Integer> queryCounts = new ConcurrentHashMap<>();
+
+        CountingExecutorFactory(Configuration configuration) {
+            super(configuration);
+        }
+
+        @Override
+        protected Executor newExecutor(Transaction transaction) {
+            return new SimpleExecutor(getConfiguration(), transaction) {
+                @Override
+                protected <E> List<E> doQuery(MappedStatement ms, Object parameter,
+                        RowBounds bounds, ResultHandler<E> handler) throws SQLException {
+                    String id = ms.getId();
+                    queryCounts.merge(id.substring(id.lastIndexOf('.') + 1), 1, Integer::sum);
+                    return super.doQuery(ms, parameter, bounds, handler);
+                }
+            };
+        }
+    }
+}
+```
+
+夹具只负责数据库、Configuration 装配和 `doQuery` 层计数，不复制 Mapper、Executor 或事务实现；覆写的是第 2.6 节工厂的 `newExecutor` 扩展点。
+
+#### 章节测试约定
+
+本篇补充的纯单元测试放在 `src/test/java/com/frank/mybatis/chapter04/CachePrimitivesTest.java`，先创建第四节给出的完整类，再把第五、七、九节方法追加进去。它不依赖 Session 工厂，可先运行 `mvn -Dtest=CachePrimitivesTest test`。插件测试使用第八节独立完整类。第一节范围与第三节 schema 由第十一节 H2 集成测试验收；第六、十节测试直接使用本节的 `Chapter04Fixture`。
+
+注意：`selectCount` 在 `doQuery` 层统计真正落到 JDBC 的查询次数，缓存命中不会计入；放在执行器外层的插件统计的是查询调用次数，两者不能混用。`OrderMapper` 与订单 ResultMap 的注册在第十一.1 节作为构造器增量补上。
+
+## 四、缓存基础：Cache 与 PerpetualCache
+
+### 4.1 接口先隔离 Map
+
+**为什么需要这一步：** 缓存不能让执行器直接依赖 `Map`。一级缓存和二级缓存需要相同的读写接口，而二级缓存还要加事务包装器。
+
+文件：`src/main/java/com/frank/mybatis/cache/Cache.java`｜package：`com.frank.mybatis.cache`｜前置依赖：无
+
+```java
+package com.frank.mybatis.cache;
+
 public interface Cache {
-  String getId(); void putObject(Object key,Object value);
-  Object getObject(Object key); Object removeObject(Object key);
-  void clear(); int getSize();
+    String getId();
+    void putObject(Object key, Object value);
+    Object getObject(Object key);
+    Object removeObject(Object key);
+    void clear();
+    int getSize();
 }
+```
+
+`getId()` 是稳定身份，不是显示名称。namespace delegate、事务 wrapper、日志和测试都依赖它区分缓存实例。
+
+### 4.2 最小存储实现
+
+文件：`src/main/java/com/frank/mybatis/cache/PerpetualCache.java`｜package：`com.frank.mybatis.cache`｜前置依赖：`Cache`、Java 集合
+
+```java
+package com.frank.mybatis.cache;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public final class PerpetualCache implements Cache {
-  private final String id; private final Map<Object,Object> map=new HashMap<>();
-  public PerpetualCache(String id){this.id=Objects.requireNonNull(id);}
-  public String getId(){return id;}
-  public void putObject(Object k,Object v){map.put(Objects.requireNonNull(k),v);}
-  public Object getObject(Object k){return map.get(k);}
-  public Object removeObject(Object k){return map.remove(k);}
-  public void clear(){map.clear();} public int getSize(){return map.size();}
+    private final String id;
+    private final Map<Object, Object> entries = new HashMap<>();
+
+    public PerpetualCache(String id) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("cache id is blank");
+        }
+        this.id = id;
+    }
+
+    @Override public String getId() { return id; }
+
+    @Override
+    public void putObject(Object key, Object value) {
+        entries.put(Objects.requireNonNull(key, "key"), value);
+    }
+
+    @Override public Object getObject(Object key) { return entries.get(key); }
+    @Override public Object removeObject(Object key) { return entries.remove(key); }
+    @Override public void clear() { entries.clear(); }
+    @Override public int getSize() { return entries.size(); }
 }
 ```
 
-“永久”表示本类不负责过期，不表示数据永远正确。一级缓存可用会话私有 HashMap；二级共享缓存还需并发、容量、序列化和对象隔离策略。
+“永久”只表示不做 TTL、容量淘汰或磁盘持久化，正确性来自 update、commit、rollback、close 的清理。共享二级 delegate 若跨线程，还需并发与对象隔离测试。
 
-## 三、CacheKey
+#### 本节单元测试：覆盖、移除与缓存实例隔离
 
-只用 statement id 或 SQL 会把不同参数、分页、租户混在一起。key 必须包含 statement、offset、limit、最终 SQL、按占位符顺序排列的参数、环境和必要的租户信息。
+文件：`src/test/java/com/frank/mybatis/chapter04/CachePrimitivesTest.java`。
 
 ```java
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.cache.*;
+import com.frank.mybatis.mapping.*;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class CachePrimitivesTest {
+    @Test void cacheStoresRemovesAndSeparatesInstances() {
+        Cache first = new PerpetualCache("local.first");
+        Cache second = new PerpetualCache("local.second");
+        first.putObject("id", "old");
+        first.putObject("id", "new");
+        assertEquals(1, first.getSize());
+        assertEquals("new", first.getObject("id"));
+        assertNull(second.getObject("id"));
+        assertEquals("new", first.removeObject("id"));
+        assertEquals(0, first.getSize());
+        first.putObject("another", List.of());
+        first.clear();
+        assertEquals(0, first.getSize());
+        assertThrows(IllegalArgumentException.class, () -> new PerpetualCache(" "));
+        assertThrows(NullPointerException.class, () -> first.putObject(null, "value"));
+    }
+}
+```
+
+## 五、CacheKey：把查询结果定义为有序身份
+
+**为什么需要这一步：** 仅使用 statement id 会导致 `findById(1)` 与 `findById(2)` 互相命中；只使用 SQL 又会漏掉分页和环境。key 应包含：
+
+![图 3：CacheKey 的有序身份](cachekey-ordered-identity.svg)
+
+```text
+statement id -> offset -> limit -> 最终 SQL -> 按问号顺序的参数 -> environment id
+```
+
+最终 SQL 必须来自 `BoundSql`，因为第 03 篇动态条件和 foreach 会改变 SQL 形状。数组参数也要按内容比较，不能按数组引用比较。
+
+文件：`src/main/java/com/frank/mybatis/cache/CacheKey.java`｜package：`com.frank.mybatis.cache`｜前置依赖：Java 17 标准库
+
+```java
+package com.frank.mybatis.cache;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public final class CacheKey {
-  private int hashcode=17; private long checksum; private int count;
-  private final List<Object> values=new ArrayList<>();
-  public CacheKey(Object... xs){for(Object x:xs)update(x);}
-  public void update(Object x){int h=x==null?1:x.hashCode();count++;checksum+=h;
-    hashcode=37*hashcode+h*count;values.add(x);}
-  public int hashCode(){return hashcode;}
-  public boolean equals(Object o){if(this==o)return true;if(!(o instanceof CacheKey k))return false;
-    return hashcode==k.hashcode&&checksum==k.checksum&&count==k.count&&values.equals(k.values);}
-  public String toString(){return "CacheKey"+values;}
+    private int hashcode = 17;
+    private long checksum;
+    private int count;
+    private final List<Object> values = new ArrayList<>();
+
+    public CacheKey(Object... initialValues) {
+        for (Object value : initialValues) update(value);
+    }
+
+    public void update(Object value) {
+        Object normalized = normalize(value);
+        int hash = normalized == null ? 1 : normalized.hashCode();
+        count++;
+        checksum += hash;
+        hashcode = 37 * hashcode + hash * count;
+        values.add(normalized);
+    }
+
+    private static Object normalize(Object value) {
+        if (value == null || !value.getClass().isArray()) return value;
+        int length = Array.getLength(value);
+        Object[] copy = new Object[length];
+        for (int i = 0; i < length; i++) copy[i] = normalize(Array.get(value, i));
+        return Arrays.asList(copy);
+    }
+
+    @Override public int hashCode() { return hashcode; }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof CacheKey that)) return false;
+        return hashcode == that.hashcode
+                && checksum == that.checksum
+                && count == that.count
+                && values.equals(that.values);
+    }
+
+    @Override public String toString() { return "CacheKey" + values; }
 }
-CacheKey key=new CacheKey(ms.getId(),bounds.offset(),bounds.limit(),boundSql.sql());
-for(Object p:boundSql.orderedParameters())key.update(p);
-key.update(environmentId);
 ```
 
-哈希只是快速筛选，最终比较有序值。数组参数需转为深内容结构，否则数组默认按引用比较。分页遗漏会造成第一页和第二页互相污染；租户条件若来自 ThreadLocal，也必须显式加入 key。
+哈希只用于筛选，最终仍比较有序 `values`；日志不要输出敏感实参。
 
-## 四、一级缓存与更新清理
+### 5.1 在已有执行器中构造 key
 
-缓存应放在执行器查询模板，而不是 Mapper 代理。
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（增量）｜package：`com.frank.mybatis.executor`｜前置依赖：第 03 篇 `MappedStatement`、`BoundSql`、`RowBounds`；本篇 `CacheKey`
 
 ```java
-public abstract class BaseExecutor {
-  private final PerpetualCache localCache;
-  protected BaseExecutor(String id){localCache=new PerpetualCache(id+".local");}
-  public <E> List<E> query(MappedStatement ms,Object p,RowBounds rb,ResultHandler<E> h){
-    BoundSql sql=ms.getBoundSql(p); CacheKey key=createCacheKey(ms,p,rb,sql);
-    @SuppressWarnings("unchecked") List<E> hit=(List<E>)localCache.getObject(key);
-    if(hit!=null){h.handle(hit);return hit;}
-    List<E> result=doQuery(ms,p,rb,sql,h);localCache.putObject(key,result);return result;
-  }
-  protected abstract <E> List<E> doQuery(MappedStatement ms,Object p,RowBounds rb,BoundSql s,ResultHandler<E> h);
-  protected void clearLocalCache(){localCache.clear();}
-  public int update(MappedStatement ms,Object p){clearLocalCache();return doUpdate(ms,p);}
+protected CacheKey createCacheKey(
+        MappedStatement ms, Object parameter,
+        RowBounds bounds, BoundSql boundSql) {
+    CacheKey key = new CacheKey();
+    key.update(ms.getId());
+    key.update(bounds.getOffset());
+    key.update(bounds.getLimit());
+    key.update(boundSql.getSql());
+    for (ParameterMapping mapping : boundSql.getParameterMappings()) {
+        key.update(ParameterHandler.valueOf(boundSql, mapping.getProperty()));
+    }
+    key.update(configuration.getEnvironmentId());
+    return key;
 }
 ```
 
-同一 SqlSession 相同 key 命中；不同会话不共享。更新前清理最保守：失败只会多一次查询，不会返回旧对象。commit、rollback、close 都要清理，且 close 必须关闭连接。示例缓存返回同一可变实例，生产二级缓存应深拷贝或使用不可变 DTO。
+取值用的 `ParameterHandler.valueOf` 就是第 03 篇参数绑定的同一个函数（本篇起它从 private 改为 public），缓存 key 与 JDBC 绑定因此永远看到同一份值。不要从原始 Mapper 参数数组构造 key；动态 SQL 的参数顺序以已渲染的 BoundSql 为准。
+
+#### 本节单元测试：有序身份和数组快照
+
+追加到 `CachePrimitivesTest`。不要断言不同 key 的 hashCode 必然不同，哈希碰撞是允许的；必须断言 equals 能区分结果身份。
 
 ```java
-@Test void sameSessionHits(){try(SqlSession s=factory.openSession()){var m=s.getMapper(UserMapper.class);m.findById(1L);m.findById(1L);assertEquals(1,counter.selects());}}
-@Test void updateClears(){try(SqlSession s=factory.openSession()){var m=s.getMapper(UserMapper.class);m.findById(1L);m.rename(1L,"Changed");assertEquals("Changed",m.findById(1L).getUserName());assertEquals(2,counter.selects());}}
+@Test void cacheKeyIncludesOrderSqlPaginationAndEnvironment() {
+    CacheKey key = new CacheKey("User.find", 0, 10, "select ?", 1L, "test");
+    assertEquals(key, new CacheKey("User.find", 0, 10, "select ?", 1L, "test"));
+    assertEquals(key.hashCode(), new CacheKey("User.find", 0, 10, "select ?", 1L, "test").hashCode());
+    assertNotEquals(key, new CacheKey("User.find", 0, 10, "select ?", 2L, "test"));
+    assertNotEquals(key, new CacheKey("User.find", 1, 10, "select ?", 1L, "test"));
+    assertNotEquals(key, new CacheKey("User.find", 0, 20, "select ?", 1L, "test"));
+    assertNotEquals(key, new CacheKey("User.find", 0, 10, "select ?,?", 1L, "test"));
+    assertNotEquals(key, new CacheKey("User.find", 0, 10, "select ?", 1L, "prod"));
+    assertNotEquals(new CacheKey(1L, 2L), new CacheKey(2L, 1L));
+}
+
+@Test void cacheKeyCopiesArrayContents() {
+    long[] input = {3L, 1L};
+    CacheKey key = new CacheKey("query", input);
+    input[0] = 99L;
+    assertEquals(new CacheKey("query", new long[]{3L, 1L}), key);
+    assertNotEquals(new CacheKey("query", input), key);
+}
 ```
 
-## 五、TransactionalCache 与二级边界
+## 六、一级缓存：Executor 的 session 私有状态
 
-若查询后立刻写共享 Map，会发生 A 未提交、B 命中、A 回滚的脏缓存。每个事务必须拥有自己的包装器，只有 delegate 共享。
+**为什么需要这一步：** 一级缓存属于一个 SqlSession，而不是 Mapper 代理、全局配置或静态字段。这样同一 session 的多个 Mapper 可共享结果，不同 session 仍能隔离自己的事务状态。
+
+![图 4：一级缓存是 session 私有状态](l1-cache-session-scope.svg)
+
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（增量）｜package：`com.frank.mybatis.executor`｜前置依赖：`PerpetualCache`、`CacheKey`、第二节 `BaseExecutor`
 
 ```java
+private final PerpetualCache localCache;
+
+protected BaseExecutor(Configuration configuration, Transaction transaction) {
+    this.configuration = configuration;
+    this.transaction = transaction;
+    this.localCache = new PerpetualCache("local." + System.identityHashCode(this));
+}
+
+@Override
+public <E> List<E> query(MappedStatement ms, Object parameter,
+                         RowBounds bounds, ResultHandler<E> handler)
+        throws SQLException {
+    BoundSql boundSql = ms.getSqlSource().getBoundSql(parameter);
+    CacheKey key = createCacheKey(ms, parameter, bounds, boundSql);
+    @SuppressWarnings("unchecked")
+    List<E> hit = (List<E>) localCache.getObject(key);
+    if (hit != null) {
+        if (handler != null) handler.handleResult(hit);
+        return hit;
+    }
+    List<E> result = doQuery(ms, parameter, bounds, handler, boundSql);
+    localCache.putObject(key, result);
+    return result;
+}
+```
+
+回调签名就是第 2.1 节定义的 `handleResult(List<E>)`；命中缓存也必须触发回调，否则调用方会漏掉本批结果。
+
+### 6.1 更新和会话结束都清理
+
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（增量）｜package：`com.frank.mybatis.executor`｜前置依赖：上一个代码块、第二节执行器生命周期
+
+```java
+@Override
+public int update(MappedStatement ms, Object parameter) throws SQLException {
+    clearLocalCache();
+    return doUpdate(ms, parameter);
+}
+
+@Override
+public void commit(boolean required) throws SQLException {
+    clearLocalCache();
+    if (required) transaction.commit();
+}
+
+@Override
+public void rollback(boolean required) throws SQLException {
+    try {
+        clearLocalCache();
+        if (required) transaction.rollback();
+    } finally {
+        discardPendingStatements();
+    }
+}
+
+@Override
+public void close(boolean forceRollback) {
+    try {
+        if (forceRollback) rollback(true);
+    } catch (SQLException failure) {
+        throw new PersistenceException("close executor failed", failure);
+    } finally {
+        localCache.clear();
+        transaction.close();
+    }
+}
+
+protected void clearLocalCache() { localCache.clear(); }
+```
+
+更新前清理是保守且容易审计的策略：更新失败最多导致一次额外查询，不会让同一事务继续读旧对象。`close()` 必须清理内存缓存并关闭事务资源，未提交会话按 rollback 处理。
+
+#### 本节集成测试：相同参数命中，更新后重新查询
+
+追加到 `CacheChapter04Test`，使用第十一节同一 `UserMapper` 和完成装配的夹具。计数发生在 `doQuery` 层（见第三节夹具），一二级缓存命中都不会计数，因此不需要为这个测试关闭 `useCache`。
+
+```java
+@Test void localCacheInvalidatesAfterUpdate() throws Exception {
+    try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+        fixture.reset();
+        try (SqlSession session = fixture.openSession()) {
+            UserMapper mapper = session.getMapper(UserMapper.class);
+            assertEquals("Frank", mapper.findById(1L).getUserName());
+            assertEquals("Frank", mapper.findById(1L).getUserName());
+            assertEquals(1, fixture.selectCount("findById"));
+            mapper.rename(1L, "Changed");
+            assertEquals("Changed", mapper.findById(1L).getUserName());
+            assertEquals(2, fixture.selectCount("findById"));
+            session.rollback();
+            assertEquals("Frank", mapper.findById(1L).getUserName());
+            assertEquals(3, fixture.selectCount("findById"));
+        }
+    }
+}
+```
+
+## 七、二级缓存：TransactionalCache 不发布未提交结果
+
+**为什么需要这一步：** 一级缓存只在一个 session 内可见。二级缓存的 delegate 按 namespace 共享，例如用户 Mapper 的所有查询共享一个 delegate。但查询结果不能直接写入 delegate：会话 A 查询后回滚时，会话 B 不应看到 A 的未提交缓存状态。
+
+![图 5：二级缓存的事务发布边界](l2-transactional-boundary.svg)
+
+`TransactionalCache` 是每个 executor/事务私有的 wrapper：
+
+```text
+delegate                 namespace 共享
+entriesToAddOnCommit     当前事务暂存结果
+entriesMissedInCache     当前事务 miss 记录
+clearOnCommit            更新后的延迟清空标记
+```
+
+文件：`src/main/java/com/frank/mybatis/cache/TransactionalCache.java`｜package：`com.frank.mybatis.cache`｜前置依赖：`Cache`、Java 集合
+
+```java
+package com.frank.mybatis.cache;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 public final class TransactionalCache implements Cache {
-  private final Cache delegate; private final Map<Object,Object> pending=new LinkedHashMap<>();
-  private final Set<Object> missed=new LinkedHashSet<>(); private boolean clearOnCommit;
-  public TransactionalCache(Cache d){delegate=Objects.requireNonNull(d);}
-  public String getId(){return delegate.getId();}
-  public Object getObject(Object k){if(pending.containsKey(k))return pending.get(k);Object v=delegate.getObject(k);if(v==null)missed.add(k);return v;}
-  public void putObject(Object k,Object v){pending.put(k,v);}
-  public Object removeObject(Object k){pending.remove(k);return delegate.removeObject(k);}
-  public void clear(){clearOnCommit=true;pending.clear();}
-  public int getSize(){return delegate.getSize();}
-  public void commit(){if(clearOnCommit)delegate.clear();missed.forEach(delegate::removeObject);pending.forEach(delegate::putObject);reset();}
-  public void rollback(){reset();}
-  private void reset(){clearOnCommit=false;pending.clear();missed.clear();}
-}
-```
+    private final Cache delegate;
+    private final Map<Object, Object> entriesToAddOnCommit = new LinkedHashMap<>();
+    private final Set<Object> entriesMissedInCache = new LinkedHashSet<>();
+    private boolean clearOnCommit;
 
-更新 namespace 时标记 `clearOnCommit`，commit 清共享缓存，rollback 丢 pending。一个 updateUser 可能影响多个查询，因此按 namespace 清理而不是只删一个 key。
+    public TransactionalCache(Cache delegate) {
+        this.delegate = Objects.requireNonNull(delegate, "delegate");
+    }
 
-```java
-@Test void rollbackDoesNotPublish(){try(SqlSession a=factory.openSession()){a.getMapper(UserMapper.class).findById(1L);a.rollback();}try(SqlSession b=factory.openSession()){b.getMapper(UserMapper.class).findById(1L);assertEquals(2,counter.selects());}}
-@Test void commitPublishes(){try(SqlSession a=factory.openSession()){a.getMapper(UserMapper.class).findById(1L);a.commit();}try(SqlSession b=factory.openSession()){b.getMapper(UserMapper.class).findById(1L);assertEquals(1,counter.selects());}}
-```
+    @Override public String getId() { return delegate.getId(); }
 
-## 六、Interceptor、Plugin 与签名校验
+    @Override
+    public Object getObject(Object key) {
+        if (entriesToAddOnCommit.containsKey(key)) {
+            return entriesToAddOnCommit.get(key);
+        }
+        if (clearOnCommit) return null;
+        Object value = delegate.getObject(key);
+        if (value == null) entriesMissedInCache.add(key);
+        return value;
+    }
 
-插件把分页、日志、耗时和审计从核心类移出。
+    @Override
+    public void putObject(Object key, Object value) {
+        entriesToAddOnCommit.put(key, value);
+    }
 
-```java
-public interface Interceptor {Object intercept(Invocation i)throws Throwable;default Object plugin(Object t){return Plugin.wrap(t,this);}}
-public record Invocation(Object target,Method method,Object[] args){public Object proceed()throws Throwable{try{return method.invoke(target,args);}catch(InvocationTargetException e){throw e.getCause();}}}
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @interface Intercepts{Signature[] value();}
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE) @interface Signature{Class<?> type();String method();Class<?>[] args();}
-```
+    @Override
+    public Object removeObject(Object key) {
+        entriesToAddOnCommit.remove(key);
+        return delegate.removeObject(key);
+    }
 
-`Plugin.wrap` 必须启动时校验 `type.getMethod(method,args)`，并只为目标实现的接口创建 JDK Proxy。签名中的 args 是精确参数类型，拼错方法立即失败。
+    @Override
+    public void clear() {
+        clearOnCommit = true;
+        entriesToAddOnCommit.clear();
+    }
 
-```java
-public static Object wrap(Object target,Interceptor interceptor){
-  Intercepts a=interceptor.getClass().getAnnotation(Intercepts.class);
-  if(a==null||a.value().length==0)throw new PluginException("missing @Intercepts");
-  Map<Class<?>,Set<Method>> map=new HashMap<>();
-  for(Signature s:a.value()){if(!s.type().isInterface())throw new PluginException("type must be interface");
-    try{Method m=s.type().getMethod(s.method(),s.args());map.computeIfAbsent(s.type(),x->new HashSet<>()).add(m);}
-    catch(NoSuchMethodException e){throw new PluginException("bad signature",e);}}
-  Set<Class<?>> ifaces=map.keySet().stream().filter(i->i.isAssignableFrom(target.getClass())).collect(Collectors.toSet());
-  if(ifaces.isEmpty())return target;
-  return Proxy.newProxyInstance(target.getClass().getClassLoader(),ifaces.toArray(Class<?>[]::new),
-    (proxy,method,args)->map.getOrDefault(method.getDeclaringClass(),Set.of()).contains(method)
-      ? interceptor.intercept(new Invocation(target,method,args==null?new Object[0]:args)) : method.invoke(target,args));
-}
-```
+    @Override public int getSize() { return delegate.getSize(); }
 
-代理链按注册顺序形成 `A.before -> B.before -> real -> B.after -> A.after`。插件必须调用 `proceed()`；目标内部 `this.method()` 会绕过代理。常见错误是签名类型写实现类、只检查方法名、重复包装目标。
+    public void commit() {
+        if (clearOnCommit) delegate.clear();
+        for (Object key : entriesMissedInCache) delegate.removeObject(key);
+        for (Map.Entry<Object, Object> entry : entriesToAddOnCommit.entrySet()) {
+            delegate.putObject(entry.getKey(), entry.getValue());
+        }
+        reset();
+    }
 
-## 七、ResultMap、association、collection
+    public void rollback() { reset(); }
 
-```java
-public record ResultMapping(String property,String column,Class<?> javaType,boolean id){}
-public record AssociationMapping(String property,ResultMap resultMap){}
-public record CollectionMapping(String property,ResultMap resultMap,Class<?> elementType){}
-public record ResultMap(String id,Class<?> type,List<ResultMapping> mappings,List<AssociationMapping> associations,List<CollectionMapping> collections){}
-```
-
-SQL 必须使用别名，避免两个表的 id 冲突：
-
-```sql
-select o.id order_id,o.user_id order_user_id,o.order_no,
- i.id item_id,i.order_id item_order_id,i.sku item_sku,i.quantity item_quantity
-from t_order o left join t_order_item i on i.order_id=o.id
-where o.user_id=? order by o.id,i.id
-```
-
-核心算法维护父 key：
-
-```java
-Map<CacheKey,Object> parents=new LinkedHashMap<>();
-while(rs.next()){
-  CacheKey pk=keyOf(rs,orderMap); Order parent=(Order)parents.get(pk);
-  if(parent==null){parent=newInstance(Order.class);applySimple(rs,parent,orderMap);parents.put(pk,parent);results.add(parent);}
-  if(getObject(rs,"item_id")!=null){CacheKey ck=keyOf(rs,itemMap);
-    if(marked(parent,ck)==false){parent.getItems().add(mapItem(rs));mark(parent,ck);}}
-}
-```
-
-订单 10 两行只创建一个父对象，两个明细分别追加；订单 11 的 LEFT JOIN 子 id 全 null，集合保持空。父 id、子 id 都应标记为 `id=true`。`association` 表示单值，`collection` 表示多值；循环映射必须截断。
-
-## 八、多表方案选择
-
-JOIN 只查一次但重复父列，适合稳定排序；嵌套 select 直观却产生 N+1；父查询后按 id 批量 `IN` 再分组，查询少但要处理参数上限。
-
-```java
-Map<Long,List<OrderItem>> grouped=items.stream().collect(Collectors.groupingBy(OrderItem::getOrderId,LinkedHashMap::new,Collectors.toList()));
-for(Order o:orders)o.setItems(grouped.getOrDefault(o.getId(),List.of()));
-```
-
-选择取决于数据量、网络传输、排序、事务和懒加载，而不是固定教条。
-
-## 九、失效场景与测试矩阵
-
-|场景|必须验证|
-|---|---|
-|参数不同|CacheKey 不相等|
-|页码不同|offset/limit 进入 key|
-|更新成功|一级立即清理、二级提交清理|
-|更新回滚|pending 丢弃|
-|绕过 Mapper 更新|显式清理 namespace|
-|触发器改关联表|加入关联 namespace|
-|租户不同|租户 id 进入 key|
-|JOIN 重复父行|父对象唯一|
-|重复子行|子 id 去重|
-|LEFT JOIN 空子项|空集合而非空对象|
-|SQL NULL|Java 属性保持 null|
-
-```java
-@Test void nestedRows(){List<Order> xs=mapper.findByUserId(1L);assertEquals(2,xs.size());assertEquals(2,xs.get(0).getItems().size());assertTrue(xs.get(1).getItems().isEmpty());}
-@Test void nullIsNull(){assertNull(userMapper.findById(2L).getAge());}
-@Test void invalidSignatureFailsEarly(){assertThrows(PluginException.class,()->new Broken().plugin(handler));}
-```
-
-H2 事务测试使用两个独立连接并 `setAutoCommit(false)`，A 未提交时 B 的读取、A rollback 后的缓存可见性要分别断言。测试既断言值也断言 JDBC 次数，避免缓存未生效或命中旧值。
-
-## 十、迁移、性能与验收
-
-从第 03 篇迁移：保留 JDBC 执行器；加入会话级 PerpetualCache；统一 CacheKey；在 update、commit、rollback、close 清理；为 namespace 注册共享 delegate；每事务创建 TransactionalCache；用 CachingExecutor 装饰；Handler 创建后执行 pluginAll；将反射列映射提升为 ResultMap；删除 Mapper 代理里的临时缓存，避免双重生命周期。
-
-不要把 SqlSession 放进单例或跨线程共享。二级缓存可变对象要深拷贝或不可变；缓存击穿需要 single-flight 或外部能力。日志只打印 namespace、statement、命中、key hash 和事务状态，不记录敏感参数。
-
-验收清单：Java17 下 `mvn test` 通过；一级缓存只在会话内共享；key 区分 SQL、参数、分页、环境和租户；写操作正确失效；二级 rollback 不发布、commit 发布；错误签名启动即失败；插件链顺序稳定；父子对象去重；空子行为空集合；NULL 不变成 0。
-
-## 十一、总结与 05 预告
-
-`CacheKey` 定义结果身份，`PerpetualCache` 提供基础存储，一级缓存绑定会话，`TransactionalCache` 把二级缓存绑定提交边界；`Interceptor`/`Plugin` 以精确签名插入横切逻辑；`ResultMap` 通过父子 key 把 JOIN 行折叠成对象图。真正要守住的是边界：缓存不能泄漏未提交数据，更新要传播到正确 namespace，代理只能拦截明确方法，嵌套映射要同时处理父去重、子去重和空子行。
-
-下一篇《手写 MyBatis 05》将实现动态 SQL 与 XML/注解解析：`if`、`where`、`trim`、`foreach`、参数节点和安全 SQL 片段组合，并继续复用本篇的 MappedStatement、插件链、缓存 key 与 ResultMap。
-
-## 十二、逐步实验记录：从失败到正确
-下面按实验顺序记录每个可观察结论。每个实验都应在独立会话、独立 H2 数据库或清晰的事务夹具中执行，避免上一个测试留下的缓存影响下一个测试。
-
-### 12.1 PerpetualCache 的读写
-
-**实验问题。** 我们要确认“PerpetualCache 的读写”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment1() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(1);
+    private void reset() {
+        clearOnCommit = false;
+        entriesToAddOnCommit.clear();
+        entriesMissedInCache.clear();
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+`clear()` 只能标记，不能立刻清 delegate。否则 A 更新后 rollback，仍会错误删除 B 已提交的缓存。commit 的顺序是清旧 namespace、删 miss 时可能留下的旧值、发布 pending、重置 wrapper；rollback 只重置 wrapper。
 
-### 12.2 CacheKey 的参数维度
+### 7.1 Configuration 持有共享 delegate
 
-**实验问题。** 我们要确认“CacheKey 的参数维度”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/session/Configuration.java`（增量）｜package：`com.frank.mybatis.session`｜前置依赖：`Cache`、`PerpetualCache`、已有 Configuration
 
 ```java
-@Test
-void experiment2() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(2);
+private final Map<String, Cache> caches = new ConcurrentHashMap<>();
+
+public Cache getOrCreateCache(String namespace) {
+    return caches.computeIfAbsent(namespace,
+            key -> new PerpetualCache("namespace." + key));
+}
+```
+
+完整 statement id 不能作为二级 cache id。`updateUser` 会影响 `findById`、`findAll` 和其他用户查询，故失效粒度至少是 namespace。
+
+### 7.2 在已有 Executor 增加二级协调
+
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（增量）｜package：`com.frank.mybatis.executor`｜前置依赖：`TransactionalCache`、`Configuration.getOrCreateCache`、已有 Executor 生命周期
+
+```java
+private final Map<String, TransactionalCache> transactionalCaches = new LinkedHashMap<>();
+
+private TransactionalCache secondLevelCache(MappedStatement ms) {
+    Cache delegate = configuration.getOrCreateCache(ms.getNamespace());
+    return transactionalCaches.computeIfAbsent(delegate.getId(),
+            ignored -> new TransactionalCache(delegate));
+}
+
+private void clearSecondLevelCache(String namespace) {
+    TransactionalCache cache = transactionalCaches.get("namespace." + namespace);
+    if (cache != null) cache.clear();
+}
+```
+
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（query/update/事务增量）｜package：`com.frank.mybatis.executor`｜前置依赖：上一个代码块、一级缓存 query
+
+```java
+private <E> List<E> querySecondLevel(MappedStatement ms, Object parameter,
+                                     RowBounds bounds, ResultHandler<E> handler)
+        throws SQLException {
+    if (!ms.isUseCache()) return queryLocal(ms, parameter, bounds, handler);
+    BoundSql boundSql = ms.getSqlSource().getBoundSql(parameter);
+    CacheKey key = createCacheKey(ms, parameter, bounds, boundSql);
+    TransactionalCache cache = secondLevelCache(ms);
+    @SuppressWarnings("unchecked")
+    List<E> hit = (List<E>) cache.getObject(key);
+    if (hit != null) return hit;
+    List<E> result = queryLocal(ms, parameter, bounds, handler);
+    cache.putObject(key, result);
+    return result;
+}
+
+@Override
+public int update(MappedStatement ms, Object parameter) throws SQLException {
+    clearLocalCache();
+    clearSecondLevelCache(ms.getNamespace());
+    return doUpdate(ms, parameter);
+}
+
+private void commitSecondLevelCaches() {
+    transactionalCaches.values().forEach(TransactionalCache::commit);
+}
+
+private void rollbackSecondLevelCaches() {
+    transactionalCaches.values().forEach(TransactionalCache::rollback);
+}
+
+@Override
+public void commit(boolean required) throws SQLException {
+    if (required) {
+        transaction.commit();
+    }
+    commitSecondLevelCaches();
+}
+
+@Override
+public void rollback(boolean required) throws SQLException {
+    try {
+        if (required) {
+            transaction.rollback();
+        }
+    } finally {
+        rollbackSecondLevelCaches();
+    }
+}
+
+@Override
+public void close(boolean forceRollback) {
+    try {
+        if (forceRollback) {
+            rollback(true);
+        }
+    } catch (SQLException failure) {
+        throw new PersistenceException("close executor failed", failure);
+    } finally {
+        localCache.clear();
+        transaction.close();
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+这一步把第六节的 `query` 主体抽成私有 `queryLocal`：`Executor.query` 的对外入口先走二级缓存（判断 `useCache` 与事务 wrapper），miss 后交给 `queryLocal` 处理一级缓存与 `doQuery`。`commit` 必须先完成数据库事务，再调用 `commitSecondLevelCaches()`；rollback 和 close 的 finally 块必须调用 `rollbackSecondLevelCaches()`。JDBC rollback 不会替你清除 Java pending。
 
-### 12.3 分页 key 的隔离
+### 7.3 更新清理与关联 namespace
 
-**实验问题。** 我们要确认“分页 key 的隔离”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+按 namespace 清理不是删除 update 语句的 key；更新用户也会影响列表、分页和订单 JOIN 的 owner association。
 
-**执行步骤。**
+若 `t_order` 查询映射了 `t_user`，在 MappedStatement 的已有元数据中增加 `flushNamespaces`，更新时同时标记 wrapper：
 
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/executor/BaseExecutor.java`（增量）｜package：`com.frank.mybatis.executor`｜前置依赖：已有 `MappedStatement.getFlushNamespaces()`
 
 ```java
-@Test
-void experiment3() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(3);
+private void clearSecondLevelCaches(MappedStatement ms) {
+    clearSecondLevelCache(ms.getNamespace());
+    for (String namespace : ms.getFlushNamespaces()) {
+        clearSecondLevelCache(namespace);
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+测试可以只配置用户和订单两个 namespace；生产实现应让 XML/注解解析阶段明确注册依赖，不能靠数据库触发器或 SQL 文本猜失效范围。
 
-### 12.4 一级缓存的会话边界
+#### 本节单元测试：提交发布、回滚丢弃与延迟失效
 
-**实验问题。** 我们要确认“一级缓存的会话边界”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+追加到 `CachePrimitivesTest`。前两个方法验证基础生命周期，第三个固定当前事务更新后的缓存可见性。
 
 ```java
-@Test
-void experiment4() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(4);
+@Test void transactionalCachePublishesOnlyOnCommit() {
+    Cache delegate = new PerpetualCache("users");
+    var writer = new TransactionalCache(delegate);
+    var reader = new TransactionalCache(delegate);
+    writer.putObject("id", "pending");
+    assertNull(delegate.getObject("id"));
+    assertNull(reader.getObject("id"));
+    writer.commit();
+    assertEquals("pending", delegate.getObject("id"));
+    writer.putObject("id", "discarded");
+    writer.rollback();
+    assertEquals("pending", writer.getObject("id"));
+}
+
+@Test void rollbackOfClearPreservesCommittedDelegate() {
+    Cache delegate = new PerpetualCache("users");
+    delegate.putObject("id", "committed");
+    var tx = new TransactionalCache(delegate);
+    tx.clear();
+    assertEquals("committed", delegate.getObject("id"));
+    tx.rollback();
+    assertEquals("committed", tx.getObject("id"));
+    tx.clear();
+    tx.putObject("id", "updated");
+    tx.commit();
+    assertEquals("updated", delegate.getObject("id"));
+}
+
+@Test void clearHidesOldDelegateFromCurrentTransaction() {
+    Cache delegate = new PerpetualCache("users");
+    delegate.putObject("id", "old");
+    var tx = new TransactionalCache(delegate);
+    tx.clear();
+    assertNull(tx.getObject("id"));
+    assertEquals("old", delegate.getObject("id"));
+}
+```
+
+最后一个测试可复现 `getObject` 不检查 `clearOnCommit` 时的旧值泄漏；上面的实现已加入这一判断：先查 pending，再在 `clearOnCommit` 为 true 时屏蔽旧 delegate。其他事务仍可读取已提交的 delegate。另一个接入边界由第 11.3 节“写会话未先查询就更新”的测试验证：失效逻辑不能只清理当前已经存在的 wrapper。
+
+## 八、插件：精确签名，而不是按方法名猜测
+
+**为什么需要这一步：** 日志、计数、SQL 改写这类横切需求不该侵入框架核心。插件用 JDK 动态代理包装接口实现。每个 Interceptor 声明一个精确 Signature：接口类型、方法名、完整参数类型。只拦截声明的方法，其他方法原样转发。
+
+### 8.1 Signature
+
+文件：`src/main/java/com/frank/mybatis/plugin/Signature.java`｜package：`com.frank.mybatis.plugin`｜前置依赖：Java 注解
+
+```java
+package com.frank.mybatis.plugin;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Signature {
+    Class<?> type();
+    String method();
+    Class<?>[] args() default {};
+}
+```
+
+本教程的最小实现一个插件只声明一个签名。要支持多签名时再增加容器注解，不要先引入一套没有测试覆盖的注解模型。
+
+### 8.2 Invocation
+
+文件：`src/main/java/com/frank/mybatis/plugin/Invocation.java`｜package：`com.frank.mybatis.plugin`｜前置依赖：Java 反射
+
+```java
+package com.frank.mybatis.plugin;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+public final class Invocation {
+    private final Object target;
+    private final Method method;
+    private final Object[] args;
+
+    public Invocation(Object target, Method method, Object[] args) {
+        this.target = target;
+        this.method = method;
+        this.args = args == null ? new Object[0] : args.clone();
+    }
+
+    public Object getTarget() { return target; }
+    public Method getMethod() { return method; }
+    public Object[] getArgs() { return args.clone(); }
+
+    public Object proceed() throws Throwable {
+        try {
+            return method.invoke(target, args);
+        } catch (InvocationTargetException failure) {
+            throw failure.getCause();
+        }
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+必须解包 `InvocationTargetException`。否则 JDBC 或业务异常被额外包装，无法被第 03 篇统一异常策略正确识别。
 
-### 12.5 更新后的一级失效
+### 8.3 Interceptor
 
-**实验问题。** 我们要确认“更新后的一级失效”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/plugin/Interceptor.java`｜package：`com.frank.mybatis.plugin`｜前置依赖：`Invocation`、`Plugin`
 
 ```java
-@Test
-void experiment5() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(5);
+package com.frank.mybatis.plugin;
+
+import java.util.Properties;
+
+public interface Interceptor {
+    Object intercept(Invocation invocation) throws Throwable;
+
+    default Object plugin(Object target) {
+        return Plugin.wrap(target, this);
+    }
+
+    default void setProperties(Properties properties) { }
+}
+```
+
+普通插件必须调用 `proceed()`；只有明确实现短路缓存、拒绝访问等语义时才可以不调用，并必须有专门测试。
+
+### 8.4 Plugin：启动期验证签名
+
+文件：`src/main/java/com/frank/mybatis/plugin/Plugin.java`｜package：`com.frank.mybatis.plugin`｜前置依赖：`Signature`、`Interceptor`、`Invocation`
+
+```java
+package com.frank.mybatis.plugin;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+public final class Plugin implements InvocationHandler {
+    private final Object target;
+    private final Interceptor interceptor;
+    private final Method signature;
+
+    private Plugin(Object target, Interceptor interceptor, Method signature) {
+        this.target = target;
+        this.interceptor = interceptor;
+        this.signature = signature;
+    }
+
+    public static Object wrap(Object target, Interceptor interceptor) {
+        Signature annotation = interceptor.getClass().getAnnotation(Signature.class);
+        if (annotation == null) {
+            throw new PluginException("missing @Signature: "
+                    + interceptor.getClass().getName());
+        }
+        if (!annotation.type().isInterface()) {
+            throw new PluginException("signature type must be interface");
+        }
+        final Method method;
+        try {
+            method = annotation.type().getMethod(annotation.method(), annotation.args());
+        } catch (NoSuchMethodException failure) {
+            throw new PluginException("invalid signature: "
+                    + annotation.type().getName() + '#' + annotation.method(), failure);
+        }
+        if (!annotation.type().isAssignableFrom(target.getClass())) return target;
+        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+                new Class<?>[]{annotation.type()},
+                new Plugin(target, interceptor, method));
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if (signature.equals(method)) {
+            return interceptor.intercept(new Invocation(target, method, args));
+        }
+        return method.invoke(target, args);
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.6 commit 的二级发布
-
-**实验问题。** 我们要确认“commit 的二级发布”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/plugin/PluginException.java`（若已有框架异常可复用）｜package：`com.frank.mybatis.plugin`｜前置依赖：Java 标准库
 
 ```java
-@Test
-void experiment6() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(6);
+package com.frank.mybatis.plugin;
+
+public final class PluginException extends RuntimeException {
+    public PluginException(String message) { super(message); }
+    public PluginException(String message, Throwable cause) { super(message, cause); }
+}
+```
+
+签名校验有四层：注解存在、类型是接口、`getMethod` 精确找得到方法、target 实现该接口。不能只按方法名比较，因为 `Executor.query` 可能重载；也不能把实现类写进 `type`，JDK Proxy 只能代理接口。
+
+### 8.5 注册链与包装位置
+
+文件：`src/main/java/com/frank/mybatis/session/Configuration.java`（增量）｜package：`com.frank.mybatis.session`｜前置依赖：`Interceptor`、Java 集合、已有 Configuration
+
+```java
+private final List<Interceptor> interceptors = new ArrayList<>();
+
+public void addInterceptor(Interceptor interceptor) {
+    interceptors.add(Objects.requireNonNull(interceptor));
+}
+
+public Object pluginAll(Object target) {
+    Object current = target;
+    for (Interceptor interceptor : interceptors) {
+        current = interceptor.plugin(current);
+    }
+    return current;
+}
+```
+
+注册 A、B 后，`pluginAll` 的调用顺序为：
+
+```text
+B.before -> A.before -> target -> A.after -> B.after
+```
+
+文件：`src/main/java/com/frank/mybatis/session/DefaultSqlSessionFactory.java`（增量）｜package：`com.frank.mybatis.session`｜前置依赖：已有 executor 创建逻辑、`Configuration.pluginAll`
+
+```java
+@Override
+protected Executor newExecutor(Transaction transaction) {
+    return (Executor) configuration.pluginAll(
+            new SimpleExecutor(configuration, transaction));
+}
+```
+
+把插件装在一级、二级缓存协调后的 Executor 外层，插件可以观测命中与 miss；装在 JDBC Executor 外层则只能观测真实 SQL。选一种并用测试固定，不能在不同工厂路径中随意改变顺序。
+
+#### 本节单元测试：完整插件夹具与包装顺序
+
+文件：`src/test/java/com/frank/mybatis/chapter04/PluginContractTest.java`。利用 JDK 已有 public `Supplier` 接口作为目标，避免引入未给出的 Target 类；两份插件实例分别代表 A、B。
+
+```java
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.plugin.*;
+import java.util.*;
+import java.util.function.Supplier;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+@Signature(type = Supplier.class, method = "get")
+class TraceInterceptor implements Interceptor {
+    private final String name;
+    private final List<String> events;
+    TraceInterceptor(String name, List<String> events) {
+        this.name = name;
+        this.events = events;
+    }
+    public Object intercept(Invocation invocation) throws Throwable {
+        events.add(name + ".before");
+        try { return invocation.proceed(); }
+        finally { events.add(name + ".after"); }
+    }
+}
+
+class PluginContractTest {
+    @Test void lastWrappedPluginRunsFirst() {
+        List<String> events = new ArrayList<>();
+        Supplier<String> target = () -> { events.add("target"); return "ok"; };
+        var a = new TraceInterceptor("A", events);
+        var b = new TraceInterceptor("B", events);
+        Supplier<?> proxy = (Supplier<?>) b.plugin(a.plugin(target));
+        assertEquals("ok", proxy.get());
+        assertEquals(List.of("B.before", "A.before", "target", "A.after", "B.after"), events);
+        events.clear();
+        proxy.toString();
+        assertTrue(events.isEmpty());
+        assertSame("unrelated", a.plugin("unrelated"));
+        assertThrows(PluginException.class, () -> Plugin.wrap(target, invocation -> invocation.proceed()));
+    }
+    @Test void invocationUnwrapsOriginalFailure() throws Exception {
+        var original = new IllegalStateException("business failure");
+        Supplier<String> target = () -> { throw original; };
+        var invocation = new Invocation(target, Supplier.class.getMethod("get"), null);
+        assertSame(original, assertThrows(IllegalStateException.class, invocation::proceed));
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+按本节 `pluginAll` 的正序循环注册 A、B，实际包装为 `B(A(target))`，因此预期顺序是 B 先进入、A 先退出。以此断言为准；若希望 A 先进入，需要明确改为逆序包装并同步修改测试。
 
-### 12.7 rollback 的二级丢弃
+## 九、ResultMapping 与 ResultMap
 
-**实验问题。** 我们要确认“rollback 的二级丢弃”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+**为什么需要这一步：** JOIN 场景中 `t_order.id`、`t_order_item.id`、`t_user.id` 会同时出现。自动下划线转驼峰无法区分这些列，所以 SQL 必须用别名，映射必须声明属性、列、Java 类型和 id 标志。
 
-**执行步骤。**
+### 9.1 ResultMapping
 
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/mapping/ResultMapping.java`｜package：`com.frank.mybatis.mapping`｜前置依赖：Java 17 record
 
 ```java
-@Test
-void experiment7() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(7);
+package com.frank.mybatis.mapping;
+
+import java.util.Objects;
+
+public record ResultMapping(
+        String property, String column, Class<?> javaType, boolean id) {
+    public ResultMapping {
+        if (property == null || property.isBlank()) {
+            throw new IllegalArgumentException("result property is blank");
+        }
+        if (column == null || column.isBlank()) {
+            throw new IllegalArgumentException("result column is blank");
+        }
+        javaType = Objects.requireNonNull(javaType, "javaType");
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+父 map 与子 map 都必须至少有一个 `id=true`。没有 id 时用普通列拼 key，既会让不同对象误合并，也会让同一对象的列变化产生重复。
 
-### 12.8 namespace 的整体清理
+### 9.2 ResultMap
 
-**实验问题。** 我们要确认“namespace 的整体清理”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/mapping/ResultMap.java`｜package：`com.frank.mybatis.mapping`｜前置依赖：`ResultMapping`、Java 集合
 
 ```java
-@Test
-void experiment8() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(8);
+package com.frank.mybatis.mapping;
+
+import java.util.List;
+import java.util.Objects;
+
+public final class ResultMap {
+    public enum NestedKind { ASSOCIATION, COLLECTION }
+
+    public record Nested(String property, ResultMap resultMap,
+                         NestedKind kind, Class<?> javaType) {
+        public Nested {
+            if (property == null || property.isBlank()) {
+                throw new IllegalArgumentException("nested property is blank");
+            }
+            Objects.requireNonNull(resultMap, "resultMap");
+            Objects.requireNonNull(kind, "kind");
+            Objects.requireNonNull(javaType, "javaType");
+        }
+    }
+
+    private final String id;
+    private final Class<?> type;
+    private final List<ResultMapping> mappings;
+    private final List<Nested> nested;
+
+    public ResultMap(String id, Class<?> type,
+                     List<ResultMapping> mappings, List<Nested> nested) {
+        this.id = Objects.requireNonNull(id, "id");
+        this.type = Objects.requireNonNull(type, "type");
+        this.mappings = List.copyOf(mappings);
+        this.nested = List.copyOf(nested);
+    }
+
+    public String id() { return id; }
+    public Class<?> type() { return type; }
+    public List<ResultMapping> mappings() { return mappings; }
+    public List<Nested> nested() { return nested; }
+    public List<ResultMapping> idMappings() {
+        return mappings.stream().filter(ResultMapping::id).toList();
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+`ASSOCIATION` 表示单值属性，`COLLECTION` 表示多值属性。初版只处理一层嵌套，避免尚未设计循环检测时贸然递归；多层映射需要为每一层维护独立父子 key 上下文。
 
-### 12.9 插件接口筛选
+#### 本节单元测试：id 列筛选与元数据防御性复制
 
-**实验问题。** 我们要确认“插件接口筛选”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+追加到 `CachePrimitivesTest`，无需订单实体，`Object.class` 这里只是类型元数据，不进行实例映射。
 
 ```java
-@Test
-void experiment9() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(9);
+@Test void resultMapCopiesMappingsAndSelectsIdentityColumns() {
+    var id = new ResultMapping("id", "order_id", Long.class, true);
+    var name = new ResultMapping("name", "order_no", String.class, false);
+    var mappings = new ArrayList<>(List.of(id, name));
+    var map = new ResultMap("order", Object.class, mappings, List.of());
+    mappings.clear();
+    assertEquals(List.of(id, name), map.mappings());
+    assertEquals(List.of(id), map.idMappings());
+    assertThrows(UnsupportedOperationException.class, () -> map.mappings().clear());
+    assertThrows(IllegalArgumentException.class,
+            () -> new ResultMapping(" ", "id", Long.class, true));
+    assertThrows(IllegalArgumentException.class,
+            () -> new ResultMapping("id", " ", Long.class, true));
+}
+```
+
+## 十、改造 ResultSetHandler：从行映射到对象图
+
+**为什么需要这一步：** 「一行结果映射一个对象」的假设在 JOIN 下失效——父行会重复出现，LEFT JOIN 会造出全 null 的假子对象。结果处理要从逐行映射升级成按身份折叠对象图，这正是 ResultMap 存在的理由。
+
+![图 6：JOIN 行折叠为对象图](join-fold-object-graph.svg)
+
+保留第 03 篇的简单 `resultType` 映射。只有 MappedStatement 绑定了有 nested 的 ResultMap 时才进入本节路径。
+
+文件：`src/main/java/com/frank/mybatis/executor/ResultSetHandler.java`（已有文件增量入口）｜package：`com.frank.mybatis.executor`｜前置依赖：`ResultMap`、`MappedStatement`、第 03 篇简单映射
+
+```java
+public <E> List<E> handleResultSets(ResultSet rs, MappedStatement ms)
+        throws SQLException {
+    ResultMap map = ms.getResultMap();
+    if (map == null || map.nested().isEmpty()) {
+        return handleSimpleResultSet(rs, ms);
+    }
+    return handleNestedResultSet(rs, map);
+}
+```
+
+`getResultMap()` 字段已在第 2.3 节预留：默认 `null` 走原来的 `resultType` 路径，所以第 03 篇的 `t_user` 测试不需要重写。`handleSimpleResultSet` 直接委托第 01 篇的列名映射方法 `handle`：
+
+```java
+private <E> List<E> handleSimpleResultSet(ResultSet rs, MappedStatement ms)
+        throws SQLException {
+    return handle(rs, ms.getResultType());
+}
+```
+
+同时把 `SimpleExecutor.doQuery` 里对 `resultHandler.handle(resultSet, ms.getResultType())` 的调用改为 `resultHandler.handleResultSets(resultSet, ms)`——一行改动，两条路径在此分岔。
+
+### 10.1 先定义父子 key 和空子项判断
+
+文件：`src/main/java/com/frank/mybatis/executor/ResultSetHandler.java`（辅助方法）｜package：`com.frank.mybatis.executor`｜前置依赖：`CacheKey`、`ResultMap`、`ResultMapping`
+
+```java
+private CacheKey rowKey(ResultSet rs, ResultMap map) throws SQLException {
+    CacheKey key = new CacheKey();
+    key.update(map.id());
+    for (ResultMapping mapping : map.idMappings()) {
+        key.update(rs.getObject(mapping.column()));
+    }
+    return key;
+}
+
+private boolean hasIdentity(ResultSet rs, ResultMap map) throws SQLException {
+    for (ResultMapping mapping : map.idMappings()) {
+        if (rs.getObject(mapping.column()) != null) return true;
+    }
+    return false;
+}
+```
+
+父 key 只用父 id，子 key 只用子 id。若把 `item_id` 放进父 key，订单 10 的两条 JOIN 行就会被错误创建成两个 Order。`hasIdentity` 是 LEFT JOIN 的关键：子 id 为 null 时，不创建空 OrderItem。
+
+### 10.2 复用现有转换与反射赋值
+
+文件：`src/main/java/com/frank/mybatis/executor/ResultSetHandler.java`（辅助方法）｜package：`com.frank.mybatis.executor`｜前置依赖：`ResultMap`、JDK 反射与 Introspector
+
+```java
+private <T> T mapSimple(ResultSet rs, ResultMap map) throws SQLException {
+    T target = instantiate(map.type());
+    for (ResultMapping mapping : map.mappings()) {
+        Object raw = rs.getObject(mapping.column());
+        Object value = raw == null ? null : convert(raw, mapping.javaType());
+        setProperty(target, mapping.property(), value);
+    }
+    return target;
+}
+```
+
+第 01 篇的 `ResultSetHandler` 只有按列名给字段赋值的主流程，嵌套映射还需要四个反射小助手和一个数值转换器：
+
+```java
+private <T> T instantiate(Class<T> type) throws SQLException {
+    try {
+        var constructor = type.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        return constructor.newInstance();
+    } catch (ReflectiveOperationException failure) {
+        throw new SQLException("cannot instantiate " + type.getName(), failure);
+    }
+}
+
+private static void setProperty(Object target, String property, Object value)
+        throws SQLException {
+    try {
+        var setter = setterOf(target.getClass(), property);
+        if (setter == null) {
+            throw new SQLException("no setter for property " + property
+                    + " on " + target.getClass().getName());
+        }
+        setter.invoke(target, value);
+    } catch (ReflectiveOperationException failure) {
+        throw new SQLException("cannot set property " + property, failure);
+    }
+}
+
+private static Object getProperty(Object target, String property) throws SQLException {
+    try {
+        for (var descriptor : java.beans.Introspector.getBeanInfo(
+                target.getClass(), Object.class).getPropertyDescriptors()) {
+            if (descriptor.getName().equals(property)) {
+                return descriptor.getReadMethod().invoke(target);
+            }
+        }
+    } catch (ReflectiveOperationException | java.beans.IntrospectionException failure) {
+        throw new SQLException("cannot read property " + property, failure);
+    }
+    throw new SQLException("no getter for property " + property
+            + " on " + target.getClass().getName());
+}
+
+private static Method setterOf(Class<?> type, String property) throws SQLException {
+    try {
+        for (var descriptor : java.beans.Introspector.getBeanInfo(
+                type, Object.class).getPropertyDescriptors()) {
+            if (descriptor.getName().equals(property)) {
+                return descriptor.getWriteMethod();
+            }
+        }
+    } catch (java.beans.IntrospectionException failure) {
+        throw new SQLException("cannot inspect " + type.getName(), failure);
+    }
+    return null;
+}
+
+private static Object convert(Object raw, Class<?> javaType) {
+    if (raw == null || javaType.isInstance(raw)) {
+        return raw;
+    }
+    if (raw instanceof Number number) {
+        if (javaType == Integer.class || javaType == int.class) return number.intValue();
+        if (javaType == Long.class || javaType == long.class) return number.longValue();
+        if (javaType == Double.class || javaType == double.class) return number.doubleValue();
+    }
+    throw new IllegalArgumentException("cannot convert "
+            + raw.getClass().getName() + " to " + javaType.getName());
+}
+```
+
+使用 `getObject` 后再转换可保留 SQL NULL。若继续使用 `getInt`，必须检查 `wasNull()`；否则用户 2 的 age 会被错误映射为 0。`convert` 只做同类型透传与 Number 拆箱，故意不实现字符串到数字的魔法转换——读不明白的数据应该失败，而不是悄悄变成 0。
+
+### 10.3 JOIN 折叠、collection 去重和 association 单值
+
+文件：`src/main/java/com/frank/mybatis/executor/ResultSetHandler.java`（核心增量）｜package：`com.frank.mybatis.executor`｜前置依赖：本节前两个方法、已有属性读写器
+
+```java
+private <E> List<E> handleNestedResultSet(ResultSet rs, ResultMap root)
+        throws SQLException {
+    List<E> result = new ArrayList<>();
+    Map<CacheKey, Object> parents = new LinkedHashMap<>();
+    Map<CacheKey, Set<CacheKey>> seenChildren = new HashMap<>();
+
+    while (rs.next()) {
+        CacheKey parentKey = rowKey(rs, root);
+        @SuppressWarnings("unchecked")
+        E parent = (E) parents.get(parentKey);
+        if (parent == null) {
+            parent = mapSimple(rs, root);
+            initializeNested(parent, root);
+            parents.put(parentKey, parent);
+            seenChildren.put(parentKey, new HashSet<>());
+            result.add(parent);
+        }
+
+        for (ResultMap.Nested nested : root.nested()) {
+            ResultMap childMap = nested.resultMap();
+            if (!hasIdentity(rs, childMap)) continue;
+            CacheKey childKey = rowKey(rs, childMap);
+            if (!seenChildren.get(parentKey).add(childKey)) continue;
+            Object child = mapSimple(rs, childMap);
+            attach(parent, nested, child);
+        }
+    }
+    return result;
+}
+
+private void initializeNested(Object parent, ResultMap map) {
+    for (ResultMap.Nested nested : map.nested()) {
+        setProperty(parent, nested.property(),
+                nested.kind() == ResultMap.NestedKind.COLLECTION
+                        ? new ArrayList<>() : null);
+    }
+}
+
+@SuppressWarnings("unchecked")
+private void attach(Object parent, ResultMap.Nested nested, Object child) {
+    if (nested.kind() == ResultMap.NestedKind.ASSOCIATION) {
+        setProperty(parent, nested.property(), child);
+        return;
+    }
+    ((List<Object>) getProperty(parent, nested.property())).add(child);
+}
+```
+
+三层保护分别是：`parents` 去重父对象，`seenChildren` 在同一父对象中去重子对象，`hasIdentity` 跳过 LEFT JOIN 的空子项。association 应只有一个子对象；若同一父行出现不同 association key，生产实现应抛出映射异常，不要静默以最后一行覆盖第一行。
+
+#### 本节集成测试：父子身份与空集合
+
+追加到第十一节 `NestedMappingChapter04Test`，前置依赖为已经注册的 `OrderMapper` 和 `NestedMaps.orderWithItems()`。第 11.5 节已有行数断言，本测试进一步核对每个子对象的身份与归属，避免“数量正确、对象重复”漏检。
+
+```java
+@Test void nestedChildrenKeepTheirIdentityAndParent() throws Exception {
+    try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+        fixture.reset();
+        try (SqlSession session = fixture.openSession()) {
+            List<Order> orders = session.getMapper(OrderMapper.class).findByUserId(1L);
+            assertEquals(List.of(10L, 11L), orders.stream().map(Order::getId).toList());
+            assertEquals(List.of(100L, 101L), orders.get(0).getItems().stream()
+                    .map(OrderItem::getId).toList());
+            assertTrue(orders.get(0).getItems().stream()
+                    .allMatch(item -> Long.valueOf(10L).equals(item.getOrderId())));
+            assertNotSame(orders.get(0).getItems(), orders.get(1).getItems());
+            assertTrue(orders.get(1).getItems().isEmpty());
+            assertTrue(session.getMapper(OrderMapper.class).findByUserId(999L).isEmpty());
+        }
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+## 十一、chapter04 的 ResultMap、Mapper 与测试
 
-### 12.10 插件参数精确匹配
+**为什么需要这一步：** ResultMap、插件、缓存到此都还是纯组件，只有接进真实的 Mapper 与 H2 数据，JOIN 折叠、缓存失效、插件链这些承诺才可验证。测试模型放 chapter04 测试包，不进生产模型。
 
-**实验问题。** 我们要确认“插件参数精确匹配”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+### 11.1 测试模型和 ResultMap
 
-**执行步骤。**
+测试模型可放在 `com.frank.mybatis.chapter04`，不要因为实验订单表把 Order 加到当前生产用户模型。
 
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/test/java/com/frank/mybatis/chapter04/Order.java`、`OrderItem.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：第 03 篇 `User`
+
+两个测试 POJO 使用 public 无参构造器与普通 setter：`Order` 有 `id`、`userId`、`orderNo`、单值 `User owner` 和初始化为空的 `List<OrderItem> items`；`OrderItem` 有 `id`、`orderId`、`sku`、`quantity`。它们只属于 chapter04，不能加入当前生产用户模型。
+
+文件：`src/test/java/com/frank/mybatis/chapter04/NestedMaps.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：`ResultMap`、`ResultMapping`、`Order`、`OrderItem`
 
 ```java
-@Test
-void experiment10() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(10);
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.mapping.ResultMap;
+import com.frank.mybatis.mapping.ResultMapping;
+import java.util.List;
+
+public final class NestedMaps {
+    private NestedMaps() { }
+
+    public static ResultMap orderWithItems() {
+        ResultMap item = new ResultMap("ch04.item", OrderItem.class, List.of(
+                new ResultMapping("id", "item_id", Long.class, true),
+                new ResultMapping("orderId", "item_order_id", Long.class, false),
+                new ResultMapping("sku", "item_sku", String.class, false),
+                new ResultMapping("quantity", "item_quantity", Integer.class, false)), List.of());
+        return new ResultMap("ch04.order", Order.class, List.of(
+                new ResultMapping("id", "order_id", Long.class, true),
+                new ResultMapping("userId", "order_user_id", Long.class, false),
+                new ResultMapping("orderNo", "order_no", String.class, false)),
+                List.of(new ResultMap.Nested("items", item,
+                        ResultMap.NestedKind.COLLECTION, OrderItem.class)));
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+ResultMap 是纯 Java 元数据，还需要一条把它挂到语句上的线：`@ResultMap` 注解引用注册表中的 id，注解构建器据此改用 10 参构造器。
 
-### 12.11 代理链嵌套顺序
-
-**实验问题。** 我们要确认“代理链嵌套顺序”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/main/java/com/frank/mybatis/annotations/ResultMap.java`（新增）｜package：`com.frank.mybatis.annotations`｜前置依赖：无
 
 ```java
-@Test
-void experiment11() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(11);
+package com.frank.mybatis.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface ResultMap {
+    String value();
+}
+```
+
+文件：`src/main/java/com/frank/mybatis/session/Configuration.java`（增量）｜package：`com.frank.mybatis.session`｜前置依赖：本节 `ResultMap`
+
+```java
+private final Map<String, ResultMap> resultMaps = new HashMap<>();
+
+public void addResultMap(String id, ResultMap resultMap) {
+    if (resultMaps.putIfAbsent(id, resultMap) != null) {
+        throw new IllegalStateException("Duplicate resultMap id: " + id);
+    }
+}
+
+public ResultMap getResultMap(String id) {
+    ResultMap map = resultMaps.get(id);
+    if (map == null) {
+        throw new IllegalArgumentException("Unknown resultMap id: " + id);
+    }
+    return map;
+}
+```
+
+文件：`src/main/java/com/frank/mybatis/builder/MapperAnnotationBuilder.java`（替换 statement 构建片段）｜package：`com.frank.mybatis.builder`｜前置依赖：`ResultMap` 注解、`Configuration.getResultMap`
+
+```java
+SqlDefinition definition = definitionOf(method);
+SqlSource sqlSource = XMLScriptBuilder.parseText(
+        definition.sql(), configuration.getSqlWhitelist());
+MappedStatement statement;
+if (method.isAnnotationPresent(ResultMap.class)) {
+    ResultMap resultMap = configuration.getResultMap(
+            method.getAnnotation(ResultMap.class).value());
+    statement = new MappedStatement(id, mapperType.getName(), sqlSource,
+            definition.commandType(), Object.class, resultMap.type(),
+            method.getReturnType() == List.class, method, resultMap, true);
+} else {
+    statement = MappedStatement.fromMapperMethod(
+            id, mapperType.getName(), sqlSource, definition.commandType(), method);
+}
+parsed.put(id, statement);
+```
+
+最后给第三节夹具的构造器追加两行，让 chapter04 测试能拿到订单映射：
+
+```java
+configuration.addMapper(OrderMapper.class);
+configuration.addResultMap("ch04.order", NestedMaps.orderWithItems());
+```
+
+未标注 `@ResultMap` 的语句完全不受影响，仍走 `fromMapperMethod` 的 resultType 路径。
+
+### 11.2 SQL 必须使用列别名
+
+文件：`src/test/java/com/frank/mybatis/chapter04/OrderMapper.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：第 03 篇 `@Select`、`Order`、注册的 ResultMap
+
+```java
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.annotations.Select;
+import java.util.List;
+
+public interface OrderMapper {
+    @Select("""
+        SELECT o.id AS order_id, o.user_id AS order_user_id, o.order_no,
+               i.id AS item_id, i.order_id AS item_order_id,
+               i.sku AS item_sku, i.quantity AS item_quantity
+        FROM t_order o
+        LEFT JOIN t_order_item i ON i.order_id = o.id
+        WHERE o.user_id = #{_parameter}
+        ORDER BY o.id, i.id
+        """)
+    List<Order> findByUserId(Long userId);
+}
+```
+
+`order_id` 与 `item_id` 是 ResultMap 契约。不能写 `select o.*, i.*` 再期待驱动稳定地区分重复列名。
+
+`findByUserId` 是无 `@Param` 的单参数方法，`ParamNameResolver` 会把 `Long` 原样作为根对象，标量只能用 `_parameter` 引用（第 03 篇 10.1 节）。给参数加上 `@Param("userId")` 后就可以改写成 `#{userId}`；两种写法不要混用。
+
+### 11.3 一级、二级缓存测试
+
+文件：`src/test/java/com/frank/mybatis/chapter04/CacheChapter04Test.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：`Chapter04Fixture`、第 01 篇 `chapter01.UserMapper`（夹具已注册）
+
+```java
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.chapter01.UserMapper;
+import com.frank.mybatis.session.SqlSession;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class CacheChapter04Test {
+    @Test
+    void sameSessionHitsFirstLevelCache() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            try (SqlSession session = fixture.openSession()) {
+                UserMapper mapper = session.getMapper(UserMapper.class);
+                mapper.findById(1L);
+                mapper.findById(1L);
+                assertEquals(1, fixture.selectCount("findById"));
+            }
+        }
+    }
+
+    @Test
+    void rollbackDoesNotPublishSecondLevelCache() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            try (SqlSession first = fixture.openSession()) {
+                first.getMapper(UserMapper.class).findById(1L);
+                first.rollback();
+            }
+            try (SqlSession second = fixture.openSession()) {
+                second.getMapper(UserMapper.class).findById(1L);
+                assertEquals(2, fixture.selectCount("findById"));
+            }
+        }
+    }
+
+    @Test
+    void commitPublishesAndUpdateClearsNamespace() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            try (SqlSession seed = fixture.openSession()) {
+                seed.getMapper(UserMapper.class).findById(1L);
+                seed.commit();
+            }
+            try (SqlSession writer = fixture.openSession()) {
+                writer.getMapper(UserMapper.class).rename(1L, "Changed");
+                writer.commit();
+            }
+            try (SqlSession reader = fixture.openSession()) {
+                assertEquals("Changed", reader.getMapper(UserMapper.class)
+                        .findById(1L).getUserName());
+            }
+        }
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+`selectCount` 可由本节插件计数，或复用第 03 篇已有 JDBC 计数器。测试必须同时断言查询次数和数据库结果；只断言值无法证明缓存真的命中或真正清理。
 
-### 12.12 异常解包
+### 11.4 插件签名和链测试
 
-**实验问题。** 我们要确认“异常解包”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+文件：`src/test/java/com/frank/mybatis/chapter04/PluginChapter04Test.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：`Interceptor`、`Invocation`、`Plugin`、`Signature`、第八节 `Configuration.addInterceptor`、`Chapter04Fixture`
 
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+第一个测试走真实链路：拦截 `Executor.query`，验证声明的方法被拦截、未声明的方法原样转发；第二个测试固定"缺签名的插件在包装期失败"。注意拦截器必须在 `openSession()` 之前注册——执行器在 openSession 时才被 `pluginAll` 包装。
 
 ```java
-@Test
-void experiment12() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(12);
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.chapter01.UserMapper;
+import com.frank.mybatis.executor.Executor;
+import com.frank.mybatis.mapping.MappedStatement;
+import com.frank.mybatis.plugin.Interceptor;
+import com.frank.mybatis.plugin.Invocation;
+import com.frank.mybatis.plugin.Plugin;
+import com.frank.mybatis.plugin.PluginException;
+import com.frank.mybatis.plugin.Signature;
+import com.frank.mybatis.session.ResultHandler;
+import com.frank.mybatis.session.RowBounds;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class PluginChapter04Test {
+
+    @Signature(type = Executor.class, method = "query",
+            args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})
+    static class CountingInterceptor implements Interceptor {
+        int calls;
+
+        @Override
+        public Object intercept(Invocation invocation) throws Throwable {
+            calls++;
+            return invocation.proceed();
+        }
+    }
+
+    @Test
+    void executorQueryIsInterceptedOnTheRealChain() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            CountingInterceptor interceptor = new CountingInterceptor();
+            fixture.configuration().addInterceptor(interceptor);
+            try (var session = fixture.openSession()) {
+                assertNotNull(session.getMapper(UserMapper.class).findById(1L));
+            }
+            assertEquals(1, interceptor.calls);
+        }
+    }
+
+    @Test
+    void missingSignatureFailsAtWrapTime() {
+        Interceptor broken = new Interceptor() { };
+        assertThrows(PluginException.class, () -> Plugin.wrap(new Object(), broken));
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+配合第八.4 节的 `PluginContractTest`（Supplier 目标 + A/B 链顺序断言），插件部分的行为就完整了：签名校验四层、链式包装顺序、`proceed()` 解包原始异常、未声明方法转发。运行 `mvn -q -Dtest='PluginContractTest,PluginChapter04Test' test`。
 
-### 12.13 ResultMap 列别名
+### 11.5 JOIN、LEFT JOIN、NULL 测试
 
-**实验问题。** 我们要确认“ResultMap 列别名”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：`src/test/java/com/frank/mybatis/chapter04/NestedMappingChapter04Test.java`｜package：`com.frank.mybatis.chapter04`｜前置依赖：`Chapter04Fixture`、`OrderMapper`、注册的 `NestedMaps.orderWithItems()`
 
 ```java
-@Test
-void experiment13() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(13);
+package com.frank.mybatis.chapter04;
+
+import com.frank.mybatis.chapter01.UserMapper;
+import com.frank.mybatis.session.SqlSession;
+import org.junit.jupiter.api.Test;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+class NestedMappingChapter04Test {
+    @Test
+    void joinDeduplicatesParentsAndKeepsChildren() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            try (SqlSession session = fixture.openSession()) {
+                List<Order> orders = session.getMapper(OrderMapper.class)
+                        .findByUserId(1L);
+                assertEquals(2, orders.size());
+                assertEquals(10L, orders.get(0).getId());
+                assertEquals(2, orders.get(0).getItems().size());
+                assertEquals(11L, orders.get(1).getId());
+                assertTrue(orders.get(1).getItems().isEmpty());
+            }
+        }
+    }
+
+    @Test
+    void sqlNullRemainsNull() throws Exception {
+        try (Chapter04Fixture fixture = new Chapter04Fixture()) {
+            fixture.reset();
+            try (SqlSession session = fixture.openSession()) {
+                assertNull(session.getMapper(UserMapper.class)
+                        .findById(2L).getAge());
+            }
+        }
     }
 }
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+collection 测试验证订单 10 的两条行被折叠为一个父对象和两个子对象；订单 11 验证 LEFT JOIN 子 id 全 null 时集合为空，而不是含有一条全 null 的明细。association 测试可在 SQL 中加入 `u.id AS user_id`、`u.user_name AS user_name`、`u.age AS user_age`，注册 `NestedKind.ASSOCIATION`，并断言 `order.getOwner()` 是唯一 User。
 
-### 12.14 父对象去重
+## 十二、验证命令、失效矩阵与结论
 
-**实验问题。** 我们要确认“父对象去重”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
+**为什么需要这一步：** 缓存与映射的 bug 几乎都是「偶现」——只有把失效场景列成矩阵逐条断言，才敢说实现正确；这张表同时是后续重构的回归清单。
 
-**执行步骤。**
+### 12.1 测试命令
 
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
+文件：命令行｜package：无｜前置依赖：真实项目根目录、Maven、JUnit 5
 
-```java
-@Test
-void experiment14() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(14);
-    }
-}
+```bash
+mvn -q test
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+文件：命令行｜package：无｜前置依赖：chapter04 测试类
 
-### 12.15 子对象去重
-
-**实验问题。** 我们要确认“子对象去重”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment15() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(15);
-    }
-}
+```bash
+mvn -q -Dtest='com.frank.mybatis.chapter04.*' test
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+文件：命令行｜package：无｜前置依赖：缓存测试
 
-### 12.16 LEFT JOIN 空对象
-
-**实验问题。** 我们要确认“LEFT JOIN 空对象”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment16() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(16);
-    }
-}
+```bash
+mvn -q -Dtest=com.frank.mybatis.chapter04.CacheChapter04Test test
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+文件：命令行｜package：无｜前置依赖：插件测试
 
-### 12.17 association 单值映射
-
-**实验问题。** 我们要确认“association 单值映射”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment17() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(17);
-    }
-}
+```bash
+mvn -q -Dtest=com.frank.mybatis.chapter04.PluginChapter04Test test
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
+文件：命令行｜package：无｜前置依赖：嵌套映射测试
 
-### 12.18 collection 空集合
-
-**实验问题。** 我们要确认“collection 空集合”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment18() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(18);
-    }
-}
+```bash
+mvn -q -Dtest=com.frank.mybatis.chapter04.NestedMappingChapter04Test test
 ```
 
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.19 NULL 类型处理
-
-**实验问题。** 我们要确认“NULL 类型处理”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment19() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(19);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.20 H2 双连接事务
-
-**实验问题。** 我们要确认“H2 双连接事务”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment20() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(20);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.21 可变结果保护
-
-**实验问题。** 我们要确认“可变结果保护”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment21() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(21);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.22 绕过框架更新
-
-**实验问题。** 我们要确认“绕过框架更新”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment22() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(22);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.23 触发器关联失效
-
-**实验问题。** 我们要确认“触发器关联失效”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment23() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(23);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.24 租户 key 隔离
-
-**实验问题。** 我们要确认“租户 key 隔离”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment24() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(24);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.25 缓存命中日志
-
-**实验问题。** 我们要确认“缓存命中日志”不是偶然行为，而是由明确的生命周期或元数据规则保证。先准备最小输入，再观察命中次数、对象数量和事务状态。
-
-**执行步骤。**
-
-1. 创建测试夹具并清空共享缓存。
-2. 执行一次原始操作，记录 SQL 和返回值。
-3. 重复操作或改变一个维度。
-4. 检查计数器、结果对象和日志。
-5. finally 中关闭会话，避免连接泄漏。
-
-```java
-@Test
-void experiment25() {
-    fixture.reset();
-    try (SqlSession session = fixture.openSession()) {
-        Object first = fixture.run(session);
-        Object second = fixture.runAgain(session);
-        assertNotNull(first);
-        assertNotNull(second);
-        fixture.assertExpectedForCase(25);
-    }
-}
-```
-
-**结论。** 如果结果不符合预期，按“最终 SQL -> CacheKey 字段 -> 缓存层级 -> 清理时机 -> 事务提交”顺序排查。不要先修改 Map 的实现；多数错误来自边界放错位置。
-
-### 12.26 代码审查清单 1
-
-审查第 1 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review1(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.27 代码审查清单 2
-
-审查第 2 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review2(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.28 代码审查清单 3
-
-审查第 3 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review3(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.29 代码审查清单 4
-
-审查第 4 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review4(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.30 代码审查清单 5
-
-审查第 5 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review5(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.31 代码审查清单 6
-
-审查第 6 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review6(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.32 代码审查清单 7
-
-审查第 7 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review7(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.33 代码审查清单 8
-
-审查第 8 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review8(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.34 代码审查清单 9
-
-审查第 9 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review9(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.35 代码审查清单 10
-
-审查第 10 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review10(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.36 代码审查清单 11
-
-审查第 11 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review11(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.37 代码审查清单 12
-
-审查第 12 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review12(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.38 代码审查清单 13
-
-审查第 13 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review13(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.39 代码审查清单 14
-
-审查第 14 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review14(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.40 代码审查清单 15
-
-审查第 15 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review15(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.41 代码审查清单 16
-
-审查第 16 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review16(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.42 代码审查清单 17
-
-审查第 17 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review17(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.43 代码审查清单 18
-
-审查第 18 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review18(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.44 代码审查清单 19
-
-审查第 19 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review19(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.45 代码审查清单 20
-
-审查第 20 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review20(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.46 代码审查清单 21
-
-审查第 21 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review21(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.47 代码审查清单 22
-
-审查第 22 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review22(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.48 代码审查清单 23
-
-审查第 23 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review23(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.49 代码审查清单 24
-
-审查第 24 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review24(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
-### 12.50 代码审查清单 25
-
-审查第 25 组代码时，重点看输入是否可能为 null、集合是否可变、方法是否重载、SQL 是否包含分页和租户条件。缓存 key 的构造顺序一旦改变，旧数据应整体失效，不能只依赖哈希值“碰巧不同”。
-
-插件必须通过声明的接口方法进入 `intercept`，未声明的方法原样转发；嵌套结果必须先判断子 id，再创建子对象。更新清理最好覆盖失败、回滚、关闭和异常传播路径。
-
-```java
-void review25(MappedStatement ms, CacheKey key) {
-    require(ms.getId() != null);
-    require(key != null);
-    // 真实项目在这里加入断言、指标或测试夹具。
-}
-```
-
+### 12.2 必须覆盖的失效与映射矩阵
+
+| 场景 | 必须结果 |
+| --- | --- |
+| 同 session、同 key | 一级缓存命中，JDBC 只执行一次 |
+| 不同 session | 一级缓存不共享 |
+| 二级查询后 rollback | pending 丢弃，另一 session 不能命中 |
+| 二级查询后 commit | 结果发布到 namespace delegate |
+| update 后同 session 查询 | 一级缓存已清，不能返回旧对象 |
+| update commit | namespace 二级缓存清理 |
+| update rollback / close | 不发布清理或 pending 结果 |
+| 参数、SQL、offset、limit、环境不同 | CacheKey 不相等 |
+| 数组参数内容相同 | CacheKey 相等 |
+| 插件签名错误 | 包装期失败 |
+| 未声明方法 | 原样转发 |
+| 多插件 | 顺序稳定，均能 proceed |
+| JOIN 重复父行 | 父对象唯一 |
+| 子 id 重复 | collection 不重复追加 |
+| LEFT JOIN 子 id 为 null | 空集合，不创建空子对象 |
+| SQL NULL | Java 属性仍为 null |
+
+### 12.3 最后检查
+
+四个边界必须成立：CacheKey 定义结果身份；一级缓存绑定 SqlSession，二级缓存只在 commit 后发布；插件只代理精确签名并显式 proceed；ResultMap 用父/子 id 折叠 JOIN，子 id 为空时跳过对象创建。不要跨线程共享 SqlSession，也不要修改二级缓存命中的可变对象。生产二级缓存还需容量、并发、复制和跨进程失效策略；主 schema 仍只有 `t_user`，订单表只存在 `schema-ch04.sql`。
+
+至此，执行链上只剩最后一块没有归位的职责：JDBC 值与 Java 类型之间的转换还散落在各处，生成主键、批量执行和连接所有权也没有明确边界。第 05 篇用 `TypeHandlerRegistry`、`BatchExecutor` 和 `TransactionFactory` 收拢它们——本篇的 `BaseExecutor` 生命周期与 `Configuration` 挂载点会原样复用，不需要再次重构。
+
+> 系列导航：上一篇：[手写 MyBatis 03：动态 SQL 与参数绑定](/2026/09/11/articles/Mybatis/03-mybatis-dynamic-sql-and-parameters/) ｜ 本篇是第 4 篇 ｜ 下一篇：[手写 MyBatis 05：类型、批处理、事务与 Spring 生态增量](/2026/09/13/articles/Mybatis/05-mybatis-types-transactions-and-ecosystem/)

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="329" fill="none" stroke="#D9DFE8"/>
+
+  <!-- 面板 A：classpath -->
+  <rect x="40" y="36" width="360" height="262" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="60" y="66" font-size="17" font-weight="700" fill="#3C5488">A</text>
+  <text x="82" y="65" font-size="14" font-weight="600" fill="#252A33">文件路径 vs classpath</text>
+  <rect x="60" y="84" width="320" height="42" rx="6" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="220" y="110" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">src/test/resources/mapper/User.xml</text>
+  <text x="220" y="146" text-anchor="middle" font-size="12" fill="#6B7280">IDE 能跑 · jar 运行时不存在</text>
+  <rect x="60" y="166" width="320" height="42" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="220" y="192" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">classpath: mapper/User.xml</text>
+  <text x="220" y="238" text-anchor="middle" font-size="12" fill="#6B7280">开发、测试、打包三种形态</text>
+  <text x="220" y="256" text-anchor="middle" font-size="12" fill="#6B7280">同一条解析路径</text>
+
+  <!-- 面板 B：XXE -->
+  <rect x="420" y="36" width="360" height="262" rx="10" fill="#FFFFFF" stroke="#D9DFE8"/>
+  <text x="440" y="66" font-size="17" font-weight="700" fill="#3C5488">B</text>
+  <text x="462" y="65" font-size="14" font-weight="600" fill="#252A33">解析 XML 的第一课是安全</text>
+  <rect x="440" y="84" width="320" height="42" rx="6" fill="#E64B35" fill-opacity="0.10" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="600" y="110" text-anchor="middle" font-size="12" fill="#252A33" font-family="Consolas,monospace">&lt;!DOCTYPE … &lt;!ENTITY xxe SYSTEM "file:///…"&gt;&gt;</text>
+  <text x="600" y="146" text-anchor="middle" font-size="12" fill="#6B7280">外部实体一旦被解析，</text>
+  <text x="600" y="164" text-anchor="middle" font-size="12" fill="#6B7280">服务器文件内容可能随报错回显</text>
+  <rect x="440" y="184" width="320" height="42" rx="6" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="600" y="210" text-anchor="middle" font-size="12" fill="#252A33">禁 DOCTYPE · 禁外部实体 · 安全处理模式</text>
+  <text x="600" y="252" text-anchor="middle" font-size="12" fill="#6B7280">配置文件与 mapper XML</text>
+  <text x="600" y="270" text-anchor="middle" font-size="12" fill="#6B7280">共用同一个 parseDocument 入口</text>
+
+  <text x="410" y="326" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜资源加载统一走 classpath；DOM 解析默认拒绝 DOCTYPE 与外部实体</text>
+</svg>

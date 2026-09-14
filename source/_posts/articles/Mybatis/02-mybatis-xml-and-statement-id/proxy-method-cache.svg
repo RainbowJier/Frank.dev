@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" width="820" height="310"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="310" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="309" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="b6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 入口 -->
+  <rect x="36" y="56" width="190" height="66" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="131" y="84" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">MapperProxy.invoke</text>
+  <text x="131" y="106" text-anchor="middle" font-size="12" fill="#6B7280">接口 + Method + 实参</text>
+
+  <!-- methodCache -->
+  <rect x="286" y="44" width="200" height="90" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="386" y="72" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">methodCache 查表</text>
+  <text x="386" y="96" text-anchor="middle" font-size="12" fill="#6B7280">首次：构建 MapperMethod</text>
+  <text x="386" y="116" text-anchor="middle" font-size="12" fill="#6B7280">之后：直接命中复用</text>
+
+  <line x1="230" y1="89" x2="280" y2="89" stroke="#5A6472" stroke-width="1.5" marker-end="url(#b6)"/>
+
+  <!-- MapperMethod 职责 -->
+  <rect x="546" y="36" width="234" height="106" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="663" y="64" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">MapperMethod.execute</text>
+  <text x="663" y="88" text-anchor="middle" font-size="12" fill="#6B7280">拼 statement id · 解析实参</text>
+  <text x="663" y="108" text-anchor="middle" font-size="12" fill="#6B7280">按 commandType 调 Session</text>
+  <text x="663" y="128" text-anchor="middle" font-size="12" fill="#6B7280">selectOne / selectList / update</text>
+
+  <line x1="490" y1="89" x2="540" y2="89" stroke="#5A6472" stroke-width="1.5" marker-end="url(#b6)"/>
+
+  <!-- 对象方法旁路 -->
+  <rect x="286" y="182" width="200" height="44" rx="8" fill="#8491B4" fill-opacity="0.12" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="386" y="209" text-anchor="middle" font-size="12" fill="#252A33">toString/hashCode/equals 旁路</text>
+  <path d="M 131 126 C 131 200, 240 204, 280 204" fill="none" stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#b6)"/>
+
+  <text x="410" y="262" text-anchor="middle" font-size="12" fill="#6B7280">注册期已解析注解；运行期只剩查表转发——反射开销只付第一次</text>
+
+  <text x="410" y="294" text-anchor="middle" font-size="12" fill="#6B7280">图 6｜代理只做缓存与委托，路由细节全部下沉到 MapperMethod</text>
+</svg>

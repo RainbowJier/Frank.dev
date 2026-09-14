@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" width="820" height="360"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="360" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="359" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="e2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 参数侧 -->
+  <rect x="40" y="52" width="320" height="106" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="200" y="82" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">参数写入（带 JDBCType）</text>
+  <text x="200" y="108" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">setParameter(ps, i, v, jdbcType)</text>
+  <text x="200" y="134" text-anchor="middle" font-size="12" fill="#6B7280">null → setNull(类型码)，不进处理器</text>
+
+  <!-- 结果侧 -->
+  <rect x="460" y="52" width="320" height="106" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="620" y="82" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">三类读取（对称）</text>
+  <text x="620" y="108" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">getResult(rs, 列名 / 下标)</text>
+  <text x="620" y="134" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">getResult(cs, 下标)</text>
+
+  <!-- 中央注册表 -->
+  <rect x="250" y="192" width="320" height="76" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="2"/>
+  <text x="410" y="222" text-anchor="middle" font-size="14" font-weight="600" fill="#252A33">TypeHandlerRegistry</text>
+  <text x="410" y="246" text-anchor="middle" font-size="12" fill="#6B7280">同一套查找规则、同一个处理器</text>
+
+  <path d="M 200 162 C 200 186, 300 196, 340 206" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e2)"/>
+  <path d="M 620 162 C 620 186, 520 196, 480 206" fill="none" stroke="#5A6472" stroke-width="1.5" marker-end="url(#e2)"/>
+
+  <!-- NULL/零 区分 -->
+  <rect x="40" y="288" width="740" height="36" rx="6" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="410" y="311" text-anchor="middle" font-size="13" fill="#252A33">getLong() 的 0 与 SQL NULL 必须区分——wasNull() 统一收在 BaseTypeHandler</text>
+
+  <text x="410" y="348" text-anchor="middle" font-size="12" fill="#6B7280">图 2｜两侧对称的类型契约：写入与读取走同一个注册表，规则只有一份</text>
+</svg>

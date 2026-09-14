@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 共享模板树 -->
+  <rect x="36" y="46" width="330" height="170" rx="10" fill="#3C5488" fill-opacity="0.06" stroke="#3C5488" stroke-width="2"/>
+  <text x="201" y="76" text-anchor="middle" font-size="15" font-weight="600" fill="#252A33">共享：SqlNode 模板树</text>
+  <text x="201" y="102" text-anchor="middle" font-size="12" fill="#6B7280">注册期编译一次，只读</text>
+  <rect x="70" y="120" width="120" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="130" y="143" text-anchor="middle" font-size="12" fill="#252A33">IfSqlNode</text>
+  <rect x="212" y="120" width="120" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="272" y="143" text-anchor="middle" font-size="12" fill="#252A33">ForEachSqlNode</text>
+  <rect x="212" y="166" width="120" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="272" y="189" text-anchor="middle" font-size="12" fill="#252A33">TextSqlNode</text>
+
+  <!-- 两个隔离上下文 -->
+  <rect x="440" y="36" width="344" height="88" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="612" y="64" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">DynamicContext（调用 A）</text>
+  <text x="612" y="88" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">sql 片段 · mappings · __frch_id_0…</text>
+  <text x="612" y="108" text-anchor="middle" font-size="12" fill="#6B7280">本次调用的可变状态</text>
+
+  <rect x="440" y="140" width="344" height="88" rx="10" fill="#00A087" fill-opacity="0.10" stroke="#00A087" stroke-width="1.5"/>
+  <text x="612" y="168" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">DynamicContext（调用 B）</text>
+  <text x="612" y="192" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">另一套片段 · mappings · 绑定</text>
+  <text x="612" y="212" text-anchor="middle" font-size="12" fill="#6B7280">与 A 完全隔离</text>
+
+  <line x1="372" y1="100" x2="434" y2="78" stroke="#5A6472" stroke-width="1.5" marker-end="url(#c3)"/>
+  <line x1="372" y1="160" x2="434" y2="182" stroke="#5A6472" stroke-width="1.5" marker-end="url(#c3)"/>
+
+  <!-- 警示 -->
+  <rect x="36" y="248" width="748" height="44" rx="8" fill="#E64B35" fill-opacity="0.08" stroke="#E64B35" stroke-width="1.5"/>
+  <text x="410" y="275" text-anchor="middle" font-size="13" fill="#252A33">若把可变状态放进模板树：并发调用互相污染——上一轮的循环变量泄漏到下一轮</text>
+
+  <text x="410" y="322" text-anchor="middle" font-size="12" fill="#6B7280">图 3｜共享的是规则（节点树），隔离的是状态（每次调用新建上下文）</text>
+</svg>

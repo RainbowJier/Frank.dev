@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" width="820" height="320"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="320" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="319" fill="none" stroke="#D9DFE8"/>
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+  </defs>
+
+  <!-- 模板输入 -->
+  <rect x="40" y="44" width="212" height="88" rx="8" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="146" y="74" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">SQL 模板（含 #{} 占位符）</text>
+  <text x="146" y="100" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">… where id=#{id} and age=#{age}</text>
+
+  <!-- 启动期解析一次 -->
+  <rect x="300" y="44" width="190" height="88" rx="8" fill="#4DBBD5" fill-opacity="0.12" stroke="#4DBBD5" stroke-width="1.5"/>
+  <text x="395" y="74" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">SqlTemplateParser</text>
+  <text x="395" y="100" text-anchor="middle" font-size="12" fill="#6B7280">注册期解析，仅一次</text>
+
+  <!-- 元数据产物 -->
+  <rect x="540" y="32" width="240" height="112" rx="8" fill="#00A087" fill-opacity="0.12" stroke="#00A087" stroke-width="1.5"/>
+  <text x="660" y="58" text-anchor="middle" font-size="14" font-weight="500" fill="#252A33">PreparedSql（不可变）</text>
+  <text x="660" y="84" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">sql = "… id=? and age=?"</text>
+  <text x="660" y="108" text-anchor="middle" font-size="12" fill="#6B7280" font-family="Consolas,monospace">parameterNames = [id, age]</text>
+
+  <line x1="258" y1="88" x2="294" y2="88" stroke="#5A6472" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="496" y1="88" x2="534" y2="88" stroke="#5A6472" stroke-width="1.5" marker-end="url(#a2)"/>
+
+  <!-- 反例：每调用解析 -->
+  <g stroke="#8491B4" stroke-width="1.5" stroke-dasharray="5 4">
+    <path d="M 300 132 C 240 200, 160 200, 146 232" fill="none" marker-end="url(#a2)"/>
+  </g>
+  <rect x="40" y="236" width="220" height="34" rx="6" fill="#8491B4" fill-opacity="0.10" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="150" y="258" text-anchor="middle" font-size="12" fill="#6B7280">反例：每次调用重新解析</text>
+  <text x="330" y="216" font-size="12" fill="#6B7280">慢——正则逐次执行</text>
+  <text x="330" y="234" font-size="12" fill="#6B7280">漏——注册期校验无从谈起</text>
+  <text x="560" y="180" font-size="12" fill="#6B7280">共享：多个 Session 只读复用，</text>
+  <text x="560" y="198" font-size="12" fill="#6B7280">防御性复制防外部篡改</text>
+
+  <text x="410" y="300" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜模板在注册期一次性转换为不可变元数据，运行期零解析</text>
+</svg>
