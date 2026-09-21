@@ -62,6 +62,8 @@ function scanRoot(root) {
 
   return entries
     .filter(entry => entry.isDirectory())
+    // speckit-* 是 spec-kit 开发流程技能（装在 .agents/skills 供 ZCode/Codex 使用），不属于站点内容，不发布
+    .filter(entry => !entry.name.startsWith('speckit-'))
     .map(entry => {
       const source = readTextSafe(path.join(root, entry.name, 'SKILL.md'));
       const metadata = source ? parseFrontMatter(source) : null;

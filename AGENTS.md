@@ -31,8 +31,28 @@ Frank 的个人技术博客与作品集（https://frank-dev.site）：Hexo 8.1.2
 
 ## 已知取舍（勿"修复"）
 
-- AI 阅读助手的 API key 明文写在 `_config.oranges.yml` 的 `aiChat.apiKey`——静态博客无后端，key 随页面源码公开是明确接受的取舍，不要改回环境变量/GitHub Secrets 注入方案。
+- AI 阅读助手的 API key 不入仓库：`_config.oranges.yml` 的 `aiChat.apiKey` 留空，线上由 GitHub Secrets 的 `AI_CHAT_KEY` 在构建时注入；本地预览用 `AI_CHAT_KEY=sk-xxx pnpm server`。这是公开仓库 key 被扫盗刷事故（commit 97d824a）后的定案，不要再改回明文方案。
 - 推送 main 即触发 `.github/workflows/deploy.yml` 部署（Node 22 + pnpm 11.17.0 + `pnpm install --frozen-lockfile`）；依赖变化时务必一并提交 `pnpm-lock.yaml`。
+
+## spec-kit 开发流程
+
+本项目用 GitHub spec-kit 管理功能性改动，设施在 `.specify/`（模板/脚本/宪章），技能在 `.agents/skills/speckit-*`（`scripts/skills.js` 已排除其发布到 Skill-Hub）。
+
+**工作分两类，别走错道**：
+
+- **日常写作**（新增/修改文章、配图）：不走 spec-kit，按上文"写作约定"直接操作，conventional commits 提交。
+- **功能性改动**（主题模板/CSS/JS、构建脚本、新页面类型、配置结构调整、涉及多篇文章的批量重构）：走 spec-kit 流程。
+
+**流程纪律（硬性）**：
+
+1. 新 feature 先建目录：`bash .specify/scripts/bash/create-new-feature.sh "short-name"`（ASCII 名），会自动建分支与 `.specify/feature.json`。
+2. 顺序不可跳：specify → plan → tasks → implement；每步产出（`specs/NNN-xxx/` 下的 spec.md / plan.md / tasks.md）落盘并经我确认后才进下一步。
+3. 实现与 spec 冲突时以 spec 为准；需求变更先改 spec（经我确认）再改代码。
+4. 一个任务一个原子提交，conventional commits 格式，正文引用任务编号。
+5. 验收以 spec 的 Given/When/Then 为准：涉及页面效果的必须 `pnpm server` 本地跑通并截图/描述给我，涉及构建的必须 `pnpm build` 成功。
+6. 推送 main 即触发线上部署——implement 完成后**先停下等我确认，禁止自行 push**。
+
+**项目宪章**：`.specify/memory/constitution.md` 定义技术原则（与 AGENTS.md 冲突时以宪章为准）。
 
 ## 提交信息
 
