@@ -1,8 +1,9 @@
 <%
   // 文章页 AI 阅读助手：tools-bar 图标 + 侧边聊天面板。
-  // 仅在真实文章页渲染；endpoint 或 apiKey 任一缺失时整块不输出。
+  // 仅在真实文章页渲染；endpoint 或 key 任一缺失时整块不输出。
+  // key 优先取环境变量 AI_CHAT_KEY（线上由 GitHub Secret 在构建时注入，仓库不留明文）
   var aiChat = theme.aiChat || {}
-  var aiChatKey = (aiChat.apiKey || '').trim()
+  var aiChatKey = (process.env.AI_CHAT_KEY || aiChat.apiKey || '').trim()
   if (aiChat.enable && aiChat.endpoint && aiChatKey && is_post()) {
     var aiChatConfig = {
       endpoint: aiChat.endpoint,

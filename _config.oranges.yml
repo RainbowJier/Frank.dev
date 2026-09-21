@@ -167,8 +167,9 @@ aiChat:
   enable: true
   # OpenAI 兼容接口完整地址，留空则文章页不显示 AI 助手
   endpoint: "https://api.siliconflow.cn/v1/chat/completions"
-  # API Key：直接写死（静态博客的 key 本就随页面源码公开）
-  apiKey: "sk-wzmqfkehtvevfuuhnmekbciovhvfyaexqibowpxoxatspgch"
+  # API Key：留空。线上由 GitHub Secrets 的 AI_CHAT_KEY 在构建时注入（仓库不留明文，
+  # 避免被自动化扫描盗用）；本地预览 AI 助手用 AI_CHAT_KEY=sk-xxx pnpm server
+  apiKey: ""
   # 模型名，按接口可用模型填写（实测 GLM-4-9B 首token 0.7s 即问即答；
   # 想要更高质量可换 deepseek-ai/DeepSeek-V4-Flash，但需等待 20s+）
   model: "THUDM/GLM-4-9B-0414"

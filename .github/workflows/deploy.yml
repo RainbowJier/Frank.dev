@@ -34,6 +34,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm exec hexo generate
+        env:
+          # AI 阅读助手 key：构建时从 Secret 注入，仓库内不保留明文
+          # （在仓库 Settings → Secrets and variables → Actions 配置 AI_CHAT_KEY）
+          AI_CHAT_KEY: ${{ secrets.AI_CHAT_KEY }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

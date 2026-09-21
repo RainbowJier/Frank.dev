@@ -215,19 +215,23 @@ description: 一句话项目简介
 
 ## AI 阅读助手
 
-AI 助手只在文章详情页渲染，并且必须同时满足 `aiChat.enable`、接口地址和 API key 均有效。当前配置使用硅基流动的 OpenAI 兼容接口，API key 直接写在 `_config.oranges.yml` 中：
+AI 助手只在文章详情页渲染，并且必须同时满足 `aiChat.enable`、接口地址和 API key 均有效。当前配置使用硅基流动的 OpenAI 兼容接口，key 不写进仓库：
 
 ```yaml
 aiChat:
   enable: true
   endpoint: "https://api.siliconflow.cn/v1/chat/completions"
-  apiKey: "sk-xxxx"       # 直接填写硅基流动 API Key
+  apiKey: ""              # 留空：key 由构建环境注入，仓库不留明文
   model: "THUDM/GLM-4-9B-0414"
   stream: true
   maxContextTurns: 6
 ```
 
-不再使用 `AI_CHAT_KEY` 环境变量或 GitHub Secrets 注入；修改配置后重启 `pnpm server` 生效。
+**key 的注入方式**：key 明文不进仓库（公开仓库会被自动化扫描器扒取，本仓库已有一次被扫盗刷的实例）。线上构建时由 `.github/workflows/deploy.yml` 从仓库 Secret `AI_CHAT_KEY`（Settings → Secrets and variables → Actions）读取并注入页面；本地预览 AI 助手时用环境变量传入：
+
+```bash
+AI_CHAT_KEY=sk-xxx pnpm server
+```
 
 ### 本地预览
 
@@ -243,7 +247,7 @@ pnpm exec hexo server -p 4321
 
 ### 安全说明
 
-静态博客没有后端，API key 会随页面源码公开，也会随仓库公开——这是当前方案明确接受的取舍。请使用独立、低额度、严格限流的 key，不要与其他付费服务共用。若要彻底避免 key 暴露，应改为服务端代理转发模型请求。
+静态博客没有后端，前端直连方案下 API key 仍会随页面源码公开（访问者可读到），这是明确接受的取舍；仓库侧则通过「Secret 注入、不存明文」把 GitHub 扫描这条最大的自动化泄露渠道关掉。运行时配套「低余额 + 余额预警 + 定期轮换」策略：账户只留极小额余额，即使 key 被滥用，上限就是余额本身。请使用独立、低额度、严格限流的 key，不要与其他付费服务共用。若要彻底避免 key 暴露，应改为服务端代理（如 Cloudflare Workers）转发模型请求。
 
 ## 部署
 
