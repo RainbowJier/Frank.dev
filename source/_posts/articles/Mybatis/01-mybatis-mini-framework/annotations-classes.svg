@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" width="820" height="310"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="310" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="309" fill="none" stroke="#D9DFE8"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#9AA4B2"/>
+    </marker>
+  </defs>
+
+  <!-- Mapper 方法示意（业务侧，灰紫） -->
+  <rect x="50" y="80" width="330" height="100" rx="6" fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5"/>
+  <text x="215" y="106" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">UserMapper.insert（示意）</text>
+  <text x="215" y="132" text-anchor="middle" font-size="12" fill="#6B7280">@Insert("insert into t_user ...")</text>
+  <text x="215" y="156" text-anchor="middle" font-size="12" fill="#6B7280">int insert(@Param("id") Long id, ...)</text>
+
+  <!-- SQL 注解组（新建，深蓝） -->
+  <text x="460" y="52" font-size="12" font-weight="600" fill="#3C5488">SQL 注解 · Target(METHOD)</text>
+  <g fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5">
+    <rect x="460" y="62" width="110" height="36" rx="6"/>
+    <rect x="585" y="62" width="100" height="36" rx="6"/>
+    <rect x="460" y="108" width="110" height="36" rx="6"/>
+    <rect x="585" y="108" width="100" height="36" rx="6"/>
+  </g>
+  <g text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">
+    <text x="515" y="85">Select</text>
+    <text x="635" y="85">Insert</text>
+    <text x="515" y="131">Update</text>
+    <text x="635" y="131">Delete</text>
+  </g>
+
+  <!-- Param（新建，深蓝） -->
+  <text x="460" y="182" font-size="12" font-weight="600" fill="#3C5488">Param · Target(PARAMETER)</text>
+  <rect x="460" y="192" width="110" height="36" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <text x="515" y="215" text-anchor="middle" font-size="13" font-weight="500" fill="#252A33">Param</text>
+  <text x="585" y="215" font-size="11" fill="#6B7280">参数命名 —— #{} 里名字的来源</text>
+
+  <!-- 标注关系（虚线） -->
+  <g fill="none" stroke="#9AA4B2" stroke-width="1.5" stroke-dasharray="5 4">
+    <line x1="455" y1="95" x2="388" y2="115" marker-end="url(#arrow)"/>
+    <line x1="455" y1="210" x2="388" y2="150" marker-end="url(#arrow)"/>
+  </g>
+  <text x="398" y="102" font-size="11" fill="#6B7280">标注方法</text>
+  <text x="398" y="192" font-size="11" fill="#6B7280">标注参数</text>
+
+  <text x="410" y="272" text-anchor="middle" font-size="12" fill="#6B7280">五个注解均为 RetentionPolicy.RUNTIME —— 注册期反射可读；注解只声明，绝不执行</text>
+  <text x="410" y="298" text-anchor="middle" font-size="12" fill="#6B7280">图 4｜五个运行时注解的标注目标：SQL 注解标方法，Param 标参数</text>
+</svg>

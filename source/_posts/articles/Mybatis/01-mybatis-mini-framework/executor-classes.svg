@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" width="820" height="340"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="340" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="339" fill="none" stroke="#D9DFE8"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="hollow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11 z" fill="#FFFFFF" stroke="#5A6472" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <!-- 新建类（深蓝） -->
+  <rect x="60" y="60" width="170" height="72" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="330" y="60" width="170" height="64" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="330" y="160" width="170" height="64" rx="6" fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5"/>
+  <rect x="60" y="180" width="170" height="72" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+  <!-- JDK（灰紫） -->
+  <rect x="330" y="260" width="140" height="44" rx="6" fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5"/>
+
+  <g text-anchor="middle" fill="#252A33">
+    <text x="145" y="82" font-size="11" font-style="italic" fill="#6B7280">«interface»</text>
+    <text x="145" y="102" font-size="13" font-weight="500">Executor</text>
+    <text x="145" y="122" font-size="11" fill="#6B7280">queryOne / queryList / update</text>
+    <text x="145" y="202" font-size="13" font-weight="500">SimpleExecutor</text>
+    <text x="145" y="222" font-size="11" fill="#6B7280">一条语句一开一关</text>
+    <text x="415" y="84" font-size="13" font-weight="500">ParameterHandler</text>
+    <text x="415" y="106" font-size="11" fill="#6B7280">resolve 命名 · bind 绑 ?</text>
+    <text x="415" y="184" font-size="13" font-weight="500">ResultSetHandler</text>
+    <text x="415" y="206" font-size="11" fill="#6B7280">列 → 字段映射</text>
+    <text x="400" y="286" font-size="13" font-weight="500">Connection</text>
+    <text x="482" y="286" font-size="11" fill="#6B7280" text-anchor="start">java.sql</text>
+  </g>
+
+  <!-- 关系边 -->
+  <g fill="none" stroke="#5A6472" stroke-width="1.5">
+    <line x1="145" y1="132" x2="145" y2="176" marker-end="url(#hollow)"/>
+    <path d="M230,196 H285 V92 H325" marker-end="url(#arrow)"/>
+    <line x1="230" y1="216" x2="325" y2="200" marker-end="url(#arrow)"/>
+    <path d="M230,232 H285 V282 H325" marker-end="url(#arrow)"/>
+  </g>
+  <g font-size="11" fill="#6B7280">
+    <text x="238" y="150">实现</text>
+    <text x="238" y="120">resolve / bind</text>
+    <text x="240" y="258">用完即关 · 不 commit</text>
+  </g>
+
+  <rect x="50" y="314" width="12" height="12" fill="#3C5488" fill-opacity="0.85"/>
+  <text x="68" y="324" font-size="11" fill="#6B7280">本章新建</text>
+  <rect x="150" y="314" width="12" height="12" fill="#8491B4" fill-opacity="0.85"/>
+  <text x="168" y="324" font-size="11" fill="#6B7280">JDK</text>
+  <text x="490" y="324" text-anchor="middle" font-size="12" fill="#6B7280">图 8｜executor 包：执行器只认 Connection 与元数据，事务边界留给上层</text>
+</svg>

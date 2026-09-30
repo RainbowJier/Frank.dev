@@ -256,11 +256,15 @@ class AnnotationContractTest {
 }
 ```
 
+四个 SQL 注解与 `Param` 的分工用一张图钉住：SQL 注解只标在方法上，`Param` 只标在参数上，五个注解全部保留到运行期——但只负责声明，执行时它们一个字都不会被再次读取。
+
+![图 4：五个运行时注解的标注目标](annotations-classes.svg)
+
 ## 5. Checkpoint 3：mapping，把文本变成元数据
 
 **为什么需要这一步：** `PreparedStatement` 只认 `?` 加下标，而人写的是 `#{name}`。两者之间必须有一次转换，产物就是两份元数据：最终 SQL（交给 `prepareStatement`）和有序参数名列表（绑定实参时按下标取用）。关键是转换在启动期只做一次、结果不可变共享——`MappedStatement` 注册后会被多个 Session 只读使用；每调用一次就重新正则解析一遍，既慢又给“注册期校验”留下漏洞。这也是固定 SQL 在第 03 篇引入 `SqlSource` 之前最简单正确的形态。
 
-![图 4：模板注册期一次性转换为不可变元数据](template-to-metadata.svg)
+![图 5：模板注册期一次性转换为不可变元数据](template-to-metadata.svg)
 
 **依赖：** Checkpoint 2。**目录：** `src/main/java/com/frank/mybatis/mapping`。
 ### 5.1 `SqlCommandType.java`
@@ -362,11 +366,15 @@ class SqlTemplateParserTest {
 }
 ```
 
+本节四个类型的关系一图流：解析器把模板文本变成 `PreparedSql`，`MappedStatement` 把它连同命令类型一起封装成不可变元数据——注册之后多个 Session 只读共享，谁也不会再改它。
+
+![图 6：mapping 包四个类的类关系](mapping-classes.svg)
+
 ## 6. Checkpoint 4：executor 的参数与结果处理
 
 **为什么需要这一步：** 绑定与映射是 JDBC 里最容易写错的两段样板——占位符按它在 SQL 里的出现顺序对应下标，与 Java 形参顺序无关；列名要对上驼峰字段，NULL 不能落进基本类型。把它们收进一个组件并以 `Executor` 接口暴露有两个原因：其一，执行器只依赖 `Connection`、用完语句就关，事务边界完全留给上层；其二，有了接口，第 04 篇的缓存和第 05 篇的批处理才能换成别的实现而不动调用方。
 
-![图 5：参数绑定按 SQL 出现顺序建立下标](bind-by-sql-order.svg)
+![图 7：参数绑定按 SQL 出现顺序建立下标](bind-by-sql-order.svg)
 
 **依赖：** `PreparedSql`、`MappedStatement`。**目录：** `src/main/java/com/frank/mybatis/executor`。
 ### 6.1 `ParameterHandler.java`
@@ -562,11 +570,15 @@ class ExecutorContractTest {
 }
 ```
 
+executor 包的分工收拢成一张图：`SimpleExecutor` 实现接口、指挥两个处理器干活，对 `Connection` 只用不拥有——语句开一条关一条，提交与归还都不过问。
+
+![图 8：executor 包四个类的类关系](executor-classes.svg)
+
 ## 7. Checkpoint 5：transaction，把 Connection 生命周期独立出来
 
 **为什么需要这一步：** 谁借出连接，谁就要对提交、回滚、关闭负责。如果 Executor 直接持有 `Connection` 并随手 commit，连接池和外部事务管理就永远插不进来。把生命周期收进 `Transaction` 接口后，Executor 只“使用”连接而不“拥有”连接——第 05 篇把 `new JdbcTransaction(dataSource)` 换成事务工厂、连接池或 Spring 实现时，执行器一行都不用改。`close()` 做成幂等、关闭后拒绝访问，则是防止同一段业务代码把连接归还两次。
 
-![图 6：连接生命周期归 Transaction 所有](transaction-ownership.svg)
+![图 9：连接生命周期归 Transaction 所有](transaction-ownership.svg)
 
 **目录：** `src/main/java/com/frank/mybatis/transaction`。**依赖：** JDK JDBC 与已有 H2。
 ### 7.1 `Transaction.java`
@@ -651,6 +663,10 @@ class JdbcTransactionTest {
 }
 ```
 
+transaction 包只有两个类型，关系也最简单：`JdbcTransaction` 构造时从 `DataSource` 借出连接并关掉自动提交，独占持有到 `close()` 归还为止——生命周期从头到尾都在它手里。
+
+![图 10：transaction 包两个类的类关系](transaction-classes.svg)
+
 ## 8. Checkpoint 6：session，组织一次业务会话
 
 **为什么需要这一步：** 零件已经齐了，但还散着：`Transaction` 管一根连接的提交与归还，`Executor` 会执行语句却不知道“业务”为何物，`MappedStatement` 是一条条元数据却没人集中保管。而真实的一次业务操作往往是“多条语句 + 一个事务”——转账就是两条 update，要么都生效、要么都不生效。如果让调用方自己开连接、自己关自动提交、自己记得 commit、异常时自己回滚再关连接，样板和遗忘点会全部回来，框架就白写了。`SqlSession` 补上的正是这个“组织者”：打开它等于开始一次事务；执行语句时它按 statement id 查元数据、转交 Executor；关闭它时未提交的工作自动作废——忘 commit 顶多丢数据，绝不会留下半截事务弄脏数据库。
@@ -665,7 +681,7 @@ class JdbcTransactionTest {
 
 一句话记住分工：**手册全局一份、大门常开、窗口一次一换；Executor 只低头干活，Transaction 只管连接的生老病死，Session 是唯一对调用方说话的。** 这也回答了“`Configuration` 为什么放在 session 包”：它是所有 Session 共享的注册表，数据源与元数据注册一次、只读共享，和短命的 Session 本来就是两种生命周期，不该搅在一个类里。
 
-![图 7：一次业务会话的边界与两条出口](session-transaction-scope.svg)
+![图 11：一次业务会话的边界与两条出口](session-transaction-scope.svg)
 
 **目录：** `src/main/java/com/frank/mybatis/session`。本节新建 5 个文件，严格按“先造被依赖的”推进：注册表 `Configuration` → 会话契约 `SqlSession` → 实现 `DefaultSqlSession` → 大门 `SqlSessionFactory` 及其默认实现。上一节的 `Transaction` 与 `Executor` 只被组装，不被修改。
 ### 8.1 `Configuration.java`：先解决“元数据放哪”
@@ -821,6 +837,10 @@ public final class DefaultSqlSessionFactory implements SqlSessionFactory {
 ```
 
 `openSession()` 一行就能读懂：用手册里的数据源新开一个事务（借连接 + 关自动提交），连同手册一起交给新窗口。Factory 长期持有 `Configuration`，每个 Session 只读引用它——正是“手册一份、窗口多个”的代码写照。
+
+五个类全部就位，用一张图收拢它们的关系：深蓝是本节新建的 session 包，灰紫是被组装的已有零件；实线箭头是“创建 / 持有 / 调用”，空心三角是“实现接口”。对照代码看三条主干：Factory 开门时创建 Session（顺手 `new JdbcTransaction`）；Session 构造时从 Transaction 拿连接、创建 Executor；Session 查手册、Executor 用连接，两条路径都汇回已有零件。
+
+![图 12：session 章节五个新建类与已有零件的关系](session-class-relationships.svg)
 **验收：** `mvn clean test` 编译并通过；用工厂打开两个 Session，验证它们各自持有独立的 Connection；未 commit 就 close 的写入，换一个 Session 查不到。
 ### 8.6 组件测试：隔离、提交与关闭回滚（本节即可运行）
 
@@ -1161,6 +1181,10 @@ class MapperBindingTest {
 }
 ```
 
+binding 与 builder 的协作一图收拢：注册期由 `MapperRegistry` 牵头——用 builder 解析注解、把生成的语句登记进 `Configuration`，再把代理工厂存起来；运行期 `MapperProxy` 只做查表转发，注解扫描、连接创建都和它无关。深蓝为本节新建，灰紫为引用的已有类。
+
+![图 13：binding 三件套与 builder 的类关系](binding-classes.svg)
+
 ## 10. Checkpoint 8：端到端测试，走通全链路
 
 **为什么需要这一步：** 前面七个 checkpoint 验证的都是单个组件的契约，还没有任何代码证明这些层拼在一起真的能工作。端到端测试用上一节就位的 `UserMapper` 走完 代理 → Session → Executor → JDBC → 结果映射 的全链路，并专门覆盖最容易被边界条件坑掉的场景：参数乱序、NULL、commit/rollback 的可见性、关闭后的调用。它锁住的不是某个类，而是层与层之间的契约——这正是 MyBatis 相对于裸 JDBC 的全部价值所在。
@@ -1221,7 +1245,7 @@ class MiniMybatisChapter01Test {
 }
 ```
 **验收：** `mvn clean test` 全部通过。这个测试同时覆盖插入、单查、列表、更新、删除、`user_name -> userName`、NULL、参数乱序、commit、rollback 和 Session 关闭边界。
-![图 8：一次 Mapper 方法调用的代理与 JDBC 时序](mapper-proxy-invocation-sequence.svg)
+![图 14：一次 Mapper 方法调用的代理与 JDBC 时序](mapper-proxy-invocation-sequence.svg)
 ## 11. 完成后的目录树与调用复盘
 
 **为什么需要这一步：** 写完不等于理解。把目录树和"注册期一次、调用期一次"的执行顺序各自串一遍，后面四篇在任意一层插入新能力（XML 解析、动态 SQL、缓存、批处理）时，你才判断得出改动落在哪个时机、会波及哪些边界。
@@ -1263,7 +1287,7 @@ src/test/java/com/frank/mybatis/
 | 新 Session 查不到写入 | 是否调用 `session.commit()` |
 | 关闭后仍想调用 Mapper | 代理绑定的 Session 已经失效 |
 | 多行却调用单查 | 改用 `List<User>` 或收紧 SQL 条件 |
-![图 9：本篇教学实现与真实 MyBatis 的能力边界](mini-vs-real-mybatis.svg)
+![图 15：本篇教学实现与真实 MyBatis 的能力边界](mini-vs-real-mybatis.svg)
 ## 12. 与真实 MyBatis 的对照，以及第 01 篇的止步处
 
 **为什么需要这一步：** 手写的意义不是替代 MyBatis，而是建立对照。知道每个手写类对应官方框架的哪个组件，将来读真实源码或排查线上问题时才有地图；同时明确本篇止步在哪里，"不做"的每一项才会在后续篇章里变成"为什么值得做"。

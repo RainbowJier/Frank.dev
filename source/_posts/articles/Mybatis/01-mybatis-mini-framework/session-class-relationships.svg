@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 600" width="820" height="600"
+     font-family="'Noto Sans SC','PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="820" height="600" fill="#FFFFFF"/>
+  <rect x="0.5" y="0.5" width="819" height="599" fill="none" stroke="#D9DFE8"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5A6472"/>
+    </marker>
+    <marker id="hollow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M1 1 L11 6 L1 11 z" fill="#FFFFFF" stroke="#5A6472" stroke-width="1.5"/>
+    </marker>
+  </defs>
+
+  <!-- 层带 A：本节新建 -->
+  <rect x="40" y="40" width="740" height="224" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="60" y="56" width="10" height="10" fill="#3C5488"/>
+  <text x="78" y="66" font-size="13" font-weight="600" fill="#3C5488">Checkpoint 6 新建 · session 包（5 个类）</text>
+
+  <!-- 层带 B：已有零件 -->
+  <rect x="40" y="300" width="740" height="190" rx="10" fill="#F4F7FA" stroke="#D9DFE8"/>
+  <rect x="60" y="316" width="10" height="10" fill="#8491B4"/>
+  <text x="78" y="326" font-size="13" font-weight="600" fill="#3C5488">已有零件 · 前序 checkpoint 与 JDK（6 个类）</text>
+
+  <!-- Band A 类盒：白底深蓝描边（新建） -->
+  <g fill="#FFFFFF" stroke="#3C5488" stroke-width="1.5">
+    <rect x="80" y="88" width="155" height="60" rx="6"/>
+    <rect x="280" y="88" width="205" height="60" rx="6"/>
+    <rect x="530" y="88" width="220" height="60" rx="6"/>
+    <rect x="80" y="196" width="155" height="60" rx="6"/>
+  </g>
+  <!-- 主角：DefaultSqlSession 低饱和填充 + 2px 描边 -->
+  <rect x="280" y="196" width="205" height="60" rx="6" fill="#3C5488" fill-opacity="0.12" stroke="#3C5488" stroke-width="2"/>
+
+  <!-- Band B 类盒：白底灰紫描边（已有） -->
+  <g fill="#FFFFFF" stroke="#8491B4" stroke-width="1.5">
+    <rect x="70" y="336" width="135" height="52" rx="6"/>
+    <rect x="230" y="336" width="150" height="52" rx="6"/>
+    <rect x="420" y="336" width="115" height="52" rx="6"/>
+    <rect x="575" y="336" width="145" height="52" rx="6"/>
+    <rect x="480" y="412" width="160" height="52" rx="6"/>
+    <rect x="660" y="412" width="110" height="52" rx="6"/>
+  </g>
+
+  <!-- Band A 文本 -->
+  <g text-anchor="middle" fill="#252A33">
+    <text x="157.5" y="108" font-size="11" font-style="italic" fill="#6B7280">«interface»</text>
+    <text x="157.5" y="128" font-size="13" font-weight="500">SqlSessionFactory</text>
+    <text x="382.5" y="114" font-size="13" font-weight="500">DefaultSqlSessionFactory</text>
+    <text x="382.5" y="134" font-size="11" fill="#6B7280">大门 · 长期存在</text>
+    <text x="640" y="114" font-size="14" font-weight="500">Configuration</text>
+    <text x="640" y="134" font-size="11" fill="#6B7280">手册 · 全局一份（注册表）</text>
+    <text x="157.5" y="216" font-size="11" font-style="italic" fill="#6B7280">«interface»</text>
+    <text x="157.5" y="236" font-size="13" font-weight="500">SqlSession</text>
+    <text x="382.5" y="222" font-size="14" font-weight="500">DefaultSqlSession</text>
+    <text x="382.5" y="242" font-size="11" fill="#6B7280">窗口 · 一次一换</text>
+  </g>
+
+  <!-- Band B 文本 -->
+  <g text-anchor="middle" fill="#252A33" font-size="13">
+    <text x="137.5" y="355" font-size="11" font-style="italic" fill="#6B7280">«interface»</text>
+    <text x="137.5" y="376" font-weight="500">Transaction</text>
+    <text x="305" y="367" font-weight="500">JdbcTransaction</text>
+    <text x="477.5" y="355" font-size="11" font-style="italic" fill="#6B7280">«interface»</text>
+    <text x="477.5" y="376" font-weight="500">Executor</text>
+    <text x="647.5" y="367" font-weight="500">SimpleExecutor</text>
+    <text x="560" y="443" font-weight="500">MappedStatement</text>
+    <text x="715" y="443" font-weight="500">DataSource</text>
+  </g>
+
+  <!-- 关系边 -->
+  <g fill="none" stroke="#5A6472" stroke-width="1.5">
+    <line x1="280" y1="118" x2="241" y2="118" marker-end="url(#hollow)"/>
+    <line x1="280" y1="226" x2="241" y2="226" marker-end="url(#hollow)"/>
+    <line x1="352" y1="148" x2="352" y2="192" marker-end="url(#arrow)"/>
+    <line x1="485" y1="118" x2="526" y2="118" marker-end="url(#arrow)"/>
+    <path d="M485,226 H600 V152" marker-end="url(#arrow)"/>
+    <line x1="555" y1="148" x2="555" y2="408" marker-end="url(#arrow)"/>
+    <path d="M750,118 H766 V408" marker-end="url(#arrow)"/>
+    <path d="M320,256 V284 H137 V332" marker-end="url(#arrow)"/>
+    <path d="M430,256 V296 H647 V332" marker-end="url(#arrow)"/>
+    <line x1="230" y1="362" x2="211" y2="362" marker-end="url(#hollow)"/>
+    <line x1="575" y1="362" x2="541" y2="362" marker-end="url(#hollow)"/>
+    <path d="M305,388 V476 H715 V468" marker-end="url(#arrow)"/>
+  </g>
+
+  <!-- 边标注 -->
+  <g font-size="11" fill="#6B7280">
+    <text x="362" y="174">openSession() 创建</text>
+    <text x="507" y="134" text-anchor="middle">长期持有</text>
+    <text x="608" y="205">getMappedStatement(id)</text>
+    <text x="563" y="290">登记 / 查取</text>
+    <text x="490" y="290">创建并持有</text>
+    <text x="150" y="278">commit / rollback 委托</text>
+    <text x="756" y="250" text-anchor="end">持有</text>
+    <text x="470" y="470">getConnection()</text>
+  </g>
+
+  <!-- 图例 -->
+  <g font-size="11" fill="#6B7280">
+    <rect x="95" y="514" width="12" height="12" fill="#3C5488" fill-opacity="0.85"/>
+    <text x="113" y="524">本节新建</text>
+    <rect x="196" y="514" width="12" height="12" fill="#8491B4" fill-opacity="0.85"/>
+    <text x="214" y="524">已有零件</text>
+    <line x1="285" y1="520" x2="318" y2="520" stroke="#5A6472" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="328" y="524">创建 / 持有 / 调用</text>
+    <line x1="455" y1="520" x2="488" y2="520" stroke="#5A6472" stroke-width="1.5" marker-end="url(#hollow)"/>
+    <text x="498" y="524">实现接口</text>
+  </g>
+
+  <text x="410" y="575" text-anchor="middle" font-size="12" fill="#6B7280">图 12｜session 章节的类关系：五个新建类（深蓝）与已有零件（灰紫）</text>
+</svg>
