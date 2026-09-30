@@ -79,7 +79,7 @@ UserMapper.findById(1L)
 配置和 `MappedStatement` 可以被多个 Session 只读共享；Connection、Transaction 和绑定了 Session 的 Mapper 代理绝不能做成全局对象。
 ### 章节测试的组织方式
 
-以下补充测试使用已有 JUnit Jupiter 5.10.2；纯逻辑测试不连接数据库，涉及 JDBC、结果映射和事务的测试使用 H2。每个完整代码块按标注路径创建，后续章节标注“追加”的方法放进同一个测试类。第 1、2 节的环境与能力约束由 JDBC 基线和各 checkpoint 验证；第 11、12 节复盘时运行全部测试，不另建重复用例。
+以下补充测试使用已有 JUnit Jupiter 5.10.2；纯逻辑测试不连接数据库，涉及 JDBC、结果映射和事务的测试使用 H2。每个完整代码块按标注路径创建；每个 checkpoint 的组件测试自成文件、当节即可运行，不向后借夹具。第 1、2 节的环境与能力约束由 JDBC 基线和各 checkpoint 验证；第 11、12 节复盘时运行全部测试，不另建重复用例。
 
 如果你的 `mini-mybatis-lab` 已经领先本篇（比如实体叫 `TUser`、测试类带 `T1_` 序号前缀、用了 pom 里已有的 Lombok），保留自己的命名完全可以——本篇的文件名与“手写字段 + 访问器”的写法是教学基准，不是必须回退的硬性要求。
 
@@ -653,175 +653,262 @@ class JdbcTransactionTest {
 
 ## 8. Checkpoint 6：session，组织一次业务会话
 
-**为什么需要这一步：** 一次业务操作往往是“多条语句 + 一个事务”，调用方不应该手动编排连接、提交、回滚和异常清理。`SqlSession` 就是这条业务会话的唯一入口：打开即开始一个事务，语句按 statement id 路由到 Executor，关闭即回滚未提交的工作。`Configuration` 放在 session 包并做成全局唯一，因为它是所有 Session 共享的注册表——数据源与语句元数据注册一次、只读共享，Session 实例则用完即弃，两者的生命周期本来就不该搅在一起。
+**为什么需要这一步：** 零件已经齐了，但还散着：`Transaction` 管一根连接的提交与归还，`Executor` 会执行语句却不知道“业务”为何物，`MappedStatement` 是一条条元数据却没人集中保管。而真实的一次业务操作往往是“多条语句 + 一个事务”——转账就是两条 update，要么都生效、要么都不生效。如果让调用方自己开连接、自己关自动提交、自己记得 commit、异常时自己回滚再关连接，样板和遗忘点会全部回来，框架就白写了。`SqlSession` 补上的正是这个“组织者”：打开它等于开始一次事务；执行语句时它按 statement id 查元数据、转交 Executor；关闭它时未提交的工作自动作废——忘 commit 顶多丢数据，绝不会留下半截事务弄脏数据库。
+
+可以把这一层想象成一家银行网点，本节要写的三个角色各司其职：
+
+| 类 | 扮演的角色 | 生命周期 |
+| --- | --- | --- |
+| `Configuration` | 业务手册：数据库怎么连（DataSource）、每项业务的元数据（statement 注册表） | 开店前编好，全店共用一份，营业中只读 |
+| `SqlSessionFactory` | 网点大门：只做一件事——`openSession()` 发一个新窗口 | 长期存在 |
+| `SqlSession` | 柜台窗口的一次办理：领连接开始，commit 确认或 close 作废结束 | 一次一换，用完即弃 |
+
+一句话记住分工：**手册全局一份、大门常开、窗口一次一换；Executor 只低头干活，Transaction 只管连接的生老病死，Session 是唯一对调用方说话的。** 这也回答了“`Configuration` 为什么放在 session 包”：它是所有 Session 共享的注册表，数据源与元数据注册一次、只读共享，和短命的 Session 本来就是两种生命周期，不该搅在一个类里。
 
 ![图 7：一次业务会话的边界与两条出口](session-transaction-scope.svg)
 
-**目录：** `src/main/java/com/frank/mybatis/session`。这里的 Session 负责把 statement id 转为 Executor 调用，并暴露事务操作。
-### 8.1 `SqlSession.java`
+**目录：** `src/main/java/com/frank/mybatis/session`。本节新建 5 个文件，严格按“先造被依赖的”推进：注册表 `Configuration` → 会话契约 `SqlSession` → 实现 `DefaultSqlSession` → 大门 `SqlSessionFactory` 及其默认实现。上一节的 `Transaction` 与 `Executor` 只被组装，不被修改。
+### 8.1 `Configuration.java`：先解决“元数据放哪”
+
+第一个问题很具体：调用方手里只有一个字符串 id，而 `Executor` 只认 `MappedStatement` 对象，中间必须有一张查找表。所以第一个文件就是注册表：
+
 ```java
 package com.frank.mybatis.session;
+
+import com.frank.mybatis.mapping.MappedStatement;
+import javax.sql.DataSource;
+import java.util.*;
+
+public final class Configuration {
+    private final DataSource dataSource;
+    private final Map<String, MappedStatement> statements = new HashMap<>();
+
+    public Configuration(DataSource dataSource) {
+        this.dataSource = Objects.requireNonNull(dataSource);
+    }
+
+    public DataSource getDataSource() { return dataSource; }
+
+    public void addMappedStatement(MappedStatement s) {
+        if (statements.putIfAbsent(s.id(), s) != null)
+            throw new IllegalArgumentException("重复 statement id: " + s.id());
+    }
+
+    public MappedStatement getMappedStatement(String id) {
+        MappedStatement s = statements.get(id);
+        if (s == null) throw new IllegalArgumentException("未注册 statement: " + id);
+        return s;
+    }
+}
+```
+
+两个设计点用大白话说：注册用 `putIfAbsent` 而不是 `put`，重复 id 在注册期就报错——配置期发现问题永远比运行期便宜；`getMappedStatement` 查不到直接抛异常而不是返回 `null`——把错误拦在离原因最近的地方，别让 `null` 一路传到上层变成莫名其妙的空指针。
+
+这里留一个口子：下一节引入 Mapper 动态代理时，会往这个文件追加 `MapperRegistry` 字段和 `addMapper`、`getMapperRegistry` 两个方法。本节先不写它们，保证你每敲完一个文件，项目都能编译。
+
+### 8.2 `SqlSession.java`：再定会话对外“承诺”什么
+
+注册表有了，接着定义组织者对调用方的承诺。接口方法分三组，读起来就是一次业务办理的动作清单——执行、确认或作废、离柜：
+
+```java
+package com.frank.mybatis.session;
+
 import java.util.List;
 import java.util.Map;
+
 public interface SqlSession extends AutoCloseable {
     <T> T selectOne(String id, Map<String,Object> p, Class<T> type);
     <T> List<T> selectList(String id, Map<String,Object> p, Class<T> type);
     int insert(String id, Map<String,Object> p);
     int update(String id, Map<String,Object> p);
     int delete(String id, Map<String,Object> p);
-    <T> T getMapper(Class<T> type);
     void commit();
     void rollback();
     void close();
 }
 ```
-### 8.2 `Configuration.java`
-Configuration 稍后会引用 `MapperRegistry`，先把 statement 注册和数据源保存好：
+
+执行组的参数就是“statement id + 参数名到实参的 Map”，名字来自 `@Param` 或默认的 `arg0`，即第 6 节 `ParameterHandler.resolve` 的产出。你可能注意到接口里暂时没有 `getMapper`——那是下一节动态代理的门面，等 `MapperRegistry` 存在后再追加，本节不预留用不上的方法。
+### 8.3 `DefaultSqlSession.java`：把已有零件编排成一次会话
+
+本节的核心文件。它不发明新能力，只做编排：把前两步的 `Configuration` 和上一节的 `Transaction`、`Executor` 组装起来。构造函数一行就是整个故事——从 `Transaction` 手里拿到已经关掉自动提交的连接，交给 `SimpleExecutor`：
+
 ```java
 package com.frank.mybatis.session;
-import com.frank.mybatis.binding.MapperRegistry;
-import com.frank.mybatis.mapping.MappedStatement;
-import javax.sql.DataSource;
-import java.util.*;
-public final class Configuration {
-    private final DataSource dataSource;
-    private final Map<String,MappedStatement> statements = new HashMap<>();
-    private final MapperRegistry mapperRegistry = new MapperRegistry(this);
-    public Configuration(DataSource dataSource) { this.dataSource = Objects.requireNonNull(dataSource); }
-    public DataSource getDataSource() { return dataSource; }
-    public void addMappedStatement(MappedStatement s) {
-        if (statements.putIfAbsent(s.id(), s) != null)
-            throw new IllegalArgumentException("重复 statement id: " + s.id());
-    }
-    public MappedStatement getMappedStatement(String id) {
-        MappedStatement s = statements.get(id);
-        if (s == null) throw new IllegalArgumentException("未注册 statement: " + id);
-        return s;
-    }
-    public <T> void addMapper(Class<T> type) { mapperRegistry.addMapper(type); }
-    public MapperRegistry getMapperRegistry() { return mapperRegistry; }
-}
-```
-### 8.3 `DefaultSqlSession.java`
-```java
-package com.frank.mybatis.session;
+
 import com.frank.mybatis.executor.*;
 import com.frank.mybatis.mapping.*;
 import com.frank.mybatis.transaction.Transaction;
 import java.util.*;
+
 public final class DefaultSqlSession implements SqlSession {
     private final Configuration configuration;
     private final Transaction transaction;
     private final Executor executor;
     private boolean closed;
+
     public DefaultSqlSession(Configuration c, Transaction t) {
-        configuration = c; transaction = t; executor = new SimpleExecutor(t.getConnection());
+        configuration = c;
+        transaction = t;
+        executor = new SimpleExecutor(t.getConnection());
     }
+
     public <T> T selectOne(String id, Map<String,Object> p, Class<T> t) {
         return executor.queryOne(statement(id, SqlCommandType.SELECT), p, t);
     }
+
     public <T> List<T> selectList(String id, Map<String,Object> p, Class<T> t) {
         return executor.queryList(statement(id, SqlCommandType.SELECT), p, t);
     }
+
     public int insert(String id, Map<String,Object> p) { return executor.update(statement(id, SqlCommandType.INSERT), p); }
     public int update(String id, Map<String,Object> p) { return executor.update(statement(id, SqlCommandType.UPDATE), p); }
     public int delete(String id, Map<String,Object> p) { return executor.update(statement(id, SqlCommandType.DELETE), p); }
-    public <T> T getMapper(Class<T> type) { requireOpen(); return configuration.getMapperRegistry().getMapper(type, this); }
+
     public void commit() { requireOpen(); transaction.commit(); }
     public void rollback() { requireOpen(); transaction.rollback(); }
+
     public void close() {
-        if (!closed) { closed = true; try { transaction.rollback(); } finally { transaction.close(); } }
+        if (!closed) {
+            closed = true;
+            try { transaction.rollback(); } finally { transaction.close(); }
+        }
     }
+
     private MappedStatement statement(String id, SqlCommandType command) {
-        requireOpen(); MappedStatement s = configuration.getMappedStatement(id);
+        requireOpen();
+        MappedStatement s = configuration.getMappedStatement(id);
         if (s.commandType() != command) throw new IllegalArgumentException("命令类型不匹配: " + id);
         return s;
     }
+
     private void requireOpen() { if (closed) throw new IllegalStateException("SqlSession 已关闭"); }
 }
 ```
-### 8.4 `SqlSessionFactory.java`
+
+按方法组读一遍实现：
+
+- 执行组的五个方法全部汇聚到私有方法 `statement(id, command)`：先查注册表，再核对命令类型——拿 `selectOne` 的 id 指到一条 insert 上会立刻报错——然后才转交 Executor。Session 自己不碰 JDBC：开语句、绑参数、关资源都是 Executor 的职责，边界与第 6 节一致。insert、update、delete 在 Executor 眼里都是“影响行数的 update”，按注解语义区分是 Session 的事。
+- 事务组只是把 `Transaction` 的 commit、rollback 透传出来，提交时机的决定权留给调用方。
+- `close` 的顺序固定为“先回滚、再关连接”：未 commit 的工作一律作废，这就是开头说的那道保险；回滚失败也要在 `finally` 里关连接，保证连接一定归还。`requireOpen` 让“关了还用”立刻失败，错误信息指向 Session 本身，而不是几层之下一个难懂的空指针。
+### 8.4 `SqlSessionFactory.java`：谁负责造会话
+
+没有它，调用方每次都要写 `new DefaultSqlSession(configuration, new JdbcTransaction(dataSource))`——`Configuration` 和 `JdbcTransaction` 都是不该暴露给业务代码的细节。先定义最小的造会话接口：
+
 ```java
 package com.frank.mybatis.session;
+
 public interface SqlSessionFactory { SqlSession openSession(); }
 ```
-### 8.5 `DefaultSqlSessionFactory.java`
+
+### 8.5 `DefaultSqlSessionFactory.java`：长期持有手册，随开随发窗口
+
 ```java
 package com.frank.mybatis.session;
+
 import com.frank.mybatis.transaction.JdbcTransaction;
+
 public final class DefaultSqlSessionFactory implements SqlSessionFactory {
     private final Configuration configuration;
+
     public DefaultSqlSessionFactory(Configuration configuration) { this.configuration = configuration; }
+
     public SqlSession openSession() {
-        return new DefaultSqlSession(configuration, new JdbcTransaction(configuration.getDataSource()));
+        return new DefaultSqlSession(configuration,
+                new JdbcTransaction(configuration.getDataSource()));
     }
 }
 ```
-**验收：** 构造一个 `Configuration`、打开两个 Session，验证它们各自获得 Connection；Session close 会回滚未提交工作，但不会撤销已经 commit 的数据。
-### 8.6 Session 测试：关闭时回滚与会话隔离
 
-完成下一节 binding 依赖和第 10 节夹具后，将此方法追加到 `MiniMybatisChapter01Test`。两个同时打开的 Session 应有独立事务；观察会话显式使用 READ COMMITTED 的 H2 默认行为。
+`openSession()` 一行就能读懂：用手册里的数据源新开一个事务（借连接 + 关自动提交），连同手册一起交给新窗口。Factory 长期持有 `Configuration`，每个 Session 只读引用它——正是“手册一份、窗口多个”的代码写照。
+**验收：** `mvn clean test` 编译并通过；用工厂打开两个 Session，验证它们各自持有独立的 Connection；未 commit 就 close 的写入，换一个 Session 查不到。
+### 8.6 组件测试：隔离、提交与关闭回滚（本节即可运行）
+
+这个测试刻意不用下一节的 Mapper 接口：直接手工注册一条 insert、一条 select，用字符串 id 走完 Session → Executor → JDBC 的全链路。这顺便证明了一件事——Session 这层只关心“按 id 路由 + 管事务”，`UserMapper` 那样的接口代理是下一节才加上的糖。文件：`src/test/java/com/frank/mybatis/chapter01/SessionContractTest.java`。
 
 ```java
-@Test void sessionsAreIsolatedAndCloseRollsBack() {
-    try (SqlSession observer = factory.openSession()) {
-        try (SqlSession writer = factory.openSession()) {
-            UserMapper mapper = writer.getMapper(UserMapper.class);
-            assertEquals(1, mapper.insert(8L, "Pending", 20));
-            assertNotNull(mapper.findById(8L));
-            assertNull(observer.getMapper(UserMapper.class).findById(8L));
+package com.frank.mybatis.chapter01;
+
+import com.frank.mybatis.fixture.User;
+import com.frank.mybatis.mapping.*;
+import com.frank.mybatis.session.*;
+import com.frank.mybatis.support.H2DatabaseSupport;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class SessionContractTest {
+    private SqlSessionFactory factory() {
+        Configuration c = new Configuration(H2DatabaseSupport.newDataSource());
+        c.addMappedStatement(stmt("chapter01.session.insert",
+                "insert into t_user(id,user_name,age) values(#{id},#{name},#{age})",
+                SqlCommandType.INSERT));
+        c.addMappedStatement(stmt("chapter01.session.findById",
+                "select id,user_name,age from t_user where id=#{id}",
+                SqlCommandType.SELECT));
+        return new DefaultSqlSessionFactory(c);
+    }
+
+    private MappedStatement stmt(String id, String sql, SqlCommandType command) {
+        return new MappedStatement(id, command, sql, SqlTemplateParser.parse(sql), User.class, false);
+    }
+
+    @Test void closeRollsBackUncommittedWork() {
+        SqlSessionFactory f = factory();
+        try (SqlSession writer = f.openSession()) {
+            assertEquals(1, writer.insert("chapter01.session.insert",
+                    Map.of("id", 1L, "name", "Pending", "age", 20)));
         }
-        assertNull(observer.getMapper(UserMapper.class).findById(8L));
+        try (SqlSession reader = f.openSession()) {
+            assertNull(reader.selectOne("chapter01.session.findById", Map.of("id", 1L), User.class));
+        }
+    }
+
+    @Test void commitPersistsAcrossSessions() {
+        SqlSessionFactory f = factory();
+        try (SqlSession writer = f.openSession()) {
+            writer.insert("chapter01.session.insert", Map.of("id", 2L, "name", "Kept", "age", 21));
+            writer.commit();
+        }
+        try (SqlSession reader = f.openSession()) {
+            User u = reader.selectOne("chapter01.session.findById", Map.of("id", 2L), User.class);
+            assertEquals("Kept", u.getUserName());
+        }
+    }
+
+    @Test void concurrentSessionsDoNotSeeUncommittedRows() {
+        SqlSessionFactory f = factory();
+        try (SqlSession writer = f.openSession(); SqlSession observer = f.openSession()) {
+            writer.insert("chapter01.session.insert", Map.of("id", 3L, "name", "Hidden", "age", 22));
+            assertNotNull(writer.selectOne("chapter01.session.findById", Map.of("id", 3L), User.class));
+            assertNull(observer.selectOne("chapter01.session.findById", Map.of("id", 3L), User.class));
+        }
+    }
+
+    @Test void closedSessionRejectsFurtherCalls() {
+        SqlSession s = factory().openSession();
+        s.close();
+        assertThrows(IllegalStateException.class,
+                () -> s.selectOne("chapter01.session.findById", Map.of("id", 1L), User.class));
+        assertThrows(IllegalStateException.class, s::commit);
     }
 }
 ```
+
+四个用例分别钉死四条会话语义：关闭即回滚（忘了 commit 也不脏库）、commit 之后跨会话可见、两个同时打开的会话互相看不见对方未提交的行（H2 默认 READ COMMITTED）、关闭后继续调用快速失败。
+
+到这里，调用方的代码已经从“手工编排连接和事务”变成 `factory.openSession() → session.insert(id, params) → session.close()` 三句话。剩下的痛点是调用方还在手写字符串 id 和参数 Map——下一节 Checkpoint 7 用 JDK 动态代理把这层样板也吸收掉，`getMapper` 就是在那时回到 `SqlSession` 接口上的。
 
 ## 9. Checkpoint 7：binding 三件套和 builder
 
-**为什么需要这一步：** 调用方想要的是 `userMapper.findById(1L)`，而不是 `session.selectOne("com.frank.mybatis.chapter01.UserMapper.findById", Map.of("id", 1L), User.class)`——字符串 id、手工组 Map、结果强转，每一样都是出错点。接口加 JDK 动态代理把这层样板全部吸收掉。代理内不扫描注解、不拼 id、不创建连接，是因为这些反射成本只在注册期由 builder 付一次；运行期的每次调用只是一次查表转发。
+**为什么需要这一步：** 上一节结束时留下了一个痛点：调用方要写 `session.selectOne("com.frank.mybatis.chapter01.UserMapper.findById", Map.of("id", 1L), User.class)`——字符串 id、手工组 Map、结果强转，每一样都是出错点。调用方想要的是 `userMapper.findById(1L)`。接口加 JDK 动态代理把这层样板全部吸收掉。代理内不扫描注解、不拼 id、不创建连接，是因为这些反射成本只在注册期由 builder 付一次；运行期的每次调用只是一次查表转发。
 
 **依赖：** 前面所有类型。**目标：** 注册 Mapper 时解析一次，运行时代理只路由，不扫描注解、不创建连接。
-### 9.1 `binding/MapperProxyFactory.java`
-```java
-package com.frank.mybatis.binding;
-import com.frank.mybatis.session.*;
-import java.lang.reflect.Proxy;
-public final class MapperProxyFactory<T> {
-    private final Class<T> mapperType;
-    private final Configuration configuration;
-    public MapperProxyFactory(Class<T> type, Configuration c) { mapperType = type; configuration = c; }
-    public T newInstance(SqlSession session) {
-        Object proxy = Proxy.newProxyInstance(mapperType.getClassLoader(),
-                new Class<?>[]{mapperType}, new MapperProxy(session, configuration, mapperType));
-        return mapperType.cast(proxy);
-    }
-}
-```
-### 9.2 `binding/MapperRegistry.java`
-```java
-package com.frank.mybatis.binding;
-import com.frank.mybatis.builder.MapperAnnotationBuilder;
-import com.frank.mybatis.session.*;
-import java.util.*;
-public final class MapperRegistry {
-    private final Configuration configuration;
-    private final Map<Class<?>,MapperProxyFactory<?>> factories = new HashMap<>();
-    public MapperRegistry(Configuration c) { configuration = c; }
-    public <T> void addMapper(Class<T> type) {
-        if (!type.isInterface()) throw new IllegalArgumentException("Mapper 必须是接口");
-        if (factories.containsKey(type)) throw new IllegalArgumentException("Mapper 已注册");
-        new MapperAnnotationBuilder(configuration, type).parse();
-        factories.put(type, new MapperProxyFactory<>(type, configuration));
-    }
-    public <T> T getMapper(Class<T> type, SqlSession session) {
-        MapperProxyFactory<?> factory = factories.get(type);
-        if (factory == null) throw new IllegalArgumentException("Mapper 未注册: " + type.getName());
-        @SuppressWarnings("unchecked") MapperProxyFactory<T> typed = (MapperProxyFactory<T>) factory;
-        return typed.newInstance(session);
-    }
-}
-```
-### 9.3 `binding/MapperProxy.java`
+本节产物仍按“先造被依赖的”推进：先写代理本身（`MapperProxy`），再写造代理的工厂（`MapperProxyFactory`），然后是注册期的注解解析器（`MapperAnnotationBuilder`）、把两者串起来的注册表（`MapperRegistry`），接着回填上一节在 `Configuration` 与 `SqlSession` 留下的口子，最后用一个真实 Mapper 和测试验证整条链。
+### 9.1 `binding/MapperProxy.java`：先写转发器本身
+
+代理是“被别人用”的零件，而且只依赖已有类型，所以最先建。它的 `invoke` 只做三件事：兜住 `Object` 自带方法、按“接口全限定名 + 方法名”拼出 id 并查元数据、把实参交给 `ParameterHandler.resolve` 后按命令类型转发给 Session：
+
 ```java
 package com.frank.mybatis.binding;
 import com.frank.mybatis.executor.ParameterHandler;
@@ -858,8 +945,33 @@ public final class MapperProxy implements InvocationHandler {
     }
 }
 ```
-### 9.4 `builder/MapperAnnotationBuilder.java`
-构建器负责唯一注解、SQL 解析、参数名称和返回形状检查。为保持本篇边界，它拒绝 default、static 和重载方法：
+
+三件事之外它刻意什么都不做：不扫注解（注册期已解析完）、不创建连接（Session 管事务）、不碰 JDBC（Executor 的活）。`toString`、`equals`、`hashCode` 必须特殊处理——不拦截的话，对代理调用 `equals` 会再次进入 `invoke`，无限递归。
+### 9.2 `binding/MapperProxyFactory.java`：把“造代理”收进工厂
+
+`Proxy.newProxyInstance` 需要类加载器、接口数组和 handler 三样参数，对同一个 Mapper 接口来说每次都一样，收进泛型工厂：
+
+```java
+package com.frank.mybatis.binding;
+import com.frank.mybatis.session.*;
+import java.lang.reflect.Proxy;
+public final class MapperProxyFactory<T> {
+    private final Class<T> mapperType;
+    private final Configuration configuration;
+    public MapperProxyFactory(Class<T> type, Configuration c) { mapperType = type; configuration = c; }
+    public T newInstance(SqlSession session) {
+        Object proxy = Proxy.newProxyInstance(mapperType.getClassLoader(),
+                new Class<?>[]{mapperType}, new MapperProxy(session, configuration, mapperType));
+        return mapperType.cast(proxy);
+    }
+}
+```
+
+`newInstance(session)` 每次传入不同的 Session，产出绑定到该会话的代理——同一个 Mapper 接口在每个会话里各有一个实例。
+### 9.3 `builder/MapperAnnotationBuilder.java`：注册期解析注解
+
+代理在运行期不扫注解，前提是注册期有人把注解解析成 `MappedStatement` 存进 `Configuration`，这就是 builder 的职责。构建器负责唯一注解、SQL 解析、参数名称和返回形状检查。为保持本篇边界，它拒绝 default、static 和重载方法：
+
 ```java
 package com.frank.mybatis.builder;
 import com.frank.mybatis.annotations.*;
@@ -926,41 +1038,67 @@ public final class MapperAnnotationBuilder {
     }
 }
 ```
-**验收：** `configuration.addMapper(UserMapper.class)` 能注册；故意写错 `#{naem}`、加两个 SQL 注解、注册两次或声明重载时，错误应在注册期抛出，而不是等到请求期间才暴露。
-### 9.5 单元测试：注册校验与代理的 Object 方法
+### 9.4 `binding/MapperRegistry.java`：把解析和工厂串成注册表
 
-将以下方法追加到第 10 节的 `MiniMybatisChapter01Test`；使用现有 `UserMapper`，无需额外业务模型。无注解、参数拼写错误与重载接口应各自使用独立 Configuration 验证，不能在失败注册后的对象上继续装配。
+它同时使用 9.3 的 builder 和 9.2 的工厂，所以放在两者之后。`addMapper` 的顺序是“先解析、解析通过才登记”，注册失败的接口不会留下半套元数据：
 
 ```java
-@Test void registrationRejectsDuplicatesAndUnknownStatements() {
-    Configuration c = new Configuration(H2DatabaseSupport.newDataSource());
-    c.addMapper(UserMapper.class);
-    assertThrows(IllegalArgumentException.class, () -> c.addMapper(UserMapper.class));
-    assertThrows(IllegalArgumentException.class, () -> c.addMapper(User.class));
-    assertThrows(IllegalArgumentException.class, () -> c.getMappedStatement("missing.id"));
-    var statement = c.getMappedStatement(UserMapper.class.getName() + ".rename");
-    assertEquals(List.of("name", "id"), statement.preparedSql().parameterNames());
-}
-
-@Test void proxyObjectMethodsDoNotExecuteSql() {
-    try (SqlSession s = factory.openSession()) {
-        UserMapper first = s.getMapper(UserMapper.class);
-        UserMapper second = s.getMapper(UserMapper.class);
-        assertTrue(first.equals(first));
-        assertFalse(first.equals(second));
-        assertFalse(first.equals(null));
-        assertEquals(System.identityHashCode(first), first.hashCode());
-        assertTrue(first.toString().contains(UserMapper.class.getName()));
+package com.frank.mybatis.binding;
+import com.frank.mybatis.builder.MapperAnnotationBuilder;
+import com.frank.mybatis.session.*;
+import java.util.*;
+public final class MapperRegistry {
+    private final Configuration configuration;
+    private final Map<Class<?>,MapperProxyFactory<?>> factories = new HashMap<>();
+    public MapperRegistry(Configuration c) { configuration = c; }
+    public <T> void addMapper(Class<T> type) {
+        if (!type.isInterface()) throw new IllegalArgumentException("Mapper 必须是接口");
+        if (factories.containsKey(type)) throw new IllegalArgumentException("Mapper 已注册");
+        new MapperAnnotationBuilder(configuration, type).parse();
+        factories.put(type, new MapperProxyFactory<>(type, configuration));
+    }
+    public <T> T getMapper(Class<T> type, SqlSession session) {
+        MapperProxyFactory<?> factory = factories.get(type);
+        if (factory == null) throw new IllegalArgumentException("Mapper 未注册: " + type.getName());
+        @SuppressWarnings("unchecked") MapperProxyFactory<T> typed = (MapperProxyFactory<T>) factory;
+        return typed.newInstance(session);
     }
 }
 ```
+### 9.5 接线：回填上一节预留的口子
 
-## 10. Checkpoint 8：真实 Mapper 与端到端测试
+binding 四件套就位，现在把代理接进 Session。上一节的 `Configuration` 与 `SqlSession` 各留了口子，此刻回填，共改三个文件；接口和实现必须同一步改，否则项目编译不过。
 
-**为什么需要这一步：** 前面七个 checkpoint 验证的都是单个组件的契约，还没有任何代码证明这些层拼在一起真的能工作。端到端测试用一条真实业务接口走完 代理 → Session → Executor → JDBC → 结果映射 的全链路，并专门覆盖最容易被边界条件坑掉的场景：参数乱序、NULL、commit/rollback 的可见性、关闭后的调用。它锁住的不是某个类，而是层与层之间的契约——这正是 MyBatis 相对于裸 JDBC 的全部价值所在。
+`Configuration.java` 追加（新增 `import com.frank.mybatis.binding.MapperRegistry;`，字段放在 `statements` 旁边，两个方法加在类尾）：
 
-**目录：** `src/test/java/com/frank/mybatis/chapter01`。这里不引入新依赖，直接使用项目 `pom.xml` 中已有的 H2 和 JUnit。
-### 10.1 `chapter01/UserMapper.java`
+```java
+private final MapperRegistry mapperRegistry = new MapperRegistry(this);
+
+public <T> void addMapper(Class<T> type) { mapperRegistry.addMapper(type); }
+
+public MapperRegistry getMapperRegistry() { return mapperRegistry; }
+```
+
+`SqlSession.java` 接口追加一个方法，`DefaultSqlSession.java` 同步追加实现：
+
+```java
+// SqlSession 接口新增
+<T> T getMapper(Class<T> type);
+
+// DefaultSqlSession 新增实现
+public <T> T getMapper(Class<T> type) {
+    requireOpen();
+    return configuration.getMapperRegistry().getMapper(type, this);
+}
+```
+
+回填之后，注册入口是 `configuration.addMapper(...)`，取代理入口是 `session.getMapper(...)`。
+
+**验收：** 完成下两小节后 `mvn clean test` 通过；`configuration.addMapper(UserMapper.class)` 能注册，而故意写错 `#{naem}`、加两个 SQL 注解、注册两次或声明重载时，错误应在注册期抛出，而不是等到请求期间才暴露。
+### 9.6 `chapter01/UserMapper.java`：第一个真实 Mapper
+
+验证注册与代理需要一个真实的 Mapper 接口。它放在测试目录（`src/test/java/com/frank/mybatis/chapter01/UserMapper.java`），第 10 节的端到端测试继续用它：
+
 ```java
 package com.frank.mybatis.chapter01;
 import com.frank.mybatis.annotations.*;
@@ -980,7 +1118,55 @@ public interface UserMapper {
 }
 ```
 `rename` 刻意让 SQL 顺序与 Java 参数顺序不同；`deleteById` 刻意不写 `@Param`，验证默认名称 `arg0`。
-### 10.2 `chapter01/MiniMybatisChapter01Test.java`
+### 9.7 组件测试：注册校验与代理行为（本节即可运行）
+
+文件：`src/test/java/com/frank/mybatis/chapter01/MapperBindingTest.java`。不向后借夹具，注册边界与代理行为当场验证；注册失败的 Configuration 上不要继续装配，所以重复注册等用例各自新建 Configuration：
+
+```java
+package com.frank.mybatis.chapter01;
+
+import com.frank.mybatis.fixture.User;
+import com.frank.mybatis.session.*;
+import com.frank.mybatis.support.H2DatabaseSupport;
+import org.junit.jupiter.api.Test;
+import javax.sql.DataSource;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+class MapperBindingTest {
+    @Test void registrationRejectsDuplicatesAndUnknownStatements() {
+        Configuration c = new Configuration(H2DatabaseSupport.newDataSource());
+        c.addMapper(UserMapper.class);
+        assertThrows(IllegalArgumentException.class, () -> c.addMapper(UserMapper.class));
+        assertThrows(IllegalArgumentException.class, () -> c.addMapper(User.class));
+        assertThrows(IllegalArgumentException.class, () -> c.getMappedStatement("missing.id"));
+        var statement = c.getMappedStatement(UserMapper.class.getName() + ".rename");
+        assertEquals(List.of("name", "id"), statement.preparedSql().parameterNames());
+    }
+
+    @Test void proxyObjectMethodsDoNotExecuteSql() {
+        DataSource ds = H2DatabaseSupport.newDataSource();
+        Configuration c = new Configuration(ds);
+        c.addMapper(UserMapper.class);
+        try (SqlSession s = new DefaultSqlSessionFactory(c).openSession()) {
+            UserMapper first = s.getMapper(UserMapper.class);
+            UserMapper second = s.getMapper(UserMapper.class);
+            assertTrue(first.equals(first));
+            assertFalse(first.equals(second));
+            assertFalse(first.equals(null));
+            assertEquals(System.identityHashCode(first), first.hashCode());
+            assertTrue(first.toString().contains(UserMapper.class.getName()));
+        }
+    }
+}
+```
+
+## 10. Checkpoint 8：端到端测试，走通全链路
+
+**为什么需要这一步：** 前面七个 checkpoint 验证的都是单个组件的契约，还没有任何代码证明这些层拼在一起真的能工作。端到端测试用上一节就位的 `UserMapper` 走完 代理 → Session → Executor → JDBC → 结果映射 的全链路，并专门覆盖最容易被边界条件坑掉的场景：参数乱序、NULL、commit/rollback 的可见性、关闭后的调用。它锁住的不是某个类，而是层与层之间的契约——这正是 MyBatis 相对于裸 JDBC 的全部价值所在。
+
+**目录：** `src/test/java/com/frank/mybatis/chapter01`。这里不引入新依赖，直接使用项目 `pom.xml` 中已有的 H2 和 JUnit。
+### 10.1 `chapter01/MiniMybatisChapter01Test.java`
 ```java
 package com.frank.mybatis.chapter01;
 import com.frank.mybatis.fixture.User;
@@ -1055,7 +1241,16 @@ src/main/java/com/frank/mybatis/
 src/test/java/com/frank/mybatis/
 ├── fixture/User.java
 ├── support/H2DatabaseSupport.java
-└── chapter01/{JdbcBaselineTest,UserMapper,MiniMybatisChapter01Test}.java
+└── chapter01/
+    ├── JdbcBaselineTest.java          # Checkpoint 1
+    ├── AnnotationContractTest.java    # Checkpoint 2
+    ├── SqlTemplateParserTest.java     # Checkpoint 3
+    ├── ExecutorContractTest.java      # Checkpoint 4
+    ├── JdbcTransactionTest.java       # Checkpoint 5
+    ├── SessionContractTest.java       # Checkpoint 6
+    ├── MapperBindingTest.java         # Checkpoint 7
+    ├── UserMapper.java                # Checkpoint 7 引入，Checkpoint 8 复用
+    └── MiniMybatisChapter01Test.java  # Checkpoint 8
 ```
 一次 `addMapper` 的注册期顺序是：`MapperRegistry` 检查接口和重复注册，`MapperAnnotationBuilder` 读取方法注解，`SqlTemplateParser` 生成 `PreparedSql`，构建器校验参数和返回值，最后 `Configuration` 保存 `MappedStatement`。
 一次方法调用的运行期顺序是：代理计算 statement id，`ParameterHandler` 把实参变成名称到值的 Map，Session 按命令类型调用 Executor，Executor 创建并关闭 JDBC 语句，结果交给 `ResultSetHandler`。Executor 不 commit，Session 不解析注解，代理不创建 Connection，各层边界因此清楚。
