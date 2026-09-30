@@ -37,7 +37,7 @@ if (catalog && tocElement) {
 
     const activeLink = links[activeIndex]
     if (activeLink && !isMobile()) {
-      tocElement.scrollTop = Math.max(0, activeLink.offsetTop - 32)
+      tocElement.scrollTop = Math.max(0, activeLink.offsetTop - tocElement.offsetTop - 12)
     }
   }
 
