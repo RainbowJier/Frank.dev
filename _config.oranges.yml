@@ -60,10 +60,17 @@ intro:
   # 工作经历（按时间自动排序）：logo 留空时显示简称占位；传入 logo 后填 /images/xxx.png 即可
   work:
     -
+      name: 福建英迈软件有限公司
+      short: 英迈
+      logo: /images/emsoft.ico
+      period: 2026.09 - 至今
+      role: Java 开发工程师
+      location: 福州
+    -
       name: 福州智城空间信息科技有限公司
       short: 智城
       logo:
-      period: 2025.04 - 至今
+      period: 2025.04 - 2026.08
       role: Java 开发工程师
       location: 福州
     -
