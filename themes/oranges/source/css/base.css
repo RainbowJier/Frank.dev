@@ -2285,6 +2285,7 @@ button:focus-visible {
 .todo-edit-priority:focus {
   outline: none;
   border-color: var(--color-text-sub);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-a-hover) 12%, transparent);
 }
 
 .todo-add {
@@ -2296,11 +2297,17 @@ button:focus-visible {
   font-size: 1.4rem;
   font-family: inherit;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
 .todo-add:hover {
   opacity: 0.85;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.todo-add:active {
+  transform: scale(0.94);
 }
 
 /* 筛选与批量操作 */
@@ -2357,12 +2364,17 @@ button:focus-visible {
   font-size: 1.2rem;
   font-family: inherit;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
 }
 
 .todo-action:hover {
   color: var(--color-text-a-hover);
   border-color: var(--color-text-sub);
+  background-color: var(--bg-content-search);
+}
+
+.todo-action:active {
+  transform: scale(0.94);
 }
 
 .todo-action:disabled {
@@ -2404,13 +2416,52 @@ button:focus-visible {
   background: var(--bg-content-search);
 }
 
+/* 自定义打勾框：圆形描边，选中填充并对勾弹跳弹入 */
 .todo-check {
+  appearance: none;
+  -webkit-appearance: none;
   flex: none;
-  width: 1.8rem;
-  height: 1.8rem;
-  margin-top: 3px;
-  accent-color: var(--color-text-a-hover);
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-top: 2px;
+  border: 2px solid var(--color-text-sub);
+  border-radius: 50%;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 68%;
   cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.todo-check:hover {
+  border-color: var(--color-text-a-hover);
+}
+
+.todo-check:focus-visible {
+  outline: 2px solid var(--color-text-a-hover);
+  outline-offset: 2px;
+}
+
+.todo-check:checked {
+  border-color: var(--color-text-a-hover);
+  background-color: var(--color-text-a-hover);
+  animation: todo-check-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 对勾颜色随亮暗反转：亮色选中底是黑、勾用白；暗色选中底是白、勾用深底色 */
+:root[color-mode="light"] .todo-check:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+}
+
+:root[color-mode="dark"] .todo-check:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E3440' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+}
+
+@keyframes todo-check-pop {
+  0% { transform: scale(0.75); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
 }
 
 .todo-main {
@@ -2470,18 +2521,20 @@ button:focus-visible {
   display: flex;
   flex: none;
   gap: 6px;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-/* 悬停才显示行内操作按钮，触屏设备常显 */
+/* 悬停才显示行内操作按钮（右滑入场），触屏设备常显 */
 @media (hover: hover) {
   .todo-item:not(.editing) .todo-item-actions {
     opacity: 0;
+    transform: translateX(8px);
   }
 
   .todo-item:hover .todo-item-actions,
   .todo-item:focus-within .todo-item-actions {
     opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -2494,18 +2547,28 @@ button:focus-visible {
   font-size: 1.25rem;
   font-family: inherit;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
 }
 
 .todo-item-btn:hover {
   color: var(--color-text-a-hover);
+  background-color: var(--bg-search-item-hover);
+}
+
+.todo-item-btn:active {
+  transform: scale(0.92);
 }
 
 .todo-item-delete:hover {
   color: var(--color-todo-high);
 }
 
-/* 行内编辑态：隐藏原行内容，展示编辑控件 */
+/* 行内编辑态：整行高亮，隐藏原行内容，展示编辑控件 */
+.todo-item.editing {
+  border-color: var(--color-text-sub);
+  background-color: var(--bg-content-search);
+}
+
 .todo-item.editing .todo-check,
 .todo-item.editing .todo-main,
 .todo-item.editing .todo-item-actions {
@@ -2543,6 +2606,27 @@ button:focus-visible {
   color: var(--color-text-sub);
   font-size: 1.4rem;
   text-align: center;
+  animation: fade-up 0.35s ease backwards;
+}
+
+/* 行入场动画（复用全局 fade-up），由 JS 在首屏/新增时挂类 */
+.todo-item.todo-enter {
+  animation: fade-up 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) backwards;
+}
+
+/* 筛选计数变化时脉冲一下 */
+.todo-switch-item [data-count] {
+  display: inline-block;
+}
+
+@keyframes todo-count-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.todo-count-pulse {
+  animation: todo-count-pulse 0.3s ease;
 }
 
 .todo-tips {

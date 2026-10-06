@@ -1,12 +1,15 @@
 // Todo 页：本地待办清单
 // - 数据仅存当前浏览器（localStorage），隐私模式下静默降级为仅本次会话有效
 // - 支持：新增 / 勾选完成 / 行内编辑（标题、截止日期、优先级）/ 删除 / 筛选 / 清除已完成 / 导出导入 JSON
+// - 动效：行入场（fade-up）、删除离场（WAAPI 折叠）、打勾弹跳、计数脉冲；respect prefers-reduced-motion
 (() => {
   const root = document.querySelector('.todo-index')
   if (!root) return
 
   const STORAGE_KEY = 'todo-items'
   const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' }
+  const reduceMotion = window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const form = root.querySelector('#todo-form')
   const inputEl = root.querySelector('#todo-input')
@@ -25,6 +28,8 @@
   let filter = 'all'
   let tipsTimer = null
   let storageWarned = false
+  let removing = false
+  let prevCounts = null
 
   const pad = value => String(value).padStart(2, '0')
   const todayStr = () => {
@@ -47,8 +52,10 @@
     if (!title) return null
     let deadline = ''
     if (typeof raw.deadline === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.deadline)) deadline = raw.deadline
+    // id 会被拼进选择器，白名单外的直接换新，避免注入
+    const id = typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(raw.id) ? raw.id : uid()
     return {
-      id: typeof raw.id === 'string' && raw.id ? raw.id : uid(),
+      id: id,
       title: title.slice(0, 200),
       done: raw.done === true,
       deadline: deadline,
@@ -101,6 +108,8 @@
     return node
   }
 
+  const rowById = id => listEl.querySelector('.todo-item[data-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]')
+
   const renderRow = item => {
     const li = el('li', 'todo-item')
     li.dataset.id = item.id
@@ -112,7 +121,9 @@
     check.setAttribute('aria-label', item.done ? '标记为未完成' : '标记为已完成')
 
     const main = el('div', 'todo-main')
-    main.appendChild(el('span', 'todo-item-title', item.title))
+    const title = el('span', 'todo-item-title', item.title)
+    title.title = '双击编辑'
+    main.appendChild(title)
     const meta = el('div', 'todo-meta')
     meta.appendChild(el('span', 'todo-badge todo-priority-' + item.priority, PRIORITY_LABELS[item.priority]))
     const due = dueInfo(item)
@@ -135,18 +146,27 @@
     return li
   }
 
-  const render = () => {
+  const pulse = span => {
+    span.classList.remove('todo-count-pulse')
+    void span.offsetWidth
+    span.classList.add('todo-count-pulse')
+  }
+
+  // 只更新计数、空态与批量按钮，不动列表（勾选/局部刷新时用）
+  const syncChrome = () => {
     const activeCount = items.filter(item => !item.done).length
     const counts = { all: items.length, active: activeCount, done: items.length - activeCount }
     switchEl.querySelectorAll('[data-count]').forEach(span => {
-      span.textContent = counts[span.dataset.count]
+      const key = span.dataset.count
+      const value = String(counts[key])
+      if (span.textContent !== value) {
+        span.textContent = value
+        if (prevCounts && prevCounts[key] !== counts[key]) pulse(span)
+      }
     })
+    prevCounts = counts
     clearDoneEl.disabled = counts.done === 0
-
-    listEl.textContent = ''
     const visible = filtered()
-    visible.forEach(item => listEl.appendChild(renderRow(item)))
-
     emptyEl.hidden = visible.length > 0
     listEl.hidden = visible.length === 0
     if (!visible.length) {
@@ -154,6 +174,12 @@
         ? (filter === 'done' ? '还没有已完成的任务。' : '没有进行中的任务，休息一下吧。')
         : '还没有待办事项，从上方输入框添加第一条吧。'
     }
+  }
+
+  const render = () => {
+    listEl.textContent = ''
+    filtered().forEach(item => listEl.appendChild(renderRow(item)))
+    syncChrome()
   }
 
   const applyFilter = next => {
@@ -164,6 +190,33 @@
       button.setAttribute('aria-pressed', String(active))
     })
     render()
+  }
+
+  // 新行入场动画（复用全局 fade-up），仅在首屏/新增时挂上，避免每次全量重渲染都闪
+  const enterAnimation = (ids, stagger) => {
+    if (reduceMotion) return
+    ids.forEach((id, index) => {
+      const li = rowById(id)
+      if (!li) return
+      li.classList.add('todo-enter')
+      if (stagger) li.style.animationDelay = Math.min(index * 45, 360) + 'ms'
+    })
+  }
+
+  // 删除离场：折叠 + 右滑，结束后由调用方更新状态重渲染
+  const animateOut = rows => {
+    const gap = parseFloat(getComputedStyle(listEl).gap) || 10
+    return Promise.all(rows.filter(Boolean).map((li, index) => {
+      li.style.pointerEvents = 'none'
+      const style = getComputedStyle(li)
+      return li.animate(
+        [
+          { opacity: 1, height: li.offsetHeight + 'px', paddingTop: style.paddingTop, paddingBottom: style.paddingBottom, marginBottom: '0px' },
+          { opacity: 0, height: '0px', paddingTop: '0px', paddingBottom: '0px', marginBottom: -gap + 'px', borderColor: 'transparent', transform: 'translateX(24px)' }
+        ],
+        { duration: 220, delay: index * 50, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
+      ).finished.catch(() => {})
+    }))
   }
 
   // 行内编辑：把该行切换为 标题输入 + 日期 + 优先级 + 保存/取消
@@ -232,7 +285,7 @@
       return
     }
     const now = Date.now()
-    items.unshift({
+    const added = {
       id: uid(),
       title: title.slice(0, 200),
       done: false,
@@ -240,13 +293,15 @@
       priority: priorityEl.value,
       createdAt: now,
       updatedAt: now
-    })
+    }
+    items.unshift(added)
     save()
     inputEl.value = ''
     dateEl.value = ''
     priorityEl.value = 'medium'
     if (filter === 'done') applyFilter('all')
     else render()
+    enterAnimation([added.id], false)
     inputEl.focus()
   })
 
@@ -255,6 +310,7 @@
     if (button) applyFilter(button.dataset.filter)
   })
 
+  // 勾选只替换该行，不整表重渲染，避免其他行的打勾动画重放
   listEl.addEventListener('change', event => {
     if (!event.target.classList.contains('todo-check')) return
     const li = event.target.closest('.todo-item')
@@ -263,29 +319,66 @@
     item.done = event.target.checked
     item.updatedAt = Date.now()
     save()
-    render()
+    const showsItem = filter === 'all'
+      || (filter === 'active' && !item.done)
+      || (filter === 'done' && item.done)
+    if (showsItem) {
+      listEl.replaceChild(renderRow(item), li)
+    } else {
+      li.remove()
+    }
+    syncChrome()
   })
 
   listEl.addEventListener('click', event => {
     const button = event.target.closest('.todo-item-btn')
-    if (!button) return
+    if (!button || removing) return
     const li = event.target.closest('.todo-item')
     if (button.dataset.action === 'edit') {
       startEdit(li)
     } else if (button.dataset.action === 'delete') {
-      items = items.filter(entry => entry.id !== li.dataset.id)
-      save()
-      render()
+      const id = li.dataset.id
+      if (!reduceMotion) {
+        removing = true
+        animateOut([li]).then(() => {
+          removing = false
+          items = items.filter(entry => entry.id !== id)
+          save()
+          render()
+        })
+      } else {
+        items = items.filter(entry => entry.id !== id)
+        save()
+        render()
+      }
     }
   })
 
+  // 双击标题进入编辑
+  listEl.addEventListener('dblclick', event => {
+    const title = event.target.closest('.todo-item-title')
+    if (title) startEdit(title.closest('.todo-item'))
+  })
+
   clearDoneEl.addEventListener('click', () => {
-    const doneCount = items.filter(item => item.done).length
-    if (!doneCount) return
-    if (!window.confirm('确定清除 ' + doneCount + ' 条已完成任务？')) return
-    items = items.filter(item => !item.done)
-    save()
-    render()
+    if (removing) return
+    const doneItems = items.filter(item => item.done)
+    if (!doneItems.length) return
+    if (!window.confirm('确定清除 ' + doneItems.length + ' 条已完成任务？')) return
+    const remove = () => {
+      items = items.filter(item => !item.done)
+      save()
+      render()
+    }
+    if (reduceMotion) {
+      remove()
+      return
+    }
+    removing = true
+    animateOut(doneItems.map(item => rowById(item.id))).then(() => {
+      removing = false
+      remove()
+    })
   })
 
   exportEl.addEventListener('click', () => {
@@ -327,6 +420,7 @@
       items = imported
       save()
       render()
+      enterAnimation(items.map(item => item.id), true)
       showTips('已导入 ' + imported.length + ' 条任务')
     }
     reader.onerror = () => showTips('导入失败：文件读取错误')
@@ -335,4 +429,5 @@
 
   items = load()
   applyFilter('all')
+  enterAnimation(items.map(item => item.id), true)
 })()
