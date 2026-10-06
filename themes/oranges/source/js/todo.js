@@ -43,6 +43,8 @@
   let storageWarned = false
   let removing = false
   let prevCounts = null
+  let priorityDd = null
+  let projectFilterDd = null
 
   // 文件存储状态
   let fileHandle = null
@@ -237,6 +239,7 @@
       projectFilterEl.appendChild(none)
     }
     projectFilterEl.value = projectFilter
+    if (projectFilterDd) projectFilterDd.sync()
   }
 
   const inProject = item => {
@@ -258,6 +261,276 @@
     if (className) node.className = className
     if (text != null) node.textContent = text
     return node
+  }
+
+  // ---------- 控件皮肤：原生 select / date 换成自定义下拉与日历 ----------
+  // 原生控件保留为数据源（读写 value、监听 change 的逻辑全部不动），仅藏进皮肤内；
+  // 无 JS 或脚本异常时原生控件照常显示，回退到上一节的 CSS 原生增强样式
+
+  // 弹层统一注册全局点击关闭；编辑行销毁后的死实例在下次点击时顺带清理
+  const popInstances = []
+  document.addEventListener('pointerdown', event => {
+    for (let i = popInstances.length - 1; i >= 0; i--) {
+      const instance = popInstances[i]
+      if (!instance.root.isConnected) {
+        popInstances.splice(i, 1)
+        continue
+      }
+      if (!instance.root.contains(event.target)) instance.close()
+    }
+  })
+
+  const buildDropdown = (select, pill) => {
+    const wrapper = el('div', 'todo-dd' + (pill ? ' pill' : ''))
+    select.classList.add('todo-dd-native')
+    select.parentNode.insertBefore(wrapper, select)
+    wrapper.appendChild(select)
+
+    const btn = el('button', 'todo-dd-btn')
+    btn.type = 'button'
+    btn.setAttribute('aria-haspopup', 'listbox')
+    btn.setAttribute('aria-expanded', 'false')
+    const label = el('span', 'todo-dd-label')
+    const arrow = el('span', 'todo-dd-arrow')
+    btn.append(label, arrow)
+    const menu = el('ul', 'todo-dd-menu')
+    menu.setAttribute('role', 'listbox')
+    wrapper.append(btn, menu)
+
+    let open = false
+    const close = () => {
+      if (!open) return
+      open = false
+      wrapper.classList.remove('open')
+      btn.setAttribute('aria-expanded', 'false')
+    }
+    const renderMenu = () => {
+      menu.textContent = ''
+      Array.from(select.options).forEach(option => {
+        const li = el('li', 'todo-dd-option', option.textContent)
+        li.dataset.value = option.value
+        li.tabIndex = -1
+        li.setAttribute('role', 'option')
+        li.setAttribute('aria-selected', String(option.value === select.value))
+        if (option.value === select.value) li.classList.add('active')
+        menu.appendChild(li)
+      })
+    }
+    const cursorIndex = () => Array.prototype.findIndex.call(menu.children, li => li.classList.contains('cursor'))
+    const moveCursor = index => {
+      const options = menu.children
+      if (!options.length) return
+      index = Math.max(0, Math.min(index, options.length - 1))
+      Array.prototype.forEach.call(options, (li, i) => li.classList.toggle('cursor', i === index))
+      options[index].scrollIntoView({ block: 'nearest' })
+      options[index].focus()
+    }
+    const openMenu = () => {
+      open = true
+      wrapper.classList.add('open')
+      btn.setAttribute('aria-expanded', 'true')
+      renderMenu()
+      const active = Array.prototype.findIndex.call(menu.children, li => li.classList.contains('active'))
+      moveCursor(active === -1 ? 0 : active)
+    }
+    const choose = value => {
+      select.value = value
+      select.dispatchEvent(new Event('change', { bubbles: true }))
+      sync()
+      close()
+      btn.focus()
+    }
+    const sync = () => {
+      const option = select.options[select.selectedIndex]
+      label.textContent = option ? option.textContent : ''
+      if (open) renderMenu()
+    }
+
+    btn.addEventListener('click', () => (open ? close() : openMenu()))
+    btn.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        if (!open) openMenu()
+      }
+    })
+    menu.addEventListener('click', event => {
+      const li = event.target.closest('.todo-dd-option')
+      if (li) choose(li.dataset.value)
+    })
+    menu.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.stopPropagation()
+        close()
+        btn.focus()
+      } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault()
+        const current = cursorIndex()
+        moveCursor((current === -1 ? 0 : current) + (event.key === 'ArrowDown' ? 1 : -1))
+      } else if (event.key === 'Home' || event.key === 'End') {
+        event.preventDefault()
+        moveCursor(event.key === 'Home' ? 0 : menu.children.length - 1)
+      } else if (event.key === 'Enter') {
+        event.preventDefault()
+        const current = cursorIndex()
+        if (current >= 0) choose(menu.children[current].dataset.value)
+      } else if (event.key === 'Tab') {
+        close()
+      }
+    })
+    select.addEventListener('change', sync)
+    popInstances.push({ root: wrapper, close })
+    sync()
+    return { sync }
+  }
+
+  const WEEK_LABELS = ['一', '二', '三', '四', '五', '六', '日']
+  const formatDeadline = value => {
+    const parts = value.split('-')
+    const now = new Date()
+    const text = Number(parts[1]) + '月' + Number(parts[2]) + '日'
+    return Number(parts[0]) === now.getFullYear() ? text : parts[0] + '年' + text
+  }
+
+  const buildDatePicker = input => {
+    const wrapper = el('div', 'todo-cal')
+    input.classList.add('todo-dd-native')
+    input.parentNode.insertBefore(wrapper, input)
+    wrapper.appendChild(input)
+
+    const btn = el('button', 'todo-cal-btn')
+    btn.type = 'button'
+    btn.setAttribute('aria-haspopup', 'dialog')
+    btn.setAttribute('aria-expanded', 'false')
+    const label = el('span', 'todo-cal-label')
+    const icon = el('span', 'todo-cal-icon')
+    btn.append(label, icon)
+
+    const pop = el('div', 'todo-cal-pop')
+    pop.setAttribute('role', 'dialog')
+    pop.setAttribute('aria-label', '选择截止日期')
+    const head = el('div', 'todo-cal-head')
+    const prevBtn = el('button', 'todo-cal-nav', '‹')
+    prevBtn.type = 'button'
+    prevBtn.setAttribute('aria-label', '上一月')
+    const title = el('span', 'todo-cal-title')
+    const nextBtn = el('button', 'todo-cal-nav', '›')
+    nextBtn.type = 'button'
+    nextBtn.setAttribute('aria-label', '下一月')
+    head.append(prevBtn, title, nextBtn)
+    const week = el('div', 'todo-cal-week')
+    WEEK_LABELS.forEach(day => week.appendChild(el('span', null, day)))
+    const grid = el('div', 'todo-cal-grid')
+    const foot = el('div', 'todo-cal-foot')
+    const clearBtn = el('button', 'todo-cal-foot-btn', '清除')
+    clearBtn.type = 'button'
+    const todayBtn = el('button', 'todo-cal-foot-btn', '今天')
+    todayBtn.type = 'button'
+    foot.append(clearBtn, todayBtn)
+    pop.append(head, week, grid, foot)
+    wrapper.append(btn, pop)
+
+    let open = false
+    let view = { year: 0, month: 0 }
+
+    const close = () => {
+      if (!open) return
+      open = false
+      wrapper.classList.remove('open')
+      btn.setAttribute('aria-expanded', 'false')
+    }
+    const setDate = value => {
+      input.value = value
+      input.dispatchEvent(new Event('input', { bubbles: true }))
+      input.dispatchEvent(new Event('change', { bubbles: true }))
+      sync()
+      close()
+      btn.focus()
+    }
+    const renderGrid = () => {
+      title.textContent = view.year + '年' + (view.month + 1) + '月'
+      grid.textContent = ''
+      const first = new Date(view.year, view.month, 1)
+      const start = new Date(view.year, view.month, 1 - ((first.getDay() + 6) % 7))
+      const today = todayStr()
+      for (let i = 0; i < 42; i++) {
+        const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i)
+        const key = date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate())
+        const day = el('button', 'todo-cal-day', String(date.getDate()))
+        day.type = 'button'
+        day.dataset.date = key
+        day.tabIndex = -1
+        day.setAttribute('aria-label', key)
+        if (date.getMonth() !== view.month) day.classList.add('muted')
+        if (key === today) day.classList.add('today')
+        if (key === input.value) day.classList.add('selected')
+        grid.appendChild(day)
+      }
+    }
+    const openPop = () => {
+      const base = (input.value || todayStr()).split('-')
+      view = { year: Number(base[0]), month: Number(base[1]) - 1 }
+      renderGrid()
+      open = true
+      wrapper.classList.add('open')
+      btn.setAttribute('aria-expanded', 'true')
+      const focusTarget = grid.querySelector('.selected') || grid.querySelector('.today')
+      if (focusTarget) focusTarget.focus()
+    }
+    const shiftView = delta => {
+      const date = new Date(view.year, view.month + delta, 1)
+      view = { year: date.getFullYear(), month: date.getMonth() }
+      renderGrid()
+    }
+    // 方向键在日期间移动，跨月自动翻页
+    const stepFocus = delta => {
+      const active = document.activeElement
+      let key = active && active.dataset ? active.dataset.date : ''
+      if (!key) key = input.value || todayStr()
+      const parts = key.split('-')
+      const next = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]) + delta)
+      if (next.getMonth() !== view.month || next.getFullYear() !== view.year) {
+        view = { year: next.getFullYear(), month: next.getMonth() }
+        renderGrid()
+      }
+      const target = grid.querySelector('.todo-cal-day[data-date="' + next.getFullYear() + '-' + pad(next.getMonth() + 1) + '-' + pad(next.getDate()) + '"]')
+      if (target) target.focus()
+    }
+    const sync = () => {
+      label.textContent = input.value ? formatDeadline(input.value) : '截止日期'
+    }
+
+    btn.addEventListener('click', () => (open ? close() : openPop()))
+    btn.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        if (!open) openPop()
+      }
+    })
+    prevBtn.addEventListener('click', () => shiftView(-1))
+    nextBtn.addEventListener('click', () => shiftView(1))
+    todayBtn.addEventListener('click', () => setDate(todayStr()))
+    clearBtn.addEventListener('click', () => setDate(''))
+    grid.addEventListener('click', event => {
+      const day = event.target.closest('.todo-cal-day')
+      if (day) setDate(day.dataset.date)
+    })
+    pop.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        event.stopPropagation()
+        close()
+        btn.focus()
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+        event.preventDefault()
+        stepFocus(event.key === 'ArrowLeft' ? -1 : -7)
+      } else if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+        event.preventDefault()
+        stepFocus(event.key === 'ArrowRight' ? 1 : 7)
+      }
+    })
+    input.addEventListener('change', sync)
+    popInstances.push({ root: wrapper, close })
+    sync()
+    return { sync }
   }
 
   const rowById = id => listEl.querySelector('.todo-item[data-id="' + (window.CSS && CSS.escape ? CSS.escape(id) : id) + '"]')
@@ -412,6 +685,9 @@
     cancelBtn.type = 'button'
     editor.append(titleInput, projectInput, dateInput, prioritySelect, saveBtn, cancelBtn)
     li.appendChild(editor)
+    // 皮肤需在控件进入 DOM 后再包（insertBefore 依赖 parentNode）
+    buildDatePicker(dateInput)
+    buildDropdown(prioritySelect)
     titleInput.focus()
     titleInput.setSelectionRange(titleInput.value.length, titleInput.value.length)
 
@@ -561,6 +837,7 @@
     dateEl.value = ''
     syncDateEmpty(dateEl)
     priorityEl.value = 'medium'
+    if (priorityDd) priorityDd.sync()
     // 连续录入同一项目：项目输入保留，其余清空
     if (filter === 'done') applyFilter('all')
     else render()
@@ -722,6 +999,9 @@
 
   items = load()
   updateLinkButton()
+  priorityDd = buildDropdown(priorityEl)
+  projectFilterDd = buildDropdown(projectFilterEl, true)
+  buildDatePicker(dateEl)
   applyFilter('all')
   enterAnimation(items.map(item => item.id), true)
   updateStorageStatus()

@@ -2371,6 +2371,298 @@ button:focus-visible {
   }
 }
 
+/* ---------- 控件皮肤：todo.js 用自定义下拉/日历替换原生控件 ---------- */
+/* 原生控件藏进皮肤内（display:none），无 JS 时自动回退上方原生增强样式 */
+.todo-dd,
+.todo-cal {
+  position: relative;
+  display: inline-flex;
+}
+
+.todo-dd-native {
+  display: none;
+}
+
+.todo-dd-btn,
+.todo-cal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 8px;
+  background-color: var(--bg-body);
+  color: var(--color-text-md-content);
+  font-size: 1.4rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.todo-dd-btn:hover,
+.todo-cal-btn:hover {
+  border-color: color-mix(in srgb, var(--color-text-sub) 55%, transparent);
+}
+
+.todo-dd-btn:focus-visible,
+.todo-cal-btn:focus-visible,
+.todo-cal-nav:focus-visible,
+.todo-cal-day:focus-visible,
+.todo-cal-foot-btn:focus-visible {
+  outline: 2px solid var(--color-text-a-hover);
+  outline-offset: 1px;
+}
+
+.todo-dd-label,
+.todo-cal-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.todo-dd-arrow {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 2px;
+  border-right: 1.6px solid var(--color-text-sub);
+  border-bottom: 1.6px solid var(--color-text-sub);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease, margin-top 0.2s ease;
+}
+
+.todo-dd.open .todo-dd-arrow {
+  margin-top: -2px;
+  transform: rotate(225deg);
+}
+
+.todo-dd-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  min-width: 100%;
+  max-width: 280px;
+  max-height: 264px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 10px;
+  background-color: var(--bg-body);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  display: none;
+}
+
+.todo-dd.open .todo-dd-menu {
+  display: block;
+  animation: todo-pop-in 0.16s ease;
+}
+
+@keyframes todo-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.todo-dd-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: var(--color-text-md-content);
+  font-size: 1.3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.todo-dd-option:hover,
+.todo-dd-option.cursor {
+  background-color: var(--bg-content-search);
+}
+
+.todo-dd-option.active {
+  color: var(--color-text-a-hover);
+  font-weight: 600;
+}
+
+.todo-dd-option.active::after {
+  content: '✓';
+}
+
+/* 胶囊形态：工具栏的项目筛选 */
+.todo-dd.pill {
+  max-width: 200px;
+}
+
+.todo-dd.pill .todo-dd-btn {
+  width: 100%;
+  justify-content: space-between;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--color-text-sub);
+  font-size: 1.2rem;
+}
+
+.todo-dd.pill .todo-dd-btn:hover {
+  color: var(--color-text-a-hover);
+  border-color: var(--color-text-sub);
+  background-color: var(--bg-content-search);
+}
+
+/* 日历弹层 */
+.todo-cal-icon {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238e8e8e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.2' y='3.2' width='11.6' height='10.6' rx='2'/%3E%3Cpath d='M2.2 6.8h11.6M5.3 1.6v3M10.7 1.6v3'/%3E%3C/svg%3E");
+}
+
+:root[color-mode="dark"] .todo-cal-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23C1C2C5' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.2' y='3.2' width='11.6' height='10.6' rx='2'/%3E%3Cpath d='M2.2 6.8h11.6M5.3 1.6v3M10.7 1.6v3'/%3E%3C/svg%3E");
+}
+
+.todo-cal-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  width: 266px;
+  padding: 12px;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 12px;
+  background-color: var(--bg-body);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  display: none;
+}
+
+.todo-cal.open .todo-cal-pop {
+  display: block;
+  animation: todo-pop-in 0.16s ease;
+}
+
+.todo-cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.todo-cal-title {
+  color: var(--color-text-md-content);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.todo-cal-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-sub);
+  font-size: 1.6rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.todo-cal-nav:hover {
+  color: var(--color-text-a-hover);
+  background-color: var(--bg-content-search);
+}
+
+.todo-cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.todo-cal-week span {
+  color: var(--color-text-sub);
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.todo-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.todo-cal-day {
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-md-content);
+  font-size: 1.3rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.todo-cal-day:hover {
+  background-color: var(--bg-content-search);
+}
+
+.todo-cal-day.muted {
+  opacity: 0.35;
+}
+
+.todo-cal-day.today {
+  box-shadow: inset 0 0 0 1px var(--color-text-sub);
+}
+
+.todo-cal-day.selected {
+  background-color: var(--color-text-a-hover);
+  color: var(--bg-body);
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.todo-cal-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-divider-md-border);
+}
+
+.todo-cal-foot-btn {
+  padding: 2px 4px;
+  border: 0;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--color-text-sub);
+  font-size: 1.25rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.todo-cal-foot-btn:hover {
+  color: var(--color-text-a-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .todo-dd.open .todo-dd-menu,
+  .todo-cal.open .todo-cal-pop {
+    animation: none;
+  }
+}
+
 .todo-add {
   padding: 8px 20px;
   border: 0;
@@ -2829,6 +3121,11 @@ button:focus-visible {
   }
 
   .todo-project-filter {
+    max-width: 100%;
+    flex: 1;
+  }
+
+  .todo-dd.pill {
     max-width: 100%;
     flex: 1;
   }
