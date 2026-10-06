@@ -2271,7 +2271,7 @@ button:focus-visible {
   color: var(--color-text-md-content);
   font-size: 1.4rem;
   font-family: inherit;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .todo-input {
@@ -2295,6 +2295,80 @@ button:focus-visible {
   outline: none;
   border-color: var(--color-text-sub);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-a-hover) 12%, transparent);
+}
+
+/* 悬停时边框加重一档，与聚焦态拉开层次 */
+.todo-input:hover,
+.todo-project-input:hover,
+.todo-date:hover,
+.todo-priority-select:hover,
+.todo-edit-input:hover,
+.todo-edit-project:hover,
+.todo-edit-date:hover,
+.todo-edit-priority:hover {
+  border-color: color-mix(in srgb, var(--color-text-sub) 55%, transparent);
+}
+
+.todo-input::placeholder,
+.todo-project-input::placeholder,
+.todo-edit-input::placeholder,
+.todo-edit-project::placeholder {
+  color: var(--color-text-sub);
+  opacity: 1;
+}
+
+/* 下拉框：去原生外观，自定义箭头随亮暗主题换色 */
+.todo-priority-select,
+.todo-edit-priority {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%238e8e8e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px 12px;
+}
+
+:root[color-mode="dark"] .todo-priority-select,
+:root[color-mode="dark"] .todo-edit-priority {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23C1C2C5' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+}
+
+/* 日期框：自定义日历图标 + 整框可点开选择器（Chromium/WebKit 生效，Firefox 走原生） */
+@supports selector(::-webkit-calendar-picker-indicator) {
+  .todo-date,
+  .todo-edit-date {
+    position: relative;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 34px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%238e8e8e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.2' y='3.2' width='11.6' height='10.6' rx='2'/%3E%3Cpath d='M2.2 6.8h11.6M5.3 1.6v3M10.7 1.6v3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px 15px;
+  }
+
+  :root[color-mode="dark"] .todo-date,
+  :root[color-mode="dark"] .todo-edit-date {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23C1C2C5' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2.2' y='3.2' width='11.6' height='10.6' rx='2'/%3E%3Cpath d='M2.2 6.8h11.6M5.3 1.6v3M10.7 1.6v3'/%3E%3C/svg%3E");
+  }
+
+  /* 原生日历按钮透明并铺满整框：点框内任意位置都能弹出选择器 */
+  .todo-date::-webkit-calendar-picker-indicator,
+  .todo-edit-date::-webkit-calendar-picker-indicator {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* 空值时“年 / 月 / 日”占位降为弱色（is-empty 类由 todo.js 维护） */
+  .todo-date.is-empty::-webkit-datetime-edit,
+  .todo-edit-date.is-empty::-webkit-datetime-edit {
+    color: var(--color-text-sub);
+  }
 }
 
 .todo-add {
@@ -2374,15 +2448,32 @@ button:focus-visible {
 
 .todo-project-filter {
   max-width: 200px;
-  padding: 5px 12px;
+  padding: 5px 30px 5px 12px;
   border: 1px solid var(--color-divider-md-border);
   border-radius: 999px;
   background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%238e8e8e' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 11px 11px;
+  appearance: none;
+  -webkit-appearance: none;
   color: var(--color-text-sub);
   font-size: 1.2rem;
   font-family: inherit;
+  text-overflow: ellipsis;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:root[color-mode="dark"] .todo-project-filter {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23C1C2C5' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+}
+
+.todo-project-filter:focus {
+  outline: none;
+  border-color: var(--color-text-sub);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text-a-hover) 12%, transparent);
 }
 
 .todo-project-filter:hover {

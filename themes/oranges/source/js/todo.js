@@ -85,6 +85,11 @@
     }
   }
 
+  // 日期框空值时“年/月/日”占位降为弱色（原生不响应 :placeholder-shown，切类配合 CSS）
+  const syncDateEmpty = input => {
+    input.classList.toggle('is-empty', !input.value)
+  }
+
   const dueInfo = item => {
     if (!item.deadline) return null
     if (item.done) return { text: '截止 ' + item.deadline, overdue: false }
@@ -392,6 +397,8 @@
     const dateInput = el('input', 'todo-edit-date')
     dateInput.type = 'date'
     dateInput.value = item.deadline
+    syncDateEmpty(dateInput)
+    dateInput.addEventListener('input', () => syncDateEmpty(dateInput))
     const prioritySelect = el('select', 'todo-edit-priority')
     Object.keys(PRIORITY_LABELS).forEach(key => {
       const option = el('option', null, PRIORITY_LABELS[key])
@@ -552,6 +559,7 @@
     save()
     inputEl.value = ''
     dateEl.value = ''
+    syncDateEmpty(dateEl)
     priorityEl.value = 'medium'
     // 连续录入同一项目：项目输入保留，其余清空
     if (filter === 'done') applyFilter('all')
@@ -559,6 +567,9 @@
     enterAnimation([added.id], false)
     inputEl.focus()
   })
+
+  dateEl.addEventListener('input', () => syncDateEmpty(dateEl))
+  syncDateEmpty(dateEl)
 
   switchEl.addEventListener('click', event => {
     const button = event.target.closest('.todo-switch-item')
