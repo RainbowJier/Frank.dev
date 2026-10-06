@@ -2661,6 +2661,14 @@ button:focus-visible {
   .todo-cal.open .todo-cal-pop {
     animation: none;
   }
+
+  .todo-group-body {
+    transition: none;
+  }
+
+  .todo-group-arrow {
+    transition: none;
+  }
 }
 
 .todo-add {
@@ -2820,6 +2828,94 @@ button:focus-visible {
   display: none;
 }
 
+/* 分组树：分组头可折叠，子任务缩进带参考线；计数徽标显示当前可见行数 */
+.todo-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  max-width: 100%;
+  padding: 5px 10px 5px 8px;
+  margin-bottom: 4px;
+  border: 0;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--color-text-sub);
+  font-family: inherit;
+  font-size: 1.35rem;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.todo-group-head:hover {
+  color: var(--color-text-a-hover);
+  background-color: var(--bg-content-search);
+}
+
+.todo-group-head:focus-visible {
+  outline: 2px solid var(--color-text-a-hover);
+  outline-offset: 1px;
+}
+
+.todo-group-arrow {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 0.2s ease;
+}
+
+/* 展开时箭头转向下方；折叠态保持指右 */
+.todo-group:not(.collapsed) .todo-group-arrow {
+  transform: rotate(45deg);
+}
+
+.todo-group-name {
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.todo-group-count {
+  flex: none;
+  min-width: 2rem;
+  padding: 0 8px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-text-sub) 12%, transparent);
+  font-size: 1.15rem;
+  line-height: 1.9;
+  text-align: center;
+}
+
+/* 折叠动画：grid 行高 1fr→0fr，需子级 overflow 收口 */
+.todo-group-body {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.25s ease;
+}
+
+.todo-group.collapsed .todo-group-body {
+  grid-template-rows: 0fr;
+}
+
+.todo-group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* 只留水平缩进：垂直 margin/padding 会把 0fr 折叠轨道撑开 */
+  padding: 0 0 0 16px;
+  border-left: 1px solid var(--color-divider-md-border);
+  list-style: none;
+  overflow: hidden;
+  min-height: 0;
+}
+
 .todo-item {
   display: flex;
   align-items: flex-start;
@@ -2925,15 +3021,6 @@ button:focus-visible {
 
 .todo-priority-low {
   color: var(--color-todo-low);
-}
-
-/* 行内 #项目 标签：半透明底色，亮暗色通吃 */
-.todo-project-tag {
-  padding: 1px 9px;
-  border-radius: 999px;
-  background-color: color-mix(in srgb, var(--color-text-sub) 12%, transparent);
-  color: var(--color-text-sub);
-  font-size: 1.1rem;
 }
 
 .todo-due {
@@ -3112,6 +3199,10 @@ button:focus-visible {
 }
 
 @media (max-width: 600px) {
+  .todo-group-list {
+    padding-left: 10px;
+  }
+
   .todo-input {
     flex: 1 1 100%;
   }

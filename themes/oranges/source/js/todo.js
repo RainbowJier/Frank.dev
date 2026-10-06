@@ -1,5 +1,5 @@
 // Todo 页：本地待办清单
-// - 支持按项目归类：录入时可选填项目，工具栏按项目筛选，meta 行显示 #项目 标签
+// - 支持按项目归类：录入时可选填项目，列表按项目分组树形展示（分组可折叠、状态记忆），工具栏按项目筛选
 // - 数据层双层结构：localStorage 永远作镜像缓存；Chrome/Edge 桌面版可再关联磁盘 todo.json
 //   （File System Access API），句柄存 IndexedDB，改动自动写入文件，重启后按 updatedAt 新者胜出对账
 // - 不支持文件 API 的浏览器只走 localStorage，功能不受影响；隐私模式静默降级
@@ -9,6 +9,7 @@
   if (!root) return
 
   const STORAGE_KEY = 'todo-items'
+  const COLLAPSED_KEY = 'todo-collapsed'
   const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' }
   const PROJECT_NONE = '__none__' // 项目筛选下拉里「未分类」的哨兵值
   const FILE_DB = 'todo-storage'
@@ -45,6 +46,7 @@
   let prevCounts = null
   let priorityDd = null
   let projectFilterDd = null
+  let collapsedGroups = new Set() // 折叠的项目分组名（'' = 未分类），localStorage 持久化
 
   // 文件存储状态
   let fileHandle = null
@@ -133,6 +135,24 @@
         updateStorageStatus()
         showTips('写入磁盘文件失败，改动已暂存浏览器缓存')
       })
+    }
+  }
+
+  // 折叠分组记忆：只可能是短字符串数组，坏数据整体丢弃
+  const loadCollapsed = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(COLLAPSED_KEY))
+      return new Set(Array.isArray(parsed) ? parsed.filter(name => typeof name === 'string' && name.length <= 30) : [])
+    } catch (error) {
+      return new Set()
+    }
+  }
+
+  const saveCollapsed = () => {
+    try {
+      localStorage.setItem(COLLAPSED_KEY, JSON.stringify(Array.from(collapsedGroups)))
+    } catch (error) {
+      /* 隐私模式静默降级：折叠状态仅本次会话有效 */
     }
   }
 
@@ -551,9 +571,6 @@
     main.appendChild(title)
     const meta = el('div', 'todo-meta')
     meta.appendChild(el('span', 'todo-badge todo-priority-' + item.priority, PRIORITY_LABELS[item.priority]))
-    if (item.project) {
-      meta.appendChild(el('span', 'todo-project-tag', '#' + item.project))
-    }
     const due = dueInfo(item)
     if (due) {
       meta.appendChild(el('span', 'todo-due', due.text))
@@ -595,6 +612,13 @@
     })
     prevCounts = counts
     clearDoneEl.disabled = !items.some(item => item.done)
+    // 分组徽标跟随当前可见行数（勾选局部刷新不重渲染分组时也要跟上）
+    listEl.querySelectorAll('.todo-group').forEach(group => {
+      const badge = group.querySelector('.todo-group-count')
+      if (!badge) return
+      const value = String(group.querySelectorAll('.todo-item').length)
+      if (badge.textContent !== value) badge.textContent = value
+    })
     const visible = filtered()
     emptyEl.hidden = visible.length > 0
     listEl.hidden = visible.length === 0
@@ -605,10 +629,51 @@
     }
   }
 
+  // 分组树节点：分组头（箭头 + 项目名 + 计数）+ 子任务列表，折叠状态随 localStorage 记忆
+  const renderGroup = (key, groupItems) => {
+    const collapsed = collapsedGroups.has(key)
+    const li = el('li', 'todo-group' + (collapsed ? ' collapsed' : ''))
+
+    const head = el('button', 'todo-group-head')
+    head.type = 'button'
+    head.setAttribute('aria-expanded', String(!collapsed))
+    const arrow = el('span', 'todo-group-arrow')
+    const name = el('span', 'todo-group-name', key || '未分类')
+    const count = el('span', 'todo-group-count', String(groupItems.length))
+    head.append(arrow, name, count)
+
+    const body = el('div', 'todo-group-body')
+    const list = el('ul', 'todo-group-list')
+    groupItems.forEach(item => list.appendChild(renderRow(item)))
+    body.appendChild(list)
+
+    head.addEventListener('click', () => {
+      const nowCollapsed = li.classList.toggle('collapsed')
+      head.setAttribute('aria-expanded', String(!nowCollapsed))
+      if (nowCollapsed) collapsedGroups.add(key)
+      else collapsedGroups.delete(key)
+      saveCollapsed()
+    })
+
+    li.append(head, body)
+    return li
+  }
+
   const render = () => {
     updateProjectOptions()
     listEl.textContent = ''
-    filtered().forEach(item => listEl.appendChild(renderRow(item)))
+    const visible = filtered()
+
+    // 按项目聚成分组；组间排序与项目筛选下拉一致（条数降序 + 拼音），「未分类」垫底
+    const groups = new Map()
+    visible.forEach(item => {
+      const key = item.project || ''
+      if (!groups.has(key)) groups.set(key, [])
+      groups.get(key).push(item)
+    })
+    const order = projectList().map(project => project.name).filter(name => groups.has(name))
+    if (groups.has('')) order.push('')
+    order.forEach(key => listEl.appendChild(renderGroup(key, groups.get(key))))
     syncChrome()
   }
 
@@ -635,9 +700,10 @@
 
   // 删除离场：折叠 + 右滑，结束后由调用方更新状态重渲染
   const animateOut = rows => {
-    const gap = parseFloat(getComputedStyle(listEl).gap) || 10
     return Promise.all(rows.filter(Boolean).map((li, index) => {
       li.style.pointerEvents = 'none'
+      // 行分属不同分组，间距从各自父级取（.todo-group-list）
+      const gap = parseFloat(getComputedStyle(li.parentElement).gap) || 10
       const style = getComputedStyle(li)
       return li.animate(
         [
@@ -839,6 +905,7 @@
     priorityEl.value = 'medium'
     if (priorityDd) priorityDd.sync()
     // 连续录入同一项目：项目输入保留，其余清空
+    collapsedGroups.delete(added.project || '') // 新行所在分组自动展开，避免录进折叠组看不见
     if (filter === 'done') applyFilter('all')
     else render()
     enterAnimation([added.id], false)
@@ -871,9 +938,11 @@
       || (filter === 'active' && !item.done)
       || (filter === 'done' && item.done)
     if (showsItem && inProject(item)) {
-      listEl.replaceChild(renderRow(item), li)
+      li.replaceWith(renderRow(item))
     } else {
+      const group = li.closest('.todo-group')
       li.remove()
+      if (group && !group.querySelector('.todo-item')) group.remove()
     }
     syncChrome()
   })
@@ -998,6 +1067,7 @@
   }
 
   items = load()
+  collapsedGroups = loadCollapsed()
   updateLinkButton()
   priorityDd = buildDropdown(priorityEl)
   projectFilterDd = buildDropdown(projectFilterEl, true)
