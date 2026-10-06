@@ -30,6 +30,9 @@
   --color-ai-bubble-user: #ffffff;
   --bg-ai-input: rgba(0, 0, 0, 0.035);
   --color-ai-error: #c0504a;
+  --color-todo-high: #c0504a;
+  --color-todo-medium: #b07d2b;
+  --color-todo-low: #3f9270;
 }
 
 /* dark scheme */
@@ -64,4 +67,7 @@
   --color-ai-bubble-user: #2E3440;
   --bg-ai-input: rgba(255, 255, 255, 0.05);
   --color-ai-error: #e5837b;
+  --color-todo-high: #e5837b;
+  --color-todo-medium: #d9a35a;
+  --color-todo-low: #6fbf9b;
 }
