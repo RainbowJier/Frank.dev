@@ -1,11 +1,12 @@
 <div class="container todo-index">
   <div class="todo-intro">
     <h1 class="todo-title"><%= page.title %></h1>
-    <p class="todo-description">个人待办清单。数据仅保存在当前浏览器本地，换设备或清除缓存前请先导出备份。</p>
+    <p class="todo-description">个人待办清单，支持按项目归类。数据默认保存在当前浏览器，可关联本地磁盘文件长期保存。</p>
   </div>
 
   <form class="todo-form" id="todo-form">
     <input class="todo-input" id="todo-input" type="text" placeholder="要做什么？" maxlength="200" autocomplete="off" aria-label="任务标题" />
+    <input class="todo-project-input" id="todo-project" list="todo-project-options" type="text" placeholder="项目" maxlength="30" autocomplete="off" aria-label="项目（可选）" title="项目（可选，连续添加时保留）" />
     <input class="todo-date" id="todo-date" type="date" aria-label="截止日期（可选）" title="截止日期（可选）" />
     <select class="todo-priority-select" id="todo-priority" aria-label="优先级" title="优先级">
       <option value="high">高</option>
@@ -13,6 +14,7 @@
       <option value="low">低</option>
     </select>
     <button class="todo-add" type="submit">添加</button>
+    <datalist id="todo-project-options"></datalist>
   </form>
 
   <div class="todo-toolbar">
@@ -21,16 +23,21 @@
       <button class="todo-switch-item" type="button" data-filter="active">进行中 <span data-count="active">0</span></button>
       <button class="todo-switch-item" type="button" data-filter="done">已完成 <span data-count="done">0</span></button>
     </div>
-    <div class="todo-actions">
-      <button class="todo-action" id="todo-clear-done" type="button">清除已完成</button>
-      <button class="todo-action" id="todo-export" type="button">导出</button>
-      <button class="todo-action" id="todo-import-trigger" type="button">导入</button>
-      <input id="todo-import" type="file" accept="application/json,.json" hidden />
+    <div class="todo-side">
+      <select class="todo-project-filter" id="todo-project-filter" aria-label="按项目筛选" title="按项目筛选"></select>
+      <div class="todo-actions">
+        <button class="todo-action" id="todo-clear-done" type="button">清除已完成</button>
+        <button class="todo-action" id="todo-export" type="button">导出</button>
+        <button class="todo-action" id="todo-import-trigger" type="button">导入</button>
+        <button class="todo-action" id="todo-link-file" type="button" hidden>关联文件</button>
+        <input id="todo-import" type="file" accept="application/json,.json" hidden />
+      </div>
     </div>
   </div>
 
   <ul class="todo-list" id="todo-list"></ul>
   <p class="todo-empty" id="todo-empty" hidden>还没有待办事项，从上方输入框添加第一条吧。</p>
+  <p class="todo-storage" id="todo-storage"></p>
   <p class="todo-tips" id="todo-tips" hidden></p>
 </div>
 

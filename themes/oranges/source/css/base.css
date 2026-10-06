@@ -2257,9 +2257,11 @@ button:focus-visible {
 }
 
 .todo-input,
+.todo-project-input,
 .todo-date,
 .todo-priority-select,
 .todo-edit-input,
+.todo-edit-project,
 .todo-edit-date,
 .todo-edit-priority {
   padding: 8px 12px;
@@ -2277,10 +2279,17 @@ button:focus-visible {
   min-width: 200px;
 }
 
+.todo-project-input {
+  flex: 0 1 150px;
+  min-width: 110px;
+}
+
 .todo-input:focus,
+.todo-project-input:focus,
 .todo-date:focus,
 .todo-priority-select:focus,
 .todo-edit-input:focus,
+.todo-edit-project:focus,
 .todo-edit-date:focus,
 .todo-edit-priority:focus {
   outline: none;
@@ -2353,6 +2362,33 @@ button:focus-visible {
 .todo-actions {
   display: flex;
   gap: 8px;
+}
+
+/* 状态页签右侧：项目筛选下拉 + 批量操作 */
+.todo-side {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.todo-project-filter {
+  max-width: 200px;
+  padding: 5px 12px;
+  border: 1px solid var(--color-divider-md-border);
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--color-text-sub);
+  font-size: 1.2rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.todo-project-filter:hover {
+  color: var(--color-text-a-hover);
+  border-color: var(--color-text-sub);
+  background-color: var(--bg-content-search);
 }
 
 .todo-action {
@@ -2508,6 +2544,15 @@ button:focus-visible {
   color: var(--color-todo-low);
 }
 
+/* 行内 #项目 标签：半透明底色，亮暗色通吃 */
+.todo-project-tag {
+  padding: 1px 9px;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--color-text-sub) 12%, transparent);
+  color: var(--color-text-sub);
+  font-size: 1.1rem;
+}
+
 .todo-due {
   color: var(--color-text-sub);
   font-size: 1.2rem;
@@ -2589,8 +2634,14 @@ button:focus-visible {
   font-size: 1.4rem;
 }
 
+.todo-edit-project {
+  flex: 0 1 140px;
+  min-width: 100px;
+}
+
 .todo-edit-date,
-.todo-edit-priority {
+.todo-edit-priority,
+.todo-edit-project {
   font-size: 1.3rem;
 }
 
@@ -2635,6 +2686,35 @@ button:focus-visible {
   font-size: 1.25rem;
 }
 
+/* 存储状态栏：当前数据存哪、是否已落盘 */
+.todo-storage {
+  margin: 14px 0 0;
+  color: var(--color-text-sub);
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+.todo-storage[hidden] {
+  display: none;
+}
+
+.todo-storage-btn {
+  margin-left: 6px;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--color-text-a-hover);
+  font-size: 1.2rem;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.todo-storage-btn:hover {
+  opacity: 0.8;
+}
+
 /* 响应式：对齐归档页断点 */
 @media (max-width: 888px) {
   .todo-index {
@@ -2651,6 +2731,15 @@ button:focus-visible {
 @media (max-width: 600px) {
   .todo-input {
     flex: 1 1 100%;
+  }
+
+  .todo-project-input {
+    flex: 1 1 40%;
+  }
+
+  .todo-project-filter {
+    max-width: 100%;
+    flex: 1;
   }
 
   .todo-add {
