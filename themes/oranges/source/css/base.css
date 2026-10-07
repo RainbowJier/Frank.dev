@@ -2458,14 +2458,6 @@ button:focus-visible {
 
 .todo-dd.open .todo-dd-menu {
   display: block;
-  animation: todo-pop-in 0.16s ease;
-}
-
-@keyframes todo-pop-in {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
 }
 
 .todo-dd-option {
@@ -2546,7 +2538,6 @@ button:focus-visible {
 
 .todo-cal.open .todo-cal-pop {
   display: block;
-  animation: todo-pop-in 0.16s ease;
 }
 
 .todo-cal-head {
@@ -2654,13 +2645,6 @@ button:focus-visible {
 
 .todo-cal-foot-btn:hover {
   color: var(--color-text-a-hover);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .todo-dd.open .todo-dd-menu,
-  .todo-cal.open .todo-cal-pop {
-    animation: none;
-  }
 }
 
 .todo-add {
@@ -2949,7 +2933,6 @@ button:focus-visible {
 .todo-check:checked {
   border-color: var(--color-text-a-hover);
   background-color: var(--color-text-a-hover);
-  animation: todo-check-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* 对勾颜色随亮暗反转：亮色选中底是黑、勾用白；暗色选中底是白、勾用深底色 */
@@ -2959,12 +2942,6 @@ button:focus-visible {
 
 :root[color-mode="dark"] .todo-check:checked {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E3440' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
-}
-
-@keyframes todo-check-pop {
-  0% { transform: scale(0.75); }
-  60% { transform: scale(1.12); }
-  100% { transform: scale(1); }
 }
 
 .todo-main {
@@ -3118,24 +3095,11 @@ button:focus-visible {
   animation: fade-up 0.35s ease backwards;
 }
 
-/* 行入场动画（复用全局 fade-up），由 JS 在首屏/新增时挂类 */
-.todo-item.todo-enter {
-  animation: fade-up 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) backwards;
-}
+/* 行入场动画由 JS 的 WAAPI 驱动（见 todo.js enterAnimation） */
 
-/* 筛选计数变化时脉冲一下 */
+/* 筛选计数变化时脉冲一下（WAAPI，见 todo.js pulse） */
 .todo-switch-item [data-count] {
   display: inline-block;
-}
-
-@keyframes todo-count-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.35); }
-  100% { transform: scale(1); }
-}
-
-.todo-count-pulse {
-  animation: todo-count-pulse 0.3s ease;
 }
 
 .todo-tips {

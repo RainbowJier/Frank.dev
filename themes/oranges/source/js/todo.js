@@ -3,7 +3,9 @@
 // - 数据层双层结构：localStorage 永远作镜像缓存；Chrome/Edge 桌面版可再关联磁盘 todo.json
 //   （File System Access API），句柄存 IndexedDB，改动自动写入文件，重启后按 updatedAt 新者胜出对账
 // - 不支持文件 API 的浏览器只走 localStorage，功能不受影响；隐私模式静默降级
-// - 动效：行入场（fade-up）、删除离场（WAAPI 折叠）、打勾弹跳、计数脉冲；分组展开/收起为用户点名要的可见动效（WAAPI，不随 reduce-motion 关闭），其余 respect prefers-reduced-motion
+// - 动效：全页统一 WAAPI 驱动（按压脉冲、行入场、打勾弹跳、计数脉冲、弹层弹入、tips/编辑器滑入、
+//   删除离场折叠、分组展开收起）。CSS transition/animation 在浏览器开启“减少动态”时会被强制压成瞬时，
+//   WAAPI 不受影响；这些动效为用户点名要的可见效果，故不随 prefers-reduced-motion 关闭
 (() => {
   const root = document.querySelector('.todo-index')
   if (!root) return
@@ -17,8 +19,6 @@
   const FILE_STORE = 'handles'
   const FILE_HANDLE_KEY = 'todo-file'
   const fileApi = 'showSaveFilePicker' in window
-  const reduceMotion = window.matchMedia
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const form = root.querySelector('#todo-form')
   const inputEl = root.querySelector('#todo-input')
@@ -63,6 +63,15 @@
   const showTips = message => {
     tipsEl.textContent = message
     tipsEl.hidden = false
+    if (tipsEl.animate) {
+      tipsEl.animate(
+        [
+          { opacity: 0, transform: 'translateY(-6px)' },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ],
+        { duration: 200, easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)' }
+      )
+    }
     clearTimeout(tipsTimer)
     tipsTimer = setTimeout(() => { tipsEl.hidden = true }, 3000)
   }
@@ -284,6 +293,23 @@
     return node
   }
 
+  // 按压反馈：页内所有按钮统一短促弹性脉冲（WAAPI；原因见文件头注释）
+  const pulseButton = btn => {
+    if (!btn.animate || btn.disabled) return
+    btn.animate(
+      [
+        { transform: 'scale(1)' },
+        { transform: 'scale(0.93)' },
+        { transform: 'scale(1)' }
+      ],
+      { duration: 200, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
+    )
+  }
+  root.addEventListener('click', event => {
+    const btn = event.target.closest('button')
+    if (btn) pulseButton(btn)
+  })
+
   // ---------- 控件皮肤：原生 select / date 换成自定义下拉与日历 ----------
   // 原生控件保留为数据源（读写 value、监听 change 的逻辑全部不动），仅藏进皮肤内；
   // 无 JS 或脚本异常时原生控件照常显示，回退到上一节的 CSS 原生增强样式
@@ -351,6 +377,15 @@
       wrapper.classList.add('open')
       btn.setAttribute('aria-expanded', 'true')
       renderMenu()
+      if (menu.animate) {
+        menu.animate(
+          [
+            { opacity: 0, transform: 'translateY(-4px)' },
+            { opacity: 1, transform: 'translateY(0px)' }
+          ],
+          { duration: 160, easing: 'ease' }
+        )
+      }
       const active = Array.prototype.findIndex.call(menu.children, li => li.classList.contains('active'))
       moveCursor(active === -1 ? 0 : active)
     }
@@ -494,6 +529,15 @@
       open = true
       wrapper.classList.add('open')
       btn.setAttribute('aria-expanded', 'true')
+      if (pop.animate) {
+        pop.animate(
+          [
+            { opacity: 0, transform: 'translateY(-4px)' },
+            { opacity: 1, transform: 'translateY(0px)' }
+          ],
+          { duration: 160, easing: 'ease' }
+        )
+      }
       const focusTarget = grid.querySelector('.selected') || grid.querySelector('.today')
       if (focusTarget) focusTarget.focus()
     }
@@ -593,9 +637,15 @@
   }
 
   const pulse = span => {
-    span.classList.remove('todo-count-pulse')
-    void span.offsetWidth
-    span.classList.add('todo-count-pulse')
+    if (!span.animate) return
+    span.animate(
+      [
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.35)' },
+        { transform: 'scale(1)' }
+      ],
+      { duration: 300, easing: 'ease' }
+    )
   }
 
   // 只更新计数、空态与批量按钮，不动列表（勾选/局部刷新时用）；页签计数跟随当前项目范围
@@ -701,7 +751,8 @@
     return li
   }
 
-  const render = () => {
+  // animate 为 true 时（首屏、切换页签/项目筛选、导入）对可见行做 stagger 入场
+  const render = animate => {
     updateProjectOptions()
     listEl.textContent = ''
     const visible = filtered()
@@ -717,6 +768,7 @@
     if (groups.has('')) order.push('')
     order.forEach(key => listEl.appendChild(renderGroup(key, groups.get(key))))
     syncChrome()
+    if (animate) enterAnimation(visible.map(item => item.id), true)
   }
 
   const applyFilter = next => {
@@ -726,17 +778,26 @@
       button.classList.toggle('active', active)
       button.setAttribute('aria-pressed', String(active))
     })
-    render()
+    render(true)
   }
 
-  // 新行入场动画（复用全局 fade-up），仅在首屏/新增时挂上，避免每次全量重渲染都闪
+  // 新行入场：fade-up + stagger，仅在首屏/新增/切换筛选时调用，避免每次全量重渲染都闪
   const enterAnimation = (ids, stagger) => {
-    if (reduceMotion) return
     ids.forEach((id, index) => {
       const li = rowById(id)
-      if (!li) return
-      li.classList.add('todo-enter')
-      if (stagger) li.style.animationDelay = Math.min(index * 45, 360) + 'ms'
+      if (!li || !li.animate) return
+      li.animate(
+        [
+          { opacity: 0, transform: 'translateY(10px)' },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ],
+        {
+          duration: 400,
+          delay: stagger ? Math.min(index * 45, 360) : 0,
+          easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)',
+          fill: 'backwards'
+        }
+      )
     })
   }
 
@@ -796,6 +857,15 @@
     // 皮肤需在控件进入 DOM 后再包（insertBefore 依赖 parentNode）
     buildDatePicker(dateInput)
     buildDropdown(prioritySelect)
+    if (editor.animate) {
+      editor.animate(
+        [
+          { opacity: 0, transform: 'translateY(-6px)' },
+          { opacity: 1, transform: 'translateY(0px)' }
+        ],
+        { duration: 200, easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)' }
+      )
+    }
     titleInput.focus()
     titleInput.setSelectionRange(titleInput.value.length, titleInput.value.length)
 
@@ -964,7 +1034,7 @@
 
   projectFilterEl.addEventListener('change', () => {
     projectFilter = projectFilterEl.value
-    render()
+    render(true)
   })
 
   // 勾选只替换该行，不整表重渲染，避免其他行的打勾动画重放
@@ -980,7 +1050,18 @@
       || (filter === 'active' && !item.done)
       || (filter === 'done' && item.done)
     if (showsItem && inProject(item)) {
-      li.replaceWith(renderRow(item))
+      const fresh = renderRow(item)
+      li.replaceWith(fresh)
+      if (item.done && fresh.querySelector('.todo-check').animate) {
+        fresh.querySelector('.todo-check').animate(
+          [
+            { transform: 'scale(0.75)' },
+            { transform: 'scale(1.12)' },
+            { transform: 'scale(1)' }
+          ],
+          { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
+        )
+      }
     } else {
       const group = li.closest('.todo-group')
       li.remove()
@@ -997,19 +1078,13 @@
       startEdit(li)
     } else if (button.dataset.action === 'delete') {
       const id = li.dataset.id
-      if (!reduceMotion) {
-        removing = true
-        animateOut([li]).then(() => {
-          removing = false
-          items = items.filter(entry => entry.id !== id)
-          save()
-          render()
-        })
-      } else {
+      removing = true
+      animateOut([li]).then(() => {
+        removing = false
         items = items.filter(entry => entry.id !== id)
         save()
         render()
-      }
+      })
     }
   })
 
@@ -1024,19 +1099,12 @@
     const doneItems = items.filter(item => item.done)
     if (!doneItems.length) return
     if (!window.confirm('确定清除 ' + doneItems.length + ' 条已完成任务？')) return
-    const remove = () => {
-      items = items.filter(item => !item.done)
-      save()
-      render()
-    }
-    if (reduceMotion) {
-      remove()
-      return
-    }
     removing = true
     animateOut(doneItems.map(item => rowById(item.id))).then(() => {
       removing = false
-      remove()
+      items = items.filter(item => !item.done)
+      save()
+      render()
     })
   })
 
@@ -1078,8 +1146,7 @@
       if (!window.confirm('将导入 ' + imported.length + ' 条任务并覆盖当前 ' + items.length + ' 条，确定？')) return
       items = imported
       save()
-      render()
-      enterAnimation(items.map(item => item.id), true)
+      render(true)
       showTips('已导入 ' + imported.length + ' 条任务')
     }
     reader.onerror = () => showTips('导入失败：文件读取错误')
@@ -1115,7 +1182,6 @@
   projectFilterDd = buildDropdown(projectFilterEl, true)
   buildDatePicker(dateEl)
   applyFilter('all')
-  enterAnimation(items.map(item => item.id), true)
   updateStorageStatus()
   restoreFile()
 })()
