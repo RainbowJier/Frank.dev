@@ -12,6 +12,7 @@
 - [文章归档](https://frank-dev.site/archives/)
 - [项目经历](https://frank-dev.site/projects/)
 - [Skill-Hub](https://frank-dev.site/skills/)
+- [待办管理](https://frank-dev.site/todo/)
 - [关于我](https://frank-dev.site/about/)
 
 ### 首页 · 浅色模式
@@ -42,6 +43,12 @@
 
 点击侧栏头像可放大查看并导出图片，按 `Esc` 或点击背景关闭。
 
+### 待办管理页
+
+![待办管理页](docs/screenshots/todo.png)
+
+任务按项目分组树形展示（分组可折叠、状态记忆），支持优先级、截止日期、行内编辑与项目筛选；下拉与日期控件为自定义皮肤组件，无 JS 时回退为原生控件。
+
 ## 核心能力
 
 - **内容与作品集**：博客文章与项目经历分开维护，首页和 `/projects/` 会自动聚合项目文章。
@@ -51,6 +58,7 @@
 - **深浅主题**：支持浅色/深色切换与 View Transitions 动画；不支持该 API 或设置了 `prefers-reduced-motion` 时会降级。
 - **AI 阅读助手**：文章页基于当前文章全文问答，支持 SSE 流式输出、推理过程、多轮追问、停止生成、错误提示和代码块渲染。
 - **Skill-Hub**：扫描仓库中的可复用技能，生成 `/skills/` 目录和技能详情页；技能正文 `SKILL.md` 不会作为静态文件直接发布。
+- **待办管理**：`/todo/` 本地待办清单，任务按项目分组树形展示（可折叠、折叠状态记忆），支持优先级/截止日期、行内编辑、筛选、JSON 导入导出；数据以 localStorage 为镜像，Chrome/Edge 桌面版可关联磁盘 `todo.json` 长期保存（File System Access API，句柄存 IndexedDB，重启按 `updatedAt` 对账）。
 - **自动部署**：推送 `main` 分支或手动运行 GitHub Actions，构建后发布到 GitHub Pages。
 
 ## 内容地图
@@ -101,6 +109,7 @@ Frank.dev/
 │   ├── about/                 # 关于页与系列文章入口
 │   ├── projects/              # 项目经历列表页
 │   ├── skills/                # 站点保存的技能副本与对外 README
+│   ├── todo/                  # 待办管理页（layout: todo，交互由 todo.js 驱动）
 │   ├── images/                # 头像、favicon、机构 logo 和公共图片
 │   └── CNAME                  # GitHub Pages 自定义域名
 ├── themes/oranges/
@@ -212,6 +221,19 @@ description: 一句话项目简介
 - 全局头像与 favicon 当前都指向 `source/images/favicon.png`；机构 logo 和其他公共图片也放在 `source/images/`。
 - 标签页和标签渲染仍然保留，但默认不显示在主导航；在 `_config.oranges.yml` 中将 `navbar` 的标签项设为 `enable: true` 即可启用入口。
 - 页面模板位于 `themes/oranges/layout/`，样式和脚本分别位于 `themes/oranges/source/css/`、`themes/oranges/source/js/`。
+
+## 待办管理页
+
+`/todo/` 是纯前端的本地待办清单：页面模板为 `themes/oranges/layout/todo.ejs`，交互全部在 `themes/oranges/source/js/todo.js`（原生 DOM，无依赖）。
+
+**功能**：任务可归属项目，列表按项目分组树形展示（分组可折叠、折叠状态随 localStorage 记忆，展开/收起为 WAAPI 高度动画）；支持高/中/低优先级、截止日期（逾期高亮）、行内编辑、全部/进行中/已完成筛选、按项目筛选、清除已完成和 JSON 导入导出。优先级下拉与日期选择为自定义皮肤组件，原生 `<select>`/`<input type="date">` 保留为数据源，无 JS 时照常显示。
+
+**数据层**为双层结构：
+
+1. **localStorage 镜像**（key `todo-items`）：永远写入，隐私模式静默降级为仅本次会话有效；
+2. **磁盘文件**（可选）：Chrome/Edge 桌面版点击「关联文件」后通过 File System Access API 读写本地 `todo.json`，文件句柄存 IndexedDB，重启后自动恢复授权并对账——整表级别按 `updatedAt` 新者胜出。
+
+因此数据默认只在当前浏览器内，清缓存前建议导出 JSON 备份或关联磁盘文件。
 
 ## AI 阅读助手
 
