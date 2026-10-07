@@ -2661,14 +2661,6 @@ button:focus-visible {
   .todo-cal.open .todo-cal-pop {
     animation: none;
   }
-
-  .todo-group-body {
-    transition: none;
-  }
-
-  .todo-group-arrow {
-    transition: none;
-  }
 }
 
 .todo-add {
@@ -2869,7 +2861,6 @@ button:focus-visible {
   border-right: 1.6px solid currentColor;
   border-bottom: 1.6px solid currentColor;
   transform: rotate(-45deg);
-  transition: transform 0.2s ease;
 }
 
 /* 展开时箭头转向下方；折叠态保持指右 */
@@ -2893,27 +2884,24 @@ button:focus-visible {
   text-align: center;
 }
 
-/* 折叠动画：grid 行高 1fr→0fr，需子级 overflow 收口 */
-.todo-group-body {
-  display: grid;
-  grid-template-rows: 1fr;
-  transition: grid-template-rows 0.25s ease;
+/* 收起态由 JS 的 WAAPI 高度动画过渡到位后落地（CSS transition 会被浏览器“减少动态”压成瞬时） */
+.todo-group.collapsed .todo-group-list {
+  display: none;
 }
 
-.todo-group.collapsed .todo-group-body {
-  grid-template-rows: 0fr;
+/* 收起动画进行中暂时压过 display:none，动画收口后由 JS 撤除 */
+.todo-group.collapsed .todo-group-list.animating {
+  display: flex;
 }
 
 .todo-group-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /* 只留水平缩进：垂直 margin/padding 会把 0fr 折叠轨道撑开 */
+  /* 只留水平缩进：垂直 margin/padding 会把高度动画的起止高度算歪 */
   padding: 0 0 0 16px;
   border-left: 1px solid var(--color-divider-md-border);
   list-style: none;
-  overflow: hidden;
-  min-height: 0;
 }
 
 .todo-item {

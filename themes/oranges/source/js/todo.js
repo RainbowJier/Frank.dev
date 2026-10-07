@@ -3,7 +3,7 @@
 // - 数据层双层结构：localStorage 永远作镜像缓存；Chrome/Edge 桌面版可再关联磁盘 todo.json
 //   （File System Access API），句柄存 IndexedDB，改动自动写入文件，重启后按 updatedAt 新者胜出对账
 // - 不支持文件 API 的浏览器只走 localStorage，功能不受影响；隐私模式静默降级
-// - 动效：行入场（fade-up）、删除离场（WAAPI 折叠）、打勾弹跳、计数脉冲；respect prefers-reduced-motion
+// - 动效：行入场（fade-up）、删除离场（WAAPI 折叠）、打勾弹跳、计数脉冲；分组展开/收起为用户点名要的可见动效（WAAPI，不随 reduce-motion 关闭），其余 respect prefers-reduced-motion
 (() => {
   const root = document.querySelector('.todo-index')
   if (!root) return
@@ -11,6 +11,7 @@
   const STORAGE_KEY = 'todo-items'
   const COLLAPSED_KEY = 'todo-collapsed'
   const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' }
+  const GROUP_ANIM_MS = 240
   const PROJECT_NONE = '__none__' // 项目筛选下拉里「未分类」的哨兵值
   const FILE_DB = 'todo-storage'
   const FILE_STORE = 'handles'
@@ -642,20 +643,61 @@
     const count = el('span', 'todo-group-count', String(groupItems.length))
     head.append(arrow, name, count)
 
-    const body = el('div', 'todo-group-body')
     const list = el('ul', 'todo-group-list')
     groupItems.forEach(item => list.appendChild(renderRow(item)))
-    body.appendChild(list)
 
+    // 展开/收起用 WAAPI 驱动而非 CSS transition：浏览器开启“减少动态”时会把 CSS transition
+    // 强制压成瞬时（观感即“一闪”），WAAPI 不受该强制影响；用户点名要这个动效，故不随开关关闭。
+    // 状态（类/aria/存储）点击即落地，动画只负责视觉过渡：后台标签页动画被节流暂停也不至于悬空
+    let animSeq = 0
     head.addEventListener('click', () => {
-      const nowCollapsed = li.classList.toggle('collapsed')
-      head.setAttribute('aria-expanded', String(!nowCollapsed))
-      if (nowCollapsed) collapsedGroups.add(key)
-      else collapsedGroups.delete(key)
-      saveCollapsed()
+      const collapsing = !li.classList.contains('collapsed')
+      const token = ++animSeq
+      const commit = () => {
+        li.classList.toggle('collapsed', collapsing)
+        head.setAttribute('aria-expanded', String(!collapsing))
+        if (collapsing) collapsedGroups.add(key)
+        else collapsedGroups.delete(key)
+        saveCollapsed()
+      }
+      if (!list.animate) {
+        commit()
+        return
+      }
+      list.getAnimations().forEach(anim => anim.cancel())
+      list.style.overflow = 'hidden'
+      // 收起方向：类已切换，靠 animating 暂时压过 display:none 让内容留在画面里参与动画
+      list.classList.add('animating')
+      commit()
+      const height = list.offsetHeight
+      if (arrow.animate) {
+        arrow.animate(
+          [
+            { transform: collapsing ? 'rotate(45deg)' : 'rotate(-45deg)' },
+            { transform: collapsing ? 'rotate(-45deg)' : 'rotate(45deg)' }
+          ],
+          { duration: GROUP_ANIM_MS, easing: 'ease' }
+        )
+      }
+      const anim = list.animate(
+        collapsing
+          ? [{ height: height + 'px', opacity: 1 }, { height: '0px', opacity: 0 }]
+          : [{ height: '0px', opacity: 0 }, { height: height + 'px', opacity: 1 }],
+        {
+          duration: GROUP_ANIM_MS,
+          easing: collapsing ? 'cubic-bezier(0.4, 0, 0.2, 1)' : 'cubic-bezier(0.25, 0.8, 0.25, 1)',
+          fill: collapsing ? 'forwards' : 'none'
+        }
+      )
+      anim.finished.catch(() => {}).then(() => {
+        if (token !== animSeq) return
+        anim.cancel()
+        list.classList.remove('animating')
+        list.style.overflow = ''
+      })
     })
 
-    li.append(head, body)
+    li.append(head, list)
     return li
   }
 
