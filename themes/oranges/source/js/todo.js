@@ -29,7 +29,6 @@
   const projectEl = root.querySelector('#todo-project')
   const dateEl = root.querySelector('#todo-date')
   const priorityEl = root.querySelector('#todo-priority')
-  const projectOptionsEl = root.querySelector('#todo-project-options')
   const listEl = root.querySelector('#todo-list')
   const emptyEl = root.querySelector('#todo-empty')
   const switchEl = root.querySelector('#todo-switch')
@@ -243,17 +242,10 @@
       .map(([name, count]) => ({ name, count }))
   }
 
-  // 重建输入联想 datalist 与项目筛选下拉；当前项目已消失时回到「全部项目」
+  // 重建项目筛选下拉；当前项目已消失时回到「全部项目」（输入组合框在展开时实时取 projectList，无需此处同步）
   const updateProjectOptions = () => {
     const projects = projectList()
     const hasNone = items.some(item => !item.project)
-
-    projectOptionsEl.textContent = ''
-    projects.forEach(project => {
-      const option = el('option')
-      option.value = project.name
-      projectOptionsEl.appendChild(option)
-    })
 
     const keep = projects.some(project => project.name === projectFilter)
       || (projectFilter === PROJECT_NONE && hasNone)
@@ -445,6 +437,146 @@
     popInstances.push({ root: wrapper, close })
     sync()
     return { sync }
+  }
+
+  // 项目输入组合框：保留原生 input 供自由输入新项目，聚焦/点箭头展开既有项目面板点选回填；
+  // 输入即过滤，未命中时给「新建」行兜底（取代原生 datalist——其点击不出全量列表且样式与皮肤不一致）
+  const buildProjectCombo = input => {
+    const wrapper = el('div', 'todo-dd combo')
+    input.parentNode.insertBefore(wrapper, input)
+    wrapper.appendChild(input)
+    const toggle = el('button', 'todo-combo-toggle')
+    toggle.type = 'button'
+    toggle.tabIndex = -1
+    toggle.setAttribute('aria-label', '选择已有项目')
+    const menu = el('ul', 'todo-dd-menu')
+    menu.setAttribute('role', 'listbox')
+    wrapper.append(toggle, menu)
+    input.setAttribute('role', 'combobox')
+    input.setAttribute('aria-haspopup', 'listbox')
+    input.setAttribute('aria-expanded', 'false')
+
+    let open = false
+    let cursorLi = null
+    let filterDirty = false
+
+    const close = () => {
+      if (!open) return
+      open = false
+      cursorLi = null
+      wrapper.classList.remove('open')
+      input.setAttribute('aria-expanded', 'false')
+    }
+    const renderMenu = () => {
+      menu.textContent = ''
+      const typed = input.value.trim()
+      const lower = filterDirty ? typed.toLowerCase() : ''
+      const list = projectList()
+        .filter(project => !lower || project.name.toLowerCase().includes(lower))
+      list.forEach(project => {
+        const li = el('li', 'todo-dd-option', project.name + '（' + project.count + '）')
+        li.dataset.value = project.name
+        li.tabIndex = -1
+        li.setAttribute('role', 'option')
+        if (project.name === typed) li.classList.add('active')
+        menu.appendChild(li)
+      })
+      if (filterDirty && typed && !list.some(project => project.name === typed)) {
+        const li = el('li', 'todo-dd-option new', '新建「' + typed + '」')
+        li.dataset.value = typed
+        li.tabIndex = -1
+        li.setAttribute('role', 'option')
+        menu.appendChild(li)
+      }
+      if (!menu.children.length) {
+        const li = el('li', 'todo-dd-option empty', filterDirty && typed ? '无匹配项目' : '暂无项目，输入名称新建')
+        li.tabIndex = -1
+        menu.appendChild(li)
+      }
+      cursorLi = null
+    }
+    const openMenu = () => {
+      const wasOpen = open
+      open = true
+      filterDirty = false
+      wrapper.classList.add('open')
+      input.setAttribute('aria-expanded', 'true')
+      renderMenu()
+      if (!wasOpen && menu.animate) {
+        menu.animate(
+          [
+            { opacity: 0, transform: 'translateY(-4px)' },
+            { opacity: 1, transform: 'translateY(0px)' }
+          ],
+          { duration: 160, easing: 'ease' }
+        )
+      }
+    }
+    // 光标只在可选项间移动（跳过空态行），焦点始终留在输入框以便继续键入
+    const moveCursor = step => {
+      const pickable = Array.prototype.filter.call(menu.children, li => li.dataset.value)
+      if (!pickable.length) {
+        cursorLi = null
+        return
+      }
+      const current = cursorLi ? pickable.indexOf(cursorLi) : -1
+      const next = current === -1
+        ? (step > 0 ? 0 : pickable.length - 1)
+        : Math.min(Math.max(current + step, 0), pickable.length - 1)
+      cursorLi = pickable[next]
+      Array.prototype.forEach.call(menu.children, li => li.classList.toggle('cursor', li === cursorLi))
+      cursorLi.scrollIntoView({ block: 'nearest' })
+    }
+    const choose = li => {
+      if (!li || !li.dataset.value) return
+      input.value = li.dataset.value
+      close()
+    }
+
+    input.addEventListener('focus', () => { if (!open) openMenu() })
+    input.addEventListener('input', () => {
+      if (!open) openMenu()
+      filterDirty = true
+      renderMenu()
+    })
+    input.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault()
+        if (!open) openMenu()
+        moveCursor(event.key === 'ArrowDown' ? 1 : -1)
+      } else if (event.key === 'Enter') {
+        if (open && cursorLi) {
+          event.preventDefault()
+          choose(cursorLi)
+        } else if (open) {
+          close()
+        }
+      } else if (event.key === 'Escape') {
+        if (open) {
+          event.stopPropagation()
+          close()
+        }
+      } else if (event.key === 'Tab') {
+        close()
+      }
+    })
+    // 选项与箭头在按下阶段阻止焦点转移，避免点选瞬间触发输入框 focus 重开面板
+    menu.addEventListener('pointerdown', event => {
+      if (event.target.closest('.todo-dd-option')) event.preventDefault()
+    })
+    menu.addEventListener('click', event => {
+      choose(event.target.closest('.todo-dd-option'))
+    })
+    toggle.addEventListener('pointerdown', event => event.preventDefault())
+    toggle.addEventListener('click', () => {
+      if (open) {
+        close()
+      } else {
+        openMenu()
+        input.focus()
+      }
+    })
+    popInstances.push({ root: wrapper, close })
   }
 
   const WEEK_LABELS = ['一', '二', '三', '四', '五', '六', '日']
@@ -851,7 +983,6 @@
     projectInput.type = 'text'
     projectInput.maxLength = 30
     projectInput.placeholder = '项目'
-    projectInput.setAttribute('list', 'todo-project-options')
     projectInput.value = item.project
     const dateInput = el('input', 'todo-edit-date')
     dateInput.type = 'date'
@@ -883,6 +1014,7 @@
     buildDatePicker(dateInput)
     buildDropdown(prioritySelect)
     buildDropdown(statusSelect)
+    buildProjectCombo(projectInput)
     if (editor.animate) {
       editor.animate(
         [
@@ -1221,6 +1353,7 @@
   priorityDd = buildDropdown(priorityEl)
   projectFilterDd = buildDropdown(projectFilterEl, true)
   buildDatePicker(dateEl)
+  buildProjectCombo(projectEl)
   applyFilter('all')
   updateStorageStatus()
   restoreFile()
