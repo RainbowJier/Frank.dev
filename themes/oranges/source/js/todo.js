@@ -1232,7 +1232,8 @@
     // 连续录入同一项目/目录：项目与目录输入保留，其余清空
     collapsedGroups.delete(added.project || '') // 新行所在分组自动展开，避免录进折叠组看不见
     if (added.group) collapsedGroups.delete(added.project + '\u001f' + added.group)
-    if (filter === 'done') applyFilter('all')
+    // 新任务固定为未开始：停在「进行中/已完成」页签时会看不见，跳回全部给反馈
+    if (filter === 'doing' || filter === 'done') applyFilter('all')
     else render()
     enterAnimation([added.id], false)
     inputEl.focus()
