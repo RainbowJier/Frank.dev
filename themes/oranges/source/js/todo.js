@@ -14,6 +14,10 @@
   const COLLAPSED_KEY = 'todo-collapsed'
   const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' }
   const GROUP_ANIM_MS = 240
+  // 任务三态：未开始 → 进行中 → 已完成 → 未开始（点行首圆环循环）
+  const STATUS_LABELS = { todo: '未开始', doing: '进行中', done: '已完成' }
+  const NEXT_STATUS = { todo: 'doing', doing: 'done', done: 'todo' }
+  const CYCLE_ARIA = { todo: '标记为进行中', doing: '标记为已完成', done: '标记为未开始' }
   const PROJECT_NONE = '__none__' // 项目筛选下拉里「未分类」的哨兵值
   const FILE_DB = 'todo-storage'
   const FILE_STORE = 'handles'
@@ -87,11 +91,13 @@
     if (typeof raw.project === 'string') project = raw.project.trim().slice(0, 30)
     // id 会被拼进选择器，白名单外的直接换新，避免注入
     const id = typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(raw.id) ? raw.id : uid()
+    // 旧数据只有 done 布尔（true=已完成），新数据存 status 三态
+    const status = STATUS_LABELS[raw.status] ? raw.status : (raw.done === true ? 'done' : 'todo')
     return {
       id: id,
       title: title.slice(0, 200),
       project: project,
-      done: raw.done === true,
+      status: status,
       deadline: deadline,
       priority: PRIORITY_LABELS[raw.priority] ? raw.priority : 'medium',
       createdAt: Number(raw.createdAt) || Date.now(),
@@ -106,7 +112,7 @@
 
   const dueInfo = item => {
     if (!item.deadline) return null
-    if (item.done) return { text: '截止 ' + item.deadline, overdue: false }
+    if (item.status === 'done') return { text: '截止 ' + item.deadline, overdue: false }
     const today = todayStr()
     if (item.deadline < today) return { text: '已逾期 · ' + item.deadline, overdue: true }
     if (item.deadline === today) return { text: '今天截止', overdue: false }
@@ -281,8 +287,9 @@
   // ---------- 筛选与渲染 ----------
 
   const filtered = () => items.filter(item => {
-    if (filter === 'active' && item.done) return false
-    if (filter === 'done' && !item.done) return false
+    if (filter === 'todo' && item.status !== 'todo') return false
+    if (filter === 'doing' && item.status !== 'doing') return false
+    if (filter === 'done' && item.status !== 'done') return false
     return inProject(item)
   })
 
@@ -307,7 +314,8 @@
   }
   root.addEventListener('click', event => {
     const btn = event.target.closest('button')
-    if (btn) pulseButton(btn)
+    // 状态圆环有自己的切换反馈动画，不叠按压缩放
+    if (btn && btn.dataset.action !== 'cycle') pulseButton(btn)
   })
 
   // ---------- 控件皮肤：原生 select / date 换成自定义下拉与日历 ----------
@@ -603,18 +611,23 @@
   const renderRow = item => {
     const li = el('li', 'todo-item')
     li.dataset.id = item.id
-    if (item.done) li.classList.add('done')
+    if (item.status === 'done') li.classList.add('done')
 
-    const check = el('input', 'todo-check')
-    check.type = 'checkbox'
-    check.checked = item.done
-    check.setAttribute('aria-label', item.done ? '标记为未完成' : '标记为已完成')
+    // 行首圆环即状态控件：空环=未开始，半填充=进行中，实心对勾=已完成；点击循环
+    const check = el('button', 'todo-check' + (item.status !== 'todo' ? ' ' + (item.status === 'doing' ? 'is-doing' : 'is-done') : ''))
+    check.type = 'button'
+    check.dataset.action = 'cycle'
+    check.setAttribute('aria-label', CYCLE_ARIA[item.status])
+    check.title = '当前：' + STATUS_LABELS[item.status]
 
     const main = el('div', 'todo-main')
     const title = el('span', 'todo-item-title', item.title)
     title.title = '双击编辑'
     main.appendChild(title)
     const meta = el('div', 'todo-meta')
+    if (item.status === 'doing') {
+      meta.appendChild(el('span', 'todo-badge todo-status-doing', STATUS_LABELS.doing))
+    }
     meta.appendChild(el('span', 'todo-badge todo-priority-' + item.priority, PRIORITY_LABELS[item.priority]))
     const due = dueInfo(item)
     if (due) {
@@ -651,8 +664,12 @@
   // 只更新计数、空态与批量按钮，不动列表（勾选/局部刷新时用）；页签计数跟随当前项目范围
   const syncChrome = () => {
     const scoped = items.filter(inProject)
-    const activeCount = scoped.filter(item => !item.done).length
-    const counts = { all: scoped.length, active: activeCount, done: scoped.length - activeCount }
+    const counts = {
+      all: scoped.length,
+      todo: scoped.filter(item => item.status === 'todo').length,
+      doing: scoped.filter(item => item.status === 'doing').length,
+      done: scoped.filter(item => item.status === 'done').length
+    }
     switchEl.querySelectorAll('[data-count]').forEach(span => {
       const key = span.dataset.count
       const value = String(counts[key])
@@ -662,7 +679,7 @@
       }
     })
     prevCounts = counts
-    clearDoneEl.disabled = !items.some(item => item.done)
+    clearDoneEl.disabled = !items.some(item => item.status === 'done')
     // 分组徽标跟随当前可见行数（勾选局部刷新不重渲染分组时也要跟上）
     listEl.querySelectorAll('.todo-group').forEach(group => {
       const badge = group.querySelector('.todo-group-count')
@@ -848,15 +865,24 @@
       prioritySelect.appendChild(option)
     })
     prioritySelect.value = item.priority
+    const statusSelect = el('select', 'todo-edit-priority')
+    statusSelect.setAttribute('aria-label', '任务状态')
+    Object.keys(STATUS_LABELS).forEach(key => {
+      const option = el('option', null, STATUS_LABELS[key])
+      option.value = key
+      statusSelect.appendChild(option)
+    })
+    statusSelect.value = item.status
     const saveBtn = el('button', 'todo-item-btn todo-edit-save', '保存')
     saveBtn.type = 'button'
     const cancelBtn = el('button', 'todo-item-btn', '取消')
     cancelBtn.type = 'button'
-    editor.append(titleInput, projectInput, dateInput, prioritySelect, saveBtn, cancelBtn)
+    editor.append(titleInput, projectInput, dateInput, prioritySelect, statusSelect, saveBtn, cancelBtn)
     li.appendChild(editor)
     // 皮肤需在控件进入 DOM 后再包（insertBefore 依赖 parentNode）
     buildDatePicker(dateInput)
     buildDropdown(prioritySelect)
+    buildDropdown(statusSelect)
     if (editor.animate) {
       editor.animate(
         [
@@ -880,6 +906,7 @@
       item.project = projectInput.value.trim().slice(0, 30)
       item.deadline = dateInput.value
       item.priority = prioritySelect.value
+      item.status = STATUS_LABELS[statusSelect.value] ? statusSelect.value : item.status
       item.updatedAt = Date.now()
       save()
       render()
@@ -1003,9 +1030,9 @@
       id: uid(),
       title: title.slice(0, 200),
       project: projectEl.value.trim().slice(0, 30),
-      done: false,
       deadline: dateEl.value,
       priority: priorityEl.value,
+      status: 'todo',
       createdAt: now,
       updatedAt: now
     }
@@ -1037,30 +1064,38 @@
     render(true)
   })
 
-  // 勾选只替换该行，不整表重渲染，避免其他行的打勾动画重放
-  listEl.addEventListener('change', event => {
-    if (!event.target.classList.contains('todo-check')) return
-    const li = event.target.closest('.todo-item')
+  // 状态循环只替换该行，不整表重渲染，避免其他行动画重放
+  const cycleStatus = li => {
     const item = items.find(entry => entry.id === li.dataset.id)
     if (!item) return
-    item.done = event.target.checked
+    item.status = NEXT_STATUS[item.status]
     item.updatedAt = Date.now()
     save()
-    const showsItem = filter === 'all'
-      || (filter === 'active' && !item.done)
-      || (filter === 'done' && item.done)
+    const showsItem = filter === 'all' || filter === item.status
     if (showsItem && inProject(item)) {
       const fresh = renderRow(item)
       li.replaceWith(fresh)
-      if (item.done && fresh.querySelector('.todo-check').animate) {
-        fresh.querySelector('.todo-check').animate(
-          [
-            { transform: 'scale(0.75)' },
-            { transform: 'scale(1.12)' },
-            { transform: 'scale(1)' }
-          ],
-          { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
-        )
+      const ring = fresh.querySelector('.todo-check')
+      if (ring.animate) {
+        if (item.status === 'done') {
+          ring.animate(
+            [
+              { transform: 'scale(0.75)' },
+              { transform: 'scale(1.12)' },
+              { transform: 'scale(1)' }
+            ],
+            { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
+          )
+        } else {
+          ring.animate(
+            [
+              { transform: 'scale(1)' },
+              { transform: 'scale(0.85)' },
+              { transform: 'scale(1)' }
+            ],
+            { duration: 160, easing: 'ease' }
+          )
+        }
       }
     } else {
       const group = li.closest('.todo-group')
@@ -1068,9 +1103,14 @@
       if (group && !group.querySelector('.todo-item')) group.remove()
     }
     syncChrome()
-  })
+  }
 
   listEl.addEventListener('click', event => {
+    const check = event.target.closest('.todo-check')
+    if (check) {
+      if (!removing) cycleStatus(check.closest('.todo-item'))
+      return
+    }
     const button = event.target.closest('.todo-item-btn')
     if (!button || removing || !button.dataset.action) return
     const li = event.target.closest('.todo-item')
@@ -1096,13 +1136,13 @@
 
   clearDoneEl.addEventListener('click', () => {
     if (removing) return
-    const doneItems = items.filter(item => item.done)
+    const doneItems = items.filter(item => item.status === 'done')
     if (!doneItems.length) return
     if (!window.confirm('确定清除 ' + doneItems.length + ' 条已完成任务？')) return
     removing = true
     animateOut(doneItems.map(item => rowById(item.id))).then(() => {
       removing = false
-      items = items.filter(item => !item.done)
+      items = items.filter(item => item.status !== 'done')
       save()
       render()
     })

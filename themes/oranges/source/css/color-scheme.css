@@ -33,6 +33,7 @@
   --color-todo-high: #c0504a;
   --color-todo-medium: #b07d2b;
   --color-todo-low: #3f9270;
+  --color-todo-doing: #5e81ac;
 }
 
 /* dark scheme */
@@ -70,4 +71,5 @@
   --color-todo-high: #e5837b;
   --color-todo-medium: #d9a35a;
   --color-todo-low: #6fbf9b;
+  --color-todo-doing: #81a1c1;
 }

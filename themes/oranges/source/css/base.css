@@ -2904,19 +2904,17 @@ button:focus-visible {
 }
 
 /* 自定义打勾框：圆形描边，选中填充并对勾弹跳弹入 */
+/* 状态圆环（button）：空环=未开始，半填充=进行中，实心对勾=已完成；点击循环三态 */
 .todo-check {
-  appearance: none;
-  -webkit-appearance: none;
+  position: relative;
   flex: none;
   width: 1.9rem;
   height: 1.9rem;
   margin-top: 2px;
+  padding: 0;
   border: 2px solid var(--color-text-sub);
   border-radius: 50%;
   background-color: transparent;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 68%;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
 }
@@ -2930,17 +2928,30 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
-.todo-check:checked {
+/* 进行中：环内上半填充（conic 50%），专属蓝与优先级三色区分 */
+.todo-check.is-doing {
+  border-color: var(--color-todo-doing);
+}
+
+.todo-check.is-doing::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: conic-gradient(var(--color-todo-doing) 0 50%, transparent 50% 100%);
+}
+
+.todo-check.is-done {
   border-color: var(--color-text-a-hover);
   background-color: var(--color-text-a-hover);
 }
 
 /* 对勾颜色随亮暗反转：亮色选中底是黑、勾用白；暗色选中底是白、勾用深底色 */
-:root[color-mode="light"] .todo-check:checked {
+:root[color-mode="light"] .todo-check.is-done {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
 
-:root[color-mode="dark"] .todo-check:checked {
+:root[color-mode="dark"] .todo-check.is-done {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E3440' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
 }
 
@@ -2986,6 +2997,11 @@ button:focus-visible {
 
 .todo-priority-low {
   color: var(--color-todo-low);
+}
+
+/* 「进行中」行内徽标：与优先级徽标同款胶囊，用专属蓝与半填充圆环呼应，避免和中优先级混淆 */
+.todo-status-doing {
+  color: var(--color-todo-doing);
 }
 
 .todo-due {
