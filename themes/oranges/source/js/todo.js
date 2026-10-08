@@ -27,6 +27,7 @@
   const form = root.querySelector('#todo-form')
   const inputEl = root.querySelector('#todo-input')
   const projectEl = root.querySelector('#todo-project')
+  const dirEl = root.querySelector('#todo-dir')
   const dateEl = root.querySelector('#todo-date')
   const priorityEl = root.querySelector('#todo-priority')
   const listEl = root.querySelector('#todo-list')
@@ -50,7 +51,7 @@
   let prevCounts = null
   let priorityDd = null
   let projectFilterDd = null
-  let collapsedGroups = new Set() // 折叠的项目分组名（'' = 未分类），localStorage 持久化
+  let collapsedGroups = new Set() // 折叠的分组键：项目层=项目名，目录层=项目名+\u001f+目录名（'' = 未分类）
 
   // 文件存储状态
   let fileHandle = null
@@ -88,6 +89,8 @@
     if (typeof raw.deadline === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.deadline)) deadline = raw.deadline
     let project = ''
     if (typeof raw.project === 'string') project = raw.project.trim().slice(0, 30)
+    let group = ''
+    if (typeof raw.group === 'string') group = raw.group.trim().slice(0, 30)
     // id 会被拼进选择器，白名单外的直接换新，避免注入
     const id = typeof raw.id === 'string' && /^[A-Za-z0-9_-]{1,64}$/.test(raw.id) ? raw.id : uid()
     // 旧数据只有 done 布尔（true=已完成），新数据存 status 三态
@@ -96,6 +99,7 @@
       id: id,
       title: title.slice(0, 200),
       project: project,
+      group: group,
       status: status,
       deadline: deadline,
       priority: PRIORITY_LABELS[raw.priority] ? raw.priority : 'medium',
@@ -153,11 +157,11 @@
     }
   }
 
-  // 折叠分组记忆：只可能是短字符串数组，坏数据整体丢弃
+  // 折叠分组记忆：只可能是短字符串数组（旧版项目名 / 新版含 \u001f 组合键），坏数据整体丢弃
   const loadCollapsed = () => {
     try {
       const parsed = JSON.parse(localStorage.getItem(COLLAPSED_KEY))
-      return new Set(Array.isArray(parsed) ? parsed.filter(name => typeof name === 'string' && name.length <= 30) : [])
+      return new Set(Array.isArray(parsed) ? parsed.filter(name => typeof name === 'string' && name.length <= 80) : [])
     } catch (error) {
       return new Set()
     }
@@ -236,6 +240,18 @@
     const counts = new Map()
     items.forEach(item => {
       if (item.project) counts.set(item.project, (counts.get(item.project) || 0) + 1)
+    })
+    return Array.from(counts.entries())
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh'))
+      .map(([name, count]) => ({ name, count }))
+  }
+
+  // 目录维度聚合：给定条目池按 group 字段聚出目录清单，排序规则与 projectList 一致
+  const dirListOf = pool => {
+    const counts = new Map()
+    pool.forEach(item => {
+      if (!item.group) return
+      counts.set(item.group, (counts.get(item.group) || 0) + 1)
     })
     return Array.from(counts.entries())
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh'))
@@ -440,8 +456,9 @@
   }
 
   // 项目输入组合框：保留原生 input 供自由输入新项目，聚焦/点箭头展开既有项目面板点选回填；
-  // 输入即过滤，未命中时给「新建」行兜底（取代原生 datalist——其点击不出全量列表且样式与皮肤不一致）
-  const buildProjectCombo = input => {
+  // 输入即过滤，未命中时给「新建」行兜底（取代原生 datalist——其点击不出全量列表且样式与皮肤不一致）。
+  // listProvider 在面板每次展开/过滤时调用，目录输入框传入按当前项目过滤的目录清单
+  const buildProjectCombo = (input, listProvider) => {
     const wrapper = el('div', 'todo-dd combo')
     input.parentNode.insertBefore(wrapper, input)
     wrapper.appendChild(input)
@@ -471,7 +488,7 @@
       menu.textContent = ''
       const typed = input.value.trim()
       const lower = filterDirty ? typed.toLowerCase() : ''
-      const list = projectList()
+      const list = listProvider()
         .filter(project => !lower || project.name.toLowerCase().includes(lower))
       list.forEach(project => {
         const li = el('li', 'todo-dd-option', project.name + '（' + project.count + '）')
@@ -829,21 +846,21 @@
     }
   }
 
-  // 分组树节点：分组头（箭头 + 项目名 + 计数）+ 子任务列表，折叠状态随 localStorage 记忆
-  const renderGroup = (key, groupItems) => {
+  // 分组树节点：分组头（箭头 + 名称 + 计数）+ 子内容列表，折叠状态随 localStorage 记忆。
+  // 项目层与目录层共用：sub=true 为项目内的二级目录组，内容由调用方填充进返回的 list
+  const renderGroup = (key, label, groupItems, sub) => {
     const collapsed = collapsedGroups.has(key)
-    const li = el('li', 'todo-group' + (collapsed ? ' collapsed' : ''))
+    const li = el('li', 'todo-group' + (sub ? ' todo-group-sub' : '') + (collapsed ? ' collapsed' : ''))
 
     const head = el('button', 'todo-group-head')
     head.type = 'button'
     head.setAttribute('aria-expanded', String(!collapsed))
     const arrow = el('span', 'todo-group-arrow')
-    const name = el('span', 'todo-group-name', key || '未分类')
+    const name = el('span', 'todo-group-name', label)
     const count = el('span', 'todo-group-count', String(groupItems.length))
     head.append(arrow, name, count)
 
     const list = el('ul', 'todo-group-list')
-    groupItems.forEach(item => list.appendChild(renderRow(item)))
 
     // 展开/收起用 WAAPI 驱动而非 CSS transition：浏览器开启“减少动态”时会把 CSS transition
     // 强制压成瞬时（观感即“一闪”），WAAPI 不受该强制影响；用户点名要这个动效，故不随开关关闭。
@@ -897,7 +914,7 @@
     })
 
     li.append(head, list)
-    return li
+    return { li, list }
   }
 
   // animate 为 true 时（首屏、切换页签/项目筛选、导入）对可见行做 stagger 入场
@@ -906,7 +923,7 @@
     listEl.textContent = ''
     const visible = filtered()
 
-    // 按项目聚成分组；组间排序与项目筛选下拉一致（条数降序 + 拼音），「未分类」垫底
+    // 两级树：项目分组 → 目录分组 → 任务；组间排序与项目筛选下拉一致（条数降序 + 拼音），「未分类」垫底
     const groups = new Map()
     visible.forEach(item => {
       const key = item.project || ''
@@ -915,7 +932,32 @@
     })
     const order = projectList().map(project => project.name).filter(name => groups.has(name))
     if (groups.has('')) order.push('')
-    order.forEach(key => listEl.appendChild(renderGroup(key, groups.get(key))))
+    order.forEach(key => {
+      const projectItems = groups.get(key)
+      const project = renderGroup(key, key || '未分类', projectItems, false)
+
+      // 项目下先列目录再列直属任务；目录键 = 项目名 + \u001f + 目录名，折叠记忆与项目层互不串扰
+      const dirMap = new Map()
+      const direct = []
+      projectItems.forEach(item => {
+        if (!item.group) {
+          direct.push(item)
+          return
+        }
+        if (!dirMap.has(item.group)) dirMap.set(item.group, [])
+        dirMap.get(item.group).push(item)
+      })
+      Array.from(dirMap.keys())
+        .sort((a, b) => dirMap.get(b).length - dirMap.get(a).length || a.localeCompare(b, 'zh'))
+        .forEach(dir => {
+          const dirItems = dirMap.get(dir)
+          const sub = renderGroup(key + '\u001f' + dir, dir, dirItems, true)
+          dirItems.forEach(item => sub.list.appendChild(renderRow(item)))
+          project.list.appendChild(sub.li)
+        })
+      direct.forEach(item => project.list.appendChild(renderRow(item)))
+      listEl.appendChild(project.li)
+    })
     syncChrome()
     if (animate) enterAnimation(visible.map(item => item.id), true)
   }
@@ -967,7 +1009,7 @@
     }))
   }
 
-  // 行内编辑：把该行切换为 标题输入 + 项目 + 日期 + 优先级 + 保存/取消
+  // 行内编辑：把该行切换为 标题输入 + 项目 + 目录 + 日期 + 优先级 + 状态 + 保存/取消
   const startEdit = li => {
     if (listEl.querySelector('.todo-item.editing')) return
     const item = items.find(entry => entry.id === li.dataset.id)
@@ -984,6 +1026,11 @@
     projectInput.maxLength = 30
     projectInput.placeholder = '项目'
     projectInput.value = item.project
+    const dirInput = el('input', 'todo-edit-dir')
+    dirInput.type = 'text'
+    dirInput.maxLength = 30
+    dirInput.placeholder = '目录'
+    dirInput.value = item.group
     const dateInput = el('input', 'todo-edit-date')
     dateInput.type = 'date'
     dateInput.value = item.deadline
@@ -1008,13 +1055,18 @@
     saveBtn.type = 'button'
     const cancelBtn = el('button', 'todo-item-btn', '取消')
     cancelBtn.type = 'button'
-    editor.append(titleInput, projectInput, dateInput, prioritySelect, statusSelect, saveBtn, cancelBtn)
+    editor.append(titleInput, projectInput, dirInput, dateInput, prioritySelect, statusSelect, saveBtn, cancelBtn)
     li.appendChild(editor)
     // 皮肤需在控件进入 DOM 后再包（insertBefore 依赖 parentNode）
     buildDatePicker(dateInput)
     buildDropdown(prioritySelect)
     buildDropdown(statusSelect)
-    buildProjectCombo(projectInput)
+    buildProjectCombo(projectInput, projectList)
+    // 目录联想跟随编辑行里的项目输入：填了项目只列该项目下的目录
+    buildProjectCombo(dirInput, () => {
+      const proj = projectInput.value.trim()
+      return dirListOf(proj ? items.filter(entry => entry.project === proj) : items)
+    })
     if (editor.animate) {
       editor.animate(
         [
@@ -1036,6 +1088,7 @@
       }
       item.title = title.slice(0, 200)
       item.project = projectInput.value.trim().slice(0, 30)
+      item.group = dirInput.value.trim().slice(0, 30)
       item.deadline = dateInput.value
       item.priority = prioritySelect.value
       item.status = STATUS_LABELS[statusSelect.value] ? statusSelect.value : item.status
@@ -1162,6 +1215,7 @@
       id: uid(),
       title: title.slice(0, 200),
       project: projectEl.value.trim().slice(0, 30),
+      group: dirEl.value.trim().slice(0, 30),
       deadline: dateEl.value,
       priority: priorityEl.value,
       status: 'todo',
@@ -1175,8 +1229,9 @@
     syncDateEmpty(dateEl)
     priorityEl.value = 'medium'
     if (priorityDd) priorityDd.sync()
-    // 连续录入同一项目：项目输入保留，其余清空
+    // 连续录入同一项目/目录：项目与目录输入保留，其余清空
     collapsedGroups.delete(added.project || '') // 新行所在分组自动展开，避免录进折叠组看不见
+    if (added.group) collapsedGroups.delete(added.project + '\u001f' + added.group)
     if (filter === 'done') applyFilter('all')
     else render()
     enterAnimation([added.id], false)
@@ -1230,9 +1285,14 @@
         }
       }
     } else {
-      const group = li.closest('.todo-group')
       li.remove()
-      if (group && !group.querySelector('.todo-item')) group.remove()
+      // 自底向上清掉空目录与空项目（目录组嵌在项目组内，最后一条走人时两层都要收）
+      let node = li.closest('.todo-group')
+      while (node && !node.querySelector('.todo-item')) {
+        const parent = node.parentElement ? node.parentElement.closest('.todo-group') : null
+        node.remove()
+        node = parent
+      }
     }
     syncChrome()
   }
@@ -1353,7 +1413,12 @@
   priorityDd = buildDropdown(priorityEl)
   projectFilterDd = buildDropdown(projectFilterEl, true)
   buildDatePicker(dateEl)
-  buildProjectCombo(projectEl)
+  buildProjectCombo(projectEl, projectList)
+  // 表单目录联想跟随项目输入：填了项目只列该项目下的目录
+  buildProjectCombo(dirEl, () => {
+    const proj = projectEl.value.trim()
+    return dirListOf(proj ? items.filter(item => item.project === proj) : items)
+  })
   applyFilter('all')
   updateStorageStatus()
   restoreFile()

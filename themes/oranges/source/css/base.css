@@ -2258,10 +2258,12 @@ button:focus-visible {
 
 .todo-input,
 .todo-project-input,
+.todo-dir-input,
 .todo-date,
 .todo-priority-select,
 .todo-edit-input,
 .todo-edit-project,
+.todo-edit-dir,
 .todo-edit-date,
 .todo-edit-priority {
   padding: 8px 12px;
@@ -2279,17 +2281,20 @@ button:focus-visible {
   min-width: 200px;
 }
 
-.todo-project-input {
+.todo-project-input,
+.todo-dir-input {
   flex: 0 1 150px;
   min-width: 110px;
 }
 
 .todo-input:focus,
 .todo-project-input:focus,
+.todo-dir-input:focus,
 .todo-date:focus,
 .todo-priority-select:focus,
 .todo-edit-input:focus,
 .todo-edit-project:focus,
+.todo-edit-dir:focus,
 .todo-edit-date:focus,
 .todo-edit-priority:focus {
   outline: none;
@@ -2300,10 +2305,12 @@ button:focus-visible {
 /* 悬停时边框加重一档，与聚焦态拉开层次 */
 .todo-input:hover,
 .todo-project-input:hover,
+.todo-dir-input:hover,
 .todo-date:hover,
 .todo-priority-select:hover,
 .todo-edit-input:hover,
 .todo-edit-project:hover,
+.todo-edit-dir:hover,
 .todo-edit-date:hover,
 .todo-edit-priority:hover {
   border-color: color-mix(in srgb, var(--color-text-sub) 55%, transparent);
@@ -2311,8 +2318,10 @@ button:focus-visible {
 
 .todo-input::placeholder,
 .todo-project-input::placeholder,
+.todo-dir-input::placeholder,
 .todo-edit-input::placeholder,
-.todo-edit-project::placeholder {
+.todo-edit-project::placeholder,
+.todo-edit-dir::placeholder {
   color: var(--color-text-sub);
   opacity: 1;
 }
@@ -2928,6 +2937,19 @@ button:focus-visible {
   text-align: center;
 }
 
+/* 目录层级：项目分组内的二级折叠头，弱一档字号与项目层拉开层次 */
+.todo-group-sub > .todo-group-head {
+  padding: 3px 8px;
+  font-size: 1.25rem;
+}
+
+.todo-group-sub .todo-group-count {
+  min-width: 1.6rem;
+  padding: 0 6px;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
 /* 收起态由 JS 的 WAAPI 高度动画过渡到位后落地（CSS transition 会被浏览器“减少动态”压成瞬时） */
 .todo-group.collapsed .todo-group-list {
   display: none;
@@ -3242,7 +3264,8 @@ button:focus-visible {
   }
 
   .todo-form .todo-dd.combo,
-  .todo-project-input {
+  .todo-project-input,
+  .todo-dir-input {
     flex: 1 1 40%;
   }
 
