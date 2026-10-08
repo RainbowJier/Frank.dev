@@ -2519,6 +2519,8 @@ button:focus-visible {
 
 .todo-dd.combo > input {
   width: 100%;
+  /* 站点无全局 border-box，100% 宽再叠 padding/border 会右溢压住相邻控件 */
+  box-sizing: border-box;
   padding-right: 30px;
 }
 
@@ -3144,6 +3146,12 @@ button:focus-visible {
 }
 
 .todo-edit-project {
+  flex: 0 1 140px;
+  min-width: 100px;
+}
+
+/* 编辑行里组合框包裹层取代输入框成为 flex 项，尺寸规则随之迁移 */
+.todo-edit .todo-dd.combo {
   flex: 0 1 140px;
   min-width: 100px;
 }
