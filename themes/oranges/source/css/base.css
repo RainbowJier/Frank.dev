@@ -2980,6 +2980,19 @@ button:focus-visible {
   transition: border-color 0.25s ease, background-color 0.25s ease;
 }
 
+/* 拖动排序：标题/正文区提示可抓取，拖拽中的行半透明示位 */
+.todo-item:not(.editing) .todo-main {
+  cursor: grab;
+}
+
+.todo-item.dragging {
+  opacity: 0.4;
+}
+
+.todo-item.dragging .todo-main {
+  cursor: grabbing;
+}
+
 .todo-item:hover {
   border-color: var(--color-text-sub);
   background: var(--bg-content-search);

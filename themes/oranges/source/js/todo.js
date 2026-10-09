@@ -774,7 +774,7 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
 
     const main = el('div', 'todo-main')
     const title = el('span', 'todo-item-title', item.title)
-    title.title = '双击编辑'
+    title.title = '双击编辑；按住拖动可排序'
     main.appendChild(title)
     const meta = el('div', 'todo-meta')
     if (item.status === 'doing') {
@@ -925,10 +925,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     return { li, list }
   }
 
-  // 组内任务按优先级高→中→低排，同级维持原有先后（新增在前）；sort 稳定不打乱次序
-  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 }
-  const byPriority = (a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]
-
   // animate 为 true 时（首屏、切换页签/项目筛选、导入）对可见行做 stagger 入场
   const render = animate => {
     updateProjectOptions()
@@ -962,12 +958,11 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
       Array.from(dirMap.keys())
         .sort((a, b) => dirMap.get(b).length - dirMap.get(a).length || a.localeCompare(b, 'zh'))
         .forEach(dir => {
-          const dirItems = dirMap.get(dir).sort(byPriority)
+          const dirItems = dirMap.get(dir)
           const sub = renderGroup(key + '\u001f' + dir, dir, dirItems, true)
           dirItems.forEach(item => sub.list.appendChild(renderRow(item)))
           project.list.appendChild(sub.li)
         })
-      direct.sort(byPriority)
       direct.forEach(item => project.list.appendChild(renderRow(item)))
       listEl.appendChild(project.li)
     })
@@ -1264,6 +1259,83 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     projectFilter = projectFilterEl.value
     render(true)
   })
+
+  // ---------- 拖动排序 ----------
+  // 行序即 items 数组内同组条目的相对顺序；拖动只在行所在容器内重排（跨目录/项目移动走编辑行），
+  // data 不加排序字段，靠数组顺序本身持久化，导入/磁盘对账天然兼容
+
+  // mousedown 时才对该行开 draggable：避免拖动状态常驻抢走标题文本选择、干扰输入框
+  listEl.addEventListener('mousedown', event => {
+    listEl.querySelectorAll('.todo-item[draggable="true"]').forEach(node => { node.draggable = false })
+    const li = event.target.closest('.todo-item')
+    if (li && !li.classList.contains('editing') && !event.target.closest('input, button, select, a')) {
+      li.draggable = true
+    }
+  })
+
+  let dragMoved = false
+  listEl.addEventListener('dragstart', event => {
+    const li = event.target.closest('.todo-item')
+    if (!li || li.classList.contains('editing') || removing) {
+      event.preventDefault()
+      return
+    }
+    dragMoved = false
+    li.classList.add('dragging')
+    event.dataTransfer.effectAllowed = 'move'
+    try {
+      event.dataTransfer.setData('text/plain', li.dataset.id)
+    } catch (error) {
+      /* 老浏览器 setData 失败不影响排序主流程 */
+    }
+  })
+
+  // dragover 实时把拖拽行插到光标位置（取命中行中线上下判断前后），拖动本身就是落点预览；
+  // closest 取的是光标下最内层容器，跨容器拖动因行不在该容器内而不动作
+  listEl.addEventListener('dragover', event => {
+    const list = event.target.closest('.todo-group-list')
+    if (!list) return
+    event.preventDefault()
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+    const dragging = listEl.querySelector('.todo-item.dragging')
+    if (!dragging || dragging.parentElement !== list) return
+    const rows = Array.prototype.filter.call(
+      list.children,
+      node => node.classList.contains('todo-item') && node !== dragging
+    )
+    const ref = rows.find(row => event.clientY < row.getBoundingClientRect().top + row.offsetHeight / 2)
+    const unchanged = ref
+      ? dragging.nextElementSibling === ref
+      : dragging === list.lastElementChild
+    if (unchanged) return
+    dragMoved = true
+    if (ref) list.insertBefore(dragging, ref)
+    else list.appendChild(dragging)
+  })
+
+  listEl.addEventListener('dragend', () => {
+    const dragging = listEl.querySelector('.todo-item.dragging')
+    if (!dragging) return
+    dragging.classList.remove('dragging')
+    if (dragMoved) commitOrder(dragging.parentElement)
+  })
+
+  // 把容器内最终行序写回 items：抽走该组全部行，按新顺序插回原位置，组间相对位置不受影响
+  const commitOrder = container => {
+    const ids = Array.prototype.map.call(
+      Array.prototype.filter.call(container.children, node => node.classList.contains('todo-item')),
+      node => node.dataset.id
+    )
+    if (!ids.length) return
+    const positions = ids.map(id => items.findIndex(item => item.id === id)).filter(pos => pos !== -1)
+    const block = ids.map(id => items.find(item => item.id === id)).filter(Boolean)
+    if (positions.length !== ids.length || block.length !== ids.length) return
+    const insertAt = Math.min.apply(null, positions)
+    items = items.filter(item => ids.indexOf(item.id) === -1)
+    items.splice.apply(items, [Math.min(insertAt, items.length), 0].concat(block))
+    save()
+    render()
+  }
 
   // 状态循环只替换该行，不整表重渲染，避免其他行动画重放
   const cycleStatus = li => {
