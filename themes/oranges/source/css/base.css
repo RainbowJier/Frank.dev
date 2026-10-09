@@ -2260,7 +2260,6 @@ button:focus-visible {
 .todo-project-input,
 .todo-dir-input,
 .todo-date,
-.todo-priority-select,
 .todo-edit-input,
 .todo-edit-project,
 .todo-edit-dir,
@@ -2291,7 +2290,6 @@ button:focus-visible {
 .todo-project-input:focus,
 .todo-dir-input:focus,
 .todo-date:focus,
-.todo-priority-select:focus,
 .todo-edit-input:focus,
 .todo-edit-project:focus,
 .todo-edit-dir:focus,
@@ -2307,7 +2305,6 @@ button:focus-visible {
 .todo-project-input:hover,
 .todo-dir-input:hover,
 .todo-date:hover,
-.todo-priority-select:hover,
 .todo-edit-input:hover,
 .todo-edit-project:hover,
 .todo-edit-dir:hover,
@@ -2327,7 +2324,6 @@ button:focus-visible {
 }
 
 /* 下拉框：去原生外观，自定义箭头随亮暗主题换色 */
-.todo-priority-select,
 .todo-edit-priority {
   appearance: none;
   -webkit-appearance: none;
@@ -2338,7 +2334,6 @@ button:focus-visible {
   background-size: 12px 12px;
 }
 
-:root[color-mode="dark"] .todo-priority-select,
 :root[color-mode="dark"] .todo-edit-priority {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23C1C2C5' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
 }
@@ -3082,19 +3077,7 @@ button:focus-visible {
   font-size: 1.1rem;
 }
 
-.todo-priority-high {
-  color: var(--color-todo-high);
-}
-
-.todo-priority-medium {
-  color: var(--color-todo-medium);
-}
-
-.todo-priority-low {
-  color: var(--color-todo-low);
-}
-
-/* 「进行中」行内徽标：与优先级徽标同款胶囊，用专属蓝与半填充圆环呼应，避免和中优先级混淆 */
+/* 「进行中」行内徽标：专属蓝与半填充圆环呼应 */
 .todo-status-doing {
   color: var(--color-todo-doing);
 }

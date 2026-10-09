@@ -12,7 +12,7 @@
 
   const STORAGE_KEY = 'todo-items'
   const COLLAPSED_KEY = 'todo-collapsed'
-  const PRIORITY_LABELS = { high: '高', medium: '中', low: '低' }
+  // 旧数据兼容：normalize 只认白名单字段，priority 等已移除字段随首次保存自然消失
   const GROUP_ANIM_MS = 240
   // 任务三态：未开始 → 进行中 → 已完成 → 未开始（点行首圆环循环）
   const STATUS_LABELS = { todo: '未开始', doing: '进行中', done: '已完成' }
@@ -31,7 +31,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
   const projectEl = root.querySelector('#todo-project')
   const dirEl = root.querySelector('#todo-dir')
   const dateEl = root.querySelector('#todo-date')
-  const priorityEl = root.querySelector('#todo-priority')
   const listEl = root.querySelector('#todo-list')
   const emptyEl = root.querySelector('#todo-empty')
   const switchEl = root.querySelector('#todo-switch')
@@ -51,7 +50,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
   let storageWarned = false
   let removing = false
   let prevCounts = null
-  let priorityDd = null
   let projectFilterDd = null
   let collapsedGroups = new Set() // 折叠的分组键：项目层=项目名，目录层=项目名+\u001f+目录名（'' = 未分类）
 
@@ -104,7 +102,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
       group: group,
       status: status,
       deadline: deadline,
-      priority: PRIORITY_LABELS[raw.priority] ? raw.priority : 'medium',
       createdAt: Number(raw.createdAt) || Date.now(),
       updatedAt: Number(raw.updatedAt) || Date.now()
     }
@@ -780,7 +777,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     if (item.status === 'doing') {
       meta.appendChild(el('span', 'todo-badge todo-status-doing', STATUS_LABELS.doing))
     }
-    meta.appendChild(el('span', 'todo-badge todo-priority-' + item.priority, PRIORITY_LABELS[item.priority]))
     const due = dueInfo(item)
     if (due) {
       meta.appendChild(el('span', 'todo-due', due.text))
@@ -1017,7 +1013,7 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     }))
   }
 
-  // 行内编辑：把该行切换为 标题输入 + 项目 + 目录 + 日期 + 优先级 + 状态 + 保存/取消
+  // 行内编辑：把该行切换为 标题输入 + 项目 + 目录 + 日期 + 状态 + 保存/取消
   const startEdit = li => {
     if (listEl.querySelector('.todo-item.editing')) return
     const item = items.find(entry => entry.id === li.dataset.id)
@@ -1044,13 +1040,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     dateInput.value = item.deadline
     syncDateEmpty(dateInput)
     dateInput.addEventListener('input', () => syncDateEmpty(dateInput))
-    const prioritySelect = el('select', 'todo-edit-priority')
-    Object.keys(PRIORITY_LABELS).forEach(key => {
-      const option = el('option', null, PRIORITY_LABELS[key])
-      option.value = key
-      prioritySelect.appendChild(option)
-    })
-    prioritySelect.value = item.priority
     const statusSelect = el('select', 'todo-edit-priority')
     statusSelect.setAttribute('aria-label', '任务状态')
     Object.keys(STATUS_LABELS).forEach(key => {
@@ -1063,11 +1052,10 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     saveBtn.type = 'button'
     const cancelBtn = el('button', 'todo-item-btn', '取消')
     cancelBtn.type = 'button'
-    editor.append(titleInput, projectInput, dirInput, dateInput, prioritySelect, statusSelect, saveBtn, cancelBtn)
+    editor.append(titleInput, projectInput, dirInput, dateInput, statusSelect, saveBtn, cancelBtn)
     li.appendChild(editor)
     // 皮肤需在控件进入 DOM 后再包（insertBefore 依赖 parentNode）
     buildDatePicker(dateInput)
-    buildDropdown(prioritySelect)
     buildDropdown(statusSelect)
     buildProjectCombo(projectInput, projectList)
     // 目录联想跟随编辑行里的项目输入：填了项目只列该项目下的目录
@@ -1098,7 +1086,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
       item.project = projectInput.value.trim().slice(0, 30)
       item.group = dirInput.value.trim().slice(0, 30)
       item.deadline = dateInput.value
-      item.priority = prioritySelect.value
       item.status = STATUS_LABELS[statusSelect.value] ? statusSelect.value : item.status
       item.updatedAt = Date.now()
       save()
@@ -1225,7 +1212,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
       project: projectEl.value.trim().slice(0, 30),
       group: dirEl.value.trim().slice(0, 30),
       deadline: dateEl.value,
-      priority: priorityEl.value,
       status: 'todo',
       createdAt: now,
       updatedAt: now
@@ -1235,8 +1221,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     inputEl.value = ''
     dateEl.value = ''
     syncDateEmpty(dateEl)
-    priorityEl.value = 'medium'
-    if (priorityDd) priorityDd.sync()
     // 连续录入同一项目/目录：项目与目录输入保留，其余清空
     collapsedGroups.delete(added.project || '') // 新行所在分组自动展开，避免录进折叠组看不见
     if (added.group) collapsedGroups.delete(added.project + '\u001f' + added.group)
@@ -1498,7 +1482,6 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
   items = load()
   collapsedGroups = loadCollapsed()
   updateLinkButton()
-  priorityDd = buildDropdown(priorityEl)
   projectFilterDd = buildDropdown(projectFilterEl, true)
   buildDatePicker(dateEl)
   buildProjectCombo(projectEl, projectList)
