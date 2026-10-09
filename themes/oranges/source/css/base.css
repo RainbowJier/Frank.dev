@@ -3137,6 +3137,18 @@ button:focus-visible {
   transform: scale(0.92);
 }
 
+/* 状态快捷按钮：胶囊描边突出为主操作，与编辑/删除文字按钮拉开层次 */
+.todo-status-btn {
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--color-text-sub) 45%, transparent);
+  border-radius: 999px;
+}
+
+.todo-status-btn:hover {
+  border-color: var(--color-text-sub);
+  background-color: var(--bg-content-search);
+}
+
 .todo-item-delete:hover {
   color: var(--color-todo-high);
 }

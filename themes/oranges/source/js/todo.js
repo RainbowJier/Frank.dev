@@ -16,8 +16,10 @@
   const GROUP_ANIM_MS = 240
   // 任务三态：未开始 → 进行中 → 已完成 → 未开始（点行首圆环循环）
   const STATUS_LABELS = { todo: '未开始', doing: '进行中', done: '已完成' }
-  const NEXT_STATUS = { todo: 'doing', doing: 'done', done: 'todo' }
-  const CYCLE_ARIA = { todo: '标记为进行中', doing: '标记为已完成', done: '标记为未开始' }
+const NEXT_STATUS = { todo: 'doing', doing: 'done', done: 'todo' }
+const CYCLE_ARIA = { todo: '标记为进行中', doing: '标记为已完成', done: '标记为未开始' }
+// 行内快捷按钮文案：未开始→开始，进行中→完成，已完成→重开（目标即 NEXT_STATUS）
+const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
   const PROJECT_NONE = '__none__' // 项目筛选下拉里「未分类」的哨兵值
   const FILE_DB = 'todo-storage'
   const FILE_STORE = 'handles'
@@ -323,7 +325,8 @@
   root.addEventListener('click', event => {
     const btn = event.target.closest('button')
     // 状态圆环有自己的切换反馈动画，不叠按压缩放
-    if (btn && btn.dataset.action !== 'cycle') pulseButton(btn)
+    // 状态圆环与状态快捷按钮有各自的切换反馈，不叠按压缩放
+    if (btn && btn.dataset.action !== 'cycle' && btn.dataset.action !== 'status') pulseButton(btn)
   })
 
   // ---------- 控件皮肤：原生 select / date 换成自定义下拉与日历 ----------
@@ -786,13 +789,18 @@
     main.appendChild(meta)
 
     const actions = el('div', 'todo-item-actions')
+    // 状态快捷按钮：开始/完成/重开一键直达，免进编辑行
+    const statusBtn = el('button', 'todo-item-btn todo-status-btn', STATUS_NEXT_LABEL[item.status])
+    statusBtn.type = 'button'
+    statusBtn.dataset.action = 'status'
+    statusBtn.setAttribute('aria-label', CYCLE_ARIA[item.status])
     const editBtn = el('button', 'todo-item-btn', '编辑')
     editBtn.type = 'button'
     editBtn.dataset.action = 'edit'
     const deleteBtn = el('button', 'todo-item-btn todo-item-delete', '删除')
     deleteBtn.type = 'button'
     deleteBtn.dataset.action = 'delete'
-    actions.append(editBtn, deleteBtn)
+    actions.append(statusBtn, editBtn, deleteBtn)
 
     li.append(check, main, actions)
     return li
@@ -917,6 +925,10 @@
     return { li, list }
   }
 
+  // 组内任务按优先级高→中→低排，同级维持原有先后（新增在前）；sort 稳定不打乱次序
+  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 }
+  const byPriority = (a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]
+
   // animate 为 true 时（首屏、切换页签/项目筛选、导入）对可见行做 stagger 入场
   const render = animate => {
     updateProjectOptions()
@@ -950,11 +962,12 @@
       Array.from(dirMap.keys())
         .sort((a, b) => dirMap.get(b).length - dirMap.get(a).length || a.localeCompare(b, 'zh'))
         .forEach(dir => {
-          const dirItems = dirMap.get(dir)
+          const dirItems = dirMap.get(dir).sort(byPriority)
           const sub = renderGroup(key + '\u001f' + dir, dir, dirItems, true)
           dirItems.forEach(item => sub.list.appendChild(renderRow(item)))
           project.list.appendChild(sub.li)
         })
+      direct.sort(byPriority)
       direct.forEach(item => project.list.appendChild(renderRow(item)))
       listEl.appendChild(project.li)
     })
@@ -1309,6 +1322,8 @@
     const li = event.target.closest('.todo-item')
     if (button.dataset.action === 'edit') {
       startEdit(li)
+    } else if (button.dataset.action === 'status') {
+      cycleStatus(li)
     } else if (button.dataset.action === 'delete') {
       const id = li.dataset.id
       removing = true
