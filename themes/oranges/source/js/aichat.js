@@ -313,13 +313,13 @@
     }
   })
 
-  // 划词右键发送：正文内选中文字后右键且点在选区内，弹自定义菜单；
-  // 快捷动作与自由提问都以引用块预填进输入框，由读者补充问题后自行发送；
-  // 无选中、点在选区外或非正文区域保持浏览器默认菜单
+  // 划词自动浮现菜单：正文内选中文字停稳后（约 200ms 防抖），菜单自动浮现在选区上方；
+  // 快捷动作与自由提问都以引用块预填进输入框，由读者补充/确认后自行发送；
+  // 取消选择、滚动或窗口缩放即收起，不干扰页面其余交互
   if (config.selectionSend && articleBody) {
     const QUOTE_MAX_CHARS = 2000
     const menu = document.createElement('div')
-    menu.className = 'ai-chat-contextmenu'
+    menu.className = 'ai-chat-selection-menu'
     menu.setAttribute('role', 'menu')
     menu.setAttribute('aria-label', config.i18n.assistantName)
     menu.hidden = true
@@ -338,14 +338,13 @@
     const menuItems = menuActions.map(action => {
       if (action.separator) {
         const divider = document.createElement('div')
-        divider.className = 'ai-chat-contextmenu-separator'
+        divider.className = 'ai-chat-selection-menu-separator'
         menu.appendChild(divider)
       }
       const item = document.createElement('button')
       item.type = 'button'
-      item.className = 'ai-chat-contextmenu-item'
+      item.className = 'ai-chat-selection-menu-item'
       item.setAttribute('role', 'menuitem')
-      item.tabIndex = -1
       item.innerHTML = ITEM_ICON + '<span>' + escapeHtml(action.label) + '</span>'
       item.addEventListener('click', () => {
         hideMenu()
@@ -354,20 +353,29 @@
       menu.appendChild(item)
       return item
     })
+    // 自动弹出时不抢焦点（避免打断键盘选词）；仅首项可 Tab 到达，其余靠方向键漫游
+    menuItems.forEach((item, index) => { item.tabIndex = index === 0 ? 0 : -1 })
     document.body.appendChild(menu)
 
     let quotedText = ''
+    let selectionTimer = 0
 
     const hideMenu = () => { menu.hidden = true }
 
-    const showMenu = (x, y) => {
+    // 浮在选区上方居中；上方放不下移到选区下方，均贴视口内缘钳制
+    const showMenu = () => {
+      const selection = window.getSelection()
+      if (!selection || selection.rangeCount === 0) return
+      const rect = selection.getRangeAt(0).getBoundingClientRect()
       menu.hidden = false
-      const rect = menu.getBoundingClientRect()
-      // 贴近视口右/下边缘时向内收，避免菜单被裁掉
-      menu.style.left = Math.max(8, Math.min(x, window.innerWidth - rect.width - 8)) + 'px'
-      menu.style.top = Math.max(8, Math.min(y, window.innerHeight - rect.height - 8)) + 'px'
-      // 键盘可达：弹出即聚焦首项（preventScroll 防止聚焦引发意外滚动）
-      menuItems[0].focus({ preventScroll: true })
+      const menuRect = menu.getBoundingClientRect()
+      const left = Math.max(8, Math.min(
+        rect.left + rect.width / 2 - menuRect.width / 2,
+        window.innerWidth - menuRect.width - 8))
+      let top = rect.top - menuRect.height - 8
+      if (top < 8) top = rect.bottom + 8
+      menu.style.left = Math.round(left) + 'px'
+      menu.style.top = Math.round(Math.min(top, window.innerHeight - menuRect.height - 8)) + 'px'
     }
 
     // 引用块预填：逐行加 "> " 前缀，快捷动作带提问模板，末尾留空行供读者补充，光标落在末尾
@@ -383,43 +391,32 @@
       input.setSelectionRange(end, end)
     }
 
-    // 右键点须落在选区高亮范围内（行级矩形，允许数像素误差），否则不接管
-    const pointInSelection = (x, y) => {
-      const selection = window.getSelection()
-      if (!selection || selection.rangeCount === 0) return false
-      const tolerance = 6
-      return Array.from(selection.getRangeAt(0).getClientRects()).some(rect =>
-        x >= rect.left - tolerance && x <= rect.right + tolerance &&
-        y >= rect.top - tolerance && y <= rect.bottom + tolerance)
-    }
-
-    articleBody.addEventListener('contextmenu', event => {
-      const selection = window.getSelection()
-      const text = (selection && String(selection)) || ''
-      // 右键落在输入类元素内、选区不在正文中、或点在选区外时不接管
-      if (!text.trim() || event.target.closest('input, textarea, [contenteditable]')) return
-      if (!(selection.anchorNode && articleBody.contains(selection.anchorNode))) return
-      if (!pointInSelection(event.clientX, event.clientY)) return
-      event.preventDefault()
-      quotedText = text
-      showMenu(event.clientX, event.clientY)
+    // 选区变化后延迟判定：拖选过程中不闪烁，停稳且选区在正文中才浮现，否则收起
+    document.addEventListener('selectionchange', () => {
+      clearTimeout(selectionTimer)
+      selectionTimer = setTimeout(() => {
+        const selection = window.getSelection()
+        const text = (selection && String(selection)) || ''
+        if (text.trim() && selection.anchorNode && articleBody.contains(selection.anchorNode)) {
+          quotedText = text
+          showMenu()
+        } else {
+          hideMenu()
+        }
+      }, 200)
     })
 
-    // 方向键在菜单项间循环移动焦点，Tab 直接收起；Escape 由下方 document 监听统一处理
+    // 抑制菜单上的 mousedown 默认行为：点击按钮时不转移焦点、不清掉选区
+    menu.addEventListener('mousedown', event => event.preventDefault())
+
+    // 焦点在菜单内时方向键循环移动焦点；Escape 收起由下方 document 监听统一处理
     menu.addEventListener('keydown', event => {
       const index = menuItems.indexOf(document.activeElement)
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault()
         const delta = event.key === 'ArrowDown' ? 1 : -1
         menuItems[(index + delta + menuItems.length) % menuItems.length].focus({ preventScroll: true })
-      } else if (event.key === 'Tab') {
-        event.preventDefault()
-        hideMenu()
       }
-    })
-
-    document.addEventListener('mousedown', event => {
-      if (!menu.hidden && !menu.contains(event.target)) hideMenu()
     })
 
     document.addEventListener('keydown', event => {

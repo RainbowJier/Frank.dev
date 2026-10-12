@@ -2219,9 +2219,9 @@ button:focus-visible {
   }
 }
 
-/* 划词右键菜单：正文内选中文字后右键，提供「发送给 AI 助手」入口。
+/* 划词菜单：正文内选中文字停稳后自动浮现在选区上方（取消选择/滚动即收起）。
    不加入场动画：后台标签页动画时钟可能被节流冻结在 opacity:0 起始帧，导致菜单不可见 */
-.ai-chat-contextmenu {
+.ai-chat-selection-menu {
   position: fixed;
   z-index: 995;
   min-width: 176px;
@@ -2232,7 +2232,7 @@ button:focus-visible {
   box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.2);
 }
 
-.ai-chat-contextmenu-item {
+.ai-chat-selection-menu-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2248,13 +2248,13 @@ button:focus-visible {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.ai-chat-contextmenu-item:hover,
-.ai-chat-contextmenu-item:focus-visible {
+.ai-chat-selection-menu-item:hover,
+.ai-chat-selection-menu-item:focus-visible {
   color: var(--color-text-a-hover);
   background-color: var(--bg-search-item-hover);
 }
 
-.ai-chat-contextmenu-item svg {
+.ai-chat-selection-menu-item svg {
   flex: none;
   width: 1.5rem;
   height: 1.5rem;
@@ -2262,7 +2262,7 @@ button:focus-visible {
 }
 
 /* 快捷动作与自由提问之间的分组线 */
-.ai-chat-contextmenu-separator {
+.ai-chat-selection-menu-separator {
   height: 1px;
   margin: 4px 6px;
   background-color: var(--border-ai-panel);

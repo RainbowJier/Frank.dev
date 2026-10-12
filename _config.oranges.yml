@@ -189,7 +189,7 @@ aiChat:
   stream: true
   # 每次请求携带的最近对话轮数（一轮 = 一问一答）
   maxContextTurns: 6
-  # 划词右键发送：正文内选中文字后右键，可一键把引用预填给 AI 助手
+  # 划词发送：正文内选中文字停稳后自动浮现 AI 菜单（解释/翻译/总结/自由提问）
   selectionSend: true
 
 colorSwitch:
