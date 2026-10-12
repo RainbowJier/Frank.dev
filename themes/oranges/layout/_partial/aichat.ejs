@@ -11,10 +11,12 @@
       model: aiChat.model || '',
       stream: aiChat.stream !== false,
       maxContextTurns: aiChat.maxContextTurns || 6,
+      selectionSend: aiChat.selectionSend !== false,
       articleTitle: page.title || '',
       i18n: {
         send: __('aiChatSend'),
         stop: __('aiChatStop'),
+        selectionSend: __('aiChatSelectionSend'),
         netError: __('aiChatNetError'),
         authError: __('aiChatAuthError'),
         rateError: __('aiChatRateError'),

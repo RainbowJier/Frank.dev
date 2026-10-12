@@ -2219,6 +2219,47 @@ button:focus-visible {
   }
 }
 
+/* 划词右键菜单：正文内选中文字后右键，提供「发送给 AI 助手」入口。
+   不加入场动画：后台标签页动画时钟可能被节流冻结在 opacity:0 起始帧，导致菜单不可见 */
+.ai-chat-contextmenu {
+  position: fixed;
+  z-index: 995;
+  min-width: 176px;
+  padding: 5px;
+  background-color: var(--bg-ai-panel);
+  border: 1px solid var(--border-ai-panel);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.2);
+}
+
+.ai-chat-contextmenu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 7px;
+  background-color: transparent;
+  color: var(--color-text-base);
+  font-size: 1.35rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.ai-chat-contextmenu-item:hover {
+  color: var(--color-text-a-hover);
+  background-color: var(--bg-search-item-hover);
+}
+
+.ai-chat-contextmenu-item svg {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-text-a-hover);
+}
+
 /* ---------- Todo 页：本地待办清单 ---------- */
 .todo-index {
   padding: 0 40px;

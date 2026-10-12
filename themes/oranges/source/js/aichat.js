@@ -312,4 +312,75 @@
       submit()
     }
   })
+
+  // 划词右键发送：正文内选中文字后右键，弹自定义菜单把引用预填进输入框，
+  // 由读者补充问题后自行发送；无选中或非正文区域保持浏览器默认菜单
+  if (config.selectionSend && articleBody) {
+    const QUOTE_MAX_CHARS = 2000
+    const menu = document.createElement('div')
+    menu.className = 'ai-chat-contextmenu'
+    menu.hidden = true
+    menu.innerHTML =
+      '<button type="button" class="ai-chat-contextmenu-item">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.85-.93L3 20.5l1.46-5.4A8.5 8.5 0 1 1 21 11.5Z"/>' +
+      '<path d="M12.5 7.4l.75 2.05 2.05.75-2.05.75-.75 2.05-.75-2.05-2.05-.75 2.05-.75.75-2.05Z"/>' +
+      '</svg><span>' + escapeHtml(config.i18n.selectionSend) + '</span></button>'
+    document.body.appendChild(menu)
+
+    let quotedText = ''
+
+    const hideMenu = () => { menu.hidden = true }
+
+    const showMenu = (x, y) => {
+      menu.hidden = false
+      const rect = menu.getBoundingClientRect()
+      // 贴近视口右/下边缘时向内收，避免菜单被裁掉
+      menu.style.left = Math.max(8, Math.min(x, window.innerWidth - rect.width - 8)) + 'px'
+      menu.style.top = Math.max(8, Math.min(y, window.innerHeight - rect.height - 8)) + 'px'
+    }
+
+    // 引用块预填：逐行加 "> " 前缀，末尾留空行供读者补问题，光标落在末尾
+    const quoteSelection = () => {
+      let quote = quotedText.replace(/[ \t]+\n/g, '\n').trim()
+      if (!quote) return
+      if (quote.length > QUOTE_MAX_CHARS) quote = quote.slice(0, QUOTE_MAX_CHARS) + '…'
+      input.value = quote.split('\n').map(line => '> ' + line).join('\n') + '\n\n'
+      openPanel()
+      growInput()
+      const end = input.value.length
+      input.setSelectionRange(end, end)
+    }
+
+    articleBody.addEventListener('contextmenu', event => {
+      const selection = window.getSelection()
+      const text = (selection && String(selection)) || ''
+      // 右键落在输入类元素内、或选区不在正文中时不接管
+      if (!text.trim() || event.target.closest('input, textarea, [contenteditable]')) return
+      if (!(selection.anchorNode && articleBody.contains(selection.anchorNode))) return
+      event.preventDefault()
+      quotedText = text
+      showMenu(event.clientX, event.clientY)
+    })
+
+    menu.querySelector('.ai-chat-contextmenu-item').addEventListener('click', () => {
+      hideMenu()
+      quoteSelection()
+    })
+
+    document.addEventListener('mousedown', event => {
+      if (!menu.hidden && !menu.contains(event.target)) hideMenu()
+    })
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        event.preventDefault()
+        hideMenu()
+      }
+    })
+
+    // 滚动或窗口缩放后菜单位置会与选区脱节，直接收起
+    window.addEventListener('scroll', hideMenu, true)
+    window.addEventListener('resize', hideMenu)
+  }
 })()

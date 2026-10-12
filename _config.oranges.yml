@@ -189,6 +189,8 @@ aiChat:
   stream: true
   # 每次请求携带的最近对话轮数（一轮 = 一问一答）
   maxContextTurns: 6
+  # 划词右键发送：正文内选中文字后右键，可一键把引用预填给 AI 助手
+  selectionSend: true
 
 colorSwitch:
   enable: true
