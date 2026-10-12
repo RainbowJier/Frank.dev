@@ -313,19 +313,47 @@
     }
   })
 
-  // 划词右键发送：正文内选中文字后右键，弹自定义菜单把引用预填进输入框，
-  // 由读者补充问题后自行发送；无选中或非正文区域保持浏览器默认菜单
+  // 划词右键发送：正文内选中文字后右键且点在选区内，弹自定义菜单；
+  // 快捷动作与自由提问都以引用块预填进输入框，由读者补充问题后自行发送；
+  // 无选中、点在选区外或非正文区域保持浏览器默认菜单
   if (config.selectionSend && articleBody) {
     const QUOTE_MAX_CHARS = 2000
     const menu = document.createElement('div')
     menu.className = 'ai-chat-contextmenu'
+    menu.setAttribute('role', 'menu')
+    menu.setAttribute('aria-label', config.i18n.assistantName)
     menu.hidden = true
-    menu.innerHTML =
-      '<button type="button" class="ai-chat-contextmenu-item">' +
+
+    const ITEM_ICON =
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
       '<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.85-.93L3 20.5l1.46-5.4A8.5 8.5 0 1 1 21 11.5Z"/>' +
-      '<path d="M12.5 7.4l.75 2.05 2.05.75-2.05.75-.75 2.05-.75-2.05-2.05-.75 2.05-.75.75-2.05Z"/>' +
-      '</svg><span>' + escapeHtml(config.i18n.selectionSend) + '</span></button>'
+      '<path d="M12.5 7.4l.75 2.05 2.05.75-2.05.75-.75 2.05-.75-2.05-2.05-.75 2.05-.75.75-2.05Z"/></svg>'
+    // 提问模板前缀与系统提示词同风格硬编码中文；自由提问不带指令，仅引用
+    const menuActions = [
+      { label: config.i18n.selectionExplain, prefix: '请解释下面这段内容：' },
+      { label: config.i18n.selectionTranslate, prefix: '请把下面的内容翻译成中文：' },
+      { label: config.i18n.selectionSummarize, prefix: '请总结下面内容的要点：' },
+      { label: config.i18n.selectionSend, prefix: '', separator: true }
+    ]
+    const menuItems = menuActions.map(action => {
+      if (action.separator) {
+        const divider = document.createElement('div')
+        divider.className = 'ai-chat-contextmenu-separator'
+        menu.appendChild(divider)
+      }
+      const item = document.createElement('button')
+      item.type = 'button'
+      item.className = 'ai-chat-contextmenu-item'
+      item.setAttribute('role', 'menuitem')
+      item.tabIndex = -1
+      item.innerHTML = ITEM_ICON + '<span>' + escapeHtml(action.label) + '</span>'
+      item.addEventListener('click', () => {
+        hideMenu()
+        quoteSelection(action.prefix)
+      })
+      menu.appendChild(item)
+      return item
+    })
     document.body.appendChild(menu)
 
     let quotedText = ''
@@ -338,34 +366,56 @@
       // 贴近视口右/下边缘时向内收，避免菜单被裁掉
       menu.style.left = Math.max(8, Math.min(x, window.innerWidth - rect.width - 8)) + 'px'
       menu.style.top = Math.max(8, Math.min(y, window.innerHeight - rect.height - 8)) + 'px'
+      // 键盘可达：弹出即聚焦首项（preventScroll 防止聚焦引发意外滚动）
+      menuItems[0].focus({ preventScroll: true })
     }
 
-    // 引用块预填：逐行加 "> " 前缀，末尾留空行供读者补问题，光标落在末尾
-    const quoteSelection = () => {
+    // 引用块预填：逐行加 "> " 前缀，快捷动作带提问模板，末尾留空行供读者补充，光标落在末尾
+    const quoteSelection = prefix => {
       let quote = quotedText.replace(/[ \t]+\n/g, '\n').trim()
       if (!quote) return
       if (quote.length > QUOTE_MAX_CHARS) quote = quote.slice(0, QUOTE_MAX_CHARS) + '…'
-      input.value = quote.split('\n').map(line => '> ' + line).join('\n') + '\n\n'
+      const quoted = quote.split('\n').map(line => '> ' + line).join('\n')
+      input.value = prefix ? prefix + '\n\n' + quoted + '\n\n' : quoted + '\n\n'
       openPanel()
       growInput()
       const end = input.value.length
       input.setSelectionRange(end, end)
     }
 
+    // 右键点须落在选区高亮范围内（行级矩形，允许数像素误差），否则不接管
+    const pointInSelection = (x, y) => {
+      const selection = window.getSelection()
+      if (!selection || selection.rangeCount === 0) return false
+      const tolerance = 6
+      return Array.from(selection.getRangeAt(0).getClientRects()).some(rect =>
+        x >= rect.left - tolerance && x <= rect.right + tolerance &&
+        y >= rect.top - tolerance && y <= rect.bottom + tolerance)
+    }
+
     articleBody.addEventListener('contextmenu', event => {
       const selection = window.getSelection()
       const text = (selection && String(selection)) || ''
-      // 右键落在输入类元素内、或选区不在正文中时不接管
+      // 右键落在输入类元素内、选区不在正文中、或点在选区外时不接管
       if (!text.trim() || event.target.closest('input, textarea, [contenteditable]')) return
       if (!(selection.anchorNode && articleBody.contains(selection.anchorNode))) return
+      if (!pointInSelection(event.clientX, event.clientY)) return
       event.preventDefault()
       quotedText = text
       showMenu(event.clientX, event.clientY)
     })
 
-    menu.querySelector('.ai-chat-contextmenu-item').addEventListener('click', () => {
-      hideMenu()
-      quoteSelection()
+    // 方向键在菜单项间循环移动焦点，Tab 直接收起；Escape 由下方 document 监听统一处理
+    menu.addEventListener('keydown', event => {
+      const index = menuItems.indexOf(document.activeElement)
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault()
+        const delta = event.key === 'ArrowDown' ? 1 : -1
+        menuItems[(index + delta + menuItems.length) % menuItems.length].focus({ preventScroll: true })
+      } else if (event.key === 'Tab') {
+        event.preventDefault()
+        hideMenu()
+      }
     })
 
     document.addEventListener('mousedown', event => {

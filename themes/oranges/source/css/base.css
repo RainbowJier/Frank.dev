@@ -2248,7 +2248,8 @@ button:focus-visible {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.ai-chat-contextmenu-item:hover {
+.ai-chat-contextmenu-item:hover,
+.ai-chat-contextmenu-item:focus-visible {
   color: var(--color-text-a-hover);
   background-color: var(--bg-search-item-hover);
 }
@@ -2258,6 +2259,13 @@ button:focus-visible {
   width: 1.5rem;
   height: 1.5rem;
   color: var(--color-text-a-hover);
+}
+
+/* 快捷动作与自由提问之间的分组线 */
+.ai-chat-contextmenu-separator {
+  height: 1px;
+  margin: 4px 6px;
+  background-color: var(--border-ai-panel);
 }
 
 /* ---------- Todo 页：本地待办清单 ---------- */
