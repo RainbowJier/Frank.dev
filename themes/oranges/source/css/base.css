@@ -177,6 +177,77 @@ a:hover {
   color: var(--color-text-sub);
 }
 
+/* 文章发布热力图：构建时生成的内联 SVG */
+.post-calendar {
+  margin-top: 22px;
+}
+
+.post-calendar-scroll {
+  overflow-x: auto;
+}
+
+.post-calendar svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+
+.post-calendar svg text {
+  font-size: 10px;
+  fill: var(--color-text-sub);
+}
+
+.post-calendar svg rect {
+  transition: stroke 0.2s ease;
+}
+
+.post-calendar svg rect:hover {
+  stroke: var(--color-text-sub);
+  stroke-width: 1;
+}
+
+.post-calendar svg rect.cal-0 { fill: var(--calendar-cell-0); }
+.post-calendar svg rect.cal-1 { fill: var(--calendar-cell-1); }
+.post-calendar svg rect.cal-2 { fill: var(--calendar-cell-2); }
+.post-calendar svg rect.cal-3 { fill: var(--calendar-cell-3); }
+.post-calendar svg rect.cal-4 { fill: var(--calendar-cell-4); }
+
+.post-calendar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 10px;
+}
+
+.post-calendar-summary {
+  font-size: 1.2rem;
+  color: var(--color-text-sub);
+}
+
+.post-calendar-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 1.15rem;
+  color: var(--color-text-sub);
+}
+
+.post-calendar-legend i {
+  width: 10px;
+  height: 10px;
+  margin: 0 2px;
+  border-radius: 2px;
+}
+
+.post-calendar-legend i.cal-0 { background: var(--calendar-cell-0); }
+.post-calendar-legend i.cal-1 { background: var(--calendar-cell-1); }
+.post-calendar-legend i.cal-2 { background: var(--calendar-cell-2); }
+.post-calendar-legend i.cal-3 { background: var(--calendar-cell-3); }
+.post-calendar-legend i.cal-4 { background: var(--calendar-cell-4); }
+
 /* 教育与经历 */
 .home-exp {
   margin-top: 22px;

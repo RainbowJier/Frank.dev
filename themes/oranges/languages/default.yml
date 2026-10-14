@@ -27,6 +27,12 @@ pinned: Pinned
 updateTime: Update time
 about: About
 posts_count: Posts
+calendarAria: 'Post publishing heatmap of the last year'
+calendarSummary: '{n} posts in the last year'
+calendarPostCount: '{n} post(s)'
+calendarNoPost: 'No posts'
+calendarLess: 'Less'
+calendarMore: 'More'
 projects: Projects
 aiChat: 'AI Reading Assistant'
 aiChatSubtitle: 'Answers based on this article'

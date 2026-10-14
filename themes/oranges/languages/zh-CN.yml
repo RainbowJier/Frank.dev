@@ -27,6 +27,12 @@ pinned: 置顶
 updateTime: 更新时间
 about: 关于
 posts_count: 博客文章
+calendarAria: '过去一年的文章发布热力图'
+calendarSummary: '过去一年发布 {n} 篇文章'
+calendarPostCount: '发布 {n} 篇'
+calendarNoPost: '无发布'
+calendarLess: '少'
+calendarMore: '多'
 projects: 项目经历
 aiChat: 'AI 阅读助手'
 aiChatSubtitle: '基于本文内容回答'

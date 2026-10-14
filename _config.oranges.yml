@@ -109,6 +109,11 @@ intro:
       name: 邮箱
       path: mailto:3021809270@qq.com
 
+# 首页文章发布热力图：GitHub 贡献图风格，按每篇文章的发布日期在构建时统计生成，
+# 数据来自站点文章本身，无需外部接口；随每次构建（部署）自动更新
+postCalendar:
+  enable: true
+
 navbar:
   -
     name: 首页

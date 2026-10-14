@@ -32,6 +32,12 @@
   --color-ai-error: #c0504a;
   --color-todo-high: #c0504a;
   --color-todo-doing: #5e81ac;
+  /* 首页文章发布热力图（GitHub 贡献图配色） */
+  --calendar-cell-0: #ebedf0;
+  --calendar-cell-1: #9be9a8;
+  --calendar-cell-2: #40c463;
+  --calendar-cell-3: #30a14e;
+  --calendar-cell-4: #216e39;
 }
 
 /* dark scheme */
@@ -68,4 +74,10 @@
   --color-ai-error: #e5837b;
   --color-todo-high: #e5837b;
   --color-todo-doing: #81a1c1;
+  /* 首页文章发布热力图（GitHub 暗色配色；空格子用微透明，贴合 Nord 底色） */
+  --calendar-cell-0: rgba(255, 255, 255, 0.07);
+  --calendar-cell-1: #0e4429;
+  --calendar-cell-2: #006d32;
+  --calendar-cell-3: #26a641;
+  --calendar-cell-4: #39d353;
 }

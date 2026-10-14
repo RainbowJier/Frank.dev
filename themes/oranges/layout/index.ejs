@@ -112,6 +112,77 @@
       <% }) %>
     </div>
     <% } %>
+    <% if (theme.postCalendar && theme.postCalendar.enable) { %>
+    <%
+      // 文章发布热力图：按每篇文章的发布日期统计最近一年的发布节奏（周一为一周起始），
+      // 构建期内联为 SVG，数据随每次部署更新；颜色深浅 = 当天发布文章数（0-4 级）
+      var PC_CELL = 10, PC_PITCH = 13, PC_X0 = 30, PC_Y0 = 16;
+      var pcEnd = new Date(); pcEnd.setHours(0, 0, 0, 0);
+      var pcStart = new Date(pcEnd); pcStart.setDate(pcStart.getDate() - 363);
+      var pcDow = function (d) { return (d.getDay() + 6) % 7; };
+      var pcFirst = new Date(pcStart); pcFirst.setDate(pcFirst.getDate() - pcDow(pcStart));
+      var pcWeeks = Math.ceil((pcDow(pcStart) + 364) / 7);
+      var pcKey = function (d) {
+        return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+      };
+      var pcCounts = {};
+      var pcInYear = 0;
+      var pcWindowStart = pcKey(pcStart);
+      var pcWindowEnd = pcKey(pcEnd);
+      site.posts.forEach(function (p) {
+        var key = p.date.format('YYYY-MM-DD');
+        if (key >= pcWindowStart && key <= pcWindowEnd) pcInYear++;
+        pcCounts[key] = (pcCounts[key] || 0) + 1;
+      });
+      var pcLevel = function (n) { return n >= 4 ? 4 : n; };
+      var pcRects = [];
+      var pcCursor = new Date(pcFirst);
+      for (var w = 0; w < pcWeeks; w++) {
+        for (var dow = 0; dow < 7; dow++) {
+          var inWindow = pcCursor >= pcStart;
+          var key = pcKey(pcCursor);
+          var n = inWindow ? (pcCounts[key] || 0) : 0;
+          var tip = key + ' · ' + (n ? __('calendarPostCount').replace('{n}', n) : __('calendarNoPost'));
+          pcRects.push(
+            '<rect class="cal-' + pcLevel(n) + '" x="' + (PC_X0 + w * PC_PITCH) + '" y="' + (PC_Y0 + dow * PC_PITCH) + '"' +
+            ' width="' + PC_CELL + '" height="' + PC_CELL + '" rx="2" ry="2">' +
+            '<title>' + tip + '</title></rect>'
+          );
+          pcCursor.setDate(pcCursor.getDate() + 1);
+        }
+      }
+      // 顶部月份标签：每月第一周所在列；末尾留白不足两列时不标，避免溢出
+      var pcMonthLabels = [];
+      var pcLastMonth = -1;
+      for (var w2 = 0; w2 < pcWeeks; w2++) {
+        var topDay = new Date(pcFirst); topDay.setDate(topDay.getDate() + w2 * 7);
+        if (topDay.getMonth() !== pcLastMonth) {
+          pcLastMonth = topDay.getMonth();
+          if (w2 <= pcWeeks - 3) {
+            pcMonthLabels.push('<text x="' + (PC_X0 + w2 * PC_PITCH) + '" y="10">' + (topDay.getMonth() + 1) + '月</text>');
+          }
+        }
+      }
+      // 左侧星期标签：一 / 三 / 五
+      var pcDowLabels = [];
+      [[0, '一'], [2, '三'], [4, '五']].forEach(function (pair) {
+        pcDowLabels.push('<text x="0" y="' + (PC_Y0 + pair[0] * PC_PITCH + 8.5) + '">' + pair[1] + '</text>');
+      });
+    %>
+    <div class="post-calendar">
+      <div class="post-calendar-scroll">
+        <svg viewBox="0 0 <%= PC_X0 + pcWeeks * PC_PITCH %> <%= PC_Y0 + 7 * PC_PITCH %>" role="img" aria-label="<%= __('calendarAria') %>">
+          <%- pcMonthLabels.join('') %>
+          <%- pcDowLabels.join('') %>
+          <%- pcRects.join('') %>
+        </svg>
+      </div>
+      <div class="post-calendar-footer">
+        <span class="post-calendar-summary"><%= __('calendarSummary').replace('{n}', pcInYear) %></span>
+        <span class="post-calendar-legend"><%= __('calendarLess') %><i class="cal-0"></i><i class="cal-1"></i><i class="cal-2"></i><i class="cal-3"></i><i class="cal-4"></i><%= __('calendarMore') %></span>
+      </div>
+    </div>
+    <% } %>
     <% if (theme.intro.links && theme.intro.links.length) { %>
     <div class="home-intro-links">
       <% theme.intro.links.forEach(function(link) { %>
