@@ -248,6 +248,29 @@ a:hover {
 .post-calendar-legend i.cal-3 { background: var(--calendar-cell-3); }
 .post-calendar-legend i.cal-4 { background: var(--calendar-cell-4); }
 
+/* 悬停方格时的发布篇数浮层（fixed 定位，JS 控制位置） */
+.post-calendar-tip {
+  position: fixed;
+  z-index: 1100;
+  top: -9999px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--calendar-tip-color);
+  background: var(--calendar-tip-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.post-calendar-tip.show {
+  opacity: 1;
+}
+
 /* 教育与经历 */
 .home-exp {
   margin-top: 22px;

@@ -38,6 +38,8 @@
   --calendar-cell-2: #40c463;
   --calendar-cell-3: #30a14e;
   --calendar-cell-4: #216e39;
+  --calendar-tip-bg: #24292e;
+  --calendar-tip-color: #ffffff;
 }
 
 /* dark scheme */
@@ -80,4 +82,6 @@
   --calendar-cell-2: #006d32;
   --calendar-cell-3: #26a641;
   --calendar-cell-4: #39d353;
+  --calendar-tip-bg: #3b4252;
+  --calendar-tip-color: #eceff4;
 }
