@@ -1851,7 +1851,8 @@ button:focus-visible {
   z-index: 990;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  /* 宽度可拖拽伸缩：变量由 aichat.js 写入（记忆值），未设置时回落 400px */
+  width: var(--ai-chat-panel-width, 400px);
   max-width: 100%;
   background-color: var(--bg-ai-panel);
   border-left: 1px solid var(--border-ai-panel);
@@ -1867,6 +1868,44 @@ button:focus-visible {
   transform: translateX(0);
   /* 打开时大幅减速滑入，到位即停不回弹 */
   transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 面板左缘拖拽手柄：桌面端左右伸缩宽度（移动端底部抽屉隐藏），双击复位 */
+.ai-chat-resize-handle {
+  position: absolute;
+  top: 0;
+  left: -5px;
+  bottom: 0;
+  width: 10px;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 5;
+}
+
+/* 手柄悬停/拖拽中的视觉指示：左缘竖线 */
+.ai-chat-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.ai-chat-resize-handle:hover::before,
+.ai-chat-panel.is-resizing .ai-chat-resize-handle::before {
+  background-color: var(--color-text-a-hover);
+}
+
+.ai-chat-panel.is-resizing {
+  user-select: none;
+}
+
+.ai-chat-panel.is-resizing * {
+  cursor: col-resize;
 }
 
 .ai-chat-header {
@@ -2208,6 +2247,10 @@ button:focus-visible {
 
   .ai-chat-panel.open {
     transform: translateY(0);
+  }
+
+  .ai-chat-resize-handle {
+    display: none;
   }
 
   .ai-chat-hint {

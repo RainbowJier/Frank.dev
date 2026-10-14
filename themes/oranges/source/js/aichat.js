@@ -20,6 +20,12 @@
   const sendButton = document.getElementById('ai-chat-send')
   if (!icon || !panel || !messagesBox || !input || !sendButton) return
 
+  // 面板与遮罩是 fixed 覆盖层，移出带 transform 的工具栏容器：
+  // transform 祖先会把 fixed 元素的包含块困在容器内，max-width:100% 等百分比
+  // 将按小控件（而非视口）解析，面板会被钳成几十像素宽
+  document.body.appendChild(backdrop)
+  document.body.appendChild(panel)
+
   // 超长正文截断，避免请求体与上下文超出模型限制
   const ARTICLE_MAX_CHARS = 24000
   const conversation = []
@@ -66,6 +72,56 @@
       event.preventDefault()
       closePanel()
     }
+  })
+
+  // 面板左缘拖拽调宽：桌面端左右伸缩，宽度记忆在 localStorage，双击手柄复位；
+  // 移动端为底部抽屉，手柄由媒体查询隐藏，宽度固定 100% 不受影响
+  const resizeHandle = document.createElement('div')
+  resizeHandle.className = 'ai-chat-resize-handle'
+  resizeHandle.setAttribute('role', 'separator')
+  resizeHandle.setAttribute('aria-orientation', 'vertical')
+  resizeHandle.setAttribute('aria-label', '拖拽调整面板宽度，双击复位')
+  panel.appendChild(resizeHandle)
+
+  const PANEL_WIDTH_KEY = 'ai-chat-panel-width'
+  const clampWidth = width =>
+    Math.max(320, Math.min(720, width, window.innerWidth - 60))
+
+  try {
+    const saved = parseInt(localStorage.getItem(PANEL_WIDTH_KEY), 10)
+    if (saved) panel.style.setProperty('--ai-chat-panel-width', clampWidth(saved) + 'px')
+  } catch (error) {
+    // localStorage 不可用（隐私模式等）时静默回落默认宽度
+  }
+
+  resizeHandle.addEventListener('pointerdown', event => {
+    event.preventDefault()
+    // 指针捕获让拖拽越过面板内容也持续生效；合成事件无活动指针时捕获失败可忽略
+    try { resizeHandle.setPointerCapture(event.pointerId) } catch (error) { /* 忽略 */ }
+    panel.classList.add('is-resizing')
+    const onMove = move => {
+      panel.style.setProperty('--ai-chat-panel-width', clampWidth(window.innerWidth - move.clientX) + 'px')
+    }
+    const onUp = () => {
+      panel.classList.remove('is-resizing')
+      resizeHandle.removeEventListener('pointermove', onMove)
+      resizeHandle.removeEventListener('pointerup', onUp)
+      resizeHandle.removeEventListener('pointercancel', onUp)
+      try {
+        // 记录实际渲染宽度（窄视口下会被 max-width 钳制）
+        localStorage.setItem(PANEL_WIDTH_KEY, String(Math.round(panel.getBoundingClientRect().width)))
+      } catch (error) {
+        // 忽略
+      }
+    }
+    resizeHandle.addEventListener('pointermove', onMove)
+    resizeHandle.addEventListener('pointerup', onUp)
+    resizeHandle.addEventListener('pointercancel', onUp)
+  })
+
+  resizeHandle.addEventListener('dblclick', () => {
+    panel.style.removeProperty('--ai-chat-panel-width')
+    try { localStorage.removeItem(PANEL_WIDTH_KEY) } catch (error) { /* 忽略 */ }
   })
 
   const escapeHtml = value => value
