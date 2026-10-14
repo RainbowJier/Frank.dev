@@ -16,6 +16,8 @@
       i18n: {
         send: __('aiChatSend'),
         stop: __('aiChatStop'),
+        welcome: __('aiChatWelcome'),
+        newSession: __('aiChatNewSession'),
         assistantName: __('aiChat'),
         selectionSend: __('aiChatSelectionSend'),
         selectionExplain: __('aiChatSelectionExplain'),
@@ -52,6 +54,12 @@
         <span class="ai-chat-name"><%= __('aiChat') %></span>
         <span class="ai-chat-subtitle"><%= __('aiChatSubtitle') %></span>
       </div>
+      <button type="button" class="ai-chat-new-session" id="ai-chat-new-session" aria-label="<%= __('aiChatNewSession') %>" title="<%= __('aiChatNewSession') %>">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M23 4v6h-6"/>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+      </button>
       <button type="button" class="ai-chat-close" id="ai-chat-close" aria-label="<%= __('aiChatClose') %>">
         <i class="iconfont icon-close"></i>
       </button>

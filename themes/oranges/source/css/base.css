@@ -1952,7 +1952,8 @@ button:focus-visible {
   color: var(--color-text-sub);
 }
 
-.ai-chat-close {
+.ai-chat-close,
+.ai-chat-new-session {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1967,13 +1968,19 @@ button:focus-visible {
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.ai-chat-close:hover {
+.ai-chat-close:hover,
+.ai-chat-new-session:hover {
   color: var(--color-text-a-hover);
   background-color: var(--bg-search-item-hover);
 }
 
 .ai-chat-close .iconfont {
   font-size: 1.4rem;
+}
+
+.ai-chat-new-session svg {
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .ai-chat-messages {

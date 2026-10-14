@@ -31,6 +31,8 @@
   const conversation = []
   let controller = null
   let generating = false
+  // 会话纪元：新会话自增，旧请求的异步收尾凭此判断是否还应写入上下文
+  let sessionEpoch = 0
 
   const articleBody = document.querySelector('#post-details .markdown-body')
   const articleText = ((articleBody && articleBody.innerText) || '')
@@ -224,6 +226,7 @@
   }
 
   const ask = async question => {
+    const epoch = sessionEpoch
     conversation.push({ role: 'user', content: question })
     const userBubble = appendMessage('user')
     userBubble.textContent = question
@@ -321,27 +324,27 @@
 
       pending.classList.remove('is-thinking')
       pending.innerHTML = renderMarkdown(answer || '…')
-      if (answer) conversation.push({ role: 'assistant', content: answer })
+      // 旧会话的迟到回答：新会话已重置，不写入上下文（DOM 渲染无害）
+      if (answer && epoch === sessionEpoch) conversation.push({ role: 'assistant', content: answer })
     } catch (error) {
       if (error.name === 'AbortError') {
-        // 用户主动停止：保留已生成的部分，并纳入后续上下文
-        pending.classList.remove('is-thinking')
-        const note = document.createElement('p')
-        note.className = 'ai-chat-stopped'
-        note.textContent = config.i18n.aborted
-        pending.innerHTML = renderMarkdown(answer)
-        if (answer) {
+        // 用户主动停止：保留已生成的部分，并纳入后续上下文；
+        // 新会话触发的中止（纪元已变）：消息区已被整体清空，什么都不必写回
+        if (answer && epoch === sessionEpoch) {
+          pending.classList.remove('is-thinking')
+          pending.innerHTML = renderMarkdown(answer)
+          const note = document.createElement('p')
+          note.className = 'ai-chat-stopped'
+          note.textContent = config.i18n.aborted
           pending.appendChild(note)
           conversation.push({ role: 'assistant', content: answer })
-        } else {
-          pending.replaceChildren(note)
         }
       } else {
         pending.classList.remove('is-thinking')
         pending.classList.add('is-error')
         pending.textContent = errorMessage(error)
-        // 失败的一轮不入上下文，便于直接重试
-        conversation.pop()
+        // 失败的一轮不入上下文，便于直接重试；新会话已清空时避免误删新提问
+        if (epoch === sessionEpoch) conversation.pop()
       }
     } finally {
       setGenerating(false)
@@ -368,6 +371,27 @@
       submit()
     }
   })
+
+  // 新会话：中止进行中的请求（epoch 已自增，迟到收尾不会写回上下文），
+  // 清空对话与输入框，恢复欢迎语
+  const newSession = () => {
+    sessionEpoch++
+    if (controller) controller.abort()
+    conversation.length = 0
+    messagesBox.replaceChildren()
+    const message = document.createElement('div')
+    message.className = 'ai-chat-msg ai-chat-msg-bot'
+    const bubble = document.createElement('div')
+    bubble.className = 'ai-chat-bubble'
+    bubble.textContent = config.i18n.welcome
+    message.appendChild(bubble)
+    messagesBox.appendChild(message)
+    input.value = ''
+    growInput()
+    scrollToBottom(true)
+    input.focus()
+  }
+  document.getElementById('ai-chat-new-session').addEventListener('click', newSession)
 
   // 划词自动浮现菜单：正文内选中文字停稳后（约 200ms 防抖），菜单自动浮现在选区上方；
   // 快捷动作与自由提问都以引用块预填进输入框，由读者补充/确认后自行发送；
