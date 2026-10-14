@@ -1897,7 +1897,8 @@ button:focus-visible {
 
 .ai-chat-resize-handle:hover::before,
 .ai-chat-panel.is-resizing .ai-chat-resize-handle::before {
-  background-color: var(--color-text-a-hover);
+  /* 柔和中灰而非强调色：--color-text-a-hover 浅色下是纯黑，做指示线过于生硬 */
+  background-color: var(--color-text-sub);
 }
 
 .ai-chat-panel.is-resizing {
