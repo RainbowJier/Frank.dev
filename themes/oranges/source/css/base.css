@@ -97,7 +97,7 @@ a:hover {
 }
 
 .home-intro {
-  padding: 0 40px 28px;
+  padding: 0 40px 32px;
   margin-bottom: 24px;
   border-bottom: 1px solid var(--color-divider-md-border);
 }
@@ -155,7 +155,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 32px;
-  margin-top: 18px;
+  margin-top: 32px;
 }
 
 .stat-item {
@@ -179,7 +179,7 @@ a:hover {
 
 /* 文章发布热力图：构建时生成的内联 SVG */
 .post-calendar {
-  margin-top: 22px;
+  margin-top: 36px;
 }
 
 .post-calendar-scroll {
@@ -219,7 +219,7 @@ a:hover {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 8px 16px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .post-calendar-summary {
@@ -277,7 +277,7 @@ a:hover {
 }
 
 .home-exp + .home-exp {
-  margin-top: 16px;
+  margin-top: 24px;
 }
 
 .home-exp-title {
@@ -575,7 +575,7 @@ a.home-exp-item {
 }
 
 .home-intro-links {
-  margin-top: 18px;
+  margin-top: 28px;
 }
 
 .home-intro-links a {
