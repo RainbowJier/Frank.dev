@@ -1,5 +1,6 @@
 // Todo 页：本地待办清单
 // - 支持按项目归类：录入时可选填项目，列表按项目分组树形展示（分组可折叠、状态记忆），工具栏按项目筛选
+// - 列表排序：组内进行中任务置顶，未开始次之、已完成垫底；同层保持手动拖动顺序
 // - 数据层双层结构：localStorage 永远作镜像缓存；Chrome/Edge 桌面版可再关联磁盘 todo.json
 //   （File System Access API），句柄存 IndexedDB，改动自动写入文件，重启后按 updatedAt 新者胜出对账
 // - 不支持文件 API 的浏览器只走 localStorage，功能不受影响；隐私模式静默降级
@@ -20,6 +21,8 @@ const NEXT_STATUS = { todo: 'doing', doing: 'done', done: 'todo' }
 const CYCLE_ARIA = { todo: '标记为进行中', doing: '标记为已完成', done: '标记为未开始' }
 // 行内快捷按钮文案：未开始→开始，进行中→完成，已完成→重开（目标即 NEXT_STATUS）
 const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
+// 组内显示层级：进行中置顶 → 未开始 → 已完成；同层靠 sort 稳定性保持手动拖动顺序
+const STATUS_TIER = { doing: 0, todo: 1, done: 2 }
   const PROJECT_NONE = '__none__' // 项目筛选下拉里「未分类」的哨兵值
   const FILE_DB = 'todo-storage'
   const FILE_STORE = 'handles'
@@ -293,12 +296,13 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
 
   // ---------- 筛选与渲染 ----------
 
+  // 过滤后按状态分层排序（进行中置顶）；sort 稳定，同层内保持数组里的手动拖动顺序
   const filtered = () => items.filter(item => {
     if (filter === 'todo' && item.status !== 'todo') return false
     if (filter === 'doing' && item.status !== 'doing') return false
     if (filter === 'done' && item.status !== 'done') return false
     return inProject(item)
-  })
+  }).sort((a, b) => STATUS_TIER[a.status] - STATUS_TIER[b.status])
 
   const el = (tag, className, text) => {
     const node = document.createElement(tag)
@@ -771,7 +775,7 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
 
     const main = el('div', 'todo-main')
     const title = el('span', 'todo-item-title', item.title)
-    title.title = '双击编辑；按住拖动可排序'
+    title.title = '双击编辑；拖动可排序（进行中始终置顶）'
     main.appendChild(title)
     const meta = el('div', 'todo-meta')
     if (item.status === 'doing') {
@@ -927,7 +931,8 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     listEl.textContent = ''
     const visible = filtered()
 
-    // 两级树：项目分组 → 目录分组 → 任务；组间排序与项目筛选下拉一致（条数降序 + 拼音），「未分类」垫底
+    // 两级树：项目分组 → 目录分组 → 任务；组间排序与项目筛选下拉一致（条数降序 + 拼音），「未分类」垫底；
+    // 组内行序来自 filtered() 的状态分层（进行中置顶），同层保持手动拖动顺序
     const groups = new Map()
     visible.forEach(item => {
       const key = item.project || ''
@@ -1321,50 +1326,60 @@ const STATUS_NEXT_LABEL = { todo: '开始', doing: '完成', done: '重开' }
     render()
   }
 
-  // 状态循环只替换该行，不整表重渲染，避免其他行动画重放
+  // 圆环切换反馈：完成弹跳，其余短促脉冲（状态分层重排后行节点已换新，反馈跟着行走）
+  const ringFeedback = (ring, status) => {
+    if (!ring || !ring.animate) return
+    if (status === 'done') {
+      ring.animate(
+        [
+          { transform: 'scale(0.75)' },
+          { transform: 'scale(1.12)' },
+          { transform: 'scale(1)' }
+        ],
+        { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
+      )
+    } else {
+      ring.animate(
+        [
+          { transform: 'scale(1)' },
+          { transform: 'scale(0.85)' },
+          { transform: 'scale(1)' }
+        ],
+        { duration: 160, easing: 'ease' }
+      )
+    }
+  }
+
+  // 状态循环会跨显示层级（进行中置顶），无编辑行时整表静默重渲染归位（render 不带动画，其余行不闪）；
+  // 有编辑行时保持旧行为只替换/移除该行，避免重渲染丢掉未保存的编辑内容，位置留到下次渲染再归位
   const cycleStatus = li => {
     const item = items.find(entry => entry.id === li.dataset.id)
     if (!item) return
     item.status = NEXT_STATUS[item.status]
     item.updatedAt = Date.now()
     save()
-    const showsItem = filter === 'all' || filter === item.status
-    if (showsItem && inProject(item)) {
-      const fresh = renderRow(item)
-      li.replaceWith(fresh)
-      const ring = fresh.querySelector('.todo-check')
-      if (ring.animate) {
-        if (item.status === 'done') {
-          ring.animate(
-            [
-              { transform: 'scale(0.75)' },
-              { transform: 'scale(1.12)' },
-              { transform: 'scale(1)' }
-            ],
-            { duration: 300, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }
-          )
-        } else {
-          ring.animate(
-            [
-              { transform: 'scale(1)' },
-              { transform: 'scale(0.85)' },
-              { transform: 'scale(1)' }
-            ],
-            { duration: 160, easing: 'ease' }
-          )
+    if (listEl.querySelector('.todo-item.editing')) {
+      const showsItem = filter === 'all' || filter === item.status
+      if (showsItem && inProject(item)) {
+        const fresh = renderRow(item)
+        li.replaceWith(fresh)
+        ringFeedback(fresh.querySelector('.todo-check'), item.status)
+      } else {
+        li.remove()
+        // 自底向上清掉空目录与空项目（目录组嵌在项目组内，最后一条走人时两层都要收）
+        let node = li.closest('.todo-group')
+        while (node && !node.querySelector('.todo-item')) {
+          const parent = node.parentElement ? node.parentElement.closest('.todo-group') : null
+          node.remove()
+          node = parent
         }
       }
-    } else {
-      li.remove()
-      // 自底向上清掉空目录与空项目（目录组嵌在项目组内，最后一条走人时两层都要收）
-      let node = li.closest('.todo-group')
-      while (node && !node.querySelector('.todo-item')) {
-        const parent = node.parentElement ? node.parentElement.closest('.todo-group') : null
-        node.remove()
-        node = parent
-      }
+      syncChrome()
+      return
     }
-    syncChrome()
+    render()
+    const fresh = rowById(item.id)
+    if (fresh) ringFeedback(fresh.querySelector('.todo-check'), item.status)
   }
 
   listEl.addEventListener('click', event => {
