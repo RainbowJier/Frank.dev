@@ -59,6 +59,6 @@ AI_CHAT_KEY=sk-xxx pnpm server    # 本地预览 AI 阅读助手时注入 key
 
 push main（或手动 workflow_dispatch）→ `.github/workflows/deploy.yml`：Node 22 + pnpm 11.17.0 + `pnpm install --frozen-lockfile` → `hexo generate`（此时注入 `AI_CHAT_KEY`）→ 上传 `public/` 到 GitHub Pages。main 即生产，无 staging。
 
-### specs/ 与规划产物
+### specs/
 
-`specs/<编号-功能名>/`（`spec.md` + `checklists/`）是较大功能的需求与验收规格；`.zcode/plans/` 是会话级计划产物。两者均不参与构建。
+`specs/<编号-功能名>/`（`spec.md` + `checklists/`）是较大功能的需求与验收规格目录，不参与构建。
