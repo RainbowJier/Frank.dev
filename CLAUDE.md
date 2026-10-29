@@ -28,7 +28,7 @@ AI_CHAT_KEY=sk-xxx pnpm server    # 本地预览 AI 阅读助手时注入 key
 
 ### 构建管线与自定义 generator
 
-- Hexo 构建时自动加载仓库根 `scripts/*.js` 作为扩展。`scripts/skills.js` 注册名为 `skills` 的 generator：构建期按优先级扫描 `.agents/skills/<slug>/SKILL.md` → `source/skills/<slug>/SKILL.md`（同名取第一份），读 front matter 的 `name`/`description` 生成 `/skills/` 索引页；详情页渲染的是同目录 `README.md`，`SKILL.md` 正文不发布（`_config.yml` 中 `exclude: skills/**`）。
+- Hexo 构建时自动加载仓库根 `scripts/*.js` 作为扩展。`scripts/skills.js` 注册名为 `skills` 的 generator：构建期按优先级扫描 `.agents/skills/<slug>/SKILL.md` → `source/skills/<slug>/SKILL.md`（同名取第一份），读 front matter 的 `name`/`description` 生成 `/skills/` 索引页；详情页渲染的是同目录 `README.md`，`SKILL.md` 正文不发布（`_config.yml` 中 `exclude: skills/**`）。`scripts/postGroup.js` 注册 `post_column` 助手（判断文章所属专栏并映射展示名），归档页与学习计划页共用。
 - 文章资源：`post_asset_folder` + `marked.postAsset` 开启，与文章同名的资源目录发布到文章 URL 下，正文用相对路径引用配图。
 
 ### 双层配置
@@ -48,7 +48,7 @@ AI_CHAT_KEY=sk-xxx pnpm server    # 本地预览 AI 阅读助手时注入 key
 ### 内容聚合约定（无手工列表配置）
 
 - 项目文章识别：front matter `categories: [项目经历]`（勿改）；首页「项目经历」区块与 `/projects/` 页直接读 `period / role / stack / description` 字段聚合。
-- 归档页「按分组」视图：分组依据 = `source/_posts/articles/` 下的二级目录名。
+- 归档页「按分组」视图：分组依据 = `source/_posts/articles/` 下的二级目录名，由 `scripts/postGroup.js` 的 `post_column` 助手统一判断（含「专栏目录名 → 中文展示名」映射，学习计划页文章选择器共用），新增专栏目录时要同步维护。
 
 ### 特殊页面
 

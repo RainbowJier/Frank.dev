@@ -8,39 +8,12 @@
     return !(item.categories.data || []).some(function(c) { return c.name === '项目经历'; });
   }).sort('date', -1).data;
 
-  // 专栏目录名 → 展示名（与 source/_posts/articles 下的子目录对应，新增目录时在此补一行）
-  var groupDisplayNames = {
-    'Java': 'Java',
-    'Mybatis': 'Mybatis',
-    'MYSQL': 'MySQL',
-    'Redis': 'Redis',
-    'RabbitMQ': 'RabbitMQ',
-    'Oracle': 'Oracle',
-    'Elasticsearch': 'Elasticsearch',
-    'Vue': 'Vue',
-    'AI': 'AI',
-    'RESTful': 'RESTful',
-    'MinIO': 'MinIO',
-    'Springboot': 'Spring',
-    'http-sse-websocket': 'SSE / WebSocket'
-  };
-
-  // 用源路径判断所属专栏（_posts/articles/<目录>/<文件>.md）；permalink 形如 .../articles/<目录>/<slug>/，
-  // 但 articles 根目录下的散文名为 .../articles/<slug>/，形状相同，故仅作兜底并要求两段路径。
-  // 不在子目录的归入「其他」
-  var groupOf = function(item) {
-    var source = String(item.source || '').replace(/\\/g, '/');
-    var match = source.match(/_posts\/articles\/([^/]+)\/[^/]+$/);
-    if (match) return groupDisplayNames[match[1]] || match[1];
-    match = String(item.path || '').match(/articles\/([^/]+)\/[^/]+\/$/);
-    if (match) return groupDisplayNames[match[1]] || match[1];
-    return '其他';
-  };
-
+  // 专栏归属判断与「目录名 → 展示名」映射统一在 scripts/postGroup.js 的 post_column 助手，
+  // 与学习计划页的文章选择器共用
   var groups = [];
   var groupIndex = {};
   blogPosts.forEach(function(item) {
-    var name = groupOf(item);
+    var name = post_column(item);
     if (!(name in groupIndex)) {
       groupIndex[name] = { name: name, posts: [] };
       groups.push(groupIndex[name]);

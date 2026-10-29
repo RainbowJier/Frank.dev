@@ -136,16 +136,6 @@ navbar:
     path: /skills/
     key: skills
   -
-    name: 待办
-    enable: true
-    path: /todo/
-    key: todo
-  -
-    name: 学习计划
-    enable: true
-    path: /plan/
-    key: plan
-  -
     name: 分类
     enable: false
     path: /categories/

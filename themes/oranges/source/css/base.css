@@ -412,114 +412,6 @@ a.home-exp-item {
   margin-top: 10px;
 }
 
-/* 学习计划页 */
-.plan-index {
-  padding: 0 40px;
-}
-
-.plan-intro {
-  margin-bottom: 12px;
-}
-
-.plan-group {
-  margin-top: 28px;
-}
-
-.plan-group:first-of-type {
-  margin-top: 12px;
-}
-
-.plan-group-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--color-text-a);
-}
-
-.plan-group-count {
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 11px;
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: var(--color-text-sub);
-  border: 1px solid var(--color-divider-md-border);
-}
-
-.plan-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 14px;
-}
-
-.plan-item {
-  display: block;
-  padding: 16px 18px;
-  border: 1px solid var(--color-divider-md-border);
-  border-radius: 10px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.25s ease, background-color 0.25s ease;
-}
-
-a.plan-item:hover {
-  border-color: var(--color-text-sub);
-  background: var(--bg-content-search);
-}
-
-.plan-item-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.plan-item-name {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-text-a);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.plan-item-progress {
-  flex-shrink: 0;
-  font-size: 1.25rem;
-  color: var(--color-text-sub);
-  font-variant-numeric: tabular-nums;
-}
-
-.plan-progress {
-  height: 6px;
-  margin-top: 12px;
-  border-radius: 3px;
-  background: var(--color-divider-md-border);
-  overflow: hidden;
-}
-
-.plan-progress-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: var(--color-text-sub);
-  transition: width 0.4s ease;
-}
-
-.plan-item-note {
-  font-size: 1.35rem;
-  line-height: 1.7;
-  color: var(--color-text-a);
-  margin-top: 10px;
-}
-
 /* 技能目录页 */
 .skills-index {
   padding: 0 40px;
@@ -736,7 +628,6 @@ a.plan-item:hover {
     gap: 10px 24px;
   }
   .project-index,
-  .plan-index,
   .skills-index,
   .skill-index {
     padding: 0;

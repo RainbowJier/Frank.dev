@@ -36,7 +36,7 @@ Frank 的个人技术博客与作品集（https://frank-dev.site）：Hexo 8.1.2
 ## 写作约定
 
 - 新文章：`pnpm exec hexo new post "标题"`，然后移入对应专栏目录；front matter 含 title/date/categories/tags/description。
-- 新增专栏目录时，同步在 `themes/oranges/layout/archive.ejs` 的 `groupDisplayNames`（第 12 行起）加中文展示名。
+- 新增专栏目录时，同步在 `scripts/postGroup.js` 的 `groupDisplayNames` 加中文展示名（归档页「按分组」与学习计划页文章选择器共用）。
 - 配图放与 .md 同名的资源目录（`post_asset_folder` 与 `marked.postAsset` 已开启），正文相对引用：`![图N：描述](<文章同名目录>/xxx.svg)`。
 - 配图优先用工作区技能 `research-svg` 生成科研论文风 SVG（Nature NPG 配色），存入文章资源目录。
 

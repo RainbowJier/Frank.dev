@@ -72,56 +72,6 @@
     </div>
   <% } %>
 
-  <% if(page.type === "plan") { %>
-  <!-- 学习计划页 url形式：https://yoursite/plan/，计划数据来自本页 front matter 的 plans 列表 -->
-    <%
-      var planGroups = [
-        { key: 'doing', label: '进行中' },
-        { key: 'planned', label: '计划中' },
-        { key: 'done', label: '已完成' }
-      ];
-      var planItems = page.plans || [];
-    %>
-    <div class="container plan-index">
-      <% if (page.content && page.content.trim()) { %>
-      <div class="markdown-body plan-intro">
-        <%- page.content %>
-      </div>
-      <% } %>
-      <% planGroups.forEach(function(group) {
-           var items = planItems.filter(function(p) { return p.status === group.key; });
-           if (!items.length) return;
-      %>
-      <section class="plan-group">
-        <h2 class="plan-group-title"><%- group.label %><span class="plan-group-count"><%- items.length %></span></h2>
-        <div class="plan-list">
-          <% items.forEach(function(p) {
-               var seg = String(p.progress || '').split('/');
-               var doneCount = parseInt(seg[0], 10);
-               var totalCount = parseInt(seg[1], 10);
-               var hasBar = !isNaN(doneCount) && !isNaN(totalCount) && totalCount > 0;
-               var percent = hasBar ? Math.min(100, Math.round(doneCount / totalCount * 100)) : 0;
-          %>
-          <% if (p.link) { %><a class="plan-item" href="<%- url_for(p.link) %>" title="<%- p.name %>"><% } else { %><div class="plan-item"><% } %>
-            <div class="plan-item-head">
-              <span class="plan-item-name"><%- p.name %></span>
-              <span class="plan-item-progress"><%- p.progress || (p.status === 'done' ? '已完成' : '未开始') %></span>
-            </div>
-            <% if (hasBar && p.status !== 'done') { %>
-            <div class="plan-progress" role="progressbar" aria-valuenow="<%- percent %>" aria-valuemin="0" aria-valuemax="100" aria-label="<%- p.name %> 进度">
-              <div class="plan-progress-fill" style="width: <%- percent %>%"></div>
-            </div>
-            <% } %>
-            <% if (p.note) { %>
-            <div class="plan-item-note"><%- p.note %></div>
-            <% } %>
-          <% if (p.link) { %></a><% } else { %></div><% } %>
-          <% }) %>
-        </div>
-      </section>
-      <% }) %>
-    </div>
-  <% } %>
 
   <% if (!page.type) { %>
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
