@@ -12,6 +12,7 @@ const groupDisplayNames = {
   'Elasticsearch': 'Elasticsearch',
   'Vue': 'Vue',
   'AI': 'AI',
+  'Python': 'Python',
   'RESTful': 'RESTful',
   'MinIO': 'MinIO',
   'Springboot': 'Spring',
