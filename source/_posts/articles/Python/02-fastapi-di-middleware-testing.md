@@ -13,7 +13,7 @@ lang: zh-CN
 
 > 本文是《Python 基础与 FastAPI 入门》系列第 02 篇，面向第一阶段第二周。第 01 篇讲路由与 Pydantic 模型，本篇在它的基础上加入依赖注入、中间件和测试。
 
-文中所有代码都在 Python 3.13、FastAPI 0.162.0、pytest 8.4 下实际运行通过，共 8 个测试全部通过。你可以按文末的目录结构把代码复制出来自己跑一遍。
+文中所有代码都在 Python 3.13、FastAPI 0.162.0、pytest 8.4 下实际运行通过，共 10 个测试全部通过，覆盖率 100%。你可以按文末的目录结构把代码复制出来自己跑一遍。
 
 ## 本篇要解决什么问题
 
@@ -370,14 +370,92 @@ pytest tests/ -v
 2. 对鉴权要测三种情况：没有 token、token 错误、权限不足。只测成功路径会漏掉最容易出问题的分支。
 3. 测试里不要依赖真实数据库。这里 `FakeDB` 是内存对象。真实项目可以用 `app.dependency_overrides[get_db] = fake_db_factory` 把依赖替换掉，这是 FastAPI 测试的标准做法。
 
-## 六、练习
+## 六、整合测试与覆盖率
+
+前面的测试都是单接口测试，每个只验证一个函数。整合测试关心的是多个依赖、中间件、路由放在一起时是否协作正确。本节用 `dependency_overrides` 把数据库替换成计数对象，验证两件事：
+
+1. 嵌套依赖（`get_admin_user` → `get_current_user` → `get_db`）下，一次请求只创建一个数据库连接。
+2. 替换后的依赖在测试结束后被清理，不会污染其他测试。
+
+```python
+# tests/test_integration.py
+from fastapi.testclient import TestClient
+
+from app.deps import FakeDB, get_db
+from app.main import app
+
+
+class CountingDB(FakeDB):
+    created = 0
+
+    def __init__(self) -> None:
+        super().__init__()
+        CountingDB.created += 1
+
+
+async def override_get_db():
+    db = CountingDB()
+    try:
+        yield db
+    finally:
+        await db.close()
+
+
+def test_one_db_per_request_even_with_nested_deps():
+    CountingDB.created = 0
+    app.dependency_overrides[get_db] = override_get_db
+    try:
+        client = TestClient(app)
+        resp = client.get("/admin/stats", headers={"Authorization": "Bearer token-root"})
+        assert resp.status_code == 200
+        assert CountingDB.created == 1
+    finally:
+        app.dependency_overrides.clear()
+
+
+def test_override_is_cleared_after_test():
+    assert get_db not in app.dependency_overrides
+```
+
+注意 `try / finally` 里的 `clear()`。如果测试中途断言失败，没有这一步，替换会留在全局的 `app` 对象上，影响后面所有测试，而且错误很难排查。
+
+### 覆盖率
+
+覆盖率衡量测试执行到了多少代码行。安装并运行：
+
+```bash
+pip install pytest-cov
+pytest tests/ --cov=app --cov-report=term-missing
+```
+
+本文的代码运行结果如下（`Missing` 列为空表示每一行都被执行过）：
+
+```text
+Name                Stmts   Miss  Cover   Missing
+-------------------------------------------------
+app\__init__.py         0      0   100%
+app\deps.py            32      0   100%
+app\main.py            31      0   100%
+app\middleware.py      11      0   100%
+-------------------------------------------------
+TOTAL                  74      0   100%
+10 passed
+```
+
+几点需要知道：
+
+1. 覆盖率 100% 只说明代码被执行过，不说明结果是对的。`test_admin_forbidden_for_normal_user` 之类的断言才是在验证行为。
+2. 本文的目标是 80% 以上。这个项目小，所以达到 100%。真实项目里，追求 100% 常常会导致写一堆没有价值的测试，把精力花在错误处理的边角上更划算。
+3. 覆盖率报告的 `Missing` 列是最有用的部分。它直接告诉你哪些行没有被测试到，比总百分比更有指导意义。
+
+## 七、练习
 
 1. 给 `/items` 加一个 `POST` 接口，接收 `ItemIn`（`name` 长度 1 到 50），写一个测试验证空名称返回 422。
 2. 实现 `get_premium_user` 依赖，嵌套在 `get_current_user` 之上，非会员返回 403。在 `FakeDB` 里增加一个会员字段来支持它。
 3. 用 `app.dependency_overrides` 把 `get_db` 替换成一个记录调用次数的假对象，写测试确认一次请求只创建一个数据库连接。
 4. 运行 `uvicorn app.main:app --reload`，打开 `http://127.0.0.1:8000/docs`，先点右上角 `Authorize` 填入 `Bearer token-alice`，再调用 `/admin/stats`，应返回 403；换成 `token-root` 应返回 200。
 
-## 七、本篇验收清单
+## 八、本篇验收清单
 
 - [ ] 能解释 `yield` 依赖的清理时机
 - [ ] 能写出嵌套依赖并说明为什么同一请求里 `get_db` 只执行一次
@@ -386,7 +464,7 @@ pytest tests/ -v
 - [ ] 能用 `@app.exception_handler` 统一业务错误格式
 - [ ] 能用 `TestClient` 写出覆盖成功、未登录、越权的测试
 
-## 八、Java 与 FastAPI 对照
+## 九、Java 与 FastAPI 对照
 
 | Spring | FastAPI | 说明 |
 |--------|---------|------|
@@ -397,7 +475,7 @@ pytest tests/ -v
 | `MockMvc` | `TestClient` | 不启动服务器的集成测试 |
 | `@MockBean` | `app.dependency_overrides` | 替换依赖做测试 |
 
-## 九、常见坑
+## 十、常见坑
 
 | 症状 | 原因 | 解法 |
 |------|------|------|
